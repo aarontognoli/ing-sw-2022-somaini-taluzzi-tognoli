@@ -1,24 +1,24 @@
 package it.polimi.ingsw.cloud;
 
-import java.util.List;
+class FakeStudent {}
 
 // Package-only accessible class (only the Factory can instantiate it)
 class Cloud {
-    private List<Student> students;
+    // TODO: Use Student instead of FakeStudent
+    private FakeStudent[] students;
 
     public Cloud(int studentsCount) {
-        students = new List<Student>(studentsCount);
-    }
-}
-
-public class FactoryCloud {
-    public static Cloud createTwoFourPlayersCloud() {
-        // Three students per cloud when there are 2 or 4 players
-        return new Cloud(3);
+        students = new FakeStudent[studentsCount];
     }
 
-    public static Cloud createThreePlayersCloud() {
-        // Four students per cloud when there are 3 players
-        return new Cloud(4);
+    public FakeStudent[] getStudents() {
+        // remove the students from the cloud and return them
+        FakeStudent[] returnValue = students;
+        students = null;
+        return returnValue;
+    }
+
+    public void putStudents(FakeStudent[] newStudents) {
+        students = newStudents;
     }
 }
