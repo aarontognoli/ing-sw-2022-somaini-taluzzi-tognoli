@@ -1,16 +1,15 @@
 package it.polimi.ingsw.pawn;
+
 import it.polimi.ingsw.enums.TowerColor;
-public class Tower
-{
+
+public class Tower {
     TowerColor color;
 
-    public Tower(TowerColor newColor)
-    {
-
+    public Tower(TowerColor newColor) {
+        color = newColor;
     }
 
-    public TowerColor getColor()
-    {
+    public TowerColor getColor() {
         return color;
     }
 }
