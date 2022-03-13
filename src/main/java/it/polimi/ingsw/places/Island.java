@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class TowerDifferentColorException extends Exception {
-    TowerDifferentColorException(TowerColor islandTowerColor, TowerColor newTowerColor) {
-        super("Adding a tower with a different color than the ones in the island" +
-                "Remove all the towers first.\nNew Color: " + newTowerColor.toString() +
-                "; Island towers color: " + islandTowerColor.toString());
+    TowerDifferentColorException(TowerColor color1, TowerColor color2) {
+        super("Tower operation between different colors." +
+                "\nFirst Color: " + color1.toString() +
+                "; Second color: " + color2.toString());
     }
 }
 
@@ -36,7 +36,23 @@ public class Island {
         }
     }
 
-    public Island(Island i1, Island i2) {
+    public Island(Island i1, Island i2) throws TowerDifferentColorException {
+        // Check the 2 island have same color Towers
+
+        if (i1.getTowers().size() != 0 && i2.getTowers().size() != 0) {
+            TowerColor towerColor1, towerColor2;
+            try {
+                towerColor1 = i1.getTowerColor();
+                towerColor2 = i2.getTowerColor();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("This should never happen since we checked that both islands have non-zero number of towers.");
+            }
+            if (!towerColor1.equals(towerColor2)) {
+                throw new TowerDifferentColorException(towerColor1, towerColor2);
+            }
+        }
+
         // Merge students and towers into a single list
         students = Stream.concat(
                         i1.students.stream(),
@@ -59,7 +75,11 @@ public class Island {
         return students;
     }
 
-    public TowerColor getTowerColor() {
+    public TowerColor getTowerColor() throws Exception {
+        if (towers.size() == 0) {
+            throw new Exception("Cannot get tower color of island because there is no tower");
+        }
+
         return this.towers.get(0).getColor();
     }
 
