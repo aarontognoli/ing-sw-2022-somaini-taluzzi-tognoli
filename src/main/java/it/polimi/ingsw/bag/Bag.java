@@ -4,7 +4,7 @@ import it.polimi.ingsw.pawn.Student;
 
 import java.util.List;
 
-class Bag {
+public class Bag {
     private List<Student> students;
 
     public Bag(int studentsPerColorCount) {
