@@ -1,18 +1,18 @@
 package it.polimi.ingsw.pawn;
 
 import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.player.Player;
+import it.polimi.ingsw.player.Board;
 
 public class Professor {
     private Color color;
-    private Player position;
+    private Board position;
 
     public Professor(Color color) {
         position = null;
         this.color = color;
     }
 
-    public void move(Player newPosition) {
+    public void move(Board newPosition) {
         this.position = newPosition;
     }
 
@@ -20,7 +20,7 @@ public class Professor {
         return color;
     }
 
-    public Player getPosition() {
+    public Board getPosition() {
         //TODO Remember to make it immutable
         return position;
     }

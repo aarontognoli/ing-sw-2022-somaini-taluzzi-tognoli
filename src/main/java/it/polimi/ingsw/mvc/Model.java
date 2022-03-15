@@ -6,6 +6,7 @@ import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
 import it.polimi.ingsw.pawn.*;
 import it.polimi.ingsw.places.Island;
+import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.Player;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class Model {
         islands = new ArrayList<Island>();
         professors = new ArrayList<Professor>();
         players = new ArrayList<Player>();
-
     }
 
     public Model(Model copy) {
@@ -33,11 +33,11 @@ public class Model {
 
     //PRIVATE METHODS
 
-    private Player getProfessorOwner(Color c) {
+    private Board getProfessorOwner(Color c) {
         return null;
     }
 
-    private Student removeStudentFromWaitingRoom(Student student, Player player) {
+    private Student removeStudentFromWaitingRoom(Student student, Board player) {
         return null;
     }
 
@@ -45,7 +45,7 @@ public class Model {
 
     }
 
-    private void addStudentToDiningRoom(Student student, Player player) {
+    private void addStudentToDiningRoom(Student student, Board player) {
 
     }
 
@@ -61,11 +61,11 @@ public class Model {
         return null;
     }
 
-    private Player getInfluence(Island island) {
+    private Board getInfluence(Island island) {
         return null;
     }
 
-    private void placeTower(Player player) {
+    private void placeTower(Board player) {
         //towers can only be placed on the island containing MotherNature
     }
 
