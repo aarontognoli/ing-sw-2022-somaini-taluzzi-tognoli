@@ -7,7 +7,7 @@ import java.util.List;
 public class Bag {
     private List<Student> students;
 
-    Bag(int studentsPerColorCount) {
-        // TODO: Create the array of students
+    public Bag(int studentsCountPerColor) {
+        // TODO: Generate students array and shuffle
     }
 }

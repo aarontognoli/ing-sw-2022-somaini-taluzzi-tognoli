@@ -25,6 +25,12 @@ public class Island {
     private List<Tower> towers;
     private final List<Student> students;
 
+    public Island() {
+        students = new ArrayList<>(INITIAL_STUDENT_CAPACITY);
+        towers = new ArrayList<>(INITIAL_TOWER_CAPACITY);
+    }
+
+    // TODO: Delete (?)
     public Island(Student initialStudent) {
         students = new ArrayList<>(INITIAL_STUDENT_CAPACITY);
         towers = new ArrayList<>(INITIAL_TOWER_CAPACITY);

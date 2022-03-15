@@ -6,7 +6,7 @@ import it.polimi.ingsw.pawn.Student;
 public class Cloud {
     private Student[] students;
 
-    Cloud(int studentsCount) {
+    public Cloud(int studentsCount) {
         students = new Student[studentsCount];
     }
 
