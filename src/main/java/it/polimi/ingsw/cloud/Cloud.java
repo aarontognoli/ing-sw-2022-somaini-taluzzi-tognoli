@@ -3,10 +3,10 @@ package it.polimi.ingsw.cloud;
 import it.polimi.ingsw.pawn.Student;
 
 // Package-only accessible class (only the Factory can instantiate it)
-class Cloud {
+public class Cloud {
     private Student[] students;
 
-    public Cloud(int studentsCount) {
+    Cloud(int studentsCount) {
         students = new Student[studentsCount];
     }
 
