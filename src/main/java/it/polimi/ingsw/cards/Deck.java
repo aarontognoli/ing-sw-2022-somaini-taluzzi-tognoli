@@ -8,5 +8,8 @@ public class Deck {
     // TODO: Enum for the different decks
     public Deck() {
         // TODO: create list of cards
+
+
+        // Banana: implemento le cose....
     }
 }
