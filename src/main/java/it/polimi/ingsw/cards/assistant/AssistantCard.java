@@ -1,4 +1,4 @@
-package it.polimi.ingsw.cards;
+package it.polimi.ingsw.cards.assistant;
 
 public class AssistantCard {
     private final int turnOrderValue;

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.cards;
 
+import it.polimi.ingsw.cards.assistant.AssistantCard;
+
 import java.util.List;
 
 public class Deck {
