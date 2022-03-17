@@ -52,10 +52,12 @@ public class Model {
     private void prepareMatch() {
         bag = new Bag(2);
         // TODO: Assign students to the islands
+
+        // (Expert only) TODO: choose 3 random character cards
     }
 
     public Model(Model copy) {
-        //TODO copy constructor
+        // TODO copy constructor
     }
 
     // * PRIVATE METHODS
@@ -107,6 +109,10 @@ public class Model {
 
     private void checkVictoryConditions() {
 
+    }
+
+    private void rewardCoin() {
+        // Reward a new coin to the current player
     }
 
     //PUBLIC METHODS
@@ -181,5 +187,16 @@ public class Model {
     public void moveStudentToDiningRoom(Color studentColor) {
         // TODO: Move a student (of this color) from the current player's entrance
         // into their dining room
+
+        // (Expert Only) TODO: If we reached one of the critical placeholder in the dining room,
+        // Assign a new Coin to current player
+    }
+
+    public void playCharacterCard(int cardIndex) {
+        // (Expert only) Current player plays a character card
+
+        // TODO: Check they have enough coins and decrement them
+
+        // TODO: Activate card effect
     }
 }
