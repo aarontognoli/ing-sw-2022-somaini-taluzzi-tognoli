@@ -2,7 +2,9 @@ package it.polimi.ingsw.mvc;
 
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.AssistantCard;
+import it.polimi.ingsw.cards.AssistantCardID;
 import it.polimi.ingsw.cards.Deck;
+import it.polimi.ingsw.cards.DeckId;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
 import it.polimi.ingsw.pawn.*;
@@ -109,21 +111,15 @@ public class Model {
 
     //PUBLIC METHODS
 
-    public void playAssistant(AssistantCard assistant) {
-
+    public void playAssistant(AssistantCardID assistantCardID) {
+        // Current player plays this assistant card
     }
 
-    public void drawStudentsIntoEntrance() {
-    }
-
-    public void drawStudentsIntoCloud(Cloud cloud) {
+    public void drawStudentsIntoEntrance(int cloudIndex) {
+        // Current player draws student from this cloud
     }
 
     public void endTurn() {
-
-    }
-
-    public void getStudentsFromCloud(Cloud cloud) {
 
     }
 
@@ -148,29 +144,24 @@ public class Model {
     }
 
     // Called during game preparation
-    public void placeMotherNature(Island startingIsland) throws Exception {
+    public void placeMotherNature(int islandIndex) throws IndexOutOfBoundsException, Exception {
         if (motherNature != null) {
             throw new Exception("Mother Nature already chosen");
         }
 
-        for (Island i : islands) {
-            if (i.equals(startingIsland)) {
-                motherNature = new MotherNature(i);
-                return;
-            }
-        }
-
-        throw new Exception("Island not found");
+        motherNature = new MotherNature(islands.get(islandIndex));
     }
 
-    public void chooseDeck(Player player, Deck deck) throws Exception {
+    public void chooseDeck(String playerNickname, DeckId deckId) throws Exception, IndexOutOfBoundsException {
+
         for (Player p : players) {
-            if (p.equals(player)) {
-                p.setDeck(deck);
+            if (p.getNickname().equals(playerNickname)) {
+                // Select correct deck
+                //p.setDeck(deck);
 
                 // TODO: Everyone had chosen a deck and mother nature
                 //  Was placed
-                prepareMatch();
+                // prepareMatch();
 
                 return;
             }
@@ -182,9 +173,13 @@ public class Model {
     public void moveMotherNature(int steps) {
     }
 
-    public void moveStudentToIsland(Student student, Island island) {
+    public void moveStudentToIsland(Color studentColor, int islandIndex) {
+        // TODO: Move a student (of this color) from the current player's entrance
+        // into the correct island
     }
 
-    public void moveStudentToDiningRoom(Student student) {
+    public void moveStudentToDiningRoom(Color studentColor) {
+        // TODO: Move a student (of this color) from the current player's entrance
+        // into their dining room
     }
 }
