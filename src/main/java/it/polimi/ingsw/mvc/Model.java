@@ -73,8 +73,17 @@ public class Model {
         throw new Exception("Color not valid");
     }
 
-    private Student removeStudentFromWaitingRoom(Student student, Board player) {
-        return null;
+    private Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception{
+        List<Student> entrance = player.getEntrance();
+        for(Student s : entrance)
+        {
+            if(s.getColor().equals(student.getColor()))
+            {
+                entrance.remove(s);
+                return s;
+            }
+        }
+        throw new Exception("Student not found");
     }
 
     private void addStudentToIsland(Student student, Island island) {
