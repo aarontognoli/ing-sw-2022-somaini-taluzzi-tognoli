@@ -22,6 +22,18 @@ public class Board {
             diningRoom.set(i, new ArrayList<Student>());
         }
     }
+
     //TODO getters
 
+    public List<Tower> getTowers() {
+        return towers;
+    }
+
+    public List<List<Student>> getDiningRoom() {
+        return diningRoom;
+    }
+
+    public List<Student> getEntrance() {
+        return entrance;
+    }
 }
