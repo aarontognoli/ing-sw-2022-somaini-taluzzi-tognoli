@@ -48,7 +48,7 @@ public class Model {
             islands.add(new Island());
         }
     }
-
+    ///DOING PRIVATE METHODS
     private void prepareMatch() {
         bag = new Bag(2);
         // TODO: Assign students to the islands
