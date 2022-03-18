@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cards;
 
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.DeckName;
 
 import java.util.ArrayList;
