@@ -48,6 +48,7 @@ public class Model {
             islands.add(new Island());
         }
     }
+
     ///DOING PRIVATE METHODS
     private void prepareMatch() {
         bag = new Bag(2);
@@ -62,9 +63,14 @@ public class Model {
 
     // * PRIVATE METHODS
 
-    private Board getProfessorOwner(Color c) {
-        // TODO: get Player that owns professor of color c
-        return null;
+    private Board getProfessorOwner(Color c) throws Exception {
+
+        for (Professor p : professors) {
+            if (p.getColor().equals(c)) {
+                return p.getPosition();
+            }
+        }
+        throw new Exception("Color not valid");
     }
 
     private Student removeStudentFromWaitingRoom(Student student, Board player) {
