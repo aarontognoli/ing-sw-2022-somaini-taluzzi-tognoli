@@ -62,15 +62,19 @@ public class Model {
     }
 
     // * PRIVATE METHODS
+    //TODO: THINK IF CONTROLS SHOULD BE DONE ONLY ON PUBLIC METHODS OR BOTH, I THINK THAT ON PRIVATE METHODS
+    //PASSED ARGUMENTS SHOULD BE ALREADY "SANITIZED" -Aaron
 
     private Board getProfessorOwner(Color c) throws Exception {
-
-        for (Professor p : professors) {
+        //TODO: CHOOSE ALTERNATIVES, I LIKE THE FIRST ONE MORE, WHAT DO YOU THINK?
+        return professors.get(c.ordinal()).getPosition();
+        //////////////////////////////////////
+        /*for (Professor p : professors) {
             if (p.getColor().equals(c)) {
                 return p.getPosition();
             }
         }
-        throw new Exception("Color not valid");
+        throw new Exception("Color not valid");*/
     }
 
     private Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception{
@@ -83,15 +87,16 @@ public class Model {
                 return s;
             }
         }
+
         throw new Exception("Student not found");
     }
 
     private void addStudentToIsland(Student student, Island island) {
-
+        island.getStudents().add(student);
     }
 
     private void addStudentToDiningRoom(Student student, Board player) {
-
+        player.getDiningRoom().get(student.getColor().ordinal()).add(student);
     }
 
     private void fillClouds() {
