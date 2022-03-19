@@ -14,6 +14,7 @@ import it.polimi.ingsw.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Model {
     // TODO: Use a circular pointer list
@@ -115,19 +116,30 @@ public class Model {
     }
 
     private Student drawStudentFromBag() {
+        //TODO: implement later, waiting for bag implementation
         return null;
     }
 
     private Board getInfluence(Island island) {
+
         return null;
     }
 
-    private void placeTower(Board player) {
+    private void placeTower(Board player) throws Exception {
         //towers can only be placed on the island containing MotherNature
+        getMotherNatureIsland().addTower(player.getTowers().remove(player.getTowers().size()-1));
+
     }
 
     private void removeTower(Island island) {
-
+        List<Tower> torri;
+        torri =island.removeAllTowers();
+        for( Tower t : torri)
+        {
+            //TODO: check rules for 3 and 4 players
+            //player 0 WHITE, 1 BLACK, 3 GREY
+            players.get(t.getColor().ordinal()).getBoard().getTowers().add(t);
+        }
     }
 
     private void mergeIslands(Island island) {
