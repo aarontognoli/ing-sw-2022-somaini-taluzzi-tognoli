@@ -25,6 +25,7 @@ public class Model {
     // Player data and their board
     private int totalPlayerCount;
     private List<Player> players;
+    private Player currentPlayer;
 
     private GameMode gameMode;
 
@@ -77,12 +78,10 @@ public class Model {
         throw new Exception("Color not valid");*/
     }
 
-    private Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception{
+    private Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception {
         List<Student> entrance = player.getEntrance();
-        for(Student s : entrance)
-        {
-            if(s.getColor().equals(student.getColor()))
-            {
+        for (Student s : entrance) {
+            if (s.getColor().equals(student.getColor())) {
                 entrance.remove(s);
                 return s;
             }
@@ -100,7 +99,19 @@ public class Model {
     }
 
     private void fillClouds() {
+        int studentsToDraw;
+        List<Student> studentsToAdd;
+        for (Cloud c : clouds) {
+            studentsToAdd = new ArrayList<>();
+            if (totalPlayerCount == 3)
+                studentsToDraw = 4;
+            else
+                studentsToDraw = 3;
 
+            for (int i = 0; i < studentsToDraw; i++)
+                studentsToAdd.add(drawStudentFromBag());
+            c.putStudents(studentsToAdd);
+        }
     }
 
     private Student drawStudentFromBag() {
