@@ -127,15 +127,14 @@ public class Model {
 
     private void placeTower(Board player) throws Exception {
         //towers can only be placed on the island containing MotherNature
-        getMotherNatureIsland().addTower(player.getTowers().remove(player.getTowers().size()-1));
+        getMotherNatureIsland().addTower(player.getTowers().remove(player.getTowers().size() - 1));
 
     }
 
     private void removeTower(Island island) {
         List<Tower> torri;
-        torri =island.removeAllTowers();
-        for( Tower t : torri)
-        {
+        torri = island.removeAllTowers();
+        for (Tower t : torri) {
             //TODO: check rules for 3 and 4 players
             //player 0 WHITE, 1 BLACK, 3 GREY
             players.get(t.getColor().ordinal()).getBoard().getTowers().add(t);
@@ -147,15 +146,16 @@ public class Model {
     }
 
     private void placeProfessorInBoard(Professor professor) {
-
+        professor.move(currentPlayer.getBoard());
     }
 
     private void checkVictoryConditions() {
 
     }
 
-    private void rewardCoin() {
+    private void rewardCoin() throws Exception{
         // Reward a new coin to the current player
+        currentPlayer.getBoard().rewardCoin();
     }
 
     //PUBLIC METHODS
