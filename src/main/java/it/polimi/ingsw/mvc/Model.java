@@ -65,7 +65,7 @@ public class Model {
     public Model(Model copy) {
         // TODO copy constructor
     }
-       ///DOING PRIVATE METHODS
+    ///DOING PRIVATE METHODS
     // * PRIVATE METHODS
 
     private Board getProfessorOwner(Color c) throws Exception {
@@ -149,7 +149,7 @@ public class Model {
 
     private void placeTower(Board player) throws Exception {
         //towers can only be placed on the island containing MotherNature
-        //TODO: is it better to create a dedicated removeTower() Method in Board Class?
+        //TODO: removeTower() in Board class
         getMotherNatureIsland().addTower(player.getTowers().remove(player.getTowers().size() - 1));
 
     }
@@ -197,10 +197,87 @@ public class Model {
         professor.move(currentPlayer.getBoard());
     }
 
-    private void checkVictoryConditions() {
-        //TODO
+    //the method will be called in the right moments
+    private Player checkVictoryConditions() throws Exception {
+        Boolean noAssistantCards = false;
+        //every time a new tower is placed
+        Player winner;
+        for (Player p : players) {
+            if (p.getBoard().getTowers().isEmpty()) {
+                return p;
+            }
+        }
+        for (Player p : players) {
+            //TODO: wait for Final Deck implementation check assistants cards number and ser noAssistantCards accordingly
+        }
+        //when some islands are merged
+        if ((islands.size() <= 3) || noAssistantCards)//TODO: wait for bag implementation and ckeck if the bag is empty)
+        {
+            winner = checkTowersForVictory();
+            if (winner == null)
+                return checkProfessorsForVictory();
+            else
+                return winner;
+        }
+
+        return null;
     }
 
+    //support methods for more readable code
+    private Player checkTowersForVictory() {
+        List<Integer> towersCountForEachPlayer = new ArrayList<>(Collections.nCopies(totalPlayerCount, 0));
+        int max = 0;
+        Player winner = null;
+        for (Island i : islands) {
+            try {
+                towersCountForEachPlayer.set(i.getTowerColor().ordinal(), towersCountForEachPlayer.get(i.getTowerColor().ordinal()) + i.getTowers().size());
+            } catch (Exception e) {
+                //if there are no towers
+                continue;
+            }
+        }
+        for (int i = 0; i < totalPlayerCount; i++) {
+            if (towersCountForEachPlayer.get(i) > max) {
+                max = towersCountForEachPlayer.get(i);
+                winner = players.get(i);
+            } else if (towersCountForEachPlayer.get(i) == max) {
+                //tie
+                winner = null;
+            }
+        }
+
+        return winner;
+    }
+
+    private Player checkProfessorsForVictory() throws Exception {
+        // 5 professors, a tie isn't possible
+        List<Integer> professorsCountForEachPlayer = new ArrayList<>(Collections.nCopies(totalPlayerCount, 0));
+        int max = 0;
+        Player winner = null;
+        for (Professor p : professors) {
+            professorsCountForEachPlayer.set(players.indexOf(getPlayerFromBoard(p.getPosition())), professorsCountForEachPlayer.get(players.indexOf(getPlayerFromBoard(p.getPosition()))) + 1);
+        }
+
+        for (int i = 0; i < totalPlayerCount; i++) {
+            if (professorsCountForEachPlayer.get(i) > max) {
+                max = professorsCountForEachPlayer.get(i);
+                winner = players.get(i);
+            }
+        }
+
+        return winner;
+    }
+
+    private Player getPlayerFromBoard(Board board) throws Exception {
+        for (Player p : players) {
+            if (p.getBoard().equals(board)) {
+                return p;
+            }
+        }
+        throw new Exception("Board not existing");
+    }
+
+    //////////////////////////////////////////////
     private void rewardCoin() throws Exception {
         // Reward a new coin to the current player
         currentPlayer.getBoard().rewardCoin();
