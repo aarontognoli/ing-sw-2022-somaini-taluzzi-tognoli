@@ -64,19 +64,10 @@ public class Model {
     }
 
     // * PRIVATE METHODS
-    //TODO: THINK IF CONTROLS SHOULD BE DONE ONLY ON PUBLIC METHODS OR BOTH, I THINK THAT ON PRIVATE METHODS
-    //PASSED ARGUMENTS SHOULD BE ALREADY "SANITIZED" -Aaron
 
     private Board getProfessorOwner(Color c) throws Exception {
-        //TODO: CHOOSE ALTERNATIVES, I LIKE THE FIRST ONE MORE, WHAT DO YOU THINK?
         return professors.get(c.ordinal()).getPosition();
-        //////////////////////////////////////
-        /*for (Professor p : professors) {
-            if (p.getColor().equals(c)) {
-                return p.getPosition();
-            }
-        }
-        throw new Exception("Color not valid");*/
+
     }
 
     private Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception {
@@ -127,6 +118,7 @@ public class Model {
 
     private void placeTower(Board player) throws Exception {
         //towers can only be placed on the island containing MotherNature
+        //TODO: is it better to create a dedicated removeTower() Method in Board Class?
         getMotherNatureIsland().addTower(player.getTowers().remove(player.getTowers().size() - 1));
 
     }
@@ -153,7 +145,7 @@ public class Model {
 
     }
 
-    private void rewardCoin() throws Exception{
+    private void rewardCoin() throws Exception {
         // Reward a new coin to the current player
         currentPlayer.getBoard().rewardCoin();
     }
