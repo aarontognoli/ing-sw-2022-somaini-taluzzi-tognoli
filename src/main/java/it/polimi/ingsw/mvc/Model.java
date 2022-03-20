@@ -147,10 +147,9 @@ public class Model {
         return maxInfluencePlayer.getBoard();
     }
 
-    private void placeTower(Board player) throws Exception {
+    private void placeTower(Board board) throws Exception {
         //towers can only be placed on the island containing MotherNature
-        //TODO: removeTower() in Board class
-        getMotherNatureIsland().addTower(player.getTowers().remove(player.getTowers().size() - 1));
+        getMotherNatureIsland().addTower(board.removeTower());
 
     }
 
@@ -158,11 +157,6 @@ public class Model {
 
         List<Tower> towers;
         towers = island.removeAllTowers();
-        /*for (Tower t : towers) {
-            //TODO: check rules for 3 and 4 players
-            //player 0 WHITE, 1 BLACK, 3 GREY
-            players.get(t.getColor().ordinal()).getBoard().getTowers().add(t);
-        }*/
         if (!towers.isEmpty()) {
             players.get(towers.get(0).getColor().ordinal()).getBoard().getTowers().addAll(towers);
         }

@@ -24,6 +24,13 @@ public class Board {
         }
     }
 
+    public Tower removeTower() throws Exception {
+        if (towers.size() > 0) {
+            return towers.remove(towers.size() - 1);
+        } else
+            throw new Exception("No towers, end the game");
+    }
+
     public List<Tower> getTowers() {
         return towers;
     }
