@@ -24,4 +24,7 @@ public class Board {
     }
     //TODO getters
 
+    public void addStudentsToEntrance(List<Student> newStudents) {
+        entrance.addAll(newStudents);
+    }
 }

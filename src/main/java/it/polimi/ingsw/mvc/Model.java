@@ -1,7 +1,7 @@
 package it.polimi.ingsw.mvc;
 
 import it.polimi.ingsw.bag.Bag;
-import it.polimi.ingsw.cards.assistant.AssistantCardID;
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.DeckId;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
@@ -23,6 +23,7 @@ public class Model {
     // Player data and their board
     private int totalPlayerCount;
     private List<Player> players;
+    private int indexCurrentPlayer;
 
     private GameMode gameMode;
 
@@ -40,7 +41,7 @@ public class Model {
         players = new ArrayList<>();
         clouds = new ArrayList<>();
 
-        // Populate islands
+        // Initialize islands
         islands = new ArrayList<Island>();
         for (int i = 0; i < 12; i++) {
             islands.add(new Island());
@@ -56,6 +57,11 @@ public class Model {
 
     public Model(Model copy) {
         // TODO copy constructor
+    }
+
+    // Method to revise when we will implement distributed MVC
+    public void setIndexCurrentPlayer(int indexCurrentPlayer) {
+        this.indexCurrentPlayer = indexCurrentPlayer;
     }
 
     // * PRIVATE METHODS
@@ -115,12 +121,14 @@ public class Model {
 
     //PUBLIC METHODS
 
-    public void playAssistant(AssistantCardID assistantCardID) {
+    public void playAssistant(AssistantCard assistantCardID) {
         // Current player plays this assistant card
     }
 
     public void drawStudentsIntoEntrance(int cloudIndex) {
-        // Current player draws student from this cloud
+        // Current player draws students from this cloud and puts them in entrance
+        Board currentBoard = players.get(indexCurrentPlayer).getBoard();
+        currentBoard.addStudentsToEntrance(clouds.get(cloudIndex).getStudents());
     }
 
     public void endTurn() {
@@ -128,7 +136,7 @@ public class Model {
     }
 
     public Island getMotherNatureIsland() {
-        return null;
+        return motherNature.getPosition();
     }
 
     public void setPlayersCount(int playersCount) {
@@ -175,6 +183,9 @@ public class Model {
     }
 
     public void moveMotherNature(int steps) {
+        int indexPreviousMotherNatureIsland = islands.indexOf(motherNature.getPosition());
+        Island destination = islands.get(indexPreviousMotherNatureIsland + steps);
+        motherNature.move(destination);
     }
 
     public void moveStudentToIsland(Color studentColor, int islandIndex) {
