@@ -15,7 +15,11 @@ import it.polimi.ingsw.player.Player;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
+import static java.lang.Math.floorMod;
+
 public class Model {
+
+    static private final int TOTAL_ISLANDS_NUMBER = 12;
     // TODO: Use a circular pointer list
     private List<Island> islands;
 
@@ -45,12 +49,12 @@ public class Model {
 
         // Populate islands
         islands = new ArrayList<Island>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < TOTAL_ISLANDS_NUMBER; i++) {
             islands.add(new Island());
         }
     }
 
-    ///DOING PRIVATE METHODS
+
     private void prepareMatch() {
         bag = new Bag(2);
         // TODO: Assign students to the islands
@@ -61,7 +65,7 @@ public class Model {
     public Model(Model copy) {
         // TODO copy constructor
     }
-
+       ///DOING PRIVATE METHODS
     // * PRIVATE METHODS
 
     private Board getProfessorOwner(Color c) throws Exception {
@@ -115,25 +119,25 @@ public class Model {
         Player maxInfluencePlayer = null;
         int maxPlayerInfluence = 0;
         Boolean tie = false;
-        int actualPlayerInfluence;
+        int currentPlayerInfluence;
         for (int i = 0; i < totalPlayerCount; i++) {
-            actualPlayerInfluence = 0;
+            currentPlayerInfluence = 0;
             for (Tower t : island.getTowers()) {
                 if (t.getColor().ordinal() == i) {
-                    actualPlayerInfluence++;
+                    currentPlayerInfluence++;
                 }
 
             }
             for (Student s : island.getStudents()) {
                 if (professors.get(s.getColor().ordinal()).getPosition().equals(players.get(i).getBoard())) {
-                    actualPlayerInfluence++;
+                    currentPlayerInfluence++;
                 }
             }
-            if (actualPlayerInfluence > maxPlayerInfluence || maxInfluencePlayer == null) {
-                maxPlayerInfluence = actualPlayerInfluence;
+            if (currentPlayerInfluence > maxPlayerInfluence || maxInfluencePlayer == null) {
+                maxPlayerInfluence = currentPlayerInfluence;
                 maxInfluencePlayer = players.get(i);
                 tie = false;
-            } else if (actualPlayerInfluence == maxPlayerInfluence) {
+            } else if (currentPlayerInfluence == maxPlayerInfluence) {
                 tie = true;
             }
         }
@@ -150,17 +154,42 @@ public class Model {
 
     }
 
-    private void removeTower(Island island) {
-        List<Tower> torri;
-        torri = island.removeAllTowers();
-        for (Tower t : torri) {
+    private void removeAllTowers(Island island) {
+
+        List<Tower> towers;
+        towers = island.removeAllTowers();
+        /*for (Tower t : towers) {
             //TODO: check rules for 3 and 4 players
             //player 0 WHITE, 1 BLACK, 3 GREY
             players.get(t.getColor().ordinal()).getBoard().getTowers().add(t);
+        }*/
+        if (!towers.isEmpty()) {
+            players.get(towers.get(0).getColor().ordinal()).getBoard().getTowers().addAll(towers);
         }
     }
 
-    private void mergeIslands(Island island) {
+    private void mergeIslands(Island island) throws Exception {
+        int currentIslandIndex = islands.indexOf(island);
+        int prev = floorMod(currentIslandIndex - 1, TOTAL_ISLANDS_NUMBER);
+        int next = floorMod(currentIslandIndex + 1, TOTAL_ISLANDS_NUMBER);
+        Boolean prevDone = false, nextDone = false;
+        if (islands.get(prev).getTowerColor() != islands.get(currentIslandIndex).getTowerColor()) {
+            islands.set(currentIslandIndex, new Island(islands.get(currentIslandIndex), islands.get(prev)));
+            prevDone = true;
+        }
+        if (islands.get(next).getTowerColor() != islands.get(currentIslandIndex).getTowerColor()) {
+            islands.set(currentIslandIndex, new Island(islands.get(currentIslandIndex), islands.get(next)));
+            nextDone = true;
+        }
+        //the index changes if i remove islands
+        Island tempIslandToGetIndex = islands.get(currentIslandIndex);
+        if (prevDone) {
+            islands.remove(floorMod(islands.indexOf(tempIslandToGetIndex) - 1, TOTAL_ISLANDS_NUMBER));
+        }
+        if (nextDone) {
+            islands.remove(floorMod(islands.indexOf(tempIslandToGetIndex) + 1, TOTAL_ISLANDS_NUMBER));
+        }
+
 
     }
 
@@ -169,7 +198,7 @@ public class Model {
     }
 
     private void checkVictoryConditions() {
-
+        //TODO
     }
 
     private void rewardCoin() throws Exception {
