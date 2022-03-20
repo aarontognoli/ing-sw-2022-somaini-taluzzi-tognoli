@@ -23,7 +23,6 @@ public class Model {
     // Player data and their board
     private int totalPlayerCount;
     private List<Player> players;
-    private int indexCurrentPlayer;
 
     private GameMode gameMode;
 
@@ -59,10 +58,6 @@ public class Model {
         // TODO copy constructor
     }
 
-    // Method to revise when we will implement distributed MVC
-    public void setIndexCurrentPlayer(int indexCurrentPlayer) {
-        this.indexCurrentPlayer = indexCurrentPlayer;
-    }
 
     // * PRIVATE METHODS
 
@@ -127,8 +122,6 @@ public class Model {
 
     public void drawStudentsIntoEntrance(int cloudIndex) {
         // Current player draws students from this cloud and puts them in entrance
-        Board currentBoard = players.get(indexCurrentPlayer).getBoard();
-        currentBoard.addStudentsToEntrance(clouds.get(cloudIndex).getStudents());
     }
 
     public void endTurn() {
