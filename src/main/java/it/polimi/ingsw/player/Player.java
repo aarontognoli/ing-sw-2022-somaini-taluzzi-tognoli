@@ -24,7 +24,7 @@ public class Player {
         return nickname;
     }
 
-    Board getBoard() {
+    public Board getBoard() {
         return board;
     }
 

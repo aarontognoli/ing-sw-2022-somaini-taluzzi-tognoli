@@ -13,15 +13,44 @@ public class Board {
     private List<Tower> towers;
     private List<List<Student>> diningRoom = new ArrayList<List<Student>>(DINING_ROOM_CAPACITY);
     private List<Student> entrance;
+    private int coinCount;
 
     public Board() {
         towers = new ArrayList<Tower>();
         entrance = new ArrayList<Student>();
-
+        coinCount = 0;
         for (int i = 0; i < DINING_ROOM_CAPACITY; i++) {
             diningRoom.set(i, new ArrayList<Student>());
         }
     }
-    //TODO getters
 
+    public Tower removeTower() throws Exception {
+        if (towers.size() > 0) {
+            return towers.remove(towers.size() - 1);
+        } else
+            throw new Exception("No towers, end the game");
+    }
+
+    public List<Tower> getTowers() {
+        return towers;
+    }
+
+    public List<List<Student>> getDiningRoom() {
+        return diningRoom;
+    }
+
+    public List<Student> getEntrance() {
+        return entrance;
+    }
+
+    public void rewardCoin() {
+        coinCount++;
+    }
+
+    public void useCoins(int amount) throws Exception {
+        if (amount > coinCount) {
+            throw new Exception("Not enough coins");
+        }
+        coinCount -= amount;
+    }
 }
