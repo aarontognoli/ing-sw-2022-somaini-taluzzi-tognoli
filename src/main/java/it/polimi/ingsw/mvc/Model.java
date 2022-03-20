@@ -12,8 +12,7 @@ import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class Model {
@@ -111,9 +110,37 @@ public class Model {
         return null;
     }
 
+    //Returns null if there is no player with more influence than others
     private Board getInfluence(Island island) {
+        Player maxInfluencePlayer = null;
+        int maxPlayerInfluence = 0;
+        Boolean tie = false;
+        int actualPlayerInfluence;
+        for (int i = 0; i < totalPlayerCount; i++) {
+            actualPlayerInfluence = 0;
+            for (Tower t : island.getTowers()) {
+                if (t.getColor().ordinal() == i) {
+                    actualPlayerInfluence++;
+                }
 
-        return null;
+            }
+            for (Student s : island.getStudents()) {
+                if (professors.get(s.getColor().ordinal()).getPosition().equals(players.get(i).getBoard())) {
+                    actualPlayerInfluence++;
+                }
+            }
+            if (actualPlayerInfluence > maxPlayerInfluence || maxInfluencePlayer == null) {
+                maxPlayerInfluence = actualPlayerInfluence;
+                maxInfluencePlayer = players.get(i);
+                tie = false;
+            } else if (actualPlayerInfluence == maxPlayerInfluence) {
+                tie = true;
+            }
+        }
+
+        if (tie)
+            return null;
+        return maxInfluencePlayer.getBoard();
     }
 
     private void placeTower(Board player) throws Exception {
