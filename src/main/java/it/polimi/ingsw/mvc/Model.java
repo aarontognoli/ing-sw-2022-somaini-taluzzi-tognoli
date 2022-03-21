@@ -1,8 +1,8 @@
 package it.polimi.ingsw.mvc;
 
 import it.polimi.ingsw.bag.Bag;
-import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.DeckId;
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
 import it.polimi.ingsw.pawn.*;
