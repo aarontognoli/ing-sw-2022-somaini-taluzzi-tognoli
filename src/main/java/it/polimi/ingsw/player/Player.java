@@ -1,6 +1,7 @@
 package it.polimi.ingsw.player;
 
 import it.polimi.ingsw.cards.Deck;
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ public class Player {
     final private Board board;
     final private String nickname;
     private Deck deck;
+    private AssistantCard currentAssistantCard;
 
     public Player(String nickname) {
         this.nickname = nickname;
@@ -20,6 +22,10 @@ public class Player {
         this.deck = deck;
     }
 
+    public void setCurrentAssistantCard(AssistantCard currentAssistantCard){
+        this.currentAssistantCard = currentAssistantCard;
+    }
+
     public String getNickname() {
         return nickname;
     }
@@ -27,6 +33,8 @@ public class Player {
     public Board getBoard() {
         return board;
     }
+
+    public Deck getDeck() { return deck; }
 
     @Override
     public boolean equals(Object o) {

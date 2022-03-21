@@ -31,6 +31,9 @@ public class Board {
             throw new Exception("No towers, end the game");
     }
 
+    public void addStudentsToEntrance(List<Student> newStudents) {
+        entrance.addAll(newStudents);
+    }
     public List<Tower> getTowers() {
         return towers;
     }
