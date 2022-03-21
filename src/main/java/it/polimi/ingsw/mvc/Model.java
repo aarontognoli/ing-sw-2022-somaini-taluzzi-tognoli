@@ -1,8 +1,8 @@
 package it.polimi.ingsw.mvc;
 
 import it.polimi.ingsw.bag.Bag;
-import it.polimi.ingsw.cards.assistant.AssistantCardID;
 import it.polimi.ingsw.cards.DeckId;
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
 import it.polimi.ingsw.pawn.*;
@@ -277,7 +277,7 @@ public class Model {
 
     //PUBLIC METHODS
 
-    public void playAssistant(AssistantCardID assistantCardID) {
+    public void playAssistant(AssistantCard assistantCard) {
         // Current player plays this assistant card
     }
 
