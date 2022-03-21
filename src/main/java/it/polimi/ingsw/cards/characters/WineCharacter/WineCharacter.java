@@ -28,7 +28,7 @@ public class WineCharacter extends CharacterCard {
     @Override
     public void activateEffect(Object arguments) throws CCArgumentException {
         if (arguments.getClass() != WineCharacterArgument.class) {
-            throw new CCArgumentException("Invalid argument class instance");
+            throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 
         WineCharacterArgument classArgument = (WineCharacterArgument) arguments;
