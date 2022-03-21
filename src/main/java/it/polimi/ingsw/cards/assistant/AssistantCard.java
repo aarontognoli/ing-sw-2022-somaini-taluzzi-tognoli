@@ -1,9 +1,17 @@
 package it.polimi.ingsw.cards.assistant;
 
 public enum AssistantCard {
-    // TODO: Add all the cards
-    CARD_1(3, 5),
-    CARD_2(5, 2);
+
+    CARD_1(1, 1),
+    CARD_2(2, 1),
+    CARD_3(3, 2),
+    CARD_4(4, 2),
+    CARD_5(5, 3),
+    CARD_6(6, 3),
+    CARD_7(7, 4),
+    CARD_8(8, 4),
+    CARD_9(9, 5),
+    CARD_10(10, 5);
 
 
     private final int turnOrderValue;
