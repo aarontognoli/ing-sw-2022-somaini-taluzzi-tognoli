@@ -30,7 +30,7 @@ public class Deck {
             return;
         }
 
-        throw new Exception("Cart not in Deck");
+        throw new Exception("Card not in Deck");
     }
 
     public ArrayList<AssistantCard> getHand()
