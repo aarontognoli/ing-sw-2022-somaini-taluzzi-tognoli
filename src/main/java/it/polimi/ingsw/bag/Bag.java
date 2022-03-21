@@ -16,14 +16,8 @@ class BagEmptyException extends Exception {
 public class Bag {
     static private int incremental_id = 0;
 
-    static final private int COLORS_COUNT = 5;
-    static final private Color[] COLORS_BY_INDEX = {
-            Color.YELLOW_GNOMES,
-            Color.BLUE_UNICORNS,
-            Color.GREEN_FROGS,
-            Color.RED_DRAGONS,
-            Color.PINK_FAIRIES
-    };
+    static final private int COLORS_COUNT = Color.values().length;
+    static final private Color[] COLORS_BY_INDEX = Color.values();
 
     final private List<Student> students;
 
