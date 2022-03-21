@@ -388,4 +388,11 @@ public class Model {
         //TODO: implement later, waiting for bag implementation
         return null;
     }
+
+    // Update island owner based on influence
+    public void updateIslandOwner(Island island) {
+        Board playerBoard = getInfluence(island);
+
+        // TODO: Move towers, and eventually merge island, if the owner changes
+    }
 }
