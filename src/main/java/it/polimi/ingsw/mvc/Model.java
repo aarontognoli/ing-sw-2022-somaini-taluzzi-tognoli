@@ -107,11 +107,6 @@ public class Model {
         }
     }
 
-    private Student drawStudentFromBag() {
-        //TODO: implement later, waiting for bag implementation
-        return null;
-    }
-
     //Returns null if there is no player with more influence than others
     private Board getInfluence(Island island) {
         Player maxInfluencePlayer = null;
@@ -358,5 +353,10 @@ public class Model {
         // TODO: Check they have enough coins and decrement them
 
         // TODO: Activate card effect
+    }
+
+    public Student drawStudentFromBag() {
+        //TODO: implement later, waiting for bag implementation
+        return null;
     }
 }
