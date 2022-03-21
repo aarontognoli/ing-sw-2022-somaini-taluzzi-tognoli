@@ -10,8 +10,8 @@ public class Deck {
     List<AssistantCard> cards;
 
     DeckName deckName;
-    public Deck(DeckName deckName)
-    {
+
+    public Deck(DeckName deckName) {
         this.deckName = deckName;
         cards = new ArrayList<>(List.of(AssistantCard.values()));
 
@@ -22,10 +22,8 @@ public class Deck {
         this(DeckName.DESERT_KING);
     }
 
-    public void playAssistantCard(AssistantCard card) throws Exception
-    {
-        if(cards.contains(card))
-        {
+    public void playAssistantCard(AssistantCard card) throws Exception {
+        if (cards.contains(card)) {
             cards.remove(card);
             return;
         }
@@ -33,8 +31,7 @@ public class Deck {
         throw new Exception("Card not in Deck");
     }
 
-    public ArrayList<AssistantCard> getHand()
-    {
+    public ArrayList<AssistantCard> getHand() {
         return new ArrayList<>(cards);
     }
 }
