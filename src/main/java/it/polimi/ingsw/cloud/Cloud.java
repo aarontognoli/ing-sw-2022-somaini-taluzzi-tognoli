@@ -9,8 +9,8 @@ import java.util.List;
 public class Cloud {
     private List<Student> students;
 
-    public Cloud() {
-        students = new ArrayList<Student>();
+    public Cloud(int studentsCount) {
+        students = new ArrayList<Student>(studentsCount);
     }
 
     public List<Student> getStudents() {
