@@ -395,4 +395,8 @@ public class Model {
 
         // TODO: Move towers, and eventually merge island, if the owner changes
     }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
 }
