@@ -1,7 +1,7 @@
 package it.polimi.ingsw.mvc;
 
 import it.polimi.ingsw.bag.Bag;
-import it.polimi.ingsw.cards.assistant.AssistantCardID;
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.DeckId;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
@@ -45,7 +45,7 @@ public class Model {
         players = new ArrayList<>();
         clouds = new ArrayList<>();
 
-        // Populate islands
+        // Initialize islands
         islands = new ArrayList<Island>();
         for (int i = 0; i < TOTAL_ISLANDS_NUMBER; i++) {
             islands.add(new Island());
@@ -63,7 +63,8 @@ public class Model {
     public Model(Model copy) {
         // TODO copy constructor
     }
-    ///DOING PRIVATE METHODS
+
+
     // * PRIVATE METHODS
 
     private Board getProfessorOwner(Color c) throws Exception {
@@ -269,6 +270,15 @@ public class Model {
         throw new Exception("Board not existing");
     }
 
+    private Student getStudentInEntrance(Color c) throws Exception {
+        for (Student s : currentPlayer.getBoard().getEntrance()) {
+            if (s.getColor().equals(c)) {
+                return s;
+            }
+        }
+        throw new Exception("Student not found");
+    }
+
     //////////////////////////////////////////////
     private void rewardCoin() throws Exception {
         // Reward a new coin to the current player
@@ -277,20 +287,21 @@ public class Model {
 
     //PUBLIC METHODS
 
-    public void playAssistant(AssistantCardID assistantCardID) {
-        // Current player plays this assistant card
+    public void playAssistant(AssistantCard assistantCard) {
+        currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
     public void drawStudentsIntoEntrance(int cloudIndex) {
-        // Current player draws student from this cloud
+        List<Student> studentsFromCloud = clouds.get(cloudIndex).getStudents();
+        currentPlayer.getBoard().addStudentsToEntrance(studentsFromCloud);
     }
 
     public void endTurn() {
-
+        //TODO
     }
 
     public Island getMotherNatureIsland() {
-        return null;
+        return motherNature.getPosition();
     }
 
     public void setPlayersCount(int playersCount) {
@@ -322,7 +333,9 @@ public class Model {
 
         for (Player p : players) {
             if (p.getNickname().equals(playerNickname)) {
+                // Waiting for deck implementation
                 // Select correct deck
+
                 //p.setDeck(deck);
 
                 // TODO: Everyone had chosen a deck and mother nature
@@ -337,22 +350,38 @@ public class Model {
     }
 
     public void moveMotherNature(int steps) {
+        int indexPreviousMotherNatureIsland = islands.indexOf(motherNature.getPosition());
+        Island destination = islands.get(indexPreviousMotherNatureIsland + steps);
+        motherNature.move(destination);
     }
 
-    public void moveStudentToIsland(Color studentColor, int islandIndex) {
-        // TODO: Move a student (of this color) from the current player's entrance
+    public void moveStudentToIsland(Color studentColor, int islandIndex) throws Exception {
+        // Move a student (of this color) from the current player's entrance
         // into the correct island
+        Student selectedStudent = getStudentInEntrance(studentColor);
+        addStudentToIsland(selectedStudent, islands.get(islandIndex));
     }
 
-    public void moveStudentToDiningRoom(Color studentColor) {
-        // TODO: Move a student (of this color) from the current player's entrance
+    public void moveStudentToDiningRoom(Color studentColor) throws Exception{
+        // Move a student (of this color) from the current player's entrance
         // into their dining room
+        Student selectedStudent = getStudentInEntrance(studentColor);
+        addStudentToDiningRoom(selectedStudent, currentPlayer.getBoard());
 
-        // (Expert Only) TODO: If we reached one of the critical placeholder in the dining room,
+        // (Expert Only) If we reached one of the critical placeholder in the dining room,
         // Assign a new Coin to current player
+        if (gameMode.equals(GameMode.EXPERT_MODE)) {
+            List<List<Student>> currentDiningRoom = currentPlayer.getBoard().getDiningRoom();
+            int indexOfSelectedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).indexOf(selectedStudent);
+            if (indexOfSelectedStudent == 2 || indexOfSelectedStudent == 5 || indexOfSelectedStudent == 8) {
+                rewardCoin();
+            }
+        }
+
     }
 
     public void playCharacterCard(int cardIndex) {
+        // Waiting for CharacterCard implementation
         // (Expert only) Current player plays a character card
 
         // TODO: Check they have enough coins and decrement them
