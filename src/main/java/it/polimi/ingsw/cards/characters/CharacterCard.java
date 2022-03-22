@@ -1,6 +1,6 @@
 package it.polimi.ingsw.cards.characters;
 
-import it.polimi.ingsw.mvc.Model;
+import it.polimi.ingsw.mvc.model.Model;
 
 abstract public class CharacterCard {
     final Model model;
