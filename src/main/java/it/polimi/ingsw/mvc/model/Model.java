@@ -33,14 +33,16 @@ public class Model {
     MotherNature motherNature;
 
     // Models
-    PrivateModel privateModel;
-    PublicModel publicModel;
+    final PrivateModel privateModel;
+    final PublicModel publicModel;
+    final CharacterModel characterModel;
 
     // Initialize game with starting rules
     public Model() {
         // Models
         privateModel = new PrivateModel(this);
         publicModel = new PublicModel(this);
+        characterModel
 
         professors = new ArrayList<>();
         players = new ArrayList<>();

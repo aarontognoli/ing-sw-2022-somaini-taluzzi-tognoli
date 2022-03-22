@@ -12,7 +12,7 @@ import it.polimi.ingsw.player.Player;
 import it.polimi.ingsw.pawn.MotherNature;
 
 public class PublicModel {
-    Model fatherModel;
+    final Model fatherModel;
 
     PublicModel(Model fatherModel) {
         this.fatherModel = fatherModel;

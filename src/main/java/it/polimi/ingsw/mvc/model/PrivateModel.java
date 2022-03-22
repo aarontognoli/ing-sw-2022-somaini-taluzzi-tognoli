@@ -17,7 +17,7 @@ import it.polimi.ingsw.player.Player;
 
 public class PrivateModel {
 
-    Model fatherModel;
+    final Model fatherModel;
 
     public PrivateModel(Model fatherModel) {
         this.fatherModel = fatherModel;
