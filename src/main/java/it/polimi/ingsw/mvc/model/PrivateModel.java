@@ -23,19 +23,19 @@ public class PrivateModel {
         this.fatherModel = fatherModel;
     }
 
-    private void prepareMatch() {
+    void prepareMatch() {
         fatherModel.bag = new Bag(2);
         // TODO: Assign students to the islands
 
         // (Expert only) TODO: choose 3 random character cards
     }
 
-    private Board getProfessorOwner(Color c) throws Exception {
+    Board getProfessorOwner(Color c) throws Exception {
         return fatherModel.professors.get(c.ordinal()).getPosition();
 
     }
 
-    private Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception {
+    Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception {
         List<Student> entrance = player.getEntrance();
         for (Student s : entrance) {
             if (s.getColor().equals(student.getColor())) {
@@ -47,15 +47,15 @@ public class PrivateModel {
         throw new Exception("Student not found");
     }
 
-    private void addStudentToIsland(Student student, Island island) {
+    void addStudentToIsland(Student student, Island island) {
         island.getStudents().add(student);
     }
 
-    private void addStudentToDiningRoom(Student student, Board player) {
+    void addStudentToDiningRoom(Student student, Board player) {
         player.getDiningRoom().get(student.getColor().ordinal()).add(student);
     }
 
-    private void fillClouds() {
+    void fillClouds() {
         int studentsToDraw;
         List<Student> studentsToAdd;
         for (Cloud c : fatherModel.clouds) {
@@ -71,13 +71,13 @@ public class PrivateModel {
         }
     }
 
-    private Student drawStudentFromBag() {
+    Student drawStudentFromBag() {
         // TODO: implement later, waiting for bag implementation
         return null;
     }
 
     // Returns null if there is no player with more influence than others
-    private Board getInfluence(Island island) {
+    Board getInfluence(Island island) {
         Player maxInfluencePlayer = null;
         int maxPlayerInfluence = 0;
         Boolean tie = false;
@@ -110,14 +110,13 @@ public class PrivateModel {
         return maxInfluencePlayer.getBoard();
     }
 
-    private void placeTower(Board board) throws Exception {
+    void placeTower(Board board) throws Exception {
         // towers can only be placed on the island containing MotherNature
-        // TODO_CURRENT PublicModel
-        // getMotherNatureIsland().addTower(board.removeTower());
 
+        fatherModel.publicModel.getMotherNatureIsland().addTower(board.removeTower());
     }
 
-    private void removeAllTowers(Island island) {
+    void removeAllTowers(Island island) {
 
         List<Tower> towers;
         towers = island.removeAllTowers();
@@ -126,7 +125,7 @@ public class PrivateModel {
         }
     }
 
-    private void mergeIslands(Island island) throws Exception {
+    void mergeIslands(Island island) throws Exception {
         int currentIslandIndex = fatherModel.islands.indexOf(island);
         int prev = floorMod(currentIslandIndex - 1, Model.TOTAL_ISLANDS_NUMBER);
         int next = floorMod(currentIslandIndex + 1, Model.TOTAL_ISLANDS_NUMBER);
@@ -156,12 +155,12 @@ public class PrivateModel {
 
     }
 
-    private void placeProfessorInBoard(Professor professor) {
+    void placeProfessorInBoard(Professor professor) {
         professor.move(fatherModel.currentPlayer.getBoard());
     }
 
     // the method will be called in the right moments
-    private Player checkVictoryConditions() throws Exception {
+    Player checkVictoryConditions() throws Exception {
         Boolean noAssistantCards = false;
         // every time a new tower is placed
         Player winner;
@@ -189,7 +188,7 @@ public class PrivateModel {
     }
 
     // support methods for more readable code
-    private Player checkTowersForVictory() {
+    Player checkTowersForVictory() {
         List<Integer> towersCountForEachPlayer = new ArrayList<>(Collections.nCopies(fatherModel.totalPlayerCount, 0));
         int max = 0;
         Player winner = null;
@@ -215,7 +214,7 @@ public class PrivateModel {
         return winner;
     }
 
-    private Player checkProfessorsForVictory() throws Exception {
+    Player checkProfessorsForVictory() throws Exception {
         // 5 professors, a tie isn't possible
         List<Integer> professorsCountForEachPlayer = new ArrayList<>(
                 Collections.nCopies(fatherModel.totalPlayerCount, 0));
@@ -237,7 +236,7 @@ public class PrivateModel {
         return winner;
     }
 
-    private Player getPlayerFromBoard(Board board) throws Exception {
+    Player getPlayerFromBoard(Board board) throws Exception {
         for (Player p : fatherModel.players) {
             if (p.getBoard().equals(board)) {
                 return p;
@@ -246,7 +245,7 @@ public class PrivateModel {
         throw new Exception("Board not existing");
     }
 
-    private Student getStudentInEntrance(Color c) throws Exception {
+    Student getStudentInEntrance(Color c) throws Exception {
         for (Student s : fatherModel.currentPlayer.getBoard().getEntrance()) {
             if (s.getColor().equals(c)) {
                 return s;
@@ -256,7 +255,7 @@ public class PrivateModel {
     }
 
     //////////////////////////////////////////////
-    private void rewardCoin() throws Exception {
+    void rewardCoin() throws Exception {
         // Reward a new coin to the current player
         fatherModel.currentPlayer.getBoard().rewardCoin();
     }
