@@ -34,15 +34,15 @@ public class Model {
 
     // Models
     final PrivateModel privateModel;
-    final PublicModel publicModel;
-    final CharacterModel characterModel;
+    public final PublicModel publicModel;
+    public final CharacterModel characterModel;
 
     // Initialize game with starting rules
     public Model() {
         // Models
         privateModel = new PrivateModel(this);
         publicModel = new PublicModel(this);
-        characterModel
+        characterModel = new CharacterModel(this);
 
         professors = new ArrayList<>();
         players = new ArrayList<>();

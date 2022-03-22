@@ -8,6 +8,7 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
+import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.Player;
 import it.polimi.ingsw.pawn.MotherNature;
 
@@ -120,6 +121,17 @@ public class PublicModel {
         // TODO: Check they have enough coins and decrement them
 
         // TODO: Activate card effect
+    }
+
+    // Update island owner based on influence
+    public void updateIslandOwner(Island island) {
+        Board playerBoard = fatherModel.privateModel.getInfluence(island);
+
+        // TODO: Move towers, and eventually merge island, if the owner changes
+    }
+
+    public Player getCurrentPlayer() {
+        return fatherModel.currentPlayer;
     }
 
 }
