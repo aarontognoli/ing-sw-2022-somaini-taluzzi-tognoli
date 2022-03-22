@@ -5,7 +5,7 @@ import java.util.List;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.mvc.Model;
+import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Student;
 
 public class JokerCharacter extends CharacterCard {
@@ -53,7 +53,7 @@ public class JokerCharacter extends CharacterCard {
 
         int studentsToMoveCount = stuIdToRemFromJoker.size();
 
-        List<Student> currentPlayerEntrance = model.getCurrentPlayer().getBoard().getEntrance();
+        List<Student> currentPlayerEntrance = model.publicModel.getCurrentPlayer().getBoard().getEntrance();
 
         List<Integer> stuIndexToRemFromJoker = new ArrayList<>(studentsToMoveCount);
         List<Integer> stuIndexToRemFromPlayer = new ArrayList<>(studentsToMoveCount);

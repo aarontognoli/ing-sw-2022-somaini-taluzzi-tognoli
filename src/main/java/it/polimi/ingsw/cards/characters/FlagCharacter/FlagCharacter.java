@@ -2,7 +2,7 @@ package it.polimi.ingsw.cards.characters.FlagCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.mvc.Model;
+import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.places.Island;
 
 public class FlagCharacter extends CharacterCard {
@@ -17,6 +17,6 @@ public class FlagCharacter extends CharacterCard {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 
-        model.updateIslandOwner((Island) arguments);
+        model.publicModel.updateIslandOwner((Island) arguments);
     }
 }
