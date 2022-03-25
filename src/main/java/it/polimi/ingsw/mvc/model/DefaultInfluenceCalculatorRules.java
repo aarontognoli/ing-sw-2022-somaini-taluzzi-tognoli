@@ -5,10 +5,10 @@ import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 
-public class DefaultInfluenceCalculator extends InfluenceCalculator {
+public class DefaultInfluenceCalculatorRules extends InfluenceCalculatorRules {
 
-    public DefaultInfluenceCalculator(Model model) {
-        super(model);
+    public DefaultInfluenceCalculatorRules(Model fatherModel) {
+        super(fatherModel);
     }
 
     @Override
