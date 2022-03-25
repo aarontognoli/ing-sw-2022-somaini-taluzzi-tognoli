@@ -30,9 +30,8 @@ public class PrivateModel {
         // (Expert only) TODO: choose 3 random character cards
     }
 
-    Board getProfessorOwner(Color c) throws Exception {
+    Board getProfessorOwner(Color c) {
         return fatherModel.professors.get(c.ordinal()).getPosition();
-
     }
 
     Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception {
@@ -74,40 +73,6 @@ public class PrivateModel {
     Student drawStudentFromBag() {
         // TODO: implement later, waiting for bag implementation
         return null;
-    }
-
-    // Returns null if there is no player with more influence than others
-    Board getInfluence(Island island) {
-        Player maxInfluencePlayer = null;
-        int maxPlayerInfluence = 0;
-        Boolean tie = false;
-        int currentPlayerInfluence;
-        for (int i = 0; i < fatherModel.totalPlayerCount; i++) {
-            currentPlayerInfluence = 0;
-            for (Tower t : island.getTowers()) {
-                if (t.getColor().ordinal() == i) {
-                    currentPlayerInfluence++;
-                }
-
-            }
-            for (Student s : island.getStudents()) {
-                if (fatherModel.professors.get(s.getColor().ordinal()).getPosition()
-                        .equals(fatherModel.players.get(i).getBoard())) {
-                    currentPlayerInfluence++;
-                }
-            }
-            if (currentPlayerInfluence > maxPlayerInfluence || maxInfluencePlayer == null) {
-                maxPlayerInfluence = currentPlayerInfluence;
-                maxInfluencePlayer = fatherModel.players.get(i);
-                tie = false;
-            } else if (currentPlayerInfluence == maxPlayerInfluence) {
-                tie = true;
-            }
-        }
-
-        if (tie)
-            return null;
-        return maxInfluencePlayer.getBoard();
     }
 
     void placeTower(Board board) throws Exception {

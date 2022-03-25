@@ -6,6 +6,7 @@ import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
@@ -45,7 +46,17 @@ public class PublicModel {
             throw new Exception("Player pool full.");
         }
 
-        fatherModel.players.add(new Player(nickname));
+        TowerColor towerColor;
+        if (fatherModel.totalPlayerCount == 4) {
+            // 4 player rules: player 0 and 2 have WHITE towers, player 1 and 3 have BLACK
+            // towers.
+            towerColor = TowerColor.values()[fatherModel.players.size() % 2];
+        } else {
+            // 3 player rules: player 0 gets WHITE, player 1 gets BLACK, player 2 gets GREY
+            towerColor = TowerColor.values()[fatherModel.players.size()];
+        }
+
+        fatherModel.players.add(new Player(nickname, towerColor));
     }
 
     public void setGameMode(GameMode gameMode) {
@@ -125,7 +136,8 @@ public class PublicModel {
 
     // Update island owner based on influence
     public void updateIslandOwner(Island island) {
-        Board playerBoard = fatherModel.privateModel.getInfluence(island);
+        // TODO: Get influence correctly
+        // Board playerBoard = fatherModel.privateModel.getInfluence(island);
 
         // TODO: Move towers, and eventually merge island, if the owner changes
     }
