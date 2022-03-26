@@ -5,12 +5,19 @@ import java.util.List;
 import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.Player;
 import it.polimi.ingsw.pawn.MotherNature;
+
+class PlayerAlreadyChosenDeckException extends Exception {
+    public PlayerAlreadyChosenDeckException(String playerName) {
+        super(playerName + " has already chosen a deck.");
+    }
+}
 
 public class PublicModel {
     final Model fatherModel;
@@ -61,24 +68,14 @@ public class PublicModel {
         fatherModel.motherNature = new MotherNature(fatherModel.islands.get(islandIndex));
     }
 
-    public void chooseDeck(String playerNickname, Deck deck) throws Exception, IndexOutOfBoundsException {
+    public void chooseDeck(int playerIndex, int deckNameOrdinal) throws Exception {
+        Player targetPlayer = fatherModel.players.get(playerIndex);
 
-        for (Player p : fatherModel.players) {
-            if (p.getNickname().equals(playerNickname)) {
-                // Waiting for deck implementation
-                // Select correct deck
-
-                // p.setDeck(deck);
-
-                // TODO: Everyone had chosen a deck and mother nature
-                // Was placed
-                // prepareMatch();
-
-                return;
-            }
+        if (targetPlayer.getDeck() != null) {
+            throw new PlayerAlreadyChosenDeckException(targetPlayer.getNickname());
         }
 
-        throw new Exception("Player not found.");
+        targetPlayer.setDeck(new Deck(DeckName.values()[deckNameOrdinal]));
     }
 
     public void moveMotherNature(int steps) {
