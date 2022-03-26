@@ -1,6 +1,7 @@
 package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.bag.Bag;
+import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
 import it.polimi.ingsw.pawn.*;
@@ -31,6 +32,9 @@ public class Model {
     List<Cloud> clouds;
 
     MotherNature motherNature;
+
+    // Character cards
+    List<CharacterCard> currentGameCards;
 
     // Models
     final PrivateModel privateModel;

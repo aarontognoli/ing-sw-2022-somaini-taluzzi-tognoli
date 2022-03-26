@@ -1,6 +1,7 @@
 package it.polimi.ingsw.player;
 
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.pawn.Student;
 
@@ -59,13 +60,17 @@ public class Board {
         return entrance;
     }
 
+    public int getCoinCount() {
+        return coinCount;
+    }
+
     public void rewardCoin() {
         coinCount++;
     }
 
-    public void useCoins(int amount) throws Exception {
+    public void useCoins(int amount) throws InsufficientCoinException {
         if (amount > coinCount) {
-            throw new Exception("Not enough coins");
+            throw new InsufficientCoinException(coinCount, amount)
         }
         coinCount -= amount;
     }

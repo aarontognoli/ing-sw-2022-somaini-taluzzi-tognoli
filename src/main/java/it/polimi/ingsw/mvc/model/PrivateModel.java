@@ -3,11 +3,16 @@ package it.polimi.ingsw.mvc.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import static java.lang.Math.floorMod;
 
 import it.polimi.ingsw.bag.Bag;
+import it.polimi.ingsw.cards.characters.FlagCharacter.FlagCharacter;
+import it.polimi.ingsw.cards.characters.JokerCharacter.JokerCharacter;
+import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
@@ -29,7 +34,26 @@ public class PrivateModel {
         fatherModel.bag = new Bag(2);
         // TODO: Assign students to the islands
 
-        // (Expert only) TODO: choose 3 random character cards
+        // (Expert only) choose 3 random character cards
+        if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
+            fatherModel.currentGameCards = new ArrayList<>(3);
+
+            // TODO: get 3 randoms cards
+            fatherModel.currentGameCards.add(new FlagCharacter(fatherModel));
+
+            List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
+            for (int i = 0; i < JokerCharacter.INITIAL_STUDENT_SIZE; i++) {
+                studentsForJoker.add(fatherModel.privateModel.drawStudentFromBag());
+            }
+
+            List<Student> studentsForWine = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
+            for (int i = 0; i < WineCharacter.INITIAL_STUDENT_SIZE; i++) {
+                studentsForJoker.add(fatherModel.privateModel.drawStudentFromBag());
+            }
+
+            fatherModel.currentGameCards.add(new JokerCharacter(fatherModel, studentsForJoker));
+            fatherModel.currentGameCards.add(new WineCharacter(fatherModel, studentsForWine));
+        }
     }
 
     Board getProfessorOwner(Color c) throws Exception {
@@ -177,7 +201,7 @@ public class PrivateModel {
         }
         // when some islands are merged
         if ((fatherModel.islands.size() <= 3) || noAssistantCards)// TODO: wait for bag implementation and ckeck if the
-                                                                  // bag is empty)
+        // bag is empty)
         {
             winner = checkTowersForVictory();
             if (winner == null)

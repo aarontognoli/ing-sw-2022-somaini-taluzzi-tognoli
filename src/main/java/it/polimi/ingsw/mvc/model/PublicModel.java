@@ -4,9 +4,12 @@ import java.util.List;
 
 import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
+import it.polimi.ingsw.cards.characters.CCArgumentException;
+import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
@@ -104,7 +107,7 @@ public class PublicModel {
 
     /**
      * @param studentColor color of the student we need to mode from entrance to island
-     * @param islandIndex index of the target island
+     * @param islandIndex  index of the target island
      * @throws NotFoundException student of this color not found in the entrance
      */
     public void moveStudentToIsland(Color studentColor, int islandIndex) throws NotFoundException {
@@ -116,7 +119,7 @@ public class PublicModel {
     /**
      * @param studentColor color of the student we need to mode from entrance to dining room
      * @throws DiningRoomFullException dining room of the corresponding color is full
-     * @throws NotFoundException student of this color not found in the entrance
+     * @throws NotFoundException       student of this color not found in the entrance
      */
     public void moveStudentToDiningRoom(Color studentColor) throws DiningRoomFullException, NotFoundException {
         // Move a student (of this color) from the current player's entrance
@@ -140,13 +143,30 @@ public class PublicModel {
 
     }
 
-    public void playCharacterCard(int cardIndex) {
-        // Waiting for CharacterCard implementation
+    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException {
         // (Expert only) Current player plays a character card
+        if (fatherModel.gameMode.equals(GameMode.EASY_MODE)) {
+            throw new RuntimeException("Playing character card while game mode is not expert");
+        }
 
-        // TODO: Check they have enough coins and decrement them
+        CharacterCard targetCard = fatherModel.currentGameCards.get(cardIndex);
 
-        // TODO: Activate card effect
+        int cardCoinNeeded = targetCard.getCoinCost();
+
+        if (getCurrentPlayer().getBoard().getCoinCount() < cardCoinNeeded) {
+            throw new InsufficientCoinException(getCurrentPlayer().getBoard().getCoinCount(), cardCoinNeeded);
+        }
+
+        targetCard.activateEffect(effectArgument);
+
+        try {
+            // We decrement the count after the activation of the effect since we do not want to decrement the coins
+            // If the effect has invalid arguments.
+            getCurrentPlayer().getBoard().useCoins(cardCoinNeeded);
+        } catch (InsufficientCoinException e) {
+            throw new RuntimeException("Insufficient coin amount after activating character card\n"
+                    + "We checked the amount just before activation (?)");
+        }
     }
 
     // Update island owner based on influence
