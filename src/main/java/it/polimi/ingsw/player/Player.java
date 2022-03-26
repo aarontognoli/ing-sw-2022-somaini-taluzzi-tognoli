@@ -22,8 +22,12 @@ public class Player {
         this.deck = deck;
     }
 
-    public void setCurrentAssistantCard(AssistantCard currentAssistantCard){
+    public void setCurrentAssistantCard(AssistantCard currentAssistantCard) {
         this.currentAssistantCard = currentAssistantCard;
+    }
+
+    public AssistantCard getCurrentAssistantCard() {
+        return currentAssistantCard;
     }
 
     public String getNickname() {
@@ -34,7 +38,9 @@ public class Player {
         return board;
     }
 
-    public Deck getDeck() { return deck; }
+    public Deck getDeck() {
+        return deck;
+    }
 
     @Override
     public boolean equals(Object o) {

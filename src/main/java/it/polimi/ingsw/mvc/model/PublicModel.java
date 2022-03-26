@@ -19,6 +19,12 @@ class PlayerAlreadyChosenDeckException extends Exception {
     }
 }
 
+class TooMuchStepsException extends Exception {
+    public TooMuchStepsException(int maxSteps, int chosenSteps) {
+        super("Trying to move mother nature for " + chosenSteps + " steps, maximum is " + maxSteps);
+    }
+}
+
 public class PublicModel {
     final Model fatherModel;
 
@@ -60,7 +66,7 @@ public class PublicModel {
     }
 
     // Called during game preparation
-    public void placeMotherNature(int islandIndex) throws IndexOutOfBoundsException, Exception {
+    public void placeMotherNature(int islandIndex) throws Exception {
         if (fatherModel.motherNature != null) {
             throw new Exception("Mother Nature already chosen");
         }
@@ -78,9 +84,19 @@ public class PublicModel {
         targetPlayer.setDeck(new Deck(DeckName.values()[deckNameOrdinal]));
     }
 
-    public void moveMotherNature(int steps) {
+    public void moveMotherNature(int steps) throws TooMuchStepsException {
+        // TODO: PostManCharacter effect (needs PostManCharacter implementation)
+        int maxSteps = getCurrentPlayer().getCurrentAssistantCard().getMaxMotherNatureMovementValue();
+
+        if (steps > maxSteps) {
+            throw new TooMuchStepsException(maxSteps, steps);
+        }
+
         int indexPreviousMotherNatureIsland = fatherModel.islands.indexOf(fatherModel.motherNature.getPosition());
-        Island destination = fatherModel.islands.get(indexPreviousMotherNatureIsland + steps);
+
+        int finalIslandIndex = (indexPreviousMotherNatureIsland + steps) % fatherModel.islands.size();
+
+        Island destination = fatherModel.islands.get(finalIslandIndex);
         fatherModel.motherNature.move(destination);
     }
 
