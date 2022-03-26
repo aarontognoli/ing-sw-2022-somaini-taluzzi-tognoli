@@ -11,24 +11,14 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.exceptions.PlayerAlreadyChosenDeckException;
+import it.polimi.ingsw.exceptions.TooMuchStepsException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 import it.polimi.ingsw.pawn.MotherNature;
-
-class PlayerAlreadyChosenDeckException extends Exception {
-    public PlayerAlreadyChosenDeckException(String playerName) {
-        super(playerName + " has already chosen a deck.");
-    }
-}
-
-class TooMuchStepsException extends Exception {
-    public TooMuchStepsException(int maxSteps, int chosenSteps) {
-        super("Trying to move mother nature for " + chosenSteps + " steps, maximum is " + maxSteps);
-    }
-}
 
 public class PublicModel {
     final Model fatherModel;
