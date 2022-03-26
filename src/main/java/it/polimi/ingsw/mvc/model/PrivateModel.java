@@ -8,11 +8,13 @@ import static java.lang.Math.floorMod;
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
+import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
 public class PrivateModel {
@@ -35,7 +37,7 @@ public class PrivateModel {
 
     }
 
-    Student removeStudentFromWaitingRoom(Student student, Board player) throws Exception {
+    Student removeStudentFromEntrance(Student student, Board player) throws NotFoundException {
         List<Student> entrance = player.getEntrance();
         for (Student s : entrance) {
             if (s.getColor().equals(student.getColor())) {
@@ -44,15 +46,15 @@ public class PrivateModel {
             }
         }
 
-        throw new Exception("Student not found");
+        throw new NotFoundException("Student not found");
     }
 
     void addStudentToIsland(Student student, Island island) {
         island.getStudents().add(student);
     }
 
-    void addStudentToDiningRoom(Student student, Board player) {
-        player.getDiningRoom().get(student.getColor().ordinal()).add(student);
+    void addStudentToDiningRoom(Student student, Board player) throws DiningRoomFullException {
+        player.addStudentsToDiningRoom(student);
     }
 
     void fillClouds() {
@@ -245,17 +247,17 @@ public class PrivateModel {
         throw new Exception("Board not existing");
     }
 
-    Student getStudentInEntrance(Color c) throws Exception {
+    Student getStudentInEntrance(Color c) throws NotFoundException {
         for (Student s : fatherModel.currentPlayer.getBoard().getEntrance()) {
             if (s.getColor().equals(c)) {
                 return s;
             }
         }
-        throw new Exception("Student not found");
+
+        throw new NotFoundException("Student not found");
     }
 
-    //////////////////////////////////////////////
-    void rewardCoin() throws Exception {
+    void rewardCoin() {
         // Reward a new coin to the current player
         fatherModel.currentPlayer.getBoard().rewardCoin();
     }

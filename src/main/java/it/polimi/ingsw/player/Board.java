@@ -1,5 +1,6 @@
 package it.polimi.ingsw.player;
 
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.pawn.Student;
 
@@ -8,10 +9,11 @@ import java.util.List;
 
 public class Board {
 
-    static private final int DINING_ROOM_CAPACITY = 5;
+    static private final int DINING_ROOMS_COUNT = 5;
+    static private final int DINING_ROOM_MAX_STUDENT_COUNT = 10;
 
     private List<Tower> towers;
-    private List<List<Student>> diningRoom = new ArrayList<List<Student>>(DINING_ROOM_CAPACITY);
+    private List<List<Student>> diningRoom = new ArrayList<List<Student>>(DINING_ROOMS_COUNT);
     private List<Student> entrance;
     private int coinCount;
 
@@ -19,7 +21,7 @@ public class Board {
         towers = new ArrayList<Tower>();
         entrance = new ArrayList<Student>();
         coinCount = 0;
-        for (int i = 0; i < DINING_ROOM_CAPACITY; i++) {
+        for (int i = 0; i < DINING_ROOMS_COUNT; i++) {
             diningRoom.set(i, new ArrayList<Student>());
         }
     }
@@ -34,6 +36,17 @@ public class Board {
     public void addStudentsToEntrance(List<Student> newStudents) {
         entrance.addAll(newStudents);
     }
+
+    public void addStudentsToDiningRoom(Student newStudent) throws DiningRoomFullException {
+        List<Student> targetDiningRoom = diningRoom.get(newStudent.getColor().ordinal());
+
+        if (targetDiningRoom.size() == DINING_ROOM_MAX_STUDENT_COUNT) {
+            throw new DiningRoomFullException(newStudent.getColor());
+        }
+
+        targetDiningRoom.add(newStudent);
+    }
+
     public List<Tower> getTowers() {
         return towers;
     }
