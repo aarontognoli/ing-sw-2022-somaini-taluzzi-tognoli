@@ -13,17 +13,17 @@ public class Board {
     static private final int DINING_ROOMS_COUNT = 5;
     static private final int DINING_ROOM_MAX_STUDENT_COUNT = 10;
 
-    private List<Tower> towers;
-    private List<List<Student>> diningRoom = new ArrayList<List<Student>>(DINING_ROOMS_COUNT);
-    private List<Student> entrance;
+    final private List<Tower> towers;
+    final private List<List<Student>> diningRoom = new ArrayList<>(DINING_ROOMS_COUNT);
+    final private List<Student> entrance;
     private int coinCount;
 
     public Board() {
-        towers = new ArrayList<Tower>();
-        entrance = new ArrayList<Student>();
+        towers = new ArrayList<>();
+        entrance = new ArrayList<>();
         coinCount = 0;
         for (int i = 0; i < DINING_ROOMS_COUNT; i++) {
-            diningRoom.set(i, new ArrayList<Student>());
+            diningRoom.set(i, new ArrayList<>());
         }
     }
 
@@ -70,7 +70,7 @@ public class Board {
 
     public void useCoins(int amount) throws InsufficientCoinException {
         if (amount > coinCount) {
-            throw new InsufficientCoinException(coinCount, amount)
+            throw new InsufficientCoinException(coinCount, amount);
         }
         coinCount -= amount;
     }
