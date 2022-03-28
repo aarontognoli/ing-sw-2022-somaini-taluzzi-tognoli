@@ -2,6 +2,7 @@ package it.polimi.ingsw.cards.characters.WineCharacter;
 
 import java.util.List;
 
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.mvc.model.Model;
@@ -26,7 +27,7 @@ public class WineCharacter extends CharacterCard {
     }
 
     @Override
-    public void internalActivateEffect(Object arguments) throws CCArgumentException {
+    public void internalActivateEffect(Object arguments) throws CCArgumentException, BagEmptyException {
         if (arguments.getClass() != WineCharacterArgument.class) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }

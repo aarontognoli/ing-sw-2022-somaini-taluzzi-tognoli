@@ -7,6 +7,7 @@ import java.util.List;
 import static java.lang.Math.floorMod;
 
 import it.polimi.ingsw.bag.Bag;
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.FlagCharacter.FlagCharacter;
 import it.polimi.ingsw.cards.characters.JokerCharacter.JokerCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
@@ -30,9 +31,23 @@ public class PrivateModel {
         this.fatherModel = fatherModel;
     }
 
-    void prepareMatch() {
+    void prepareMatch() throws BagEmptyException {
         fatherModel.bag = new Bag(2);
-        // TODO: Assign students to the islands
+        Integer motherNatureIslandIndex = 0;
+
+        for (Island island : fatherModel.islands) {
+           if (fatherModel.motherNature.getPosition().equals(island)) {
+               motherNatureIslandIndex = fatherModel.islands.indexOf(island);
+               break;
+           }
+        }
+
+        for (int index = motherNatureIslandIndex + 1; ; index ++) {
+            if (fatherModel.islands.get(index).equals(fatherModel.motherNature.getPosition())) {
+                break;
+            }
+            fatherModel.islands.get(index % fatherModel.islands.size()).addStudent(drawStudentFromBag());
+        }
 
         fatherModel.influenceCalculator = fatherModel.totalPlayerCount == 4 ?
                 new InfluenceCalculator_4(fatherModel) : new InfluenceCalculator_2_3(fatherModel);
@@ -83,7 +98,7 @@ public class PrivateModel {
         player.addStudentsToDiningRoom(student);
     }
 
-    void fillClouds() {
+    void fillClouds() throws BagEmptyException {
         int studentsToDraw;
         List<Student> studentsToAdd;
         for (Cloud c : fatherModel.clouds) {
@@ -99,9 +114,8 @@ public class PrivateModel {
         }
     }
 
-    Student drawStudentFromBag() {
-        // TODO: implement later, waiting for bag implementation
-        return null;
+    Student drawStudentFromBag() throws BagEmptyException {
+        return fatherModel.bag.draw();
     }
 
     Board getInfluence(Island island) {
@@ -159,7 +173,7 @@ public class PrivateModel {
 
     // the method will be called in the right moments
     Player checkVictoryConditions() throws Exception {
-        Boolean noAssistantCards = false;
+        boolean noAssistantCards = false;
         // every time a new tower is placed
         Player winner;
         for (Player p : fatherModel.players) {
@@ -168,12 +182,13 @@ public class PrivateModel {
             }
         }
         for (Player p : fatherModel.players) {
-            // TODO: wait for Final Deck implementation check assistants cards number and
-            // ser noAssistantCards accordingly
+            if ( p.getDeck().isEmpty() ) {
+                noAssistantCards = true;
+                break;
+            }
         }
         // when some islands are merged
-        if ((fatherModel.islands.size() <= 3) || noAssistantCards)// TODO: wait for bag implementation and ckeck if the
-        // bag is empty)
+        if ((fatherModel.islands.size() <= 3) || noAssistantCards || fatherModel.bag.isEmpty())
         {
             winner = checkTowersForVictory();
             if (winner == null)

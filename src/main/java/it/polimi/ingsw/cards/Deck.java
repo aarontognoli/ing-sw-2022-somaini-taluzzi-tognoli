@@ -34,4 +34,8 @@ public class Deck {
     public ArrayList<AssistantCard> getHand() {
         return new ArrayList<>(cards);
     }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
+    }
 }

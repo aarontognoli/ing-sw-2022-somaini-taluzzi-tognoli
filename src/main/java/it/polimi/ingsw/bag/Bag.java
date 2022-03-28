@@ -7,11 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class BagEmptyException extends Exception {
-    public BagEmptyException() {
-        super("Bag is empty");
-    }
-}
 
 public class Bag {
     static private int incremental_id = 0;
@@ -38,7 +33,7 @@ public class Bag {
     }
 
     public Student draw() throws BagEmptyException {
-        if (students.size() == 0)
+        if (isEmpty())
             throw new BagEmptyException();
 
         Student returnValue = students.get(students.size() - 1);
@@ -46,5 +41,9 @@ public class Bag {
         students.remove(students.size() - 1);
 
         return returnValue;
+    }
+
+    public boolean isEmpty() {
+        return students.size() == 0;
     }
 }

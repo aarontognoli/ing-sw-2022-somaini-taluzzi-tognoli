@@ -1,5 +1,6 @@
 package it.polimi.ingsw.mvc.model;
 
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.pawn.Student;
 
 public class CharacterModel {
@@ -9,7 +10,7 @@ public class CharacterModel {
         this.fatherModel = fatherModel;
     }
 
-    public Student drawStudentFromBag() {
+    public Student drawStudentFromBag() throws BagEmptyException {
         return fatherModel.privateModel.drawStudentFromBag();
     }
 }
