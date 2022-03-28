@@ -10,12 +10,12 @@ import it.polimi.ingsw.pawn.Student;
 
 public class JokerCharacter extends CharacterCard {
 
-    private static final int INITIAL_STUDENT_SIZE = 6;
+    public static final int INITIAL_STUDENT_SIZE = 6;
 
     private List<Student> students;
 
     public JokerCharacter(Model model, List<Student> initialStudents) {
-        super(model);
+        super(model, 1);
 
         if (initialStudents.size() != INITIAL_STUDENT_SIZE) {
             // Should never happen
@@ -37,7 +37,7 @@ public class JokerCharacter extends CharacterCard {
     }
 
     @Override
-    public void activateEffect(Object arguments) throws CCArgumentException {
+    public void internalActivateEffect(Object arguments) throws CCArgumentException {
         if (arguments.getClass() != JokerCharacterArgument.class) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }

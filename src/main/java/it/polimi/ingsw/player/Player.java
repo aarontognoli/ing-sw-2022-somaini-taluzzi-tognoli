@@ -30,6 +30,10 @@ public class Player {
         this.currentAssistantCard = currentAssistantCard;
     }
 
+    public AssistantCard getCurrentAssistantCard() {
+        return currentAssistantCard;
+    }
+
     public String getNickname() {
         return nickname;
     }
