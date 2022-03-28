@@ -8,8 +8,8 @@ import it.polimi.ingsw.player.Player;
 
 public class InfluenceCalculator_2_3 extends InfluenceCalculator {
 
-    public InfluenceCalculator_2_3(Model model, InfluenceCalculatorRules influenceCalculatorRules) {
-        super(model, influenceCalculatorRules);
+    public InfluenceCalculator_2_3(Model model) {
+        super(model);
     }
 
     Board getInfluence(Island island) {

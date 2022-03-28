@@ -11,11 +11,15 @@ import it.polimi.ingsw.player.Board;
 
 public abstract class InfluenceCalculator {
     protected final Model fatherModel;
-    protected final InfluenceCalculatorRules influenceRules;
+    protected InfluenceCalculatorRules influenceRules;
 
-    public InfluenceCalculator(Model fatherModel, InfluenceCalculatorRules influenceRules) {
+    public InfluenceCalculator(Model fatherModel) {
         this.fatherModel = fatherModel;
-        this.influenceRules = influenceRules;
+        this.influenceRules = new DefaultInfluenceCalculatorRules(fatherModel);
+    }
+
+    public void setInfluenceCalculatorRules(InfluenceCalculatorRules newRules) {
+        influenceRules = newRules;
     }
 
     /**

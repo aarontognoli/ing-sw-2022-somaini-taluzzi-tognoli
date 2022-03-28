@@ -34,6 +34,9 @@ public class PrivateModel {
         fatherModel.bag = new Bag(2);
         // TODO: Assign students to the islands
 
+        fatherModel.influenceCalculator = fatherModel.totalPlayerCount == 4 ?
+                new InfluenceCalculator_4(fatherModel) : new InfluenceCalculator_2_3(fatherModel);
+
         // (Expert only) choose 3 random character cards
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
             fatherModel.currentGameCards = new ArrayList<>(3);
@@ -43,12 +46,12 @@ public class PrivateModel {
 
             List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
             for (int i = 0; i < JokerCharacter.INITIAL_STUDENT_SIZE; i++) {
-                studentsForJoker.add(fatherModel.privateModel.drawStudentFromBag());
+                studentsForJoker.add(drawStudentFromBag());
             }
 
             List<Student> studentsForWine = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
             for (int i = 0; i < WineCharacter.INITIAL_STUDENT_SIZE; i++) {
-                studentsForJoker.add(fatherModel.privateModel.drawStudentFromBag());
+                studentsForJoker.add(drawStudentFromBag());
             }
 
             fatherModel.currentGameCards.add(new JokerCharacter(fatherModel, studentsForJoker));
@@ -99,6 +102,10 @@ public class PrivateModel {
     Student drawStudentFromBag() {
         // TODO: implement later, waiting for bag implementation
         return null;
+    }
+
+    Board getInfluence(Island island) {
+        return fatherModel.influenceCalculator.getInfluence(island);
     }
 
     void placeTower(Board board) throws Exception {

@@ -4,8 +4,8 @@ import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 
 public class InfluenceCalculator_4 extends InfluenceCalculator {
-    public InfluenceCalculator_4(Model fatherModel, InfluenceCalculatorRules influenceRules) {
-        super(fatherModel, influenceRules);
+    public InfluenceCalculator_4(Model fatherModel) {
+        super(fatherModel);
     }
 
     /**

@@ -36,6 +36,9 @@ public class Model {
     // Character cards
     List<CharacterCard> currentGameCards;
 
+    // Strategy field for Influence Calculation
+    InfluenceCalculator influenceCalculator;
+
     // Models
     final PrivateModel privateModel;
     public final PublicModel publicModel;
