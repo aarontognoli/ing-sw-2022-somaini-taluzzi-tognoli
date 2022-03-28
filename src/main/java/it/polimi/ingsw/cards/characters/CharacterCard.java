@@ -15,11 +15,11 @@ abstract public class CharacterCard {
         return coinCost;
     }
 
-    public void activateEffect(Object arguments) throws CCArgumentException, BagEmptyException {
+    public void activateEffect(Object arguments) throws CCArgumentException {
         internalActivateEffect(arguments);
         coinCost++;
     }
 
 
-    protected abstract void internalActivateEffect(Object arguments) throws CCArgumentException, BagEmptyException;
+    protected abstract void internalActivateEffect(Object arguments) throws CCArgumentException;
 }

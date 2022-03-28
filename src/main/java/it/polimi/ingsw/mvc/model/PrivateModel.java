@@ -31,9 +31,9 @@ public class PrivateModel {
         this.fatherModel = fatherModel;
     }
 
-    void prepareMatch() throws BagEmptyException {
+    void prepareMatch() throws BagEmptyException, NotFoundException {
         fatherModel.bag = new Bag(2);
-        Integer motherNatureIslandIndex = 0;
+        int motherNatureIslandIndex = -1;
 
         for (Island island : fatherModel.islands) {
            if (fatherModel.motherNature.getPosition().equals(island)) {
@@ -41,13 +41,16 @@ public class PrivateModel {
                break;
            }
         }
+        if (motherNatureIslandIndex == -1) throw new NotFoundException("Mother Nature not found");
 
-        for (int index = motherNatureIslandIndex + 1; ; index ++) {
-            if (fatherModel.islands.get(index).equals(fatherModel.motherNature.getPosition())) {
-                break;
-            }
-            fatherModel.islands.get(index % fatherModel.islands.size()).addStudent(drawStudentFromBag());
+        for (int i = 0; i < 5; i++) {
+            int index1 = (motherNatureIslandIndex + i + 1) % 12;
+            int index2 = (motherNatureIslandIndex + i + 6 + 1) % 12;
+            fatherModel.islands.get(index1).addStudent(drawStudentFromBag());
+            fatherModel.islands.get(index2).addStudent(drawStudentFromBag());
         }
+
+        fatherModel.bag = new Bag(24);
 
         fatherModel.influenceCalculator = fatherModel.totalPlayerCount == 4 ?
                 new InfluenceCalculator_4(fatherModel) : new InfluenceCalculator_2_3(fatherModel);
@@ -141,7 +144,7 @@ public class PrivateModel {
         int currentIslandIndex = fatherModel.islands.indexOf(island);
         int prev = floorMod(currentIslandIndex - 1, Model.TOTAL_ISLANDS_NUMBER);
         int next = floorMod(currentIslandIndex + 1, Model.TOTAL_ISLANDS_NUMBER);
-        Boolean prevDone = false, nextDone = false;
+        boolean prevDone = false, nextDone = false;
         if (fatherModel.islands.get(prev).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
                 .getTowerColor()) {
             fatherModel.islands.set(currentIslandIndex,

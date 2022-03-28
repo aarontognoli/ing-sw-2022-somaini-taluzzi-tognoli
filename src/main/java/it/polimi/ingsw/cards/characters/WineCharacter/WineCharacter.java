@@ -27,7 +27,7 @@ public class WineCharacter extends CharacterCard {
     }
 
     @Override
-    public void internalActivateEffect(Object arguments) throws CCArgumentException, BagEmptyException {
+    public void internalActivateEffect(Object arguments) throws CCArgumentException {
         if (arguments.getClass() != WineCharacterArgument.class) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
@@ -53,6 +53,10 @@ public class WineCharacter extends CharacterCard {
         targetIsland.addStudent(students.get(targetStudentIndex));
 
         // Draw a new student from the bag and replace the one we put on the island
-        students.set(targetStudentIndex, model.characterModel.drawStudentFromBag());
+        try {
+            students.set(targetStudentIndex, model.characterModel.drawStudentFromBag());
+        } catch (BagEmptyException e) {
+            throw new CCArgumentException(e.getMessage());
+        }
     }
 }
