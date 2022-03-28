@@ -112,9 +112,10 @@ public class PrivateModel {
             for (CharacterCard card : fatherModel.currentGameCards) {
                 if (card.getClass() == HerbalistCharacter.class) {
                     ((HerbalistCharacter) card).addNoEntryTile();
+                    return null;
                 }
             }
-            return null;
+            throw new RuntimeException("Impossible state of the game");
         }
         else {
             return fatherModel.influenceCalculator.getInfluence(island);
@@ -172,7 +173,7 @@ public class PrivateModel {
 
     // the method will be called in the right moments
     Player checkVictoryConditions() throws Exception {
-        Boolean noAssistantCards = false;
+        boolean noAssistantCards = false;
         // every time a new tower is placed
         Player winner;
         for (Player p : fatherModel.players) {
