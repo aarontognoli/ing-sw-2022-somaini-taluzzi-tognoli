@@ -14,6 +14,7 @@ public class Player {
 
     private Deck deck;
     private AssistantCard currentAssistantCard;
+    private int maxMotherNatureMovementValue;
 
     public Player(String nickname, TowerColor towerColor) {
         this.nickname = nickname;
@@ -28,6 +29,15 @@ public class Player {
 
     public void setCurrentAssistantCard(AssistantCard currentAssistantCard) {
         this.currentAssistantCard = currentAssistantCard;
+        this.maxMotherNatureMovementValue = currentAssistantCard.getMaxMotherNatureMovementValue();
+    }
+
+    public void setMaxMotherNatureMovementValue(int maxMotherNatureMovementValue) {
+        this.maxMotherNatureMovementValue = maxMotherNatureMovementValue;
+    }
+
+    public int getMaxMotherNatureMovementValue() {
+        return maxMotherNatureMovementValue;
     }
 
     public AssistantCard getCurrentAssistantCard() {
