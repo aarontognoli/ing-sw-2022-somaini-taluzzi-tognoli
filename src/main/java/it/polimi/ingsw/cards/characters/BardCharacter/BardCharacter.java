@@ -17,7 +17,7 @@ public class BardCharacter extends CharacterCard {
     }
 
     @Override
-    protected void internalActivateEffect(Object arguments) throws CCArgumentException, NotFoundException, DiningRoomFullException {
+    protected void internalActivateEffect(Object arguments) throws CCArgumentException {
         if (arguments.getClass() != BardCharacterArgument.class) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
@@ -35,7 +35,22 @@ public class BardCharacter extends CharacterCard {
         for (Color color : ((BardCharacterArgument) arguments).getStudentsColorToExchangeEntrance()) {
             for (Student student : entrance) {
                 if (student.getColor().equals(color)) {
-                    model.publicModel.moveStudentToDiningRoom(color);
+                    try{
+                        model.publicModel.moveStudentToDiningRoom(color);
+                    }catch (NotFoundException e) {
+                        for (Student s : studentList) {
+                            model.publicModel.getCurrentPlayer().getBoard().getDiningRoom()
+                                    .get(s.getColor().ordinal()).add(s);
+                        }
+                        throw new CCArgumentException("Student you want to move not found in the entrance");
+                    }
+                    catch (DiningRoomFullException e) {
+                        for (Student s : studentList) {
+                            model.publicModel.getCurrentPlayer().getBoard().getDiningRoom()
+                                    .get(s.getColor().ordinal()).add(s);
+                        }
+                        throw new CCArgumentException("The dining room of the color of one of the chosen students is already full");
+                    }
                 }
                 break;
             }

@@ -139,7 +139,7 @@ public class PublicModel {
 
     }
 
-    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException, NoMoreNoEntryTilesException, NotFoundException, DiningRoomFullException {
+    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException {
         // (Expert only) Current player plays a character card
         if (fatherModel.gameMode.equals(GameMode.EASY_MODE)) {
             throw new RuntimeException("Playing character card while game mode is not expert");

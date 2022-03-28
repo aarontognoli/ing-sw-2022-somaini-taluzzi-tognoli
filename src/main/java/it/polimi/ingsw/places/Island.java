@@ -1,6 +1,7 @@
 package it.polimi.ingsw.places;
 
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 
@@ -93,7 +94,11 @@ public class Island {
         return this.towers.get(0).getColor();
     }
 
-    public void putNoEntryTile() { noEntryTile = true; }
+    public void putNoEntryTile() throws Exception {
+        if (noEntryTile)
+            throw new Exception("A No Entry tile is already present in this island");
+        noEntryTile = true;
+    }
 
     public void removeNoEntryTile() { noEntryTile = false; }
 

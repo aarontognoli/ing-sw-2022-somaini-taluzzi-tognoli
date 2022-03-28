@@ -7,7 +7,9 @@ import java.util.List;
 import static java.lang.Math.floorMod;
 
 import it.polimi.ingsw.bag.Bag;
+import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cards.characters.FlagCharacter.FlagCharacter;
+import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
 import it.polimi.ingsw.cards.characters.JokerCharacter.JokerCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
@@ -105,10 +107,18 @@ public class PrivateModel {
     }
 
     Board getInfluence(Island island) {
-        if (island.hasNoEntryTile())
+        if (island.hasNoEntryTile()) {
+            island.removeNoEntryTile();
+            for (CharacterCard card : fatherModel.currentGameCards) {
+                if (card.getClass() == HerbalistCharacter.class) {
+                    ((HerbalistCharacter) card).addNoEntryTile();
+                }
+            }
             return null;
-        else
+        }
+        else {
             return fatherModel.influenceCalculator.getInfluence(island);
+        }
     }
 
     void placeTower(Board board) throws Exception {
@@ -130,7 +140,7 @@ public class PrivateModel {
         int currentIslandIndex = fatherModel.islands.indexOf(island);
         int prev = floorMod(currentIslandIndex - 1, Model.TOTAL_ISLANDS_NUMBER);
         int next = floorMod(currentIslandIndex + 1, Model.TOTAL_ISLANDS_NUMBER);
-        Boolean prevDone = false, nextDone = false;
+        boolean prevDone = false, nextDone = false;
         if (fatherModel.islands.get(prev).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
                 .getTowerColor()) {
             fatherModel.islands.set(currentIslandIndex,
