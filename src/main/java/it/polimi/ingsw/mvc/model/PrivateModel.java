@@ -105,7 +105,10 @@ public class PrivateModel {
     }
 
     Board getInfluence(Island island) {
-        return fatherModel.influenceCalculator.getInfluence(island);
+        if (island.hasNoEntryTile())
+            return null;
+        else
+            return fatherModel.influenceCalculator.getInfluence(island);
     }
 
     void placeTower(Board board) throws Exception {

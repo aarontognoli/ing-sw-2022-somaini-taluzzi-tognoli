@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cards.characters;
 
+import it.polimi.ingsw.exceptions.NoMoreNoEntryTilesException;
 import it.polimi.ingsw.mvc.model.Model;
 
 abstract public class CharacterCard {
@@ -14,11 +15,11 @@ abstract public class CharacterCard {
         return coinCost;
     }
 
-    public void activateEffect(Object arguments) throws CCArgumentException {
+    public void activateEffect(Object arguments) throws CCArgumentException, NoMoreNoEntryTilesException {
         internalActivateEffect(arguments);
         coinCost++;
     }
 
 
-    protected abstract void internalActivateEffect(Object arguments) throws CCArgumentException;
+    protected abstract void internalActivateEffect(Object arguments) throws CCArgumentException, NoMoreNoEntryTilesException;
 }

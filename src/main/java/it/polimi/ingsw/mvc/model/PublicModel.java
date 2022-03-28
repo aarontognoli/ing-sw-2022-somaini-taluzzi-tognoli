@@ -10,10 +10,7 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.TowerColor;
-import it.polimi.ingsw.exceptions.InsufficientCoinException;
-import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.exceptions.PlayerAlreadyChosenDeckException;
-import it.polimi.ingsw.exceptions.TooMuchStepsException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.DiningRoomFullException;
@@ -90,8 +87,7 @@ public class PublicModel {
     }
 
     public void moveMotherNature(int steps) throws TooMuchStepsException {
-        // TODO: PostManCharacter effect (needs PostManCharacter implementation)
-        int maxSteps = getCurrentPlayer().getCurrentAssistantCard().getMaxMotherNatureMovementValue();
+        int maxSteps = getCurrentPlayer().getMaxMotherNatureMovementValue();
 
         if (steps > maxSteps) {
             throw new TooMuchStepsException(maxSteps, steps);
@@ -143,7 +139,7 @@ public class PublicModel {
 
     }
 
-    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException {
+    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException, NoMoreNoEntryTilesException {
         // (Expert only) Current player plays a character card
         if (fatherModel.gameMode.equals(GameMode.EASY_MODE)) {
             throw new RuntimeException("Playing character card while game mode is not expert");
