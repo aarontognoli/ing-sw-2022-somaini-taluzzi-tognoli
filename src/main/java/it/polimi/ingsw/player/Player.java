@@ -2,6 +2,7 @@ package it.polimi.ingsw.player;
 
 import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
+import it.polimi.ingsw.enums.TowerColor;
 
 import java.util.Objects;
 
@@ -9,11 +10,14 @@ public class Player {
 
     final private Board board;
     final private String nickname;
+    final private TowerColor towerColor;
+
     private Deck deck;
     private AssistantCard currentAssistantCard;
 
-    public Player(String nickname) {
+    public Player(String nickname, TowerColor towerColor) {
         this.nickname = nickname;
+        this.towerColor = towerColor;
 
         board = new Board();
     }
@@ -42,10 +46,16 @@ public class Player {
         return deck;
     }
 
+    public TowerColor getTowerColor() {
+        return towerColor;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Player player = (Player) o;
         return nickname.equals(player.nickname);
     }

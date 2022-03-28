@@ -34,6 +34,9 @@ public class PrivateModel {
         fatherModel.bag = new Bag(2);
         // TODO: Assign students to the islands
 
+        fatherModel.influenceCalculator = fatherModel.totalPlayerCount == 4 ?
+                new InfluenceCalculator_4(fatherModel) : new InfluenceCalculator_2_3(fatherModel);
+
         // (Expert only) choose 3 random character cards
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
             fatherModel.currentGameCards = new ArrayList<>(3);
@@ -43,12 +46,12 @@ public class PrivateModel {
 
             List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
             for (int i = 0; i < JokerCharacter.INITIAL_STUDENT_SIZE; i++) {
-                studentsForJoker.add(fatherModel.privateModel.drawStudentFromBag());
+                studentsForJoker.add(drawStudentFromBag());
             }
 
             List<Student> studentsForWine = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
             for (int i = 0; i < WineCharacter.INITIAL_STUDENT_SIZE; i++) {
-                studentsForJoker.add(fatherModel.privateModel.drawStudentFromBag());
+                studentsForJoker.add(drawStudentFromBag());
             }
 
             fatherModel.currentGameCards.add(new JokerCharacter(fatherModel, studentsForJoker));
@@ -56,9 +59,8 @@ public class PrivateModel {
         }
     }
 
-    Board getProfessorOwner(Color c) throws Exception {
+    Board getProfessorOwner(Color c) {
         return fatherModel.professors.get(c.ordinal()).getPosition();
-
     }
 
     Student removeStudentFromEntrance(Student student, Board player) throws NotFoundException {
@@ -102,38 +104,8 @@ public class PrivateModel {
         return null;
     }
 
-    // Returns null if there is no player with more influence than others
     Board getInfluence(Island island) {
-        Player maxInfluencePlayer = null;
-        int maxPlayerInfluence = 0;
-        Boolean tie = false;
-        int currentPlayerInfluence;
-        for (int i = 0; i < fatherModel.totalPlayerCount; i++) {
-            currentPlayerInfluence = 0;
-            for (Tower t : island.getTowers()) {
-                if (t.getColor().ordinal() == i) {
-                    currentPlayerInfluence++;
-                }
-
-            }
-            for (Student s : island.getStudents()) {
-                if (fatherModel.professors.get(s.getColor().ordinal()).getPosition()
-                        .equals(fatherModel.players.get(i).getBoard())) {
-                    currentPlayerInfluence++;
-                }
-            }
-            if (currentPlayerInfluence > maxPlayerInfluence || maxInfluencePlayer == null) {
-                maxPlayerInfluence = currentPlayerInfluence;
-                maxInfluencePlayer = fatherModel.players.get(i);
-                tie = false;
-            } else if (currentPlayerInfluence == maxPlayerInfluence) {
-                tie = true;
-            }
-        }
-
-        if (tie)
-            return null;
-        return maxInfluencePlayer.getBoard();
+        return fatherModel.influenceCalculator.getInfluence(island);
     }
 
     void placeTower(Board board) throws Exception {
