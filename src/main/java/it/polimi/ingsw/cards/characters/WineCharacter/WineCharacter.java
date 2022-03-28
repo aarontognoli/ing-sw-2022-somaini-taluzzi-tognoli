@@ -10,12 +10,12 @@ import it.polimi.ingsw.places.Island;
 
 public class WineCharacter extends CharacterCard {
 
-    private static final int INITIAL_STUDENT_SIZE = 4;
+    public static final int INITIAL_STUDENT_SIZE = 4;
 
     List<Student> students;
 
     public WineCharacter(Model model, List<Student> studentsToPlace) {
-        super(model);
+        super(model, 1);
 
         if (studentsToPlace.size() != INITIAL_STUDENT_SIZE) {
             // Should never happen
@@ -26,7 +26,7 @@ public class WineCharacter extends CharacterCard {
     }
 
     @Override
-    public void activateEffect(Object arguments) throws CCArgumentException {
+    public void internalActivateEffect(Object arguments) throws CCArgumentException {
         if (arguments.getClass() != WineCharacterArgument.class) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
