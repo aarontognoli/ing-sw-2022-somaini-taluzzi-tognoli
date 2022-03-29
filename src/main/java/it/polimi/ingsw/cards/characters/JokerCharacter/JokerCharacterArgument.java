@@ -11,7 +11,7 @@ public class JokerCharacterArgument {
             List<Integer> studentsIDToRemoveFromJoker,
             List<Integer> studentsIDToRemoveFromPlayerBoard) {
         this.studentsIDToRemoveFromJoker = studentsIDToRemoveFromJoker;
-        this.studentsIDToRemoveFromJoker = studentsIDToRemoveFromJoker;
+        this.studentsIDToRemoveFromPlayerBoard = studentsIDToRemoveFromPlayerBoard;
     }
 
     public List<Integer> getStudentsIDToRemoveFromPlayerBoard() {
