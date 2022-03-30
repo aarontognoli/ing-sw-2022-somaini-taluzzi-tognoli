@@ -5,6 +5,7 @@ import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
+import it.polimi.ingsw.player.DiningRoomFullException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
