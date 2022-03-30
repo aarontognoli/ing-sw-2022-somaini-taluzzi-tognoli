@@ -8,7 +8,9 @@ import static java.lang.Math.floorMod;
 
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cards.characters.FlagCharacter.FlagCharacter;
+import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
 import it.polimi.ingsw.cards.characters.JokerCharacter.JokerCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
@@ -122,7 +124,19 @@ public class PrivateModel {
     }
 
     Board getInfluence(Island island) {
-        return fatherModel.influenceCalculator.getInfluence(island);
+        if (island.hasNoEntryTile()) {
+            island.removeNoEntryTile();
+            for (CharacterCard card : fatherModel.currentGameCards) {
+                if (card.getClass() == HerbalistCharacter.class) {
+                    ((HerbalistCharacter) card).addNoEntryTile();
+                    return null;
+                }
+            }
+            throw new RuntimeException("Impossible state of the game");
+        }
+        else {
+            return fatherModel.influenceCalculator.getInfluence(island);
+        }
     }
 
     void placeTower(Board board) throws Exception {
