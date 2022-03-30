@@ -2,6 +2,7 @@ package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
+import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
@@ -27,7 +28,7 @@ class PrivateModelTest {
     @Test
     void removeStudentFromEntrance() {
 
-        Model model = regoleBase2Player();
+        Model model = TwoPlayersBasicSetup();
         Board testBoard = new Board();
         List<Student> tempEntrance = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
@@ -58,7 +59,7 @@ class PrivateModelTest {
 
     @Test
     void addStudentToIsland() {
-        Model model = regoleBase2Player();
+        Model model = TwoPlayersBasicSetup();
         Island island = new Island();
         model.privateModel.addStudentToIsland(new Student(Color.YELLOW_GNOMES, 0), island);
         assertEquals(island.getStudents().size(), 1);
@@ -70,7 +71,7 @@ class PrivateModelTest {
 
     @Test
     void addStudentToDiningRoom() {
-        Model model = regoleBase2Player();
+        Model model = TwoPlayersBasicSetup();
         Board testBoard = new Board();
         try {
             model.privateModel.addStudentToDiningRoom(new Student(Color.GREEN_FROGS, 0), testBoard);
@@ -109,6 +110,15 @@ class PrivateModelTest {
 
     @Test
     void placeTower() {
+        Model model = TwoPlayersBasicSetup();
+        Board testBoard = new Board(TowerColor.BLACK, 8);
+        try {
+            model.privateModel.placeTower(testBoard);
+        } catch (Exception e) {
+
+        }
+        assertEquals(model.publicModel.getMotherNatureIsland().getTowers().size(), 1);
+        assertEquals(testBoard.getTowers().size(), 7);
     }
 
     @Test
@@ -143,7 +153,7 @@ class PrivateModelTest {
     void getStudentInEntrance() {
     }
 
-    Model regoleBase2Player() {
+    Model TwoPlayersBasicSetup() {
         Model model = null;
         Map<String, DeckName> temp = new HashMap<>();
         temp.put("Player1", DeckName.DESERT_KING);

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.player;
 
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.pawn.Student;
@@ -26,6 +27,12 @@ public class Board {
         for (int i = 0; i < DINING_ROOMS_COUNT; i++) {
             diningRoom.add(new ArrayList<>());
         }
+    }
+    public Board(TowerColor towerColor,int towersNumber)
+    {
+        this();
+        for(int i=0;i<towersNumber;i++)
+            towers.add(new Tower(towerColor));
     }
 
     public Tower removeTower() throws Exception {
