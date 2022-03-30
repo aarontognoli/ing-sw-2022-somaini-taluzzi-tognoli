@@ -64,6 +64,36 @@ class PrivateModelTest {
 
     @Test
     void addStudentToDiningRoom() {
+        Board testBoard = new Board();
+        try {
+            model.privateModel.addStudentToDiningRoom(new Student(Color.GREEN_FROGS, 0), testBoard);
+            for (Color c : Color.values()) {
+                int test;
+                if (c.equals(Color.GREEN_FROGS))
+                    test = 1;
+                else
+                    test = 0;
+                assertEquals(testBoard.getDiningRoom().get(c.ordinal()).size(), test);
+            }
+
+        } catch (DiningRoomFullException e) {
+
+        }
+        try {       //10 = DINING_ROOM_MAX_STUDENT_COUNT
+            for (int i = 0; i < 10; i++) {
+                model.privateModel.addStudentToDiningRoom(new Student(Color.YELLOW_GNOMES, i + 1), testBoard);
+            }
+            assert true;
+        } catch (DiningRoomFullException e) {
+
+        }
+        try {
+            model.privateModel.addStudentToDiningRoom(new Student(Color.YELLOW_GNOMES, 12), testBoard);
+        } catch (DiningRoomFullException e) {
+            assert true;
+        }
+
+
     }
 
     @Test
