@@ -143,17 +143,15 @@ class PrivateModelTest {
     void getStudentInEntrance() {
     }
 
-    Model regoleBase2Player()
-    {
-        Model model=null;
+    Model regoleBase2Player() {
+        Model model = null;
         Map<String, DeckName> temp = new HashMap<>();
-        temp.put("Player1",DeckName.DESERT_KING);
-        temp.put("Player2",DeckName.CLOUD_WITCH);
+        temp.put("Player1", DeckName.DESERT_KING);
+        temp.put("Player2", DeckName.CLOUD_WITCH);
         try {
-             model = new Model(0, temp);
+            model = new Model(0, temp);
+        } catch (Exception e) {
         }
-        catch (Exception e)
-        {}
-        return  model;
+        return model;
     }
 }
