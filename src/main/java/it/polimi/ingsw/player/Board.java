@@ -22,8 +22,9 @@ public class Board {
         towers = new ArrayList<>();
         entrance = new ArrayList<>();
         coinCount = 0;
+
         for (int i = 0; i < DINING_ROOMS_COUNT; i++) {
-            diningRoom.set(i, new ArrayList<>());
+            diningRoom.add(i, new ArrayList<>());
         }
     }
 
@@ -34,6 +35,7 @@ public class Board {
             throw new Exception("No towers, end the game");
     }
 
+    //TODO: EntranceFull Exception (?)
     public void addStudentsToEntrance(List<Student> newStudents) {
         entrance.addAll(newStudents);
     }
