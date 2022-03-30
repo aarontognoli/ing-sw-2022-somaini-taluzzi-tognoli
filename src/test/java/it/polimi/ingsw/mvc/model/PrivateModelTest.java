@@ -35,14 +35,14 @@ class PrivateModelTest {
         }
         try {
             model.privateModel.removeStudentFromEntrance(new Student(Color.GREEN_FROGS, 7), testBoard);
-            assert false;
+
         } catch (NotFoundException e) {
             assert true;
         }
         testBoard.addStudentsToEntrance(tempEntrance);
         try {
             model.privateModel.removeStudentFromEntrance(new Student(Color.GREEN_FROGS, 7), testBoard);
-            assert false;
+
         } catch (NotFoundException e) {
             assert true;
         }
@@ -50,8 +50,9 @@ class PrivateModelTest {
             Student s = model.privateModel.removeStudentFromEntrance(new Student(Color.YELLOW_GNOMES, 7), testBoard);
             assertEquals(s.getColor(), Color.YELLOW_GNOMES);
             assertEquals(testBoard.getEntrance().size(), 6);
+            assert true;
         } catch (NotFoundException e) {
-            assert false;
+
         }
     }
 
