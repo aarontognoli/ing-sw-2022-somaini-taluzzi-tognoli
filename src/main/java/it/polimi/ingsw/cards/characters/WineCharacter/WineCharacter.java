@@ -2,6 +2,7 @@ package it.polimi.ingsw.cards.characters.WineCharacter;
 
 import java.util.List;
 
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.mvc.model.Model;
@@ -52,6 +53,10 @@ public class WineCharacter extends CharacterCard {
         targetIsland.addStudent(students.get(targetStudentIndex));
 
         // Draw a new student from the bag and replace the one we put on the island
-        students.set(targetStudentIndex, model.characterModel.drawStudentFromBag());
+        try {
+            students.set(targetStudentIndex, model.characterModel.drawStudentFromBag());
+        } catch (BagEmptyException e) {
+            throw new CCArgumentException(e.getMessage());
+        }
     }
 }

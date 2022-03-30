@@ -4,7 +4,7 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.player.Board;
 
 public class Professor {
-    private Color color;
+    private final Color color;
     private Board position;
 
     public Professor(Color color) {
@@ -21,7 +21,6 @@ public class Professor {
     }
 
     public Board getPosition() {
-        //TODO Remember to make it immutable
         return position;
     }
 }

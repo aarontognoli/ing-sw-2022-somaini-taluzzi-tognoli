@@ -33,18 +33,6 @@ public class Island {
         noEntryTile = false;
     }
 
-    // TODO: Delete (?)
-    public Island(Student initialStudent) {
-        students = new ArrayList<>(INITIAL_STUDENT_CAPACITY);
-        towers = new ArrayList<>(INITIAL_TOWER_CAPACITY);
-
-        if (initialStudent != null) {
-            // This island _does_ contain a student
-            // Some Island are initialized without any student
-            students.add(initialStudent);
-        }
-    }
-
     public Island(Island i1, Island i2) throws TowerDifferentColorException {
         // Check the 2 island have same color Towers
 

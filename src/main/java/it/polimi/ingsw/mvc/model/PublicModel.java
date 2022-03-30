@@ -2,6 +2,7 @@ package it.polimi.ingsw.mvc.model;
 
 import java.util.List;
 
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
@@ -139,7 +140,7 @@ public class PublicModel {
 
     }
 
-    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException {
+    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException, BagEmptyException {
         // (Expert only) Current player plays a character card
         if (fatherModel.gameMode.equals(GameMode.EASY_MODE)) {
             throw new RuntimeException("Playing character card while game mode is not expert");
