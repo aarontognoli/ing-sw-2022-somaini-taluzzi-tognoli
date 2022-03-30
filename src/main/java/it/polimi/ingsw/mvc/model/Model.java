@@ -72,6 +72,7 @@ public class Model {
 
             for (String nickname : nicknamesAndDecks.keySet()) {
                 players.add(new Player(nickname,TowerColor.values()[towerColor],nicknamesAndDecks.get(nickname)));
+                towerColor++;
             }
         } else
             throw new IllegalArgumentException("Illegal number of Players");

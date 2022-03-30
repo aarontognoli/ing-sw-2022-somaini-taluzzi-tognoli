@@ -143,6 +143,8 @@ public class PrivateModel {
         // towers can only be placed on the island containing MotherNature
 
         fatherModel.publicModel.getMotherNatureIsland().addTower(board.removeTower());
+        //TODO: if same color exception place tower again in board
+
     }
 
     void removeAllTowers(Island island) {

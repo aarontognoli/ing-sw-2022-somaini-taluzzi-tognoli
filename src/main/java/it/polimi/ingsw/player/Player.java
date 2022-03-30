@@ -20,8 +20,8 @@ public class Player {
     public Player(String nickname, TowerColor towerColor) {
         this.nickname = nickname;
         this.towerColor = towerColor;
-
-        board = new Board();
+        //TODO: different towerNumbers for different number of players maybe add another param with totalPlayerNumbers(?)
+        board = new Board(towerColor,8);
     }
 
     public Player(String nickname, TowerColor towerColor, DeckName deckName)

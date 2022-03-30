@@ -36,24 +36,24 @@ class PrivateModelTest {
         }
         try {
             model.privateModel.removeStudentFromEntrance(new Student(Color.GREEN_FROGS, 7), testBoard);
-
+            assert false;
         } catch (NotFoundException e) {
-            assert true;
+
         }
         testBoard.addStudentsToEntrance(tempEntrance);
         try {
             model.privateModel.removeStudentFromEntrance(new Student(Color.GREEN_FROGS, 7), testBoard);
-
+            assert false;
         } catch (NotFoundException e) {
-            assert true;
+
         }
         try {
             Student s = model.privateModel.removeStudentFromEntrance(new Student(Color.YELLOW_GNOMES, 7), testBoard);
             assertEquals(s.getColor(), Color.YELLOW_GNOMES);
             assertEquals(testBoard.getEntrance().size(), 6);
-            assert true;
-        } catch (NotFoundException e) {
 
+        } catch (NotFoundException e) {
+            assert false;
         }
     }
 
@@ -85,20 +85,21 @@ class PrivateModelTest {
             }
 
         } catch (DiningRoomFullException e) {
-
+            assert false;
         }
         try {       //10 = DINING_ROOM_MAX_STUDENT_COUNT
             for (int i = 0; i < 10; i++) {
                 model.privateModel.addStudentToDiningRoom(new Student(Color.YELLOW_GNOMES, i + 1), testBoard);
             }
-            assert true;
-        } catch (DiningRoomFullException e) {
 
+        } catch (DiningRoomFullException e) {
+            assert false;
         }
         try {
             model.privateModel.addStudentToDiningRoom(new Student(Color.YELLOW_GNOMES, 12), testBoard);
+            assert false;
         } catch (DiningRoomFullException e) {
-            assert true;
+
         }
 
 
@@ -111,14 +112,33 @@ class PrivateModelTest {
     @Test
     void placeTower() {
         Model model = TwoPlayersBasicSetup();
-        Board testBoard = new Board(TowerColor.BLACK, 8);
+        Board board0 = model.players.get(0).getBoard();
+        Board board1 = model.players.get(1).getBoard();
         try {
-            model.privateModel.placeTower(testBoard);
+            model.privateModel.placeTower(board0);
         } catch (Exception e) {
-
+            assert false;
         }
+
         assertEquals(model.publicModel.getMotherNatureIsland().getTowers().size(), 1);
-        assertEquals(testBoard.getTowers().size(), 7);
+        assertEquals(board0.getTowers().size(), 7);
+        try {
+            model.privateModel.placeTower(board1);
+            assert false;
+        } catch (Exception e) {
+            assertEquals(board1.getTowers().size(), 8);
+            try {
+                assertEquals(model.publicModel.getMotherNatureIsland().getTowerColor(), board0.getTowers().get(0).getColor());
+            } catch (Exception ein) {
+            }
+        }
+        for (int i = 0; i < 7; i++) {
+            try {
+                //Todo try emptying a board
+            } catch (Exception e) {
+
+            }
+        }
     }
 
     @Test
