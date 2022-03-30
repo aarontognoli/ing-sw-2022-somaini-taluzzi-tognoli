@@ -67,7 +67,7 @@ public class Model {
         //TODO: different influence rules for each number of player
         int towerColor=0;
         publicModel.placeMotherNature(motherNatureStartingPosition);
-        if (nicknamesAndDecks.size()>0 && nicknamesAndDecks.size() <= 4) {
+        if (nicknamesAndDecks.size()>1 && nicknamesAndDecks.size() <= 4) {
             //2-3 players
 
             for (String nickname : nicknamesAndDecks.keySet()) {
