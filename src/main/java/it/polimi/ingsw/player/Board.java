@@ -24,7 +24,7 @@ public class Board {
         coinCount = 0;
 
         for (int i = 0; i < DINING_ROOMS_COUNT; i++) {
-            diningRoom.add(i, new ArrayList<>());
+            diningRoom.add(new ArrayList<>());
         }
     }
 
