@@ -67,9 +67,10 @@ public class Model {
             professors.add(c.ordinal(),new Professor(c));
         }
 
-        //TODO: different influence rules for each number of player
+        //TODO: different influence rules for each number of player with case select
         int towerColor = 0;
         privateModel.placeMotherNature(motherNatureStartingPosition);
+
         if (nicknamesAndDecks.size() > 1 && nicknamesAndDecks.size() <= 4) {
 
             //2 players
