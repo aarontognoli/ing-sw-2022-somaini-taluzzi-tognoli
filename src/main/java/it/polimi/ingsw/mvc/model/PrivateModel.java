@@ -17,6 +17,7 @@ import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.pawn.MotherNature;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
@@ -38,10 +39,10 @@ public class PrivateModel {
         int motherNatureIslandIndex = -1;
 
         for (Island island : fatherModel.islands) {
-           if (fatherModel.motherNature.getPosition().equals(island)) {
-               motherNatureIslandIndex = fatherModel.islands.indexOf(island);
-               break;
-           }
+            if (fatherModel.motherNature.getPosition().equals(island)) {
+                motherNatureIslandIndex = fatherModel.islands.indexOf(island);
+                break;
+            }
         }
         if (motherNatureIslandIndex == -1) throw new NotFoundException("Mother Nature not found");
 
@@ -133,8 +134,7 @@ public class PrivateModel {
                 }
             }
             throw new RuntimeException("Impossible state of the game");
-        }
-        else {
+        } else {
             return fatherModel.influenceCalculator.getInfluence(island);
         }
     }
@@ -201,14 +201,13 @@ public class PrivateModel {
             }
         }
         for (Player p : fatherModel.players) {
-            if ( p.getDeck().isEmpty() ) {
+            if (p.getDeck().isEmpty()) {
                 noAssistantCards = true;
                 break;
             }
         }
         // when some islands are merged
-        if ((fatherModel.islands.size() <= 3) || noAssistantCards || fatherModel.bag.isEmpty())
-        {
+        if ((fatherModel.islands.size() <= 3) || noAssistantCards || fatherModel.bag.isEmpty()) {
             winner = checkTowersForVictory();
             if (winner == null)
                 return checkProfessorsForVictory();
@@ -290,5 +289,13 @@ public class PrivateModel {
     void rewardCoin() {
         // Reward a new coin to the current player
         fatherModel.currentPlayer.getBoard().rewardCoin();
+    }
+
+    void placeMotherNature(int islandIndex) throws Exception {
+        if (fatherModel.motherNature != null) {
+            throw new Exception("Mother Nature already chosen");
+        }
+
+        fatherModel.motherNature = new MotherNature(fatherModel.islands.get(islandIndex));
     }
 }

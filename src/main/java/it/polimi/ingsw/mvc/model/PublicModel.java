@@ -60,8 +60,8 @@ public class PublicModel {
             // 3 player rules: player 0 gets WHITE, player 1 gets BLACK, player 2 gets GREY
             towerColor = TowerColor.values()[fatherModel.players.size()];
         }
-
-        fatherModel.players.add(new Player(nickname, towerColor));
+        //TODO: deckname from client and different towers number
+        fatherModel.players.add(new Player(nickname, towerColor, DeckName.DESERT_KING, 8));
     }
 
     public void setGameMode(GameMode gameMode) {
@@ -69,13 +69,7 @@ public class PublicModel {
     }
 
     // Called during game preparation
-    public void placeMotherNature(int islandIndex) throws Exception {
-        if (fatherModel.motherNature != null) {
-            throw new Exception("Mother Nature already chosen");
-        }
 
-        fatherModel.motherNature = new MotherNature(fatherModel.islands.get(islandIndex));
-    }
 
     public void chooseDeck(int playerIndex, int deckNameOrdinal) throws Exception {
         Player targetPlayer = fatherModel.players.get(playerIndex);

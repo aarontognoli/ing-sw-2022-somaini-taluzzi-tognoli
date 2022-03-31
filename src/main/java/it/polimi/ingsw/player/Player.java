@@ -17,16 +17,12 @@ public class Player {
     private AssistantCard currentAssistantCard;
     private int maxMotherNatureMovementValue;
 
-    public Player(String nickname, TowerColor towerColor) {
+
+    public Player(String nickname, TowerColor towerColor, DeckName deckName, int towersNumber) {
         this.nickname = nickname;
         this.towerColor = towerColor;
-        //TODO: different towerNumbers for different number of players maybe add another param with totalPlayerNumbers(?)
-        board = new Board(towerColor,8);
-    }
 
-    public Player(String nickname, TowerColor towerColor, DeckName deckName)
-    {
-        this(nickname,towerColor);
+        board = new Board(towerColor, towersNumber);
         setDeck(new Deck(deckName));
     }
 
