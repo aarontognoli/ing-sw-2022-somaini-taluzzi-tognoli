@@ -1,6 +1,7 @@
 package it.polimi.ingsw.places;
 
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
@@ -66,9 +67,9 @@ public class Island {
 
     public boolean hasNoEntryTile() { return noEntryTile; }
 
-    public TowerColor getTowerColor() throws Exception {
+    public TowerColor getTowerColor() throws NoTowerException {
         if (towers.size() == 0) {
-            throw new Exception("Cannot get tower color of island because there is no tower");
+            throw new NoTowerException("Cannot get tower color of island because there is no tower");
         }
 
         return this.towers.get(0).getColor();

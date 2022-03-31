@@ -2,7 +2,6 @@ package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
-import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
@@ -23,13 +22,14 @@ class PrivateModelTest {
 
     @Test
     void getProfessorOwner() {
+        //todo after placeProfessorInBoard
 
     }
 
     @Test
     void removeStudentFromEntrance() {
 
-        Model model = TwoPlayersBasicSetup();
+        Model model = twoPlayersBasicSetup();
         Board testBoard = new Board();
         List<Student> tempEntrance = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
@@ -60,7 +60,7 @@ class PrivateModelTest {
 
     @Test
     void addStudentToIsland() {
-        Model model = TwoPlayersBasicSetup();
+        Model model = twoPlayersBasicSetup();
         Island island = new Island();
         model.privateModel.addStudentToIsland(new Student(Color.YELLOW_GNOMES, 0), island);
         assertEquals(island.getStudents().size(), 1);
@@ -72,7 +72,7 @@ class PrivateModelTest {
 
     @Test
     void addStudentToDiningRoom() {
-        Model model = TwoPlayersBasicSetup();
+        Model model = twoPlayersBasicSetup();
         Board testBoard = new Board();
         try {
             model.privateModel.addStudentToDiningRoom(new Student(Color.GREEN_FROGS, 0), testBoard);
@@ -108,11 +108,12 @@ class PrivateModelTest {
 
     @Test
     void getInfluence() {
+        //TODO
     }
 
     @Test
     void placeTower() {
-        Model model = TwoPlayersBasicSetup();
+        Model model = twoPlayersBasicSetup();
         Board board0 = model.players.get(0).getBoard();
         Board board1 = model.players.get(1).getBoard();
         try {
@@ -156,26 +157,80 @@ class PrivateModelTest {
 
     @Test
     void removeAllTowers() {
-        Model model = TwoPlayersBasicSetup();
+        Model model = twoPlayersBasicSetup();
         Board board0 = model.players.get(0).getBoard();
         Island motherNatureIsland = model.publicModel.getMotherNatureIsland();
-        assertEquals(0,motherNatureIsland.getTowers().size());
+        assertEquals(0, motherNatureIsland.getTowers().size());
         model.privateModel.removeAllTowers(motherNatureIsland);
-        assertEquals(0,motherNatureIsland.getTowers().size());
+        assertEquals(0, motherNatureIsland.getTowers().size());
         try {
             for (int i = 0; i < 8; i++) {
                 model.privateModel.placeTower(board0);
             }
         } catch (Exception e) {
         }
-        assertEquals(0,board0.getTowers().size());
+        assertEquals(0, board0.getTowers().size());
         model.privateModel.removeAllTowers(motherNatureIsland);
-        assertEquals(0,motherNatureIsland.getTowers().size());
-        assertEquals(8,board0.getTowers().size());
+        assertEquals(0, motherNatureIsland.getTowers().size());
+        assertEquals(8, board0.getTowers().size());
     }
 
     @Test
     void mergeIslands() {
+        Model model = twoPlayersBasicSetup();
+        Board board0 = model.players.get(0).getBoard();
+        Island motherNatureIsland = model.publicModel.getMotherNatureIsland();
+        try {
+            model.privateModel.mergeIslands(motherNatureIsland);
+            assert false;
+        } catch (Exception e) {
+            assertEquals(12, model.islands.size());
+        }
+        try {
+            model.privateModel.placeTower(board0);
+        } catch (Exception e) {
+            assert false;
+        }
+        try {
+            model.privateModel.mergeIslands(motherNatureIsland);
+            assert false;
+        } catch (Exception e) {
+        }
+        try{
+            //model.publicModel.moveMotherNature(1);
+            model.motherNature.move(model.islands.get(1));
+            model.privateModel.placeTower(board0);
+            motherNatureIsland= model.publicModel.getMotherNatureIsland();
+        }catch (Exception e){
+
+        }
+        try{
+            model.privateModel.mergeIslands(motherNatureIsland);
+            assertEquals(11,model.islands.size());
+            motherNatureIsland = model.publicModel.getMotherNatureIsland();
+            assertEquals(2,motherNatureIsland.getTowers().size());
+        }catch(Exception e)
+        {
+            assert false;
+        }
+        model = twoPlayersBasicSetup();
+        board0 = model.players.get(0).getBoard();
+        try{
+            //model.publicModel.moveMotherNature(1);
+            model.privateModel.placeTower(board0);
+            model.motherNature.move(model.islands.get(1));
+            model.privateModel.placeTower(board0);
+            model.privateModel.placeTower(board0);
+            model.motherNature.move(model.islands.get(2));
+            model.privateModel.placeTower(board0);
+            model.privateModel.placeTower(board0);
+            model.privateModel.placeTower(board0);
+            model.privateModel.mergeIslands(model.islands.get(1));
+            assertEquals(10,model.islands.size());
+            assertEquals(6,model.publicModel.getMotherNatureIsland().getTowers().size());
+        }catch (Exception e){
+            assert false;
+        }
     }
 
     @Test
@@ -202,7 +257,7 @@ class PrivateModelTest {
     void getStudentInEntrance() {
     }
 
-    Model TwoPlayersBasicSetup() {
+    Model twoPlayersBasicSetup() {
         Model model = null;
         Map<String, DeckName> temp = new HashMap<>();
         temp.put("Player1", DeckName.DESERT_KING);

@@ -62,6 +62,11 @@ public class Model {
         for (int i = 0; i < TOTAL_ISLANDS_NUMBER; i++) {
             islands.add(new Island());
         }
+        // Initialize Professors
+        for (Color c: Color.values()) {
+            professors.add(c.ordinal(),new Professor(c));
+        }
+
         //TODO: different influence rules for each number of player
         int towerColor = 0;
         privateModel.placeMotherNature(motherNatureStartingPosition);

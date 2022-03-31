@@ -16,6 +16,7 @@ import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.MotherNature;
@@ -163,33 +164,58 @@ public class PrivateModel {
         }
     }
 
-    void mergeIslands(Island island) throws Exception {
+    void mergeIslands(Island island) throws NoTowerException {
         int currentIslandIndex = fatherModel.islands.indexOf(island);
-        int prev = floorMod(currentIslandIndex - 1, Model.TOTAL_ISLANDS_NUMBER);
-        int next = floorMod(currentIslandIndex + 1, Model.TOTAL_ISLANDS_NUMBER);
-        boolean prevDone = false, nextDone = false;
-        if (fatherModel.islands.get(prev).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
-                .getTowerColor()) {
-            fatherModel.islands.set(currentIslandIndex,
-                    new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(prev)));
-            prevDone = true;
+        int prev = floorMod(currentIslandIndex - 1, fatherModel.islands.size());
+        int next = floorMod(currentIslandIndex + 1, fatherModel.islands.size());
+        boolean prevDone = false, nextDone = false,noTowers=false;
+        try {
+            if (fatherModel.islands.get(prev).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
+                    .getTowerColor()) {
+                fatherModel.islands.set(currentIslandIndex,
+                        new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(prev)));
+                prevDone = true;
+
+            }
         }
-        if (fatherModel.islands.get(next).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
-                .getTowerColor()) {
-            fatherModel.islands.set(currentIslandIndex,
-                    new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(next)));
-            nextDone = true;
+        catch (NoTowerException e)
+        {
+            noTowers=true;
+        }
+        catch(TowerDifferentColorException e)
+        {
+            //This can't happen
+            throw new RuntimeException("Can't enter here");
+        }
+        try {
+            if (fatherModel.islands.get(next).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
+                    .getTowerColor()) {
+                fatherModel.islands.set(currentIslandIndex,
+                        new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(next)));
+                nextDone = true;
+            }
+        }
+        catch (NoTowerException e)
+        {
+            if(noTowers)
+                throw e;
+        }
+        catch(TowerDifferentColorException e)
+        {
+            //This can't happen
+            throw new RuntimeException("Can't enter here");
         }
         // the index changes if i remove islands
         Island tempIslandToGetIndex = fatherModel.islands.get(currentIslandIndex);
         if (prevDone) {
             fatherModel.islands.remove(
-                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) - 1, Model.TOTAL_ISLANDS_NUMBER));
+                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) - 1, fatherModel.islands.size()));
         }
         if (nextDone) {
             fatherModel.islands.remove(
-                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) + 1, Model.TOTAL_ISLANDS_NUMBER));
+                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) + 1, fatherModel.islands.size()));
         }
+        fatherModel.motherNature.move(tempIslandToGetIndex);
 
     }
 
