@@ -4,6 +4,7 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
@@ -125,19 +126,33 @@ class PrivateModelTest {
         try {
             model.privateModel.placeTower(board1);
             assert false;
-        } catch (Exception e) {
+        } catch (TowerDifferentColorException e) {
             assertEquals(board1.getTowers().size(), 8);
             try {
                 assertEquals(model.publicModel.getMotherNatureIsland().getTowerColor(), board0.getTowers().get(0).getColor());
             } catch (Exception ein) {
+                assert false;
             }
+        } catch (Exception e)
+        {
+            assert false;
         }
         for (int i = 0; i < 7; i++) {
             try {
-                //Todo try emptying a board
-            } catch (Exception e) {
+                model.privateModel.placeTower(board0);
 
+            } catch (Exception e) {
+                assert false;
             }
+        }
+        assertEquals(0,board0.getTowers().size());
+        try{
+            model.privateModel.placeTower(board0);
+            assert false;
+        }catch (Exception e)
+        {
+            assertEquals(0,board0.getTowers().size());
+            assertEquals(8,model.publicModel.getMotherNatureIsland().getTowers().size());
         }
     }
 

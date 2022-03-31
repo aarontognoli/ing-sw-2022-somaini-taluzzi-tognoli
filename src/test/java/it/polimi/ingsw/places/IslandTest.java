@@ -2,6 +2,7 @@ package it.polimi.ingsw.places;
 
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 import org.junit.Test;

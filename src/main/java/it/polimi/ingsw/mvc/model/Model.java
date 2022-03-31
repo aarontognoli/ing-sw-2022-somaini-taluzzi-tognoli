@@ -74,7 +74,8 @@ public class Model {
             }
         } else
             throw new IllegalArgumentException("Illegal number of Players");
-        privateModel.prepareMatch();
+        //TODO: fix prepareMatch()
+        //privateModel.prepareMatch();
     }
 
 }

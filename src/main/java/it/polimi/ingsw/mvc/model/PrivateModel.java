@@ -17,6 +17,7 @@ import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.MotherNature;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
@@ -141,9 +142,15 @@ public class PrivateModel {
 
     void placeTower(Board board) throws Exception {
         // towers can only be placed on the island containing MotherNature
+        Tower tempTower = board.removeTower();
+        try {
 
-        fatherModel.publicModel.getMotherNatureIsland().addTower(board.removeTower());
-        //TODO: if same color exception place tower again in board
+            fatherModel.publicModel.getMotherNatureIsland().addTower(tempTower);
+        } catch (TowerDifferentColorException e) {
+            board.getTowers().add(tempTower);
+            throw e;
+        }
+
 
     }
 

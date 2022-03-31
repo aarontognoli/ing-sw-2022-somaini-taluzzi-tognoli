@@ -1,7 +1,7 @@
 package it.polimi.ingsw.places;
 
 import it.polimi.ingsw.enums.TowerColor;
-import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 
@@ -9,14 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-class TowerDifferentColorException extends Exception {
-    TowerDifferentColorException(TowerColor color1, TowerColor color2) {
-        super("Tower operation between different colors." +
-                "\nFirst Color: " + color1.toString() +
-                "; Second color: " + color2.toString());
-    }
-}
 
 public class Island {
 
