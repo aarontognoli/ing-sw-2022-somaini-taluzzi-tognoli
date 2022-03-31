@@ -4,10 +4,12 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
+import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
+import it.polimi.ingsw.player.Player;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,7 +24,24 @@ class PrivateModelTest {
 
     @Test
     void getProfessorOwner() {
-        //todo after placeProfessorInBoard
+        Model model = twoPlayersBasicSetup();
+        model.currentPlayer = model.players.get(0);
+        Board testBoard;
+        for(Color c: Color.values())
+            assertEquals(null,model.privateModel.getProfessorOwner(c));
+
+        model.privateModel.placeProfessorInBoard(model.professors.get(Color.RED_DRAGONS.ordinal()));
+        for(Color c: Color.values()) {
+            if(c.equals(Color.RED_DRAGONS))
+            {
+                testBoard= model.currentPlayer.getBoard();
+            }else
+            {
+                testBoard = null;
+            }
+            assertEquals(testBoard, model.privateModel.getProfessorOwner(c));
+        }
+
 
     }
 
