@@ -235,6 +235,24 @@ class PrivateModelTest {
 
     @Test
     void placeProfessorInBoard() {
+        Model model = twoPlayersBasicSetup();
+        Board board0 = model.players.get(0).getBoard();
+        model.currentPlayer= model.players.get(0);
+        model.privateModel.placeProfessorInBoard(model.professors.get(Color.BLUE_UNICORNS.ordinal()));
+        Board testBoard;
+        for(Color c : Color.values())
+        {
+            if(c.equals(Color.BLUE_UNICORNS))
+            {
+                testBoard=board0;
+            }
+            else
+            {
+                testBoard=null;
+            }
+            assertEquals(testBoard,model.professors.get(c.ordinal()).getPosition());
+        }
+
     }
 
     @Test
