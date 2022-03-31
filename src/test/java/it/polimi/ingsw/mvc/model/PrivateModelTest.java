@@ -133,8 +133,7 @@ class PrivateModelTest {
             } catch (Exception ein) {
                 assert false;
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             assert false;
         }
         for (int i = 0; i < 7; i++) {
@@ -145,19 +144,34 @@ class PrivateModelTest {
                 assert false;
             }
         }
-        assertEquals(0,board0.getTowers().size());
-        try{
+        assertEquals(0, board0.getTowers().size());
+        try {
             model.privateModel.placeTower(board0);
             assert false;
-        }catch (Exception e)
-        {
-            assertEquals(0,board0.getTowers().size());
-            assertEquals(8,model.publicModel.getMotherNatureIsland().getTowers().size());
+        } catch (Exception e) {
+            assertEquals(0, board0.getTowers().size());
+            assertEquals(8, model.publicModel.getMotherNatureIsland().getTowers().size());
         }
     }
 
     @Test
     void removeAllTowers() {
+        Model model = TwoPlayersBasicSetup();
+        Board board0 = model.players.get(0).getBoard();
+        Island motherNatureIsland = model.publicModel.getMotherNatureIsland();
+        assertEquals(0,motherNatureIsland.getTowers().size());
+        model.privateModel.removeAllTowers(motherNatureIsland);
+        assertEquals(0,motherNatureIsland.getTowers().size());
+        try {
+            for (int i = 0; i < 8; i++) {
+                model.privateModel.placeTower(board0);
+            }
+        } catch (Exception e) {
+        }
+        assertEquals(0,board0.getTowers().size());
+        model.privateModel.removeAllTowers(motherNatureIsland);
+        assertEquals(0,motherNatureIsland.getTowers().size());
+        assertEquals(8,board0.getTowers().size());
     }
 
     @Test
