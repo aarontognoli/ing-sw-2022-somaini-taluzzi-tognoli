@@ -16,6 +16,7 @@ import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.exceptions.BoardNotInGameException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
@@ -300,13 +301,13 @@ public class PrivateModel {
         return winner;
     }
 
-    Player getPlayerFromBoard(Board board) throws Exception {
+    Player getPlayerFromBoard(Board board) throws BoardNotInGameException {
         for (Player p : fatherModel.players) {
             if (p.getBoard().equals(board)) {
                 return p;
             }
         }
-        throw new Exception("Board not existing");
+        throw new BoardNotInGameException("Board not existing");
     }
 
     Student getStudentInEntrance(Color c) throws NotFoundException {

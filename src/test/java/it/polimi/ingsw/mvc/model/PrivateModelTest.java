@@ -2,6 +2,7 @@ package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
+import it.polimi.ingsw.exceptions.BoardNotInGameException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Professor;
@@ -276,10 +277,12 @@ class PrivateModelTest {
 
     @Test
     void checkVictoryConditions() {
+        //todo after influence
     }
 
     @Test
     void checkTowersForVictory() {
+
     }
 
     @Test
@@ -288,10 +291,24 @@ class PrivateModelTest {
 
     @Test
     void getPlayerFromBoard() {
+        Model model = twoPlayersBasicSetup();
+
+        for (Player p: model.players) {
+            try {
+                assertEquals(p, model.privateModel.getPlayerFromBoard(p.getBoard()));
+            }
+            catch (BoardNotInGameException e)
+            {
+                assert false;
+            }
+        }
+
+
     }
 
     @Test
     void getStudentInEntrance() {
+
     }
 
     Model twoPlayersBasicSetup() {
@@ -302,6 +319,7 @@ class PrivateModelTest {
         try {
             model = new Model(0, temp);
         } catch (Exception e) {
+
         }
         return model;
     }
