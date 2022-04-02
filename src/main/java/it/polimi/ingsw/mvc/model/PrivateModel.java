@@ -313,6 +313,7 @@ public class PrivateModel {
     Student getStudentInEntrance(Color c) throws NotFoundException {
         for (Student s : fatherModel.currentPlayer.getBoard().getEntrance()) {
             if (s.getColor().equals(c)) {
+                fatherModel.privateModel.removeStudentFromEntrance(s,fatherModel.currentPlayer.getBoard());
                 return s;
             }
         }
