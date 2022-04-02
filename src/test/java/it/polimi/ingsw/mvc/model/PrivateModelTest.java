@@ -1,12 +1,16 @@
 package it.polimi.ingsw.mvc.model;
 
+import it.polimi.ingsw.bag.Bag;
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
+import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
+import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
@@ -270,16 +274,59 @@ class PrivateModelTest {
 
     @Test
     void checkVictoryConditions() {
-        //todo after influence
+        //2 players Test
+        Model model = twoPlayersBasicSetup();
+        Player p = model.privateModel.checkVictoryConditions();
+        assertEquals(null, p);
+        model.players.get(0).getBoard().getTowers().clear();
+        p = model.privateModel.checkVictoryConditions();
+        assertEquals(model.players.get(0), p);
+        //<=3 islands
+        model = twoPlayersBasicSetup();
+        model.islands.clear();
+        model.islands.add(new Island());
+        model.islands.add(new Island());
+        model.islands.add(new Island());
+        try {
+            model.islands.get(0).addTower(new Tower(TowerColor.BLACK));
+        } catch (Exception e) {
+            //can't come here
+            assert false;
+        }
+        //TowerVictory
+        p = model.privateModel.checkVictoryConditions();
+        assertEquals(model.players.get(TowerColor.BLACK.ordinal()), p);
+        //assistant cards empty
+        model = twoPlayersBasicSetup();
+        for (AssistantCard ac : AssistantCard.values()) {
+            try {
+                model.players.get(0).getDeck().playAssistantCard(ac);
+            } catch (NotFoundException e) {
+                assert false;
+            }
+        }
+        model.players.get(0).getDeck().getHand().clear();
+        model.professors.get(0).move(model.players.get(0).getBoard());
+        //Professors Victory
+        p = model.privateModel.checkVictoryConditions();
+        assertEquals(model.players.get(0), p);
+        //empty bag
+        model = twoPlayersBasicSetup();
+        model.bag = new Bag(0);
+        model.players.get(0).getDeck().getHand().clear();
+        model.professors.get(0).move(model.players.get(0).getBoard());
+
+
     }
 
     @Test
     void checkTowersForVictory() {
-
+        //checked in checkVictoryConditions()
     }
 
     @Test
     void checkProfessorsForVictory() {
+        //checked in checkVictoryConditions()
     }
 
     @Test
@@ -371,6 +418,8 @@ class PrivateModelTest {
         } catch (Exception e) {
 
         }
+        //TODO: Add bag creation in Model Constructor
+        model.bag = new Bag(42);//random number
         return model;
     }
 }

@@ -63,14 +63,15 @@ public class Model {
             islands.add(new Island());
         }
         // Initialize Professors
-        for (Color c: Color.values()) {
-            professors.add(c.ordinal(),new Professor(c));
+        for (Color c : Color.values()) {
+            professors.add(c.ordinal(), new Professor(c));
         }
 
         //TODO: different influence rules for each number of player with case select
         int towerColor = 0;
-        privateModel.placeMotherNature(motherNatureStartingPosition);
 
+        privateModel.placeMotherNature(motherNatureStartingPosition);
+        totalPlayerCount = nicknamesAndDecks.size();
         if (nicknamesAndDecks.size() > 1 && nicknamesAndDecks.size() <= 4) {
 
             //2 players

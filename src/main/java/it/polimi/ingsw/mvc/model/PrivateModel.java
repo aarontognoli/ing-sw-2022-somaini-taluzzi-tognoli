@@ -169,7 +169,7 @@ public class PrivateModel {
         int currentIslandIndex = fatherModel.islands.indexOf(island);
         int prev = floorMod(currentIslandIndex - 1, fatherModel.islands.size());
         int next = floorMod(currentIslandIndex + 1, fatherModel.islands.size());
-        boolean prevDone = false, nextDone = false,noTowers=false;
+        boolean prevDone = false, nextDone = false, noTowers = false;
         try {
             if (fatherModel.islands.get(prev).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
                     .getTowerColor()) {
@@ -178,13 +178,9 @@ public class PrivateModel {
                 prevDone = true;
 
             }
-        }
-        catch (NoTowerException e)
-        {
-            noTowers=true;
-        }
-        catch(TowerDifferentColorException e)
-        {
+        } catch (NoTowerException e) {
+            noTowers = true;
+        } catch (TowerDifferentColorException e) {
             //This can't happen
             throw new RuntimeException("Can't enter here");
         }
@@ -195,14 +191,10 @@ public class PrivateModel {
                         new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(next)));
                 nextDone = true;
             }
-        }
-        catch (NoTowerException e)
-        {
-            if(noTowers)
+        } catch (NoTowerException e) {
+            if (noTowers)
                 throw e;
-        }
-        catch(TowerDifferentColorException e)
-        {
+        } catch (TowerDifferentColorException e) {
             //This can't happen
             throw new RuntimeException("Can't enter here");
         }
@@ -225,7 +217,8 @@ public class PrivateModel {
     }
 
     // the method will be called in the right moments
-    Player checkVictoryConditions() throws Exception {
+    Player checkVictoryConditions() {
+        //TODO: check with rules, i think something is wrong, maybe return Player and reason why they won
         boolean noAssistantCards = false;
         // every time a new tower is placed
         Player winner;
@@ -254,6 +247,7 @@ public class PrivateModel {
 
     // support methods for more readable code
     Player checkTowersForVictory() {
+
         List<Integer> towersCountForEachPlayer = new ArrayList<>(Collections.nCopies(fatherModel.totalPlayerCount, 0));
         int max = 0;
         Player winner = null;
@@ -279,16 +273,24 @@ public class PrivateModel {
         return winner;
     }
 
-    Player checkProfessorsForVictory() throws Exception {
+    Player checkProfessorsForVictory() {
         // 5 professors, a tie isn't possible
         List<Integer> professorsCountForEachPlayer = new ArrayList<>(
                 Collections.nCopies(fatherModel.totalPlayerCount, 0));
         int max = 0;
         Player winner = null;
         for (Professor p : fatherModel.professors) {
-            professorsCountForEachPlayer.set(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())),
-                    professorsCountForEachPlayer.get(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())))
-                            + 1);
+            try {
+                professorsCountForEachPlayer.set(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())),
+                        professorsCountForEachPlayer.get(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())))
+                                + 1);
+            } catch (BoardNotInGameException e) {
+                //if this happens the code is severely bugged
+                if (p.getPosition() != null) {
+                    e.printStackTrace();
+                    throw new RuntimeException("Can't be here");
+                }
+            }
         }
 
         for (int i = 0; i < fatherModel.totalPlayerCount; i++) {
@@ -313,7 +315,7 @@ public class PrivateModel {
     Student getStudentInEntrance(Color c) throws NotFoundException {
         for (Student s : fatherModel.currentPlayer.getBoard().getEntrance()) {
             if (s.getColor().equals(c)) {
-                fatherModel.privateModel.removeStudentFromEntrance(s,fatherModel.currentPlayer.getBoard());
+                fatherModel.privateModel.removeStudentFromEntrance(s, fatherModel.currentPlayer.getBoard());
                 return s;
             }
         }
