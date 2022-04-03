@@ -25,6 +25,7 @@ public class PublicModel {
         this.fatherModel = fatherModel;
     }
 
+    //TODO: bisogna tener conto delle carte già giocate e rendere impossibile rigiocarle
     public void playAssistant(AssistantCard assistantCard) {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
@@ -42,18 +43,20 @@ public class PublicModel {
         return fatherModel.motherNature.getPosition();
     }
 
+    // TODO delete?
     public void setPlayersCount(int playersCount) {
         fatherModel.totalPlayerCount = playersCount;
     }
 
 
+    // TODO delete?
     public void setGameMode(GameMode gameMode) {
         fatherModel.gameMode = gameMode;
     }
 
     // Called during game preparation
 
-
+    // TODO delete? deck is already chosen and passed as a parameter of the constructor of Model
     public void chooseDeck(int playerIndex, int deckNameOrdinal) throws Exception {
         Player targetPlayer = fatherModel.players.get(playerIndex);
 

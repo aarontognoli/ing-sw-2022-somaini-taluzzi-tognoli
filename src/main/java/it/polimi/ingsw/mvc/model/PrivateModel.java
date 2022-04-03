@@ -37,17 +37,8 @@ public class PrivateModel {
         this.fatherModel = fatherModel;
     }
 
-    void prepareMatch() throws BagEmptyException, NotFoundException {
+    void prepareMatch(int motherNatureIslandIndex) throws BagEmptyException {
         fatherModel.bag = new Bag(2);
-        int motherNatureIslandIndex = -1;
-
-        for (Island island : fatherModel.islands) {
-            if (fatherModel.motherNature.getPosition().equals(island)) {
-                motherNatureIslandIndex = fatherModel.islands.indexOf(island);
-                break;
-            }
-        }
-        if (motherNatureIslandIndex == -1) throw new NotFoundException("Mother Nature not found");
 
         for (int i = 0; i < 5; i++) {
             int index1 = (motherNatureIslandIndex + i + 1) % 12;
@@ -57,9 +48,6 @@ public class PrivateModel {
         }
 
         fatherModel.bag = new Bag(24);
-
-        fatherModel.influenceCalculator = fatherModel.totalPlayerCount == 4 ?
-                new InfluenceCalculator_4(fatherModel) : new InfluenceCalculator_2_3(fatherModel);
 
         // (Expert only) choose 3 random character cards
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
