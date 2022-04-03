@@ -78,7 +78,7 @@ public class PrivateModel {
     Student removeStudentFromEntrance(Student student, Board player) throws NotFoundException {
         List<Student> entrance = player.getEntrance();
         for (Student s : entrance) {
-            if (s.getColor().equals(student.getColor())) {
+            if (s.equals(student)) {
                 entrance.remove(s);
                 return s;
             }

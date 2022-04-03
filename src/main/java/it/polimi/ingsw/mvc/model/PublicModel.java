@@ -105,8 +105,6 @@ public class PublicModel {
 
         fatherModel.privateModel.addStudentToDiningRoom(selectedStudent, fatherModel.currentPlayer.getBoard());
 
-        fatherModel.privateModel.removeStudentFromEntrance(selectedStudent, getCurrentPlayer().getBoard());
-
         // (Expert Only) If we reached one of the critical placeholder in the dining room,
         // Assign a new Coin to current player
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {

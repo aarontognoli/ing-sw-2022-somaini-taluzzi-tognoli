@@ -10,6 +10,7 @@ import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import org.junit.jupiter.api.Test;
 
+import java.time.Year;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,10 +84,45 @@ class PublicModelTest {
 
     @Test
     void moveStudentToIsland() {
+        Model model = twoPlayersBasicSetup();
+        model.currentPlayer = model.players.get(0);
+        model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 11));
+        try {
+            model.publicModel.moveStudentToIsland(Color.YELLOW_GNOMES, 2);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertTrue(model.currentPlayer.getBoard().getEntrance().isEmpty());
+        for (int i = 0; i < 12 && i != 0 && i != 6 && i != 2; i++) {
+            assertEquals(1, model.islands.get(i).getStudents().size());
+        }
+        assertEquals(0, model.islands.get(0).getStudents().size());
+        assertEquals(0, model.islands.get(6).getStudents().size());
+        assertEquals(2, model.islands.get(2).getStudents().size());
+        assertEquals(Color.YELLOW_GNOMES, model.islands.get(2).getStudents().get(1).getColor());
+        assertEquals(11, model.islands.get(2).getStudents().get(1).getID());
     }
 
     @Test
     void moveStudentToDiningRoom() {
+        Model model = twoPlayersBasicSetup();
+        model.currentPlayer = model.players.get(0);
+        model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 11));
+        try{
+            model.publicModel.moveStudentToDiningRoom(Color.YELLOW_GNOMES);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(0, model.currentPlayer.getBoard().getEntrance().size());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal()).size());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.BLUE_UNICORNS.ordinal()).size());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.RED_DRAGONS.ordinal()).size());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.PINK_FAIRIES.ordinal()).size());
+        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().get(Color.YELLOW_GNOMES.ordinal()).size());
+        assertEquals(Color.YELLOW_GNOMES, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.YELLOW_GNOMES.ordinal()).get(0).getColor());
+        assertEquals(11, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.YELLOW_GNOMES.ordinal()).get(0).getID());
     }
 
     @Test
