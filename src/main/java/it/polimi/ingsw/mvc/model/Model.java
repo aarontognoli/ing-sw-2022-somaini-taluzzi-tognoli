@@ -45,7 +45,9 @@ public class Model {
     public final CharacterModel characterModel;
 
     // Initialize game with starting rules
-    public Model() {
+
+    public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks) throws IllegalArgumentException, Exception {
+
         // Models
         privateModel = new PrivateModel(this);
         publicModel = new PublicModel(this);
@@ -60,6 +62,27 @@ public class Model {
         for (int i = 0; i < TOTAL_ISLANDS_NUMBER; i++) {
             islands.add(new Island());
         }
+        // Initialize Professors
+        for (Color c : Color.values()) {
+            professors.add(c.ordinal(), new Professor(c));
+        }
+
+        //TODO: different influence rules for each number of player with case select
+        int towerColor = 0;
+
+        privateModel.placeMotherNature(motherNatureStartingPosition);
+        totalPlayerCount = nicknamesAndDecks.size();
+        if (nicknamesAndDecks.size() > 1 && nicknamesAndDecks.size() <= 4) {
+
+            //2 players
+            for (String nickname : nicknamesAndDecks.keySet()) {
+                players.add(new Player(nickname, TowerColor.values()[towerColor], nicknamesAndDecks.get(nickname), 8));
+                towerColor++;
+            }
+        } else
+            throw new IllegalArgumentException("Illegal number of Players");
+        //TODO: fix prepareMatch()
+        //privateModel.prepareMatch();
     }
 
 }

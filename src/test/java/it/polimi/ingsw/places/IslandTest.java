@@ -2,6 +2,7 @@ package it.polimi.ingsw.places;
 
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 import org.junit.Test;
@@ -16,7 +17,8 @@ public class IslandTest {
 
     @Test
     public void singleStudentIsland() {
-        island = new Island(new Student(Color.BLUE_UNICORNS, 1234));
+        island = new Island();
+        island.addStudent(new Student(Color.BLUE_UNICORNS, 1234));
 
         List<Student> students = island.getStudents();
 
@@ -27,7 +29,7 @@ public class IslandTest {
 
     @Test
     public void noStudentIsland() {
-        island = new Island(null);
+        island = new Island();
 
         List<Student> students = island.getStudents();
 
@@ -38,8 +40,10 @@ public class IslandTest {
     public void mergeIslandsSameTowerColor() throws Exception {
         Student stud1 = new Student(Color.GREEN_FROGS, 1234);
         Student stud2 = new Student(Color.PINK_FAIRIES, 2345);
-        Island i1 = new Island(stud1);
-        Island i2 = new Island(stud2);
+        Island i1 = new Island();
+        i1.addStudent(stud1);
+        Island i2 = new Island();
+        i2.addStudent(stud2);
 
         try {
             i1.addTower(new Tower(TowerColor.BLACK));
@@ -63,8 +67,10 @@ public class IslandTest {
 
     @Test
     public void mergeIslandsDifferentTowerColor() {
-        Island i1 = new Island(new Student(Color.GREEN_FROGS, 1234));
-        Island i2 = new Island(new Student(Color.PINK_FAIRIES, 2345));
+        Island i1 = new Island();
+        i1.addStudent(new Student(Color.GREEN_FROGS, 1234));
+        Island i2 = new Island();
+        i2.addStudent(new Student(Color.PINK_FAIRIES, 2345));
 
         try {
             i1.addTower(new Tower(TowerColor.WHITE));
@@ -91,7 +97,7 @@ public class IslandTest {
 
     @Test
     public void addDifferentColorTower() {
-        island = new Island(null);
+        island = new Island();
 
         addBlackTowers(island);
 
@@ -104,7 +110,7 @@ public class IslandTest {
 
     @Test
     public void addSameColorTower() throws Exception {
-        island = new Island(null);
+        island = new Island();
 
         addBlackTowers(island);
 
@@ -114,7 +120,7 @@ public class IslandTest {
 
     @Test
     public void addStudent() {
-        island = new Island(null);
+        island = new Island();
 
         island.addStudent(new Student(Color.GREEN_FROGS, 1234));
         island.addStudent(new Student(Color.RED_DRAGONS, 2345));
@@ -131,7 +137,7 @@ public class IslandTest {
 
     @Test
     public void removeAllTowers() {
-        island = new Island(null);
+        island = new Island();
 
         addBlackTowers(island);
 
@@ -145,7 +151,7 @@ public class IslandTest {
 
     @Test
     public void getTowerColorWithNoTower() {
-        island = new Island(null);
+        island = new Island();
 
         try {
             island.getTowerColor();
@@ -156,7 +162,7 @@ public class IslandTest {
 
     @Test
     public void getTowerColorStandard() throws Exception {
-        island = new Island(null);
+        island = new Island();
 
         addBlackTowers(island);
 
@@ -167,7 +173,8 @@ public class IslandTest {
     public void removeStudent() {
         Student student = new Student(Color.YELLOW_GNOMES, 123);
 
-        island = new Island(student);
+        island = new Island();
+        island.addStudent(student);
 
         try {
             Student removeStudent = island.removeStudent(student);

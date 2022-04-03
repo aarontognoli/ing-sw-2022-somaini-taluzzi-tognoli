@@ -2,6 +2,7 @@ package it.polimi.ingsw.player;
 
 import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
+import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.TowerColor;
 
 import java.util.Objects;
@@ -16,11 +17,13 @@ public class Player {
     private AssistantCard currentAssistantCard;
     private int maxMotherNatureMovementValue;
 
-    public Player(String nickname, TowerColor towerColor) {
+
+    public Player(String nickname, TowerColor towerColor, DeckName deckName, int towersNumber) {
         this.nickname = nickname;
         this.towerColor = towerColor;
 
-        board = new Board();
+        board = new Board(towerColor, towersNumber);
+        setDeck(new Deck(deckName));
     }
 
     public void setDeck(Deck deck) {

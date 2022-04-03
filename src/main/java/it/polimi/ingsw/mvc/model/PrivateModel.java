@@ -16,7 +16,11 @@ import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.exceptions.BoardNotInGameException;
+import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.exceptions.TowerDifferentColorException;
+import it.polimi.ingsw.pawn.MotherNature;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
@@ -38,10 +42,10 @@ public class PrivateModel {
         int motherNatureIslandIndex = -1;
 
         for (Island island : fatherModel.islands) {
-           if (fatherModel.motherNature.getPosition().equals(island)) {
-               motherNatureIslandIndex = fatherModel.islands.indexOf(island);
-               break;
-           }
+            if (fatherModel.motherNature.getPosition().equals(island)) {
+                motherNatureIslandIndex = fatherModel.islands.indexOf(island);
+                break;
+            }
         }
         if (motherNatureIslandIndex == -1) throw new NotFoundException("Mother Nature not found");
 
@@ -133,16 +137,23 @@ public class PrivateModel {
                 }
             }
             throw new RuntimeException("Impossible state of the game");
-        }
-        else {
+        } else {
             return fatherModel.influenceCalculator.getInfluence(island);
         }
     }
 
     void placeTower(Board board) throws Exception {
         // towers can only be placed on the island containing MotherNature
+        Tower tempTower = board.removeTower();
+        try {
 
-        fatherModel.publicModel.getMotherNatureIsland().addTower(board.removeTower());
+            fatherModel.publicModel.getMotherNatureIsland().addTower(tempTower);
+        } catch (TowerDifferentColorException e) {
+            board.getTowers().add(tempTower);
+            throw e;
+        }
+
+
     }
 
     void removeAllTowers(Island island) {
@@ -154,33 +165,50 @@ public class PrivateModel {
         }
     }
 
-    void mergeIslands(Island island) throws Exception {
+    void mergeIslands(Island island) throws NoTowerException {
         int currentIslandIndex = fatherModel.islands.indexOf(island);
-        int prev = floorMod(currentIslandIndex - 1, Model.TOTAL_ISLANDS_NUMBER);
-        int next = floorMod(currentIslandIndex + 1, Model.TOTAL_ISLANDS_NUMBER);
-        boolean prevDone = false, nextDone = false;
-        if (fatherModel.islands.get(prev).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
-                .getTowerColor()) {
-            fatherModel.islands.set(currentIslandIndex,
-                    new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(prev)));
-            prevDone = true;
+        int prev = floorMod(currentIslandIndex - 1, fatherModel.islands.size());
+        int next = floorMod(currentIslandIndex + 1, fatherModel.islands.size());
+        boolean prevDone = false, nextDone = false, noTowers = false;
+        try {
+            if (fatherModel.islands.get(prev).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
+                    .getTowerColor()) {
+                fatherModel.islands.set(currentIslandIndex,
+                        new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(prev)));
+                prevDone = true;
+
+            }
+        } catch (NoTowerException e) {
+            noTowers = true;
+        } catch (TowerDifferentColorException e) {
+            //This can't happen
+            throw new RuntimeException("Can't enter here");
         }
-        if (fatherModel.islands.get(next).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
-                .getTowerColor()) {
-            fatherModel.islands.set(currentIslandIndex,
-                    new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(next)));
-            nextDone = true;
+        try {
+            if (fatherModel.islands.get(next).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
+                    .getTowerColor()) {
+                fatherModel.islands.set(currentIslandIndex,
+                        new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(next)));
+                nextDone = true;
+            }
+        } catch (NoTowerException e) {
+            if (noTowers)
+                throw e;
+        } catch (TowerDifferentColorException e) {
+            //This can't happen
+            throw new RuntimeException("Can't enter here");
         }
         // the index changes if i remove islands
         Island tempIslandToGetIndex = fatherModel.islands.get(currentIslandIndex);
         if (prevDone) {
             fatherModel.islands.remove(
-                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) - 1, Model.TOTAL_ISLANDS_NUMBER));
+                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) - 1, fatherModel.islands.size()));
         }
         if (nextDone) {
             fatherModel.islands.remove(
-                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) + 1, Model.TOTAL_ISLANDS_NUMBER));
+                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) + 1, fatherModel.islands.size()));
         }
+        fatherModel.motherNature.move(tempIslandToGetIndex);
 
     }
 
@@ -189,7 +217,8 @@ public class PrivateModel {
     }
 
     // the method will be called in the right moments
-    Player checkVictoryConditions() throws Exception {
+    Player checkVictoryConditions() {
+        //TODO: check with rules, i think something is wrong, maybe return Player and reason why they won
         boolean noAssistantCards = false;
         // every time a new tower is placed
         Player winner;
@@ -199,14 +228,13 @@ public class PrivateModel {
             }
         }
         for (Player p : fatherModel.players) {
-            if ( p.getDeck().isEmpty() ) {
+            if (p.getDeck().isEmpty()) {
                 noAssistantCards = true;
                 break;
             }
         }
         // when some islands are merged
-        if ((fatherModel.islands.size() <= 3) || noAssistantCards || fatherModel.bag.isEmpty())
-        {
+        if ((fatherModel.islands.size() <= 3) || noAssistantCards || fatherModel.bag.isEmpty()) {
             winner = checkTowersForVictory();
             if (winner == null)
                 return checkProfessorsForVictory();
@@ -219,6 +247,7 @@ public class PrivateModel {
 
     // support methods for more readable code
     Player checkTowersForVictory() {
+
         List<Integer> towersCountForEachPlayer = new ArrayList<>(Collections.nCopies(fatherModel.totalPlayerCount, 0));
         int max = 0;
         Player winner = null;
@@ -244,16 +273,24 @@ public class PrivateModel {
         return winner;
     }
 
-    Player checkProfessorsForVictory() throws Exception {
+    Player checkProfessorsForVictory() {
         // 5 professors, a tie isn't possible
         List<Integer> professorsCountForEachPlayer = new ArrayList<>(
                 Collections.nCopies(fatherModel.totalPlayerCount, 0));
         int max = 0;
         Player winner = null;
         for (Professor p : fatherModel.professors) {
-            professorsCountForEachPlayer.set(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())),
-                    professorsCountForEachPlayer.get(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())))
-                            + 1);
+            try {
+                professorsCountForEachPlayer.set(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())),
+                        professorsCountForEachPlayer.get(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())))
+                                + 1);
+            } catch (BoardNotInGameException e) {
+                //if this happens the code is severely bugged
+                if (p.getPosition() != null) {
+                    e.printStackTrace();
+                    throw new RuntimeException("Can't be here");
+                }
+            }
         }
 
         for (int i = 0; i < fatherModel.totalPlayerCount; i++) {
@@ -266,18 +303,19 @@ public class PrivateModel {
         return winner;
     }
 
-    Player getPlayerFromBoard(Board board) throws Exception {
+    Player getPlayerFromBoard(Board board) throws BoardNotInGameException {
         for (Player p : fatherModel.players) {
             if (p.getBoard().equals(board)) {
                 return p;
             }
         }
-        throw new Exception("Board not existing");
+        throw new BoardNotInGameException("Board not existing");
     }
 
     Student getStudentInEntrance(Color c) throws NotFoundException {
         for (Student s : fatherModel.currentPlayer.getBoard().getEntrance()) {
             if (s.getColor().equals(c)) {
+                fatherModel.privateModel.removeStudentFromEntrance(s, fatherModel.currentPlayer.getBoard());
                 return s;
             }
         }
@@ -288,5 +326,13 @@ public class PrivateModel {
     void rewardCoin() {
         // Reward a new coin to the current player
         fatherModel.currentPlayer.getBoard().rewardCoin();
+    }
+
+    void placeMotherNature(int islandIndex) throws Exception {
+        if (fatherModel.motherNature != null) {
+            throw new Exception("Mother Nature already chosen");
+        }
+
+        fatherModel.motherNature = new MotherNature(fatherModel.islands.get(islandIndex));
     }
 }
