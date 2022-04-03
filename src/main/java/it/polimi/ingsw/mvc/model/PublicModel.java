@@ -43,30 +43,6 @@ public class PublicModel {
         return fatherModel.motherNature.getPosition();
     }
 
-    // TODO delete?
-    public void setPlayersCount(int playersCount) {
-        fatherModel.totalPlayerCount = playersCount;
-    }
-
-
-    // TODO delete?
-    public void setGameMode(GameMode gameMode) {
-        fatherModel.gameMode = gameMode;
-    }
-
-    // Called during game preparation
-
-    // TODO delete? deck is already chosen and passed as a parameter of the constructor of Model
-    public void chooseDeck(int playerIndex, int deckNameOrdinal) throws Exception {
-        Player targetPlayer = fatherModel.players.get(playerIndex);
-
-        if (targetPlayer.getDeck() != null) {
-            throw new PlayerAlreadyChosenDeckException(targetPlayer.getNickname());
-        }
-
-        targetPlayer.setDeck(new Deck(DeckName.values()[deckNameOrdinal]));
-    }
-
     public void moveMotherNature(int steps) throws TooMuchStepsException {
         int maxSteps = getCurrentPlayer().getMaxMotherNatureMovementValue();
 
@@ -118,7 +94,7 @@ public class PublicModel {
 
     }
 
-    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException, BagEmptyException {
+    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException {
         // (Expert only) Current player plays a character card
         if (fatherModel.gameMode.equals(GameMode.EASY_MODE)) {
             throw new RuntimeException("Playing character card while game mode is not expert");

@@ -51,10 +51,15 @@ public class PrivateModel {
 
         // (Expert only) choose 3 random character cards
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
+            // give 1 coin to each player
+            for (Player player : fatherModel.players) {
+                player.getBoard().rewardCoin();
+            }
+
             fatherModel.currentGameCards = new ArrayList<>(3);
 
             // TODO: add all character cards
-            // seguo l'ordine alfabetico: Bard, Flag, Herbalist, Joker, Postman, Wine
+            // following the alphabetical order: Bard, Flag, Herbalist, Joker, Postman, Wine
             Random random = new Random();
             int previousIndex1 = -1;
             int previousIndex2 = -1;
