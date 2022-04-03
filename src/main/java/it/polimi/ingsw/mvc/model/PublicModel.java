@@ -25,7 +25,7 @@ public class PublicModel {
         this.fatherModel = fatherModel;
     }
 
-    //TODO: bisogna tener conto delle carte già giocate e rendere impossibile rigiocarle
+
     public void playAssistant(AssistantCard assistantCard) {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
+import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
@@ -46,7 +47,7 @@ class PublicModelTest {
 
     @Test
     void endTurn() {
-        //TODO
+        //TODO once the method is complete
     }
 
     @Test
@@ -127,11 +128,13 @@ class PublicModelTest {
 
     @Test
     void playCharacterCard() {
+        Model model = twoPlayersExpertMode();
+        //TODO for all character cards
     }
 
     @Test
     void updateIslandOwner() {
-        //TODO
+        //TODO once the method is complete
     }
 
     Model twoPlayersBasicSetup() {
@@ -141,6 +144,19 @@ class PublicModelTest {
         temp.put("Player2", DeckName.CLOUD_WITCH);
         try {
             model = new Model(0, temp, GameMode.EASY_MODE);
+        } catch (Exception e) {
+
+        }
+        return model;
+    }
+
+    Model twoPlayersExpertMode() {
+        Model model = null;
+        Map<String, DeckName> temp = new HashMap<>();
+        temp.put("Player1", DeckName.DESERT_KING);
+        temp.put("Player2", DeckName.CLOUD_WITCH);
+        try {
+            model = new Model(0, temp, GameMode.EXPERT_MODE);
         } catch (Exception e) {
 
         }
