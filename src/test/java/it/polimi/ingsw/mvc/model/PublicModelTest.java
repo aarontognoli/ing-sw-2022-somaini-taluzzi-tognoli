@@ -133,57 +133,49 @@ class PublicModelTest {
     void playCharacterCard() {
         Model model = twoPlayersExpertMode();
         model.currentPlayer = model.players.get(0);
-        for (int i = 0; i < 2; i++) {
-            for (Player player : model.players) {
-                player.getBoard().rewardCoin();
-            }
+        model.currentGameCards.set(0, new BardCharacter(model));
+        model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 1));
+        model.currentPlayer.getBoard().getEntrance().add(new Student(Color.GREEN_FROGS, 2));
+        model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.GREEN_FROGS.ordinal()).add(new Student(Color.GREEN_FROGS, 3));
+        model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.GREEN_FROGS.ordinal()).add(new Student(Color.GREEN_FROGS, 4));
+        List<Color> toExchangeEntrance = new ArrayList<Color>();
+        toExchangeEntrance.add(Color.YELLOW_GNOMES);
+        toExchangeEntrance.add(Color.GREEN_FROGS);
+        List<Color> toExchangeDiningRoom = new ArrayList<Color>();
+        toExchangeDiningRoom.add(Color.GREEN_FROGS);
+        toExchangeDiningRoom.add(Color.GREEN_FROGS);
+        try {
+            model.publicModel.playCharacterCard(0,
+                    new BardCharacterArgument(toExchangeEntrance, toExchangeDiningRoom));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //TODO for all character cards (?)
-        if (model.currentGameCards.get(0).getClass() == BardCharacter.class) {
-            model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 1));
-            model.currentPlayer.getBoard().getEntrance().add(new Student(Color.GREEN_FROGS, 2));
-            model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.GREEN_FROGS.ordinal()).add(new Student(Color.GREEN_FROGS, 3));
-            model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.GREEN_FROGS.ordinal()).add(new Student(Color.GREEN_FROGS, 4));
-            List<Color> toExchangeEntrance = new ArrayList<Color>();
-            toExchangeEntrance.add(Color.YELLOW_GNOMES);
-            toExchangeEntrance.add(Color.GREEN_FROGS);
-            List<Color> toExchangeDiningRoom = new ArrayList<Color>();
-            toExchangeDiningRoom.add(Color.GREEN_FROGS);
-            toExchangeDiningRoom.add(Color.GREEN_FROGS);
-            try {
-                model.publicModel.playCharacterCard(0,
-                        new BardCharacterArgument(toExchangeEntrance, toExchangeDiningRoom));
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-            assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.BLUE_UNICORNS.ordinal()).size());
-            assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.RED_DRAGONS.ordinal()).size());
-            assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.PINK_FAIRIES.ordinal()).size());
-            assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.YELLOW_GNOMES.ordinal()).size());
-            assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.YELLOW_GNOMES.ordinal()).get(0).getID());
-            assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.GREEN_FROGS.ordinal()).size());
-            assertEquals(2, model.currentPlayer.getBoard().getDiningRoom().
-                    get(Color.GREEN_FROGS.ordinal()).get(0).getID());
-            assertEquals(2, model.currentPlayer.getBoard().getEntrance().size());
-            assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().
-                    get(0).getColor());
-            assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().
-                    get(1).getColor());
-            assertTrue(model.currentPlayer.getBoard().getEntrance().get(0).getID() == 3 ||
-                    model.currentPlayer.getBoard().getEntrance().get(0).getID() == 4);
-            assertTrue(model.currentPlayer.getBoard().getEntrance().get(1).getID() == 3 ||
-                    model.currentPlayer.getBoard().getEntrance().get(1).getID() == 4);
-            assertNotEquals(model.currentPlayer.getBoard().getEntrance().get(0), model.currentPlayer.getBoard().getEntrance().get(1));
-
-        }
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.BLUE_UNICORNS.ordinal()).size());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.RED_DRAGONS.ordinal()).size());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.PINK_FAIRIES.ordinal()).size());
+        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.YELLOW_GNOMES.ordinal()).size());
+        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.YELLOW_GNOMES.ordinal()).get(0).getID());
+        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.GREEN_FROGS.ordinal()).size());
+        assertEquals(2, model.currentPlayer.getBoard().getDiningRoom().
+                get(Color.GREEN_FROGS.ordinal()).get(0).getID());
+        assertEquals(2, model.currentPlayer.getBoard().getEntrance().size());
+        assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().
+                get(0).getColor());
+        assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().
+                get(1).getColor());
+        assertTrue(model.currentPlayer.getBoard().getEntrance().get(0).getID() == 3 ||
+                model.currentPlayer.getBoard().getEntrance().get(0).getID() == 4);
+        assertTrue(model.currentPlayer.getBoard().getEntrance().get(1).getID() == 3 ||
+                model.currentPlayer.getBoard().getEntrance().get(1).getID() == 4);
+        assertNotEquals(model.currentPlayer.getBoard().getEntrance().get(0), model.currentPlayer.getBoard().getEntrance().get(1));
     }
 
     @Test
