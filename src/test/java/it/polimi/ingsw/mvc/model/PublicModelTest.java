@@ -59,20 +59,6 @@ class PublicModelTest {
         assertEquals(model.islands.get(0), model.publicModel.getMotherNatureIsland());
     }
 
-    /*
-    @Test
-    void setPlayersCount() {
-    }
-
-    @Test
-    void setGameMode() {
-    }
-
-    @Test
-    void chooseDeck() {
-    }
-    */
-
     @Test
     void moveMotherNature() {
         Model model = twoPlayersBasicSetup();
