@@ -1,11 +1,16 @@
 package it.polimi.ingsw.mvc.model;
 
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
+import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacterArgument;
+import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
+import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacterArgument;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.pawn.Student;
 import org.junit.jupiter.api.Test;
 
@@ -33,14 +38,14 @@ class PublicModelTest {
     void drawStudentsIntoEntrance() {
         Model model = twoPlayersBasicSetup();
         model.currentPlayer = model.players.get(0);
-        assertTrue(model.currentPlayer.getBoard().getEntrance().isEmpty());
+        assertFalse(model.currentPlayer.getBoard().getEntrance().isEmpty());
         try {
             model.privateModel.fillClouds();
         } catch (Exception e) {
             e.printStackTrace();
         }
         model.publicModel.drawStudentsIntoEntrance(1);
-        assertEquals(3, model.currentPlayer.getBoard().getEntrance().size());
+        assertEquals(10, model.currentPlayer.getBoard().getEntrance().size());
     }
 
     @Test
@@ -71,6 +76,7 @@ class PublicModelTest {
     void moveStudentToIsland() {
         Model model = twoPlayersBasicSetup();
         model.currentPlayer = model.players.get(0);
+        model.currentPlayer.getBoard().getEntrance().clear();
         model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 11));
         try {
             model.publicModel.moveStudentToIsland(Color.YELLOW_GNOMES, 2);
@@ -92,6 +98,7 @@ class PublicModelTest {
     void moveStudentToDiningRoom() {
         Model model = twoPlayersBasicSetup();
         model.currentPlayer = model.players.get(0);
+        model.currentPlayer.getBoard().getEntrance().clear();
         model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 11));
         try {
             model.publicModel.moveStudentToDiningRoom(Color.YELLOW_GNOMES);
@@ -114,42 +121,31 @@ class PublicModelTest {
     void playCharacterCard() {
         Model model = twoPlayersExpertMode();
         model.currentPlayer = model.players.get(0);
-        model.currentGameCards.set(0, new BardCharacter(model));
-        model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 1));
-        model.currentPlayer.getBoard().getEntrance().add(new Student(Color.GREEN_FROGS, 2));
-        model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal())
-                .add(new Student(Color.GREEN_FROGS, 3));
-        model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal())
-                .add(new Student(Color.GREEN_FROGS, 4));
-        List<Color> toExchangeEntrance = new ArrayList<Color>();
-        toExchangeEntrance.add(Color.YELLOW_GNOMES);
-        toExchangeEntrance.add(Color.GREEN_FROGS);
-        List<Color> toExchangeDiningRoom = new ArrayList<Color>();
-        toExchangeDiningRoom.add(Color.GREEN_FROGS);
-        toExchangeDiningRoom.add(Color.GREEN_FROGS);
+
+        List<Student> wineCharacterStudents = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
+
+        for (int i = 0; i < WineCharacter.INITIAL_STUDENT_SIZE; i++) {
+            try {
+                wineCharacterStudents.add(model.privateModel.drawStudentFromBag());
+            } catch (BagEmptyException e) {
+                assert false;
+            }
+        }
+
+        model.currentGameCards.set(0, new WineCharacter(model, wineCharacterStudents));
+
+        int studentToMoveId = wineCharacterStudents.get(0).getID();
         try {
             model.publicModel.playCharacterCard(0,
-                    new BardCharacterArgument(toExchangeEntrance, toExchangeDiningRoom));
-        } catch (Exception e) {
-            e.printStackTrace();
+                    new WineCharacterArgument(model.islands.get(0), studentToMoveId));
+        } catch (InsufficientCoinException e) {
+            assert false;
+        } catch (CCArgumentException e) {
+            assert false;
         }
-        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.BLUE_UNICORNS.ordinal()).size());
-        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.RED_DRAGONS.ordinal()).size());
-        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.PINK_FAIRIES.ordinal()).size());
-        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().get(Color.YELLOW_GNOMES.ordinal()).size());
-        assertEquals(1,
-                model.currentPlayer.getBoard().getDiningRoom().get(Color.YELLOW_GNOMES.ordinal()).get(0).getID());
-        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal()).size());
-        assertEquals(2, model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal()).get(0).getID());
-        assertEquals(2, model.currentPlayer.getBoard().getEntrance().size());
-        assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().get(0).getColor());
-        assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().get(1).getColor());
-        assertTrue(model.currentPlayer.getBoard().getEntrance().get(0).getID() == 3 ||
-                model.currentPlayer.getBoard().getEntrance().get(0).getID() == 4);
-        assertTrue(model.currentPlayer.getBoard().getEntrance().get(1).getID() == 3 ||
-                model.currentPlayer.getBoard().getEntrance().get(1).getID() == 4);
-        assertNotEquals(model.currentPlayer.getBoard().getEntrance().get(0),
-                model.currentPlayer.getBoard().getEntrance().get(1));
+
+        assertEquals(1, model.islands.get(0).getStudents().size());
+        assertEquals(studentToMoveId, model.islands.get(0).getStudents().get(0).getID());
     }
 
     @Test
