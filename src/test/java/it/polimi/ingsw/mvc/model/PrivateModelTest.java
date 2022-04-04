@@ -9,7 +9,6 @@ import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
-import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.places.Island;
@@ -26,7 +25,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PrivateModelTest {
-
 
     @Test
     void getProfessorOwner() {
@@ -46,7 +44,6 @@ class PrivateModelTest {
             assertEquals(testBoard, model.privateModel.getProfessorOwner(c));
         }
 
-
     }
 
     @Test
@@ -58,24 +55,39 @@ class PrivateModelTest {
         for (int i = 0; i < 7; i++) {
             tempEntrance.add(new Student(Color.YELLOW_GNOMES, i));
         }
+
+        tempEntrance.add(new Student(Color.RED_DRAGONS, 7));
+
+        // Entrance is empty. Exception expected.
         try {
-            model.privateModel.removeStudentFromEntrance(new Student(Color.GREEN_FROGS, 7), testBoard);
+            model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard);
             assert false;
         } catch (NotFoundException e) {
 
         }
+
+        // Entrance contains only Yellows, exception expected
         testBoard.addStudentsToEntrance(tempEntrance);
         try {
-            model.privateModel.removeStudentFromEntrance(new Student(Color.GREEN_FROGS, 7), testBoard);
+            model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard);
             assert false;
         } catch (NotFoundException e) {
-
         }
-        try {
-            Student s = model.privateModel.removeStudentFromEntrance(new Student(Color.YELLOW_GNOMES, 7), testBoard);
-            assertEquals(s.getColor(), Color.YELLOW_GNOMES);
-            assertEquals(testBoard.getEntrance().size(), 6);
 
+        // Trying to remove a yellow, check entrance size
+        try {
+            Student s = model.privateModel.removeStudentFromEntrance(Color.YELLOW_GNOMES, testBoard);
+            assertEquals(s.getColor(), Color.YELLOW_GNOMES);
+            assertEquals(testBoard.getEntrance().size(), 7);
+
+            boolean redFound = false;
+            for (Student student : testBoard.getEntrance()) {
+                if (student.getColor().equals(Color.RED_DRAGONS)) {
+                    assertEquals(7, student.getID());
+                    redFound = true;
+                }
+            }
+            assertTrue(redFound);
         } catch (NotFoundException e) {
             assert false;
         }
@@ -89,7 +101,6 @@ class PrivateModelTest {
         assertEquals(island.getStudents().size(), 1);
         assertEquals(island.getStudents().get(0).getID(), 0);
         assertEquals(island.getStudents().get(0).getColor(), Color.YELLOW_GNOMES);
-
 
     }
 
@@ -111,7 +122,7 @@ class PrivateModelTest {
         } catch (DiningRoomFullException e) {
             assert false;
         }
-        try {       //10 = DINING_ROOM_MAX_STUDENT_COUNT
+        try { // 10 = DINING_ROOM_MAX_STUDENT_COUNT
             for (int i = 0; i < 10; i++) {
                 model.privateModel.addStudentToDiningRoom(new Student(Color.YELLOW_GNOMES, i + 1), testBoard);
             }
@@ -126,12 +137,11 @@ class PrivateModelTest {
 
         }
 
-
     }
 
     @Test
     void getInfluence() {
-        //TODO
+        // TODO
     }
 
     @Test
@@ -153,7 +163,8 @@ class PrivateModelTest {
         } catch (TowerDifferentColorException e) {
             assertEquals(board1.getTowers().size(), 8);
             try {
-                assertEquals(model.publicModel.getMotherNatureIsland().getTowerColor(), board0.getTowers().get(0).getColor());
+                assertEquals(model.publicModel.getMotherNatureIsland().getTowerColor(),
+                        board0.getTowers().get(0).getColor());
             } catch (Exception ein) {
                 assert false;
             }
@@ -220,7 +231,7 @@ class PrivateModelTest {
         } catch (Exception e) {
         }
         try {
-            //model.publicModel.moveMotherNature(1);
+            // model.publicModel.moveMotherNature(1);
             model.motherNature.move(model.islands.get(1));
             model.privateModel.placeTower(board0);
             motherNatureIsland = model.publicModel.getMotherNatureIsland();
@@ -238,7 +249,7 @@ class PrivateModelTest {
         model = twoPlayersBasicSetup();
         board0 = model.players.get(0).getBoard();
         try {
-            //model.publicModel.moveMotherNature(1);
+            // model.publicModel.moveMotherNature(1);
             model.privateModel.placeTower(board0);
             model.motherNature.move(model.islands.get(1));
             model.privateModel.placeTower(board0);
@@ -275,14 +286,14 @@ class PrivateModelTest {
 
     @Test
     void checkVictoryConditions() {
-        //2 players Test
+        // 2 players Test
         Model model = twoPlayersBasicSetup();
         Player p = model.privateModel.checkVictoryConditions();
         assertEquals(null, p);
         model.players.get(0).getBoard().getTowers().clear();
         p = model.privateModel.checkVictoryConditions();
         assertEquals(model.players.get(0), p);
-        //<=3 islands
+        // <=3 islands
         model = twoPlayersBasicSetup();
         model.islands.clear();
         model.islands.add(new Island());
@@ -291,13 +302,13 @@ class PrivateModelTest {
         try {
             model.islands.get(0).addTower(new Tower(TowerColor.BLACK));
         } catch (Exception e) {
-            //can't come here
+            // can't come here
             assert false;
         }
-        //TowerVictory
+        // TowerVictory
         p = model.privateModel.checkVictoryConditions();
         assertEquals(model.players.get(TowerColor.BLACK.ordinal()), p);
-        //assistant cards empty
+        // assistant cards empty
         model = twoPlayersBasicSetup();
         for (AssistantCard ac : AssistantCard.values()) {
             try {
@@ -308,26 +319,25 @@ class PrivateModelTest {
         }
         model.players.get(0).getDeck().getHand().clear();
         model.professors.get(0).move(model.players.get(0).getBoard());
-        //Professors Victory
+        // Professors Victory
         p = model.privateModel.checkVictoryConditions();
         assertEquals(model.players.get(0), p);
-        //empty bag
+        // empty bag
         model = twoPlayersBasicSetup();
         model.bag = new Bag(0);
         model.players.get(0).getDeck().getHand().clear();
         model.professors.get(0).move(model.players.get(0).getBoard());
 
-
     }
 
     @Test
     void checkTowersForVictory() {
-        //checked in checkVictoryConditions()
+        // checked in checkVictoryConditions()
     }
 
     @Test
     void checkProfessorsForVictory() {
-        //checked in checkVictoryConditions()
+        // checked in checkVictoryConditions()
     }
 
     @Test
@@ -341,71 +351,6 @@ class PrivateModelTest {
                 assert false;
             }
         }
-
-
-    }
-
-    @Test
-    void getStudentInEntrance() {
-        Model model = twoPlayersBasicSetup();
-        for (Player p : model.players) {
-            model.currentPlayer = p;
-            for (Color c : Color.values()) {
-                try {
-                    model.privateModel.getStudentInEntrance(c);
-                    assert false;
-                } catch (NotFoundException e) {
-
-                }
-            }
-        }
-        model.currentPlayer = model.players.get(0);
-        List<Student> testStudents = new ArrayList<>();
-        Student ret;
-        testStudents.add(new Student(Color.YELLOW_GNOMES, 0));
-        testStudents.add(new Student(Color.YELLOW_GNOMES, 1));
-        testStudents.add(new Student(Color.YELLOW_GNOMES, 2));
-        testStudents.add(new Student(Color.GREEN_FROGS, 3));
-        testStudents.add(new Student(Color.BLUE_UNICORNS, 4));
-        testStudents.add(new Student(Color.PINK_FAIRIES, 5));
-        testStudents.add(new Student(Color.RED_DRAGONS, 6));
-        model.currentPlayer.getBoard().addStudentsToEntrance(testStudents);
-        for (int i = 0; i < 3; i++) {
-            try {
-                ret = model.privateModel.getStudentInEntrance(Color.YELLOW_GNOMES);
-                assertEquals(Color.YELLOW_GNOMES, ret.getColor());
-                assertEquals(2 - i, model.currentPlayer.getBoard().getEntrance()
-                        .stream()
-                        .filter(student -> student.getColor()
-                                .equals(Color.YELLOW_GNOMES))
-                        .count());
-            } catch (NotFoundException e) {
-                assert false;
-            }
-        }
-        try {
-            model.privateModel.getStudentInEntrance(Color.YELLOW_GNOMES);
-            assert false;
-        } catch (NotFoundException e) {
-
-        }
-        assertEquals(4, model.currentPlayer.getBoard().getEntrance().size());
-        for (Color c : Color.values()) {
-            try {
-                ret = model.privateModel.getStudentInEntrance(c);
-                if (!c.equals(Color.YELLOW_GNOMES)) {
-                    assertEquals(c, ret.getColor());
-                } else {
-                    assert false;
-                }
-
-            } catch (NotFoundException e) {
-                if (!c.equals(Color.YELLOW_GNOMES)) {
-                    assert false;
-                }
-            }
-        }
-        assertEquals(0, model.currentPlayer.getBoard().getEntrance().size());
 
     }
 

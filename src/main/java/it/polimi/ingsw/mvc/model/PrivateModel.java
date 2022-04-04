@@ -99,18 +99,6 @@ public class PrivateModel {
         return fatherModel.professors.get(c.ordinal()).getPosition();
     }
 
-    Student removeStudentFromEntrance(Student student, Board player) throws NotFoundException {
-        List<Student> entrance = player.getEntrance();
-        for (Student s : entrance) {
-            if (s.equals(student)) {
-                entrance.remove(s);
-                return s;
-            }
-        }
-
-        throw new NotFoundException("Student not found");
-    }
-
     void addStudentToIsland(Student student, Island island) {
         island.getStudents().add(student);
     }
@@ -165,7 +153,6 @@ public class PrivateModel {
             throw e;
         }
 
-
     }
 
     void removeAllTowers(Island island) {
@@ -193,7 +180,7 @@ public class PrivateModel {
         } catch (NoTowerException e) {
             noTowers = true;
         } catch (TowerDifferentColorException e) {
-            //This can't happen
+            // This can't happen
             throw new RuntimeException("Can't enter here");
         }
         try {
@@ -207,7 +194,7 @@ public class PrivateModel {
             if (noTowers)
                 throw e;
         } catch (TowerDifferentColorException e) {
-            //This can't happen
+            // This can't happen
             throw new RuntimeException("Can't enter here");
         }
         // the index changes if i remove islands
@@ -230,7 +217,8 @@ public class PrivateModel {
 
     // the method will be called in the right moments
     Player checkVictoryConditions() {
-        //TODO: check with rules, i think something is wrong, maybe return Player and reason why they won
+        // TODO: check with rules, i think something is wrong, maybe return Player and
+        // reason why they won
         boolean noAssistantCards = false;
         // every time a new tower is placed
         Player winner;
@@ -294,10 +282,11 @@ public class PrivateModel {
         for (Professor p : fatherModel.professors) {
             try {
                 professorsCountForEachPlayer.set(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())),
-                        professorsCountForEachPlayer.get(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())))
+                        professorsCountForEachPlayer
+                                .get(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())))
                                 + 1);
             } catch (BoardNotInGameException e) {
-                //if this happens the code is severely bugged
+                // if this happens the code is severely bugged
                 if (p.getPosition() != null) {
                     e.printStackTrace();
                     throw new RuntimeException("Can't be here");
@@ -324,11 +313,12 @@ public class PrivateModel {
         throw new BoardNotInGameException("Board not existing");
     }
 
-    Student getStudentInEntrance(Color c) throws NotFoundException {
-        for (Student s : fatherModel.currentPlayer.getBoard().getEntrance()) {
+    Student removeStudentFromEntrance(Color c, Board playerBoard) throws NotFoundException {
+        List<Student> entrance = playerBoard.getEntrance();
+        for (int i = 0; i < entrance.size(); i++) {
+            Student s = entrance.get(i);
             if (s.getColor().equals(c)) {
-                fatherModel.privateModel.removeStudentFromEntrance(s, fatherModel.currentPlayer.getBoard());
-                return s;
+                return entrance.remove(i);
             }
         }
 
