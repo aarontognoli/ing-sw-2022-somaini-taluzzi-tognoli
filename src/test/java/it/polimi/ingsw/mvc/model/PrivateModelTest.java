@@ -142,7 +142,30 @@ class PrivateModelTest {
 
     @Test
     void getInfluence() {
-        // TODO
+        // TODO: Check 3 player, 4 players, and tie in both cases
+        Model model = twoPlayersBasicSetup();
+
+        Island targetIsland = model.islands.get(0);
+
+        Player firstPlayer = model.players.get(0);
+        Player secondPlayer = model.players.get(1);
+
+        model.currentPlayer = firstPlayer;
+        Color firstPlayerFirstStudentColor = firstPlayer.getBoard().getEntrance().get(0).getColor();
+        try {
+            model.publicModel.moveStudentToDiningRoom(firstPlayerFirstStudentColor);
+        } catch (DiningRoomFullException e) {
+            assert false;
+        } catch (NotFoundException e) {
+            assert false;
+        }
+
+        assertEquals(firstPlayer.getBoard(),
+                model.professors.get(firstPlayerFirstStudentColor.ordinal()).getPosition());
+
+        targetIsland.addStudent(new Student(firstPlayerFirstStudentColor, 3456));
+
+        assertEquals(firstPlayer.getBoard(), model.privateModel.getInfluence(targetIsland));
     }
 
     @Test
