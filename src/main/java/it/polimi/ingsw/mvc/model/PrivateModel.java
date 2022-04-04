@@ -217,24 +217,23 @@ public class PrivateModel {
 
     // the method will be called in the right moments
     Player checkVictoryConditions() {
-        // TODO: check with rules, i think something is wrong, maybe return Player and
-        // reason why they won
-        boolean noAssistantCards = false;
-        // every time a new tower is placed
-        Player winner;
-        for (Player p : fatherModel.players) {
-            if (p.getBoard().getTowers().isEmpty()) {
-                return p;
-            }
-        }
+
+        Player winner = fatherModel.publicModel.checkFinishedTowers();
+
+        if (winner != null)
+            return winner;
+
+        // Check if someone has an empty deck
+        boolean emptyDeckSomewhere = false;
         for (Player p : fatherModel.players) {
             if (p.getDeck().isEmpty()) {
-                noAssistantCards = true;
+                emptyDeckSomewhere = true;
                 break;
             }
         }
+
         // when some islands are merged
-        if ((fatherModel.islands.size() <= 3) || noAssistantCards || fatherModel.bag.isEmpty()) {
+        if ((fatherModel.islands.size() <= 3) || emptyDeckSomewhere || fatherModel.bag.isEmpty()) {
             winner = checkTowersForVictory();
             if (winner == null)
                 return checkProfessorsForVictory();
@@ -246,54 +245,65 @@ public class PrivateModel {
     }
 
     // support methods for more readable code
-    Player checkTowersForVictory() {
+    private Player checkTowersForVictory() {
+        int minTowersCount = Integer.MAX_VALUE;
+        int playerWinningIndex = -1;
 
-        List<Integer> towersCountForEachPlayer = new ArrayList<>(Collections.nCopies(fatherModel.totalPlayerCount, 0));
-        int max = 0;
-        Player winner = null;
-        for (Island i : fatherModel.islands) {
-            try {
-                towersCountForEachPlayer.set(i.getTowerColor().ordinal(),
-                        towersCountForEachPlayer.get(i.getTowerColor().ordinal()) + i.getTowers().size());
-            } catch (Exception e) {
-                // if there are no towers
-                continue;
-            }
-        }
         for (int i = 0; i < fatherModel.totalPlayerCount; i++) {
-            if (towersCountForEachPlayer.get(i) > max) {
-                max = towersCountForEachPlayer.get(i);
-                winner = fatherModel.players.get(i);
-            } else if (towersCountForEachPlayer.get(i) == max) {
-                // tie
-                winner = null;
-            }
-        }
+            if (fatherModel.totalPlayerCount != 4 || i % 2 == 0) {
+                Player p = fatherModel.players.get(i);
 
-        return winner;
-    }
+                int currentPlayerTowerCount = p.getBoard().getTowers().size();
 
-    Player checkProfessorsForVictory() {
-        // 5 professors, a tie isn't possible
-        List<Integer> professorsCountForEachPlayer = new ArrayList<>(
-                Collections.nCopies(fatherModel.totalPlayerCount, 0));
-        int max = 0;
-        Player winner = null;
-        for (Professor p : fatherModel.professors) {
-            try {
-                professorsCountForEachPlayer.set(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())),
-                        professorsCountForEachPlayer
-                                .get(fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition())))
-                                + 1);
-            } catch (BoardNotInGameException e) {
-                // if this happens the code is severely bugged
-                if (p.getPosition() != null) {
-                    e.printStackTrace();
-                    throw new RuntimeException("Can't be here");
+                if (currentPlayerTowerCount < minTowersCount) {
+                    playerWinningIndex = i;
+                    minTowersCount = currentPlayerTowerCount;
+                } else if (currentPlayerTowerCount == minTowersCount) {
+                    playerWinningIndex = -1;
                 }
             }
         }
 
+        if (playerWinningIndex == -1) {
+            return null;
+        }
+
+        return fatherModel.players.get(playerWinningIndex);
+    }
+
+    private Player checkProfessorsForVictory() {
+        // 5 professors, tie only for 3 players. The player whose index is lesser wins,
+        // in case of tie.
+        List<Integer> professorsCountForEachPlayer = new ArrayList<>(
+                Collections.nCopies(fatherModel.totalPlayerCount, 0));
+
+        for (Professor p : fatherModel.professors) {
+            try {
+                int playerIndex = fatherModel.players.indexOf(getPlayerFromBoard(p.getPosition()));
+
+                /*
+                 * In 4 players game: We count the professors only for player 0 and 2
+                 * When a professor is owned by player 1, we update the count for player 0
+                 * (their teammate)
+                 * When a professor is owned by player 3, we update the count for player 2
+                 * (their teammate)
+                 */
+                if (fatherModel.totalPlayerCount == 4 && playerIndex % 2 == 1) {
+                    playerIndex--;
+                }
+
+                professorsCountForEachPlayer.set(playerIndex, professorsCountForEachPlayer.get(playerIndex) + 1);
+            } catch (BoardNotInGameException e) {
+                // if this happens the code is severely bugged
+                if (p.getPosition() != null) {
+                    e.printStackTrace();
+                    throw new RuntimeException("Board not found in Model. (?)");
+                }
+            }
+        }
+
+        int max = -1;
+        Player winner = null;
         for (int i = 0; i < fatherModel.totalPlayerCount; i++) {
             if (professorsCountForEachPlayer.get(i) > max) {
                 max = professorsCountForEachPlayer.get(i);
