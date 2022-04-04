@@ -28,8 +28,6 @@ class PrivateModelTest {
 
     @Test
     void getProfessorOwner() {
-
-        assert false;
         Model model = twoPlayersBasicSetup();
         model.currentPlayer = model.players.get(0);
         Board testBoard;
