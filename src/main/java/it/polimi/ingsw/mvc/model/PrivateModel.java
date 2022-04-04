@@ -31,6 +31,9 @@ import it.polimi.ingsw.player.Player;
 
 public class PrivateModel {
 
+    static final int INITIAL_STUDENT_ENTRANCE_3 = 9;
+    static final int INITIAL_STUDENT_ENTRANCE_2_4 = 7;
+
     final Model fatherModel;
 
     public PrivateModel(Model fatherModel) {
@@ -48,6 +51,18 @@ public class PrivateModel {
         }
 
         fatherModel.bag = new Bag(24);
+
+        int studentsToAddInEntranceCount = fatherModel.totalPlayerCount == 3 ? INITIAL_STUDENT_ENTRANCE_3
+                : INITIAL_STUDENT_ENTRANCE_2_4;
+
+        for (Player player : fatherModel.players) {
+            List<Student> studentsToAddInEntrance = new ArrayList<>(studentsToAddInEntranceCount);
+            for (int i = 0; i < studentsToAddInEntranceCount; i++) {
+                studentsToAddInEntrance.add(drawStudentFromBag());
+            }
+
+            player.getBoard().addStudentsToEntrance(studentsToAddInEntrance);
+        }
 
         // (Expert only) choose 3 random character cards
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
