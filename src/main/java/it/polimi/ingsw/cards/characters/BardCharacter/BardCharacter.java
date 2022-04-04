@@ -24,12 +24,12 @@ public class BardCharacter extends CharacterCard {
         List<Student> studentList = new ArrayList<Student>();
         List<Student> entrance =  model.publicModel.getCurrentPlayer().getBoard().getEntrance();
         for (Color color : ((BardCharacterArgument) arguments).getStudentsColorToExchangeDiningRoom()) {
-            for (List<Student> students : model.publicModel.getCurrentPlayer().getBoard().getDiningRoom()) {
-                if (students.get(0).getColor().equals(color)) {
-                    studentList.add(students.get(students.size() - 1));
-                    students.remove(students.get(students.size() - 1));
-                    break;
-                }
+            List<Student> students = model.publicModel.getCurrentPlayer().getBoard().getDiningRoom().get(color.ordinal());
+            try {
+                studentList.add(students.get(students.size() - 1));
+                students.remove(students.get(students.size() - 1));
+            }catch(IndexOutOfBoundsException e) {
+                throw new CCArgumentException("Invalid argument");
             }
         }
         for (Color color : ((BardCharacterArgument) arguments).getStudentsColorToExchangeEntrance()) {

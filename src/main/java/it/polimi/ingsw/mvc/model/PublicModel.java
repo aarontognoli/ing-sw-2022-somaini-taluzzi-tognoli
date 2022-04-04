@@ -25,6 +25,7 @@ public class PublicModel {
         this.fatherModel = fatherModel;
     }
 
+
     public void playAssistant(AssistantCard assistantCard) {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
@@ -40,28 +41,6 @@ public class PublicModel {
 
     public Island getMotherNatureIsland() {
         return fatherModel.motherNature.getPosition();
-    }
-
-    public void setPlayersCount(int playersCount) {
-        fatherModel.totalPlayerCount = playersCount;
-    }
-
-
-    public void setGameMode(GameMode gameMode) {
-        fatherModel.gameMode = gameMode;
-    }
-
-    // Called during game preparation
-
-
-    public void chooseDeck(int playerIndex, int deckNameOrdinal) throws Exception {
-        Player targetPlayer = fatherModel.players.get(playerIndex);
-
-        if (targetPlayer.getDeck() != null) {
-            throw new PlayerAlreadyChosenDeckException(targetPlayer.getNickname());
-        }
-
-        targetPlayer.setDeck(new Deck(DeckName.values()[deckNameOrdinal]));
     }
 
     public void moveMotherNature(int steps) throws TooMuchStepsException {
@@ -102,8 +81,6 @@ public class PublicModel {
 
         fatherModel.privateModel.addStudentToDiningRoom(selectedStudent, fatherModel.currentPlayer.getBoard());
 
-        fatherModel.privateModel.removeStudentFromEntrance(selectedStudent, getCurrentPlayer().getBoard());
-
         // (Expert Only) If we reached one of the critical placeholder in the dining room,
         // Assign a new Coin to current player
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
@@ -117,7 +94,7 @@ public class PublicModel {
 
     }
 
-    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException, BagEmptyException {
+    public void playCharacterCard(int cardIndex, Object effectArgument) throws InsufficientCoinException, CCArgumentException {
         // (Expert only) Current player plays a character card
         if (fatherModel.gameMode.equals(GameMode.EASY_MODE)) {
             throw new RuntimeException("Playing character card while game mode is not expert");

@@ -4,6 +4,7 @@ import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
+import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
 import it.polimi.ingsw.exceptions.NotFoundException;
@@ -414,12 +415,10 @@ class PrivateModelTest {
         temp.put("Player1", DeckName.DESERT_KING);
         temp.put("Player2", DeckName.CLOUD_WITCH);
         try {
-            model = new Model(0, temp);
+            model = new Model(0, temp, GameMode.EASY_MODE);
         } catch (Exception e) {
 
         }
-        //TODO: Add bag creation in Model Constructor
-        model.bag = new Bag(42);//random number
         return model;
     }
 }

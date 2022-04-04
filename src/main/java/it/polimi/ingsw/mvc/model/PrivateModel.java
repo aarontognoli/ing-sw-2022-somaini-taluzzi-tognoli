@@ -1,17 +1,17 @@
 package it.polimi.ingsw.mvc.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Math.floorMod;
 
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cards.characters.FlagCharacter.FlagCharacter;
 import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
 import it.polimi.ingsw.cards.characters.JokerCharacter.JokerCharacter;
+import it.polimi.ingsw.cards.characters.PostManCharacter.PostManCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
@@ -37,17 +37,8 @@ public class PrivateModel {
         this.fatherModel = fatherModel;
     }
 
-    void prepareMatch() throws BagEmptyException, NotFoundException {
+    void prepareMatch(int motherNatureIslandIndex) throws BagEmptyException {
         fatherModel.bag = new Bag(2);
-        int motherNatureIslandIndex = -1;
-
-        for (Island island : fatherModel.islands) {
-            if (fatherModel.motherNature.getPosition().equals(island)) {
-                motherNatureIslandIndex = fatherModel.islands.indexOf(island);
-                break;
-            }
-        }
-        if (motherNatureIslandIndex == -1) throw new NotFoundException("Mother Nature not found");
 
         for (int i = 0; i < 5; i++) {
             int index1 = (motherNatureIslandIndex + i + 1) % 12;
@@ -58,28 +49,49 @@ public class PrivateModel {
 
         fatherModel.bag = new Bag(24);
 
-        fatherModel.influenceCalculator = fatherModel.totalPlayerCount == 4 ?
-                new InfluenceCalculator_4(fatherModel) : new InfluenceCalculator_2_3(fatherModel);
-
         // (Expert only) choose 3 random character cards
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
+            // give 1 coin to each player
+            for (Player player : fatherModel.players) {
+                player.getBoard().rewardCoin();
+            }
+
             fatherModel.currentGameCards = new ArrayList<>(3);
 
-            // TODO: get 3 randoms cards
-            fatherModel.currentGameCards.add(new FlagCharacter(fatherModel));
+            // TODO: add all character cards
+            // following the alphabetical order: Bard, Flag, Herbalist, Joker, Postman, Wine
+            Random random = new Random();
+            int previousIndex1 = -1;
+            int previousIndex2 = -1;
+            for (int i = 0; i < 3; i++) {
+                int index = random.nextInt(6);
+                while (index == previousIndex1 || index == previousIndex2) {
+                    index = random.nextInt(6);
+                }
+                previousIndex2 = previousIndex1;
+                previousIndex1 = index;
 
-            List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
-            for (int i = 0; i < JokerCharacter.INITIAL_STUDENT_SIZE; i++) {
-                studentsForJoker.add(drawStudentFromBag());
+                switch (index) {
+                    case 0 -> fatherModel.currentGameCards.add(new BardCharacter(fatherModel));
+                    case 1 -> fatherModel.currentGameCards.add(new FlagCharacter(fatherModel));
+                    case 2 -> fatherModel.currentGameCards.add(new HerbalistCharacter(fatherModel));
+                    case 3 -> {
+                        List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
+                        for (int j = 0; j < JokerCharacter.INITIAL_STUDENT_SIZE; j++) {
+                            studentsForJoker.add(drawStudentFromBag());
+                        }
+                        fatherModel.currentGameCards.add(new JokerCharacter(fatherModel, studentsForJoker));
+                    }
+                    case 4 -> fatherModel.currentGameCards.add(new PostManCharacter(fatherModel));
+                    case 5 -> {
+                        List<Student> studentsForWine = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
+                        for (int j = 0; j < WineCharacter.INITIAL_STUDENT_SIZE; j++) {
+                            studentsForWine.add(drawStudentFromBag());
+                        }
+                        fatherModel.currentGameCards.add(new WineCharacter(fatherModel, studentsForWine));
+                    }
+                }
             }
-
-            List<Student> studentsForWine = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
-            for (int i = 0; i < WineCharacter.INITIAL_STUDENT_SIZE; i++) {
-                studentsForJoker.add(drawStudentFromBag());
-            }
-
-            fatherModel.currentGameCards.add(new JokerCharacter(fatherModel, studentsForJoker));
-            fatherModel.currentGameCards.add(new WineCharacter(fatherModel, studentsForWine));
         }
     }
 
@@ -90,7 +102,7 @@ public class PrivateModel {
     Student removeStudentFromEntrance(Student student, Board player) throws NotFoundException {
         List<Student> entrance = player.getEntrance();
         for (Student s : entrance) {
-            if (s.getColor().equals(student.getColor())) {
+            if (s.equals(student)) {
                 entrance.remove(s);
                 return s;
             }
