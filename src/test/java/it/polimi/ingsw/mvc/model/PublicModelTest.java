@@ -1,19 +1,14 @@
 package it.polimi.ingsw.mvc.model;
 
-import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacterArgument;
-import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.pawn.Student;
-import it.polimi.ingsw.places.Island;
-import it.polimi.ingsw.player.Player;
 import org.junit.jupiter.api.Test;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +45,7 @@ class PublicModelTest {
 
     @Test
     void endTurn() {
-        //TODO once the method is complete
+        // TODO once the method is complete
     }
 
     @Test
@@ -66,7 +61,7 @@ class PublicModelTest {
         model.currentPlayer.setCurrentAssistantCard(AssistantCard.CARD_3);
         try {
             model.publicModel.moveMotherNature(2);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertEquals(model.islands.get(2), model.motherNature.getPosition());
@@ -79,7 +74,7 @@ class PublicModelTest {
         model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 11));
         try {
             model.publicModel.moveStudentToIsland(Color.YELLOW_GNOMES, 2);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertTrue(model.currentPlayer.getBoard().getEntrance().isEmpty());
@@ -98,9 +93,9 @@ class PublicModelTest {
         Model model = twoPlayersBasicSetup();
         model.currentPlayer = model.players.get(0);
         model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 11));
-        try{
+        try {
             model.publicModel.moveStudentToDiningRoom(Color.YELLOW_GNOMES);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertEquals(0, model.currentPlayer.getBoard().getEntrance().size());
@@ -109,10 +104,10 @@ class PublicModelTest {
         assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.RED_DRAGONS.ordinal()).size());
         assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.PINK_FAIRIES.ordinal()).size());
         assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().get(Color.YELLOW_GNOMES.ordinal()).size());
-        assertEquals(Color.YELLOW_GNOMES, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.YELLOW_GNOMES.ordinal()).get(0).getColor());
-        assertEquals(11, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.YELLOW_GNOMES.ordinal()).get(0).getID());
+        assertEquals(Color.YELLOW_GNOMES,
+                model.currentPlayer.getBoard().getDiningRoom().get(Color.YELLOW_GNOMES.ordinal()).get(0).getColor());
+        assertEquals(11,
+                model.currentPlayer.getBoard().getDiningRoom().get(Color.YELLOW_GNOMES.ordinal()).get(0).getID());
     }
 
     @Test
@@ -122,10 +117,10 @@ class PublicModelTest {
         model.currentGameCards.set(0, new BardCharacter(model));
         model.currentPlayer.getBoard().getEntrance().add(new Student(Color.YELLOW_GNOMES, 1));
         model.currentPlayer.getBoard().getEntrance().add(new Student(Color.GREEN_FROGS, 2));
-        model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.GREEN_FROGS.ordinal()).add(new Student(Color.GREEN_FROGS, 3));
-        model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.GREEN_FROGS.ordinal()).add(new Student(Color.GREEN_FROGS, 4));
+        model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal())
+                .add(new Student(Color.GREEN_FROGS, 3));
+        model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal())
+                .add(new Student(Color.GREEN_FROGS, 4));
         List<Color> toExchangeEntrance = new ArrayList<Color>();
         toExchangeEntrance.add(Color.YELLOW_GNOMES);
         toExchangeEntrance.add(Color.GREEN_FROGS);
@@ -138,35 +133,28 @@ class PublicModelTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.BLUE_UNICORNS.ordinal()).size());
-        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.RED_DRAGONS.ordinal()).size());
-        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.PINK_FAIRIES.ordinal()).size());
-        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.YELLOW_GNOMES.ordinal()).size());
-        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.YELLOW_GNOMES.ordinal()).get(0).getID());
-        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.GREEN_FROGS.ordinal()).size());
-        assertEquals(2, model.currentPlayer.getBoard().getDiningRoom().
-                get(Color.GREEN_FROGS.ordinal()).get(0).getID());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.BLUE_UNICORNS.ordinal()).size());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.RED_DRAGONS.ordinal()).size());
+        assertEquals(0, model.currentPlayer.getBoard().getDiningRoom().get(Color.PINK_FAIRIES.ordinal()).size());
+        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().get(Color.YELLOW_GNOMES.ordinal()).size());
+        assertEquals(1,
+                model.currentPlayer.getBoard().getDiningRoom().get(Color.YELLOW_GNOMES.ordinal()).get(0).getID());
+        assertEquals(1, model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal()).size());
+        assertEquals(2, model.currentPlayer.getBoard().getDiningRoom().get(Color.GREEN_FROGS.ordinal()).get(0).getID());
         assertEquals(2, model.currentPlayer.getBoard().getEntrance().size());
-        assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().
-                get(0).getColor());
-        assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().
-                get(1).getColor());
+        assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().get(0).getColor());
+        assertEquals(Color.GREEN_FROGS, model.currentPlayer.getBoard().getEntrance().get(1).getColor());
         assertTrue(model.currentPlayer.getBoard().getEntrance().get(0).getID() == 3 ||
                 model.currentPlayer.getBoard().getEntrance().get(0).getID() == 4);
         assertTrue(model.currentPlayer.getBoard().getEntrance().get(1).getID() == 3 ||
                 model.currentPlayer.getBoard().getEntrance().get(1).getID() == 4);
-        assertNotEquals(model.currentPlayer.getBoard().getEntrance().get(0), model.currentPlayer.getBoard().getEntrance().get(1));
+        assertNotEquals(model.currentPlayer.getBoard().getEntrance().get(0),
+                model.currentPlayer.getBoard().getEntrance().get(1));
     }
 
     @Test
     void updateIslandOwner() {
-        //TODO once the method is complete
+        // TODO once the method is complete
     }
 
     Model twoPlayersBasicSetup() {

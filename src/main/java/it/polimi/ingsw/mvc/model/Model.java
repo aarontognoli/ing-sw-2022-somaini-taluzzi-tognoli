@@ -46,7 +46,8 @@ public class Model {
 
     // Initialize game with starting rules
 
-    public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks, GameMode gameMode) throws IllegalArgumentException, Exception {
+    public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks, GameMode gameMode)
+            throws IllegalArgumentException, Exception {
 
         // Models
         privateModel = new PrivateModel(this);
@@ -69,7 +70,7 @@ public class Model {
             professors.add(c.ordinal(), new Professor(c));
         }
 
-        //TODO: different influence rules for each number of player with case select
+        // TODO: different influence rules for each number of player with case select
         int towerColor = 0;
 
         privateModel.placeMotherNature(motherNatureStartingPosition);
@@ -77,7 +78,7 @@ public class Model {
         totalPlayerCount = nicknamesAndDecks.size();
         if (nicknamesAndDecks.size() > 1 && nicknamesAndDecks.size() <= 4) {
 
-            //2 players
+            // 2 players
             for (String nickname : nicknamesAndDecks.keySet()) {
                 players.add(new Player(nickname, TowerColor.values()[towerColor], nicknamesAndDecks.get(nickname), 8));
                 towerColor++;
@@ -86,16 +87,15 @@ public class Model {
             throw new IllegalArgumentException("Illegal number of Players");
 
         // Initialize InfluenceCalculator
-        influenceCalculator = totalPlayerCount == 4 ?
-                new InfluenceCalculator_4(this) : new InfluenceCalculator_2_3(this);
+        influenceCalculator = totalPlayerCount == 4 ? new InfluenceCalculator_4(this)
+                : new InfluenceCalculator_2_3(this);
 
         // Initialize clouds
         if (totalPlayerCount == 2 || totalPlayerCount == 4) {
             for (int i = 0; i < totalPlayerCount; i++) {
                 clouds.add(new Cloud(3));
             }
-        }
-        else if (totalPlayerCount == 3) {
+        } else if (totalPlayerCount == 3) {
             for (int i = 0; i < 3; i++) {
                 clouds.add(new Cloud(4));
             }
