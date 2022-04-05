@@ -13,7 +13,7 @@ public class CheeseCharacter extends CharacterCard {
 
     @Override
     protected void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (arguments.getClass() != String.class) {
+        if (!(arguments instanceof String)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 

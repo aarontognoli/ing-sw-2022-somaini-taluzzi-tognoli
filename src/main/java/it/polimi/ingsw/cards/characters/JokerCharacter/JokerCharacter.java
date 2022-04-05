@@ -38,7 +38,7 @@ public class JokerCharacter extends CharacterCard {
 
     @Override
     public void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (arguments.getClass() != JokerCharacterArgument.class) {
+        if (!(arguments instanceof JokerCharacterArgument)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 

@@ -13,7 +13,7 @@ public class FlagCharacter extends CharacterCard {
 
     @Override
     public void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (arguments.getClass() != Island.class) {
+        if (!(arguments instanceof Island)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 
