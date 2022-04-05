@@ -83,4 +83,11 @@ public class Board {
         }
         coinCount -= amount;
     }
+
+    public TowerColor getTowerColor() throws NoTowerException {
+        if (towers.size() == 0)
+            throw new NoTowerException("No tower found in board");
+
+        return towers.get(0).getColor();
+    }
 }
