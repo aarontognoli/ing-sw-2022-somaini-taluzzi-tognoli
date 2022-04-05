@@ -90,6 +90,7 @@ public class PublicModel {
             }
         }
 
+        fatherModel.privateModel.updateProfessorPosition(studentColor);
     }
 
     public void playCharacterCard(int cardIndex, Object effectArgument)

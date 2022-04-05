@@ -13,4 +13,8 @@ public class CharacterModel {
     public Student drawStudentFromBag() throws BagEmptyException {
         return fatherModel.privateModel.drawStudentFromBag();
     }
+
+    public void updateProfessorMoverRule(ProfessorMoverRuleDefault newProfessorMoverRule) {
+        fatherModel.professorMoverRule = newProfessorMoverRule;
+    }
 }

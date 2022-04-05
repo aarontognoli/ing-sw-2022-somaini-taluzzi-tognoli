@@ -362,4 +362,28 @@ public class PrivateModel {
 
         fatherModel.motherNature = new MotherNature(fatherModel.islands.get(islandIndex));
     }
+
+    void updateProfessorPosition(Color professColor) {
+        int maxStudentOfColor = -1;
+        Board maxBoard = null;
+
+        for (Player player : fatherModel.players) {
+            Board currentBoard = player.getBoard();
+
+            int studentsCountThisColor = currentBoard.getDiningRoom().get(professColor.ordinal()).size();
+
+            if (fatherModel.professorMoverRule.isMaxStudentsCount(studentsCountThisColor, maxStudentOfColor,
+                    player.getNickname())) {
+                maxStudentOfColor = studentsCountThisColor;
+                maxBoard = currentBoard;
+            }
+        }
+
+        if (maxBoard == null) {
+            // This should never happen (?)
+            throw new RuntimeException("No player in model (?)");
+        }
+
+        fatherModel.professors.get(professColor.ordinal()).move(maxBoard);
+    }
 }

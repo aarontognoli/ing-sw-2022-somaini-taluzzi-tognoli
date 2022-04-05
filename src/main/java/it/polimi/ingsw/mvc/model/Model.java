@@ -42,6 +42,9 @@ public class Model {
     // Strategy field for Influence Calculation
     InfluenceCalculator influenceCalculator;
 
+    // Strategy field for Professor Move Rule
+    ProfessorMoverRuleDefault professorMoverRule;
+
     // Models
     final PrivateModel privateModel;
     public final PublicModel publicModel;
@@ -113,6 +116,8 @@ public class Model {
         // Initialize InfluenceCalculator
         influenceCalculator = totalPlayerCount == 4 ? new InfluenceCalculator_4(this)
                 : new InfluenceCalculator_2_3(this);
+
+        professorMoverRule = new ProfessorMoverRuleDefault();
 
         // Initialize clouds
         if (totalPlayerCount == 2 || totalPlayerCount == 4) {
