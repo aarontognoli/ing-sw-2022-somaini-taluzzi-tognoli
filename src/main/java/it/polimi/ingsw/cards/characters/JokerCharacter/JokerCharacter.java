@@ -14,6 +14,10 @@ public class JokerCharacter extends CharacterCard {
 
     private List<Student> students;
 
+    public List<Student> getStudents() {
+        return new ArrayList<>(students);
+    }
+
     public JokerCharacter(Model model, List<Student> initialStudents) {
         super(model, 1);
 
