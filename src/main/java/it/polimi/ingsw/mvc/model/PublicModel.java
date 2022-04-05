@@ -26,9 +26,15 @@ public class PublicModel {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
-    public void drawStudentsIntoEntrance(int cloudIndex) {
+    public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException {
+
         List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudents();
-        fatherModel.currentPlayer.getBoard().addStudentsToEntrance(studentsFromCloud);
+        try {
+            fatherModel.currentPlayer.getBoard().addStudentsToEntrance(studentsFromCloud);
+        } catch (EntranceFullException e) {
+            fatherModel.clouds.get(cloudIndex).putStudents(studentsFromCloud);
+            throw e;
+        }
     }
 
     public void endTurn() {

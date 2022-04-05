@@ -18,6 +18,7 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
+import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
@@ -62,7 +63,12 @@ public class PrivateModel {
                 studentsToAddInEntrance.add(drawStudentFromBag());
             }
 
-            player.getBoard().addStudentsToEntrance(studentsToAddInEntrance);
+            try {
+                player.getBoard().addStudentsToEntrance(studentsToAddInEntrance);
+            } catch (EntranceFullException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Should not overflow entrance during initialization");
+            }
         }
 
         // (Expert only) choose 3 random character cards

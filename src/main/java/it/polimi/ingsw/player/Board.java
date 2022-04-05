@@ -1,6 +1,7 @@
 package it.polimi.ingsw.player;
 
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.pawn.Tower;
@@ -42,8 +43,10 @@ public class Board {
             throw new NoTowerException("No towers, end the game");
     }
 
-    // TODO: EntranceFull Exception (?)
-    public void addStudentsToEntrance(List<Student> newStudents) {
+    public void addStudentsToEntrance(List<Student> newStudents) throws EntranceFullException {
+        if (entrance.size() + newStudents.size() > 9) {
+            throw new EntranceFullException();
+        }
         entrance.addAll(newStudents);
     }
 

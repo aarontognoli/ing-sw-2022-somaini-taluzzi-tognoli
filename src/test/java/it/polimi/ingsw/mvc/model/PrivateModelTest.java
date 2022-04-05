@@ -6,9 +6,9 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
+import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
@@ -70,7 +70,11 @@ class PrivateModelTest {
         }
 
         // Entrance contains only Yellows, exception expected
-        testBoard.addStudentsToEntrance(tempEntrance);
+        try {
+            testBoard.addStudentsToEntrance(tempEntrance);
+        } catch (EntranceFullException e1) {
+            assert false;
+        }
         try {
             model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard);
             assert false;
