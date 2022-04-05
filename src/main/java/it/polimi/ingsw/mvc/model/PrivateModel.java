@@ -226,10 +226,6 @@ public class PrivateModel {
 
     }
 
-    void placeProfessorInBoard(Professor professor) {
-        professor.move(fatherModel.currentPlayer.getBoard());
-    }
-
     // the method will be called in the right moments
     Player checkVictoryConditions() {
 
