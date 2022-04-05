@@ -372,8 +372,8 @@ public class PrivateModel {
 
             int studentsCountThisColor = currentBoard.getDiningRoom().get(professColor.ordinal()).size();
 
-            // TODO: A character card effect should change this behavior (?)
-            if (studentsCountThisColor > maxStudentOfColor) {
+            if (fatherModel.professorMoverRule.isMaxStudentsCount(studentsCountThisColor, maxStudentOfColor,
+                    player.getNickname())) {
                 maxStudentOfColor = studentsCountThisColor;
                 maxBoard = currentBoard;
             }
