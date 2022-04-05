@@ -14,6 +14,10 @@ public class JokerCharacter extends CharacterCard {
 
     private List<Student> students;
 
+    public List<Student> getStudents() {
+        return new ArrayList<>(students);
+    }
+
     public JokerCharacter(Model model, List<Student> initialStudents) {
         super(model, 1);
 
@@ -38,7 +42,7 @@ public class JokerCharacter extends CharacterCard {
 
     @Override
     public void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (arguments.getClass() != JokerCharacterArgument.class) {
+        if (!(arguments instanceof JokerCharacterArgument)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 

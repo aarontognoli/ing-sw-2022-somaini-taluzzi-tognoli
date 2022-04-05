@@ -18,7 +18,7 @@ public class BardCharacter extends CharacterCard {
 
     @Override
     protected void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (arguments.getClass() != BardCharacterArgument.class) {
+        if (!(arguments instanceof BardCharacterArgument)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
         List<Student> studentList = new ArrayList<Student>();

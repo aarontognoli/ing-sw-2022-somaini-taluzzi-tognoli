@@ -17,4 +17,8 @@ public class CharacterModel {
     public void updateProfessorMoverRule(ProfessorMoverRuleDefault newProfessorMoverRule) {
         fatherModel.professorMoverRule = newProfessorMoverRule;
     }
+    public void updateInfluenceCalculator(InfluenceCalculatorRules newInfluenceCalculatorRules) {
+        fatherModel.influenceCalculator.setInfluenceCalculatorRules(newInfluenceCalculatorRules);
+    }
+
 }
