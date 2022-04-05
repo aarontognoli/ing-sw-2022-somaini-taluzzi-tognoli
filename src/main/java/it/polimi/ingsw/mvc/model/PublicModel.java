@@ -90,6 +90,7 @@ public class PublicModel {
             }
         }
 
+        fatherModel.privateModel.updateProfessorPosition(studentColor);
     }
 
     public void playCharacterCard(int cardIndex, Object effectArgument)
@@ -130,6 +131,26 @@ public class PublicModel {
 
     public Player getCurrentPlayer() {
         return fatherModel.currentPlayer;
+    }
+
+    /**
+     * @return null if everyone has at least a tower, otherwise returns the player
+     *         who has placed their last tower
+     *         This method also checks for 4-players game, it only checks the board
+     *         of the teammate who originally got the towers in their board
+     */
+    public Player checkFinishedTowers() {
+        for (int i = 0; i < fatherModel.players.size(); i++) {
+            // In 4 players games, just check for player 0 and 2
+            if (fatherModel.totalPlayerCount != 4 || i % 2 == 0) {
+                Player p = fatherModel.players.get(i);
+                if (p.getBoard().getTowers().isEmpty()) {
+                    return p;
+                }
+            }
+        }
+
+        return null;
     }
 
 }

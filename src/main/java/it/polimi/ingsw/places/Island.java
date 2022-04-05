@@ -36,7 +36,8 @@ public class Island {
                 towerColor2 = i2.getTowerColor();
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new RuntimeException("This should never happen since we checked that both islands have non-zero number of towers.");
+                throw new RuntimeException(
+                        "This should never happen since we checked that both islands have non-zero number of towers.");
             }
             if (!towerColor1.equals(towerColor2)) {
                 throw new TowerDifferentColorException(towerColor1, towerColor2);
@@ -45,15 +46,13 @@ public class Island {
 
         // Merge students and towers into a single list
         students = Stream.concat(
-                        i1.students.stream(),
-                        i2.students.stream()
-                )
+                i1.students.stream(),
+                i2.students.stream())
                 .collect(Collectors.toList());
 
         towers = Stream.concat(
-                        i1.towers.stream(),
-                        i2.towers.stream()
-                )
+                i1.towers.stream(),
+                i2.towers.stream())
                 .collect(Collectors.toList());
     }
 
@@ -65,7 +64,9 @@ public class Island {
         return students;
     }
 
-    public boolean hasNoEntryTile() { return noEntryTile; }
+    public boolean hasNoEntryTile() {
+        return noEntryTile;
+    }
 
     public TowerColor getTowerColor() throws NoTowerException {
         if (towers.size() == 0) {
@@ -81,16 +82,17 @@ public class Island {
         noEntryTile = true;
     }
 
-    public void removeNoEntryTile() { noEntryTile = false; }
+    public void removeNoEntryTile() {
+        noEntryTile = false;
+    }
 
-    public void addTower(Tower tower) throws Exception {
+    public void addTower(Tower tower) throws TowerDifferentColorException {
         // Make sure all the towers are of the same color
         if (towers.size() != 0) {
             if (!tower.getColor().equals(towers.get(0).getColor())) {
                 throw new TowerDifferentColorException(
                         towers.get(0).getColor(),
-                        tower.getColor()
-                );
+                        tower.getColor());
             }
         }
 
@@ -112,7 +114,8 @@ public class Island {
     public Student removeStudent(Student student) throws Exception {
         int indexRemove = students.indexOf(student);
 
-        if (indexRemove == -1) throw new Exception("Student not found.");
+        if (indexRemove == -1)
+            throw new Exception("Student not found.");
 
         return students.remove(indexRemove);
     }

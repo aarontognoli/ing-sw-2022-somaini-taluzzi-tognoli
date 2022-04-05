@@ -12,6 +12,9 @@ import java.util.*;
 
 public class Model {
 
+    private static final int INITIAL_TOWER_COUNT_2_4_PLAYERS = 8;
+    private static final int INITIAL_TOWER_COUNT_3_PLAYERS = 6;
+
     static final int TOTAL_ISLANDS_NUMBER = 12;
     List<Island> islands;
 
@@ -38,6 +41,9 @@ public class Model {
 
     // Strategy field for Influence Calculation
     InfluenceCalculator influenceCalculator;
+
+    // Strategy field for Professor Move Rule
+    ProfessorMoverRuleDefault professorMoverRule;
 
     // Models
     final PrivateModel privateModel;
@@ -70,25 +76,48 @@ public class Model {
             professors.add(c.ordinal(), new Professor(c));
         }
 
-        // TODO: different influence rules for each number of player with case select
-        int towerColor = 0;
-
         privateModel.placeMotherNature(motherNatureStartingPosition);
 
+        int towerColorIndex = 0;
         totalPlayerCount = nicknamesAndDecks.size();
-        if (nicknamesAndDecks.size() > 1 && nicknamesAndDecks.size() <= 4) {
+        switch (totalPlayerCount) {
+            case 2:
+                for (String nickname : nicknamesAndDecks.keySet()) {
+                    players.add(
+                            new Player(nickname, TowerColor.values()[towerColorIndex], nicknamesAndDecks.get(nickname),
+                                    INITIAL_TOWER_COUNT_2_4_PLAYERS));
+                    towerColorIndex++;
+                }
+                break;
+            case 3:
+                for (String nickname : nicknamesAndDecks.keySet()) {
+                    players.add(
+                            new Player(nickname, TowerColor.values()[towerColorIndex], nicknamesAndDecks.get(nickname),
+                                    INITIAL_TOWER_COUNT_3_PLAYERS));
+                    towerColorIndex++;
+                }
+                break;
 
-            // 2 players
-            for (String nickname : nicknamesAndDecks.keySet()) {
-                players.add(new Player(nickname, TowerColor.values()[towerColor], nicknamesAndDecks.get(nickname), 8));
-                towerColor++;
-            }
-        } else
-            throw new IllegalArgumentException("Illegal number of Players");
+            case 4:
+                for (String nickname : nicknamesAndDecks.keySet()) {
+
+                    TowerColor towerColor = towerColorIndex < 2 ? TowerColor.WHITE : TowerColor.BLACK;
+                    int towerCount = towerColorIndex % 2 == 0 ? INITIAL_TOWER_COUNT_2_4_PLAYERS : 0;
+                    players.add(new Player(
+                            nickname, towerColor, nicknamesAndDecks.get(nickname), towerCount));
+                    towerColorIndex++;
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Illegal number of Players");
+        }
 
         // Initialize InfluenceCalculator
         influenceCalculator = totalPlayerCount == 4 ? new InfluenceCalculator_4(this)
                 : new InfluenceCalculator_2_3(this);
+
+        professorMoverRule = new ProfessorMoverRuleDefault();
 
         // Initialize clouds
         if (totalPlayerCount == 2 || totalPlayerCount == 4) {

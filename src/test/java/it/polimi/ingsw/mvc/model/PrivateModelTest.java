@@ -7,6 +7,7 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
+import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
@@ -141,7 +142,30 @@ class PrivateModelTest {
 
     @Test
     void getInfluence() {
-        // TODO
+        // TODO: Check 3 player, 4 players, and tie in both cases
+        Model model = twoPlayersBasicSetup();
+
+        Island targetIsland = model.islands.get(0);
+
+        Player firstPlayer = model.players.get(0);
+        Player secondPlayer = model.players.get(1);
+
+        model.currentPlayer = firstPlayer;
+        Color firstPlayerFirstStudentColor = firstPlayer.getBoard().getEntrance().get(0).getColor();
+        try {
+            model.publicModel.moveStudentToDiningRoom(firstPlayerFirstStudentColor);
+        } catch (DiningRoomFullException e) {
+            assert false;
+        } catch (NotFoundException e) {
+            assert false;
+        }
+
+        assertEquals(firstPlayer.getBoard(),
+                model.professors.get(firstPlayerFirstStudentColor.ordinal()).getPosition());
+
+        targetIsland.addStudent(new Student(firstPlayerFirstStudentColor, 3456));
+
+        assertEquals(firstPlayer.getBoard(), model.privateModel.getInfluence(targetIsland));
     }
 
     @Test
@@ -299,15 +323,17 @@ class PrivateModelTest {
         model.islands.add(new Island());
         model.islands.add(new Island());
         model.islands.add(new Island());
+
+        // TowerVictory
+        Player winningPlayer = model.players.get(0);
         try {
-            model.islands.get(0).addTower(new Tower(TowerColor.BLACK));
-        } catch (Exception e) {
-            // can't come here
+            winningPlayer.getBoard().removeTower();
+        } catch (NoTowerException e1) {
             assert false;
         }
-        // TowerVictory
+
         p = model.privateModel.checkVictoryConditions();
-        assertEquals(model.players.get(TowerColor.BLACK.ordinal()), p);
+        assertEquals(p, winningPlayer);
         // assistant cards empty
         model = twoPlayersBasicSetup();
         for (AssistantCard ac : AssistantCard.values()) {
