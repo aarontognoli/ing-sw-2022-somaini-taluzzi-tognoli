@@ -1,13 +1,9 @@
 package it.polimi.ingsw.mvc.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.player.Player;
 
 public class InfluenceCalculator_4 extends InfluenceCalculator {
     public InfluenceCalculator_4(Model fatherModel) {

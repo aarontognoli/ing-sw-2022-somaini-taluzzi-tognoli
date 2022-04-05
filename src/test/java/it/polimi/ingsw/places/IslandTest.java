@@ -177,14 +177,14 @@ public class IslandTest {
         island.addStudent(student);
 
         try {
-            Student removeStudent = island.removeStudent(student);
+            island.removeStudent(student);
             assertEquals(0, island.getStudents().size());
         } catch (Exception e) {
             assert false;
         }
 
         try {
-            Student removeStudent = island.removeStudent(student);
+            island.removeStudent(student);
             assert false;
         } catch (Exception e) {
         }

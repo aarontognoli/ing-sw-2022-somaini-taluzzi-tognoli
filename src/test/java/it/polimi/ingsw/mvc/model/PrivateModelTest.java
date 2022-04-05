@@ -5,13 +5,11 @@ import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
-import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
-import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
@@ -152,7 +150,6 @@ class PrivateModelTest {
         Island targetIsland = model.islands.get(0);
 
         Player firstPlayer = model.players.get(0);
-        Player secondPlayer = model.players.get(1);
 
         model.currentPlayer = firstPlayer;
         Color firstPlayerFirstStudentColor = firstPlayer.getBoard().getEntrance().get(0).getColor();

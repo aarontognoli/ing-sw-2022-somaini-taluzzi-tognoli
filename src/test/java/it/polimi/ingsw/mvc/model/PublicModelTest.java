@@ -3,8 +3,6 @@ package it.polimi.ingsw.mvc.model;
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
-import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
-import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacterArgument;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacterArgument;
 import it.polimi.ingsw.enums.Color;
