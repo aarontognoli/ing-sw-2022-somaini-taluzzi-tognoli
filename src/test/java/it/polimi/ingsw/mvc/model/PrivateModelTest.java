@@ -35,16 +35,20 @@ class PrivateModelTest {
         for (Color c : Color.values())
             assertEquals(null, model.privateModel.getProfessorOwner(c));
 
-        model.privateModel.placeProfessorInBoard(model.professors.get(Color.RED_DRAGONS.ordinal()));
+        Color studentColor = model.currentPlayer.getBoard().getEntrance().get(0).getColor();
+        try {
+            model.publicModel.moveStudentToDiningRoom(studentColor);
+        } catch (DiningRoomFullException | NotFoundException e) {
+            assert false;
+        }
         for (Color c : Color.values()) {
-            if (c.equals(Color.RED_DRAGONS)) {
+            if (c.equals(studentColor)) {
                 testBoard = model.currentPlayer.getBoard();
             } else {
                 testBoard = null;
             }
             assertEquals(testBoard, model.privateModel.getProfessorOwner(c));
         }
-
     }
 
     @Test
@@ -288,24 +292,6 @@ class PrivateModelTest {
         } catch (Exception e) {
             assert false;
         }
-    }
-
-    @Test
-    void placeProfessorInBoard() {
-        Model model = twoPlayersBasicSetup();
-        Board board0 = model.players.get(0).getBoard();
-        model.currentPlayer = model.players.get(0);
-        model.privateModel.placeProfessorInBoard(model.professors.get(Color.BLUE_UNICORNS.ordinal()));
-        Board testBoard;
-        for (Color c : Color.values()) {
-            if (c.equals(Color.BLUE_UNICORNS)) {
-                testBoard = board0;
-            } else {
-                testBoard = null;
-            }
-            assertEquals(testBoard, model.professors.get(c.ordinal()).getPosition());
-        }
-
     }
 
     @Test
