@@ -6,9 +6,9 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
+import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
@@ -70,7 +70,11 @@ class PrivateModelTest {
         }
 
         // Entrance contains only Yellows, exception expected
-        testBoard.addStudentsToEntrance(tempEntrance);
+        try {
+            testBoard.addStudentsToEntrance(tempEntrance);
+        } catch (EntranceFullException e1) {
+            assert false;
+        }
         try {
             model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard);
             assert false;
@@ -170,68 +174,32 @@ class PrivateModelTest {
     }
 
     @Test
-    void placeTower() {
-        Model model = twoPlayersBasicSetup();
-        Board board0 = model.players.get(0).getBoard();
-        Board board1 = model.players.get(1).getBoard();
-        try {
-            model.privateModel.placeTower(board0);
-        } catch (Exception e) {
-            assert false;
-        }
-
-        assertEquals(model.publicModel.getMotherNatureIsland().getTowers().size(), 1);
-        assertEquals(board0.getTowers().size(), 7);
-        try {
-            model.privateModel.placeTower(board1);
-            assert false;
-        } catch (TowerDifferentColorException e) {
-            assertEquals(board1.getTowers().size(), 8);
-            try {
-                assertEquals(model.publicModel.getMotherNatureIsland().getTowerColor(),
-                        board0.getTowers().get(0).getColor());
-            } catch (Exception ein) {
-                assert false;
-            }
-        } catch (Exception e) {
-            assert false;
-        }
-        for (int i = 0; i < 7; i++) {
-            try {
-                model.privateModel.placeTower(board0);
-
-            } catch (Exception e) {
-                assert false;
-            }
-        }
-        assertEquals(0, board0.getTowers().size());
-        try {
-            model.privateModel.placeTower(board0);
-            assert false;
-        } catch (Exception e) {
-            assertEquals(0, board0.getTowers().size());
-            assertEquals(8, model.publicModel.getMotherNatureIsland().getTowers().size());
-        }
-    }
-
-    @Test
     void removeAllTowers() {
         Model model = twoPlayersBasicSetup();
         Board board0 = model.players.get(0).getBoard();
-        Island motherNatureIsland = model.publicModel.getMotherNatureIsland();
-        assertEquals(0, motherNatureIsland.getTowers().size());
-        model.privateModel.removeAllTowers(motherNatureIsland);
-        assertEquals(0, motherNatureIsland.getTowers().size());
+
+        Island targetIsland = model.publicModel.getMotherNatureIsland();
+        assertEquals(0, targetIsland.getTowers().size());
+
+        model.privateModel.removeAllTowers(targetIsland);
+
+        assertEquals(0, targetIsland.getTowers().size());
+
         try {
             for (int i = 0; i < 8; i++) {
-                model.privateModel.placeTower(board0);
+                targetIsland.addTower(board0.removeTower());
             }
         } catch (Exception e) {
+            assert false;
         }
+
         assertEquals(0, board0.getTowers().size());
-        model.privateModel.removeAllTowers(motherNatureIsland);
-        assertEquals(0, motherNatureIsland.getTowers().size());
+        assertEquals(8, targetIsland.getTowers().size());
+
+        model.privateModel.removeAllTowers(targetIsland);
+
         assertEquals(8, board0.getTowers().size());
+        assertEquals(0, targetIsland.getTowers().size());
     }
 
     @Test
@@ -246,7 +214,7 @@ class PrivateModelTest {
             assertEquals(12, model.islands.size());
         }
         try {
-            model.privateModel.placeTower(board0);
+            model.islands.get(0).addTower(board0.removeTower());
         } catch (Exception e) {
             assert false;
         }
@@ -256,9 +224,7 @@ class PrivateModelTest {
         } catch (Exception e) {
         }
         try {
-            // model.publicModel.moveMotherNature(1);
-            model.motherNature.move(model.islands.get(1));
-            model.privateModel.placeTower(board0);
+            model.islands.get(1).addTower(board0.removeTower());
             motherNatureIsland = model.publicModel.getMotherNatureIsland();
         } catch (Exception e) {
 
@@ -274,15 +240,12 @@ class PrivateModelTest {
         model = twoPlayersBasicSetup();
         board0 = model.players.get(0).getBoard();
         try {
-            // model.publicModel.moveMotherNature(1);
-            model.privateModel.placeTower(board0);
-            model.motherNature.move(model.islands.get(1));
-            model.privateModel.placeTower(board0);
-            model.privateModel.placeTower(board0);
-            model.motherNature.move(model.islands.get(2));
-            model.privateModel.placeTower(board0);
-            model.privateModel.placeTower(board0);
-            model.privateModel.placeTower(board0);
+            model.islands.get(0).addTower(board0.removeTower());
+            model.islands.get(1).addTower(board0.removeTower());
+            model.islands.get(1).addTower(board0.removeTower());
+            model.islands.get(2).addTower(board0.removeTower());
+            model.islands.get(2).addTower(board0.removeTower());
+            model.islands.get(2).addTower(board0.removeTower());
             model.privateModel.mergeIslands(model.islands.get(1));
             assertEquals(10, model.islands.size());
             assertEquals(6, model.publicModel.getMotherNatureIsland().getTowers().size());

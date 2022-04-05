@@ -16,7 +16,9 @@ import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
+import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
@@ -61,7 +63,12 @@ public class PrivateModel {
                 studentsToAddInEntrance.add(drawStudentFromBag());
             }
 
-            player.getBoard().addStudentsToEntrance(studentsToAddInEntrance);
+            try {
+                player.getBoard().addStudentsToEntrance(studentsToAddInEntrance);
+            } catch (EntranceFullException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Should not overflow entrance during initialization");
+            }
         }
 
         // (Expert only) choose 3 random character cards
@@ -157,25 +164,23 @@ public class PrivateModel {
         }
     }
 
-    void placeTower(Board board) throws Exception {
-        // towers can only be placed on the island containing MotherNature
-        Tower tempTower = board.removeTower();
-        try {
-
-            fatherModel.publicModel.getMotherNatureIsland().addTower(tempTower);
-        } catch (TowerDifferentColorException e) {
-            board.getTowers().add(tempTower);
-            throw e;
-        }
-
-    }
-
     void removeAllTowers(Island island) {
 
         List<Tower> towers;
         towers = island.removeAllTowers();
+
+        // Move these towers to the correct player board
         if (!towers.isEmpty()) {
-            fatherModel.players.get(towers.get(0).getColor().ordinal()).getBoard().getTowers().addAll(towers);
+
+            TowerColor towerColor = towers.get(0).getColor();
+            int playerIndex;
+            if (fatherModel.totalPlayerCount == 4) {
+                playerIndex = towerColor.ordinal() * 2;
+            } else {
+                playerIndex = towerColor.ordinal();
+            }
+
+            fatherModel.players.get(playerIndex).getBoard().getTowers().addAll(towers);
         }
     }
 

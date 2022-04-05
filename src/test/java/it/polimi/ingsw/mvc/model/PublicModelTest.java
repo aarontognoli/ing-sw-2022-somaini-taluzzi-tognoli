@@ -8,6 +8,7 @@ import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacterArgument;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.pawn.Student;
 import org.junit.jupiter.api.Test;
@@ -42,8 +43,14 @@ class PublicModelTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        model.publicModel.drawStudentsIntoEntrance(1);
-        assertEquals(10, model.currentPlayer.getBoard().getEntrance().size());
+
+        model.currentPlayer.getBoard().getEntrance().clear();
+        try {
+            model.publicModel.drawStudentsIntoEntrance(1);
+        } catch (EntranceFullException e) {
+            assert false;
+        }
+        assertEquals(3, model.currentPlayer.getBoard().getEntrance().size());
     }
 
     @Test

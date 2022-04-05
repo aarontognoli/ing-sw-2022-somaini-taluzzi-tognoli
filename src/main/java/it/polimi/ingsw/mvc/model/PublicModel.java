@@ -7,9 +7,11 @@ import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
+import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
@@ -24,9 +26,15 @@ public class PublicModel {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
-    public void drawStudentsIntoEntrance(int cloudIndex) {
+    public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException {
+
         List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudents();
-        fatherModel.currentPlayer.getBoard().addStudentsToEntrance(studentsFromCloud);
+        try {
+            fatherModel.currentPlayer.getBoard().addStudentsToEntrance(studentsFromCloud);
+        } catch (EntranceFullException e) {
+            fatherModel.clouds.get(cloudIndex).putStudents(studentsFromCloud);
+            throw e;
+        }
     }
 
     public void endTurn() {
@@ -123,10 +131,78 @@ public class PublicModel {
 
     // Update island owner based on influence
     public void updateIslandOwner(Island island) {
-        // TODO: Get influence correctly
-        // Board playerBoard = fatherModel.privateModel.getInfluence(island);
+        Board playerOwnerBoard = fatherModel.privateModel.getInfluence(island);
 
-        // TODO: Move towers, and eventually merge island, if the owner changes
+        if (playerOwnerBoard == null)
+            return;
+
+        if (island.getTowers().size() == 0) {
+            // Place tower here
+            try {
+                island.addTower(playerOwnerBoard.removeTower());
+            } catch (TowerDifferentColorException e1) {
+                e1.printStackTrace();
+                throw new RuntimeException("Island had no tower in them but different color of tower was detected (?)\n"
+                        + e1.getMessage());
+            } catch (NoTowerException e1) {
+                e1.printStackTrace();
+                throw new RuntimeException(
+                        "No tower in player board (?) How did they not win already?\n" + e1.getMessage());
+            }
+            try {
+                fatherModel.privateModel.mergeIslands(island);
+                return;
+            } catch (NoTowerException e) {
+                e.printStackTrace();
+                throw new RuntimeException(
+                        "We just added a tower. How is that possible that there is no tower now?" + e.getMessage());
+            }
+        }
+
+        TowerColor islandTowerColor;
+        try {
+            islandTowerColor = island.getTowerColor();
+        } catch (NoTowerException e) {
+            e.printStackTrace();
+            throw new RuntimeException("We just checked island had some towers. What? " + e.getMessage());
+        }
+
+        try {
+            if (playerOwnerBoard.getTowerColor().equals(islandTowerColor)) {
+                // Ok, this player was already the owner. Do nothing.
+                return;
+            } else {
+                // Remove all towers from this island
+                int towerRemovedCount = island.getTowers().size();
+                fatherModel.privateModel.removeAllTowers(island);
+
+                // Place as many towers in that island
+                for (int i = 0; i < towerRemovedCount; i++) {
+                    try {
+                        island.addTower(playerOwnerBoard.removeTower());
+                    } catch (TowerDifferentColorException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException("Player board has no tower. What? " + e.getMessage());
+                    }
+                    if (playerOwnerBoard.getTowers().size() == 0) {
+                        // VICTORY TODO: Notify remote-views of victory
+
+                        return;
+                    }
+                }
+                try {
+                    fatherModel.privateModel.mergeIslands(island);
+                    return;
+                } catch (NoTowerException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(
+                            "We just added a tower. How is that possible that there is no tower now?" + e.getMessage());
+                }
+            }
+        } catch (NoTowerException e) {
+            e.printStackTrace();
+            throw new RuntimeException("No towers in player board? Why did they not win? " + e.getMessage());
+        }
     }
 
     public Player getCurrentPlayer() {
