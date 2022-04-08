@@ -94,7 +94,7 @@ public class PrivateModel {
                 previousIndex2 = previousIndex1;
                 previousIndex1 = index;
 
-                fatherModel.currentGameCards.add(CharacterFactory.createCharacter(index));
+                fatherModel.currentGameCards.add(CharacterFactory.createCharacter(fatherModel, index));
             }
         }
     }
