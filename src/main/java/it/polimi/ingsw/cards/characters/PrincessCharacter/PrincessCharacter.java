@@ -3,6 +3,7 @@ package it.polimi.ingsw.cards.characters.PrincessCharacter;
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.player.DiningRoomFullException;
@@ -30,6 +31,21 @@ public class PrincessCharacter extends CharacterCard {
         }
 
         students = initialStudents;
+    }
+
+    public PrincessCharacter(Model model) {
+        super(model, 2);
+
+        List<Student> studentsForPrincess = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
+        for (int j = 0; j < WineCharacter.INITIAL_STUDENT_SIZE; j++) {
+            try {
+                studentsForPrincess.add(model.characterModel.drawStudentFromBag());
+            } catch (BagEmptyException e) {
+                throw new RuntimeException("This should never happen");
+            }
+
+        }
+        students = studentsForPrincess;
     }
 
     private int indexOfStudentId(int studentId, List<Student> students) {
