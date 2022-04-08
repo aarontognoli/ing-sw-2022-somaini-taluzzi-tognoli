@@ -8,6 +8,7 @@ import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cards.characters.CharacterFactory;
 import it.polimi.ingsw.cards.characters.FlagCharacter.FlagCharacter;
 import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
 import it.polimi.ingsw.cards.characters.JokerCharacter.JokerCharacter;
@@ -93,26 +94,7 @@ public class PrivateModel {
                 previousIndex2 = previousIndex1;
                 previousIndex1 = index;
 
-                switch (index) {
-                    case 0 -> fatherModel.currentGameCards.add(new BardCharacter(fatherModel));
-                    case 1 -> fatherModel.currentGameCards.add(new FlagCharacter(fatherModel));
-                    case 2 -> fatherModel.currentGameCards.add(new HerbalistCharacter(fatherModel));
-                    case 3 -> {
-                        List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
-                        for (int j = 0; j < JokerCharacter.INITIAL_STUDENT_SIZE; j++) {
-                            studentsForJoker.add(drawStudentFromBag());
-                        }
-                        fatherModel.currentGameCards.add(new JokerCharacter(fatherModel, studentsForJoker));
-                    }
-                    case 4 -> fatherModel.currentGameCards.add(new PostManCharacter(fatherModel));
-                    case 5 -> {
-                        List<Student> studentsForWine = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
-                        for (int j = 0; j < WineCharacter.INITIAL_STUDENT_SIZE; j++) {
-                            studentsForWine.add(drawStudentFromBag());
-                        }
-                        fatherModel.currentGameCards.add(new WineCharacter(fatherModel, studentsForWine));
-                    }
-                }
+                fatherModel.currentGameCards.add(CharacterFactory.createCharacter(index));
             }
         }
     }
