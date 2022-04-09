@@ -1,6 +1,7 @@
 package it.polimi.ingsw.cards.characters;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Random;
 
 import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.CentaurCharacter.CentaurCharacter;
@@ -18,27 +19,48 @@ import it.polimi.ingsw.mvc.model.Model;
 
 public class CharacterFactory {
 
-    private static final Class<? extends CharacterCard>[] CARDS_CONSTRUCTORS = new Class[] {
-            BardCharacter.class,
-            CentaurCharacter.class,
-            CheeseCharacter.class,
-            FlagCharacter.class,
-            HerbalistCharacter.class,
-            JokerCharacter.class,
-            KnightCharacter.class,
-            MushroomCharacter.class,
-            PipeCharacter.class,
-            PostManCharacter.class,
-            PrincessCharacter.class,
-            WineCharacter.class
-    };
+    private final Class<? extends CharacterCard>[] cardsConstructors;
+    private final Random random;
 
-    public static CharacterCard createCharacter(Model model, int index) {
-        Class<? extends CharacterCard> thisClass = CARDS_CONSTRUCTORS[index];
+    public CharacterFactory() {
+        cardsConstructors = new Class[] {
+                BardCharacter.class,
+                CentaurCharacter.class,
+                CheeseCharacter.class,
+                FlagCharacter.class,
+                HerbalistCharacter.class,
+                JokerCharacter.class,
+                KnightCharacter.class,
+                MushroomCharacter.class,
+                PipeCharacter.class,
+                PostManCharacter.class,
+                PrincessCharacter.class,
+                WineCharacter.class
+        };
+
+        random = new Random();
+    }
+
+    /**
+     * @param model reference to the model
+     * @return a new random CharacterCard without repetitions for this instance
+     */
+    public CharacterCard getRandomCharacter(Model model) {
+        int index;
+        Class<? extends CharacterCard> thisClass;
+
+        do {
+            index = random.nextInt(cardsConstructors.length);
+            thisClass = cardsConstructors[index];
+        } while(thisClass == null);
+
+        // Set this constructor as null, so that we can avoid repetitions
+        cardsConstructors[index] = null;
+
         try {
-            // Get the constructor with Model as a parameter, then instanciate it using
+            // Get the constructor with Model as a parameter, then instantiate it using
             // model as argument
-            return (CharacterCard) thisClass.getDeclaredConstructor(Model.class).newInstance(model);
+            return thisClass.getDeclaredConstructor(Model.class).newInstance(model);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
