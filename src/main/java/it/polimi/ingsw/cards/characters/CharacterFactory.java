@@ -36,7 +36,7 @@ public class CharacterFactory {
     public static CharacterCard createCharacter(Model model, int index) {
         Class<? extends CharacterCard> thisClass = CARDS_CONSTRUCTORS[index];
         try {
-            // Get the constructor with Model has a parameter, then instanciate it using
+            // Get the constructor with Model as a parameter, then instanciate it using
             // model as argument
             return (CharacterCard) thisClass.getDeclaredConstructor(Model.class).newInstance(model);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
