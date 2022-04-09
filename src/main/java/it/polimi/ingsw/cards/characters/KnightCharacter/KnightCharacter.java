@@ -2,7 +2,6 @@ package it.polimi.ingsw.cards.characters.KnightCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.mvc.model.InfluenceCalculatorCentaur;
 import it.polimi.ingsw.mvc.model.InfluenceCalculatorKnight;
 import it.polimi.ingsw.mvc.model.Model;
 
@@ -20,6 +19,6 @@ public class KnightCharacter extends CharacterCard {
 
         int targetPlayerIndex = (int) arguments;
 
-        model.characterModel.updateInfluenceCalculator(new InfluenceCalculatorKnight(model,targetPlayerIndex));
+        model.characterModel.updateInfluenceCalculator(new InfluenceCalculatorKnight(model, targetPlayerIndex));
     }
 }
