@@ -4,14 +4,10 @@ import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.player.Player;
-
-import java.nio.channels.Pipe;
 
 public class PipeCharacter extends CharacterCard {
-    public PipeCharacter(Model model)
-    {
-        super(model,3);
+    public PipeCharacter(Model model) {
+        super(model, 3);
     }
 
     @Override
@@ -22,8 +18,7 @@ public class PipeCharacter extends CharacterCard {
         Color whichColor = (Color) arguments;
         try {
             model.characterModel.removeStudentsFromAllBoards(3, whichColor);
-        }catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             throw new RuntimeException("This should never happen");
         }
 

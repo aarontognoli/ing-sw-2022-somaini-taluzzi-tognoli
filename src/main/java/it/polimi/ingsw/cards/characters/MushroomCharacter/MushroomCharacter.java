@@ -3,7 +3,6 @@ package it.polimi.ingsw.cards.characters.MushroomCharacter;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.mvc.model.InfluenceCalculatorKnight;
 import it.polimi.ingsw.mvc.model.InfluenceCalculatorMushroom;
 import it.polimi.ingsw.mvc.model.Model;
 
@@ -20,6 +19,6 @@ public class MushroomCharacter extends CharacterCard {
 
         Color targetColor = (Color) arguments;
 
-        model.characterModel.updateInfluenceCalculator(new InfluenceCalculatorMushroom(model,targetColor));
+        model.characterModel.updateInfluenceCalculator(new InfluenceCalculatorMushroom(model, targetColor));
     }
 }
