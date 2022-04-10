@@ -22,6 +22,8 @@ public class CharacterFactory {
     private final Class<? extends CharacterCard>[] cardsConstructors;
     private final Random random;
 
+    private int cardsConstructorsSize;
+
     public CharacterFactory() {
         cardsConstructors = new Class[] {
                 BardCharacter.class,
@@ -38,6 +40,8 @@ public class CharacterFactory {
                 WineCharacter.class
         };
 
+        cardsConstructorsSize = cardsConstructors.length;
+
         random = new Random();
     }
 
@@ -46,16 +50,15 @@ public class CharacterFactory {
      * @return a new random CharacterCard without repetitions for this instance
      */
     public CharacterCard getRandomCharacter(Model model) {
-        int index;
-        Class<? extends CharacterCard> thisClass;
+        int index = random.nextInt(cardsConstructorsSize);
+        Class<? extends CharacterCard> thisClass = cardsConstructors[index];
 
-        do {
-            index = random.nextInt(cardsConstructors.length);
-            thisClass = cardsConstructors[index];
-        } while(thisClass == null);
+        // Set this constructor as null and swap with last position in array
+        cardsConstructors[index] = cardsConstructors[cardsConstructorsSize - 1];
+        cardsConstructors[cardsConstructorsSize - 1] = null;
 
-        // Set this constructor as null, so that we can avoid repetitions
-        cardsConstructors[index] = null;
+        // Decrement virtual size of array, as we set the last one to null
+        cardsConstructorsSize--;
 
         try {
             // Get the constructor with Model as a parameter, then instantiate it using
