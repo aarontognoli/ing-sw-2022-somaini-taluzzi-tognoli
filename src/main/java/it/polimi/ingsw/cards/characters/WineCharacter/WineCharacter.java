@@ -14,17 +14,10 @@ public class WineCharacter extends CharacterCard {
 
     public static final int INITIAL_STUDENT_SIZE = 4;
 
-    List<Student> students;
+    final private List<Student> students;
 
-    public WineCharacter(Model model, List<Student> studentsToPlace) {
-        super(model, 1);
-
-        if (studentsToPlace.size() != INITIAL_STUDENT_SIZE) {
-            // Should never happen
-            throw new RuntimeException("Invalid count of students in WineCharacter constructor.");
-        }
-
-        students = studentsToPlace;
+    public List<Student> getStudents() {
+        return students;
     }
 
     public WineCharacter(Model model) {
