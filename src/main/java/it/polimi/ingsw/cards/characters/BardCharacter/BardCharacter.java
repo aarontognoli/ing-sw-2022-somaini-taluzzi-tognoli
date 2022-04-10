@@ -6,6 +6,7 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Student;
+import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 
 import java.util.ArrayList;
@@ -15,9 +16,28 @@ public class BardCharacter extends CharacterCard {
 
     static String LIST_SIZE_NOT_MATCH = "Student List and Entrance List have different sizes";
     static String LIST_SIZE_TOO_BIG = "Cannot exchange more than 2 students";
+    static String STUDENT_NOT_IN_ENTRANCE = "Student you want to move not found in the entrance";
+    static String STUDENT_NOT_IN_DINING = "Student you want to move not found in the dining room";
+    static String DINING_ROOM_FULL = "The dining room of the color of one of the chosen students is already full";
+
 
     public BardCharacter(Model model) {
         super(model, 1);
+    }
+
+
+    private List<Student> deepCopyEntrance(List<Student> entrance) {
+        return new ArrayList<>(entrance);
+    }
+
+    private List<List<Student>> deepCloneDining(List<List<Student>> dining) {
+        List<List<Student>> returnValue = new ArrayList<>();
+
+        for (List<Student> diningByColor : dining) {
+            returnValue.add(new ArrayList<>(diningByColor));
+        }
+
+        return returnValue;
     }
 
     @Override
@@ -25,54 +45,55 @@ public class BardCharacter extends CharacterCard {
         if (!(arguments instanceof BardCharacterArgument bardArgument)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
-        List<Student> studentList = new ArrayList<>();
-        List<Student> entrance = model.publicModel.getCurrentPlayer().getBoard().getEntrance();
-
         List<Color> studColorDining = bardArgument.getStudentsColorToExchangeDiningRoom();
         List<Color> studColorEntrance = bardArgument.getStudentsColorToExchangeEntrance();
 
         if (studColorDining.size() != studColorEntrance.size()) {
             throw new CCArgumentException(LIST_SIZE_NOT_MATCH);
         }
-
         if (studColorDining.size() > 2) {
             throw new CCArgumentException(LIST_SIZE_TOO_BIG);
         }
 
-        for (Color color : studColorDining) {
-            List<Student> students = model.publicModel.getCurrentPlayer().getBoard().getDiningRoom()
-                    .get(color.ordinal());
-            try {
-                studentList.add(students.get(students.size() - 1));
-                students.remove(students.get(students.size() - 1));
-            } catch (IndexOutOfBoundsException e) {
-                throw new CCArgumentException("Invalid argument");
-            }
-        }
-        for (Color color : studColorEntrance) {
-            for (Student student : entrance) {
-                if (student.getColor().equals(color)) {
-                    try {
-                        model.publicModel.moveStudentToDiningRoom(color);
-                    } catch (NotFoundException e) {
-                        for (Student s : studentList) {
-                            model.publicModel.getCurrentPlayer().getBoard().getDiningRoom()
-                                    .get(s.getColor().ordinal()).add(s);
-                        }
-                        throw new CCArgumentException("Student you want to move not found in the entrance");
-                    } catch (DiningRoomFullException e) {
-                        for (Student s : studentList) {
-                            model.publicModel.getCurrentPlayer().getBoard().getDiningRoom()
-                                    .get(s.getColor().ordinal()).add(s);
-                        }
-                        throw new CCArgumentException(
-                                "The dining room of the color of one of the chosen students is already full");
-                    }
-                }
-                break;
-            }
-        }
-        entrance.addAll(studentList);
+        List<Student> entrance = model.publicModel.getCurrentPlayer().getBoard().getEntrance();
+        List<Student> copyEntrance = deepCopyEntrance(entrance);
+        List<List<Student>> diningRoom = model.publicModel.getCurrentPlayer().getBoard().getDiningRoom();
+        List<List<Student>> copyDiningRoom = deepCloneDining(diningRoom);
 
+        Board board = model.publicModel.getCurrentPlayer().getBoard();
+        List<Student> studentsFromDining = new ArrayList<>(2);
+        for (Color color : studColorDining) {
+            List<Student> diningThisColor = board.getDiningRoom()
+                    .get(color.ordinal());
+
+            if (diningThisColor.size() == 0) {
+                // Student not found in dining room: restore and throw
+                diningRoom.clear();
+                entrance.clear();
+                diningRoom.addAll(copyDiningRoom);
+                entrance.addAll(copyEntrance);
+                throw new CCArgumentException(STUDENT_NOT_IN_DINING);
+            }
+
+            studentsFromDining.add(diningThisColor.remove(diningThisColor.size() - 1));
+        }
+
+        for (Color color : studColorEntrance) {
+            try {
+                model.publicModel.moveStudentToDiningRoom(color);
+            } catch (NotFoundException | DiningRoomFullException e) {
+                // Restore and throw
+                diningRoom.clear();
+                entrance.clear();
+                diningRoom.addAll(copyDiningRoom);
+                entrance.addAll(copyEntrance);
+                if (e instanceof NotFoundException)
+                    throw new CCArgumentException(STUDENT_NOT_IN_ENTRANCE);
+                else
+                    throw new CCArgumentException(DINING_ROOM_FULL);
+            }
+        }
+
+        entrance.addAll(studentsFromDining);
     }
 }

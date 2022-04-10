@@ -1,6 +1,9 @@
 package it.polimi.ingsw.cards.characters.BardCharacter;
 
+import it.polimi.ingsw.mvc.model.PrivateModel;
 import it.polimi.ingsw.pawn.Student;
+import it.polimi.ingsw.player.Board;
+import it.polimi.ingsw.player.DiningRoomFullException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +15,6 @@ import it.polimi.ingsw.mvc.model.PublicModelTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +26,17 @@ class BardCharacterTest {
     void setUp() {
         model = PublicModelTest.twoPlayersExpertMode();
         PublicModelTest.setupPlayCharacterCard(model, new BardCharacter(model));
+    }
+
+    @Test
+    void invalidArgument() {
+        try {
+            model.publicModel.playCharacterCard(0, new Object());
+        } catch (InsufficientCoinException e) {
+            assert false;
+        } catch (CCArgumentException e) {
+            assertEquals(CCArgumentException.INVALID_CLASS_MESSAGE, e.getMessage());
+        }
     }
 
     @Test
@@ -103,5 +116,88 @@ class BardCharacterTest {
         // Look for entranceStud*, which where moved in diningRoom
         assertNotEquals(-1, diningRoom.get(entranceStud1.getColor().ordinal()).indexOf(entranceStud1));
         assertNotEquals(-1, diningRoom.get(entranceStud2.getColor().ordinal()).indexOf(entranceStud2));
+    }
+
+    @Test
+    void diningRoomFull() {
+        Board board = model.publicModel.getCurrentPlayer().getBoard();
+        List<Student> entrance = model.publicModel.getCurrentPlayer().getBoard().getEntrance();
+        Student studentEntrance = new Student(Color.RED_DRAGONS, 54321);
+        entrance.set(0, studentEntrance);
+
+        for (int i = 0; i < Board.DINING_ROOM_MAX_STUDENT_COUNT; i++) {
+            try {
+                board.addStudentsToDiningRoom(new Student(Color.RED_DRAGONS, 12345 + i));
+            } catch (DiningRoomFullException e) {
+                assert false;
+            }
+        }
+
+        Student studentDining = new Student(Color.YELLOW_GNOMES, 56789);
+        assertDoesNotThrow(() -> board.addStudentsToDiningRoom(studentDining));
+
+        try {
+            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+                    List.of(studentEntrance.getColor()),
+                    List.of(studentDining.getColor())
+            ));
+            assert false;
+        } catch (InsufficientCoinException e) {
+            assert false;
+        } catch (CCArgumentException e) {
+            assertEquals(BardCharacter.DINING_ROOM_FULL, e.getMessage());
+        }
+    }
+
+    @Test
+    void notInEntrance() {
+        Board board = model.publicModel.getCurrentPlayer().getBoard();
+        List<Student> entrance = board.getEntrance();
+        entrance.clear();
+        Student studInDining = new Student(Color.RED_DRAGONS, 12345);
+        assertDoesNotThrow(() -> board.addStudentsToDiningRoom(studInDining));
+
+        try {
+            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+                    List.of(Color.RED_DRAGONS),
+                    List.of(Color.RED_DRAGONS)
+            ));
+            assert false;
+        } catch (InsufficientCoinException e) {
+            assert false;
+        } catch (CCArgumentException e) {
+            assertEquals(BardCharacter.STUDENT_NOT_IN_ENTRANCE, e.getMessage());
+
+            assertEquals(0, entrance.size());
+            List<Student> diningRed = board.getDiningRoom().get(Color.RED_DRAGONS.ordinal());
+            assertEquals(1, diningRed.size());
+            assertEquals(studInDining, diningRed.get(0));
+        }
+    }
+
+    @Test
+    void notInDining() {
+        Board board = model.publicModel.getCurrentPlayer().getBoard();
+        List<Student> entrance = board.getEntrance();
+        Student studInEntrance = new Student(Color.RED_DRAGONS, 12345);
+        entrance.set(0, studInEntrance);
+
+        try {
+            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+                    List.of(Color.RED_DRAGONS),
+                    List.of(Color.RED_DRAGONS)
+            ));
+            assert false;
+        } catch (InsufficientCoinException e) {
+            assert false;
+        } catch (CCArgumentException e) {
+            assertEquals(BardCharacter.STUDENT_NOT_IN_DINING, e.getMessage());
+            assertEquals(PrivateModel.INITIAL_STUDENT_ENTRANCE_2_4, entrance.size());
+            assertEquals(studInEntrance, entrance.get(0));
+
+            for (List<Student> diningByColor : board.getDiningRoom()) {
+                assertEquals(0, diningByColor.size());
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class Board {
 
     static private final int DINING_ROOMS_COUNT = 5;
-    static private final int DINING_ROOM_MAX_STUDENT_COUNT = 10;
+    static public final int DINING_ROOM_MAX_STUDENT_COUNT = 10;
 
     final private List<Tower> towers;
     final private List<List<Student>> diningRoom = new ArrayList<>(DINING_ROOMS_COUNT);

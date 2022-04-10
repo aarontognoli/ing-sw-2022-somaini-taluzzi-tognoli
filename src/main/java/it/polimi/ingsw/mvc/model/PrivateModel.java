@@ -30,7 +30,7 @@ import it.polimi.ingsw.player.Player;
 public class PrivateModel {
 
     static final int INITIAL_STUDENT_ENTRANCE_3 = 9;
-    static final int INITIAL_STUDENT_ENTRANCE_2_4 = 7;
+    public static final int INITIAL_STUDENT_ENTRANCE_2_4 = 7;
     static final int INITIAL_CHARACTERS_COUNT = 3;
 
     final Model fatherModel;
