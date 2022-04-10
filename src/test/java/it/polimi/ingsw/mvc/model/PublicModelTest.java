@@ -89,8 +89,9 @@ class PublicModelTest {
             e.printStackTrace();
         }
         assertTrue(model.currentPlayer.getBoard().getEntrance().isEmpty());
-        for (int i = 0; i < 12 && i != 0 && i != 6 && i != 2; i++) {
-            assertEquals(1, model.islands.get(i).getStudents().size());
+        for (int i = 0; i < 12; i++) {
+            if (i != 0 && i != 6 && i != 2)
+                assertEquals(1, model.islands.get(i).getStudents().size());
         }
         assertEquals(0, model.islands.get(0).getStudents().size());
         assertEquals(0, model.islands.get(6).getStudents().size());
@@ -143,9 +144,7 @@ class PublicModelTest {
         try {
             model.publicModel.playCharacterCard(0,
                     new WineCharacterArgument(model.islands.get(0), studentToMoveId));
-        } catch (InsufficientCoinException e) {
-            assert false;
-        } catch (CCArgumentException e) {
+        } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;
         }
 
@@ -158,7 +157,7 @@ class PublicModelTest {
         // TODO once the method is complete
     }
 
-    Model twoPlayersBasicSetup() {
+    public static Model twoPlayersBasicSetup() {
         Model model = null;
         Map<String, DeckName> temp = new HashMap<>();
         temp.put("Player1", DeckName.DESERT_KING);
@@ -166,12 +165,11 @@ class PublicModelTest {
         try {
             model = new Model(0, temp, GameMode.EASY_MODE);
         } catch (Exception e) {
-
         }
         return model;
     }
 
-    Model twoPlayersExpertMode() {
+    public static Model twoPlayersExpertMode() {
         Model model = null;
         Map<String, DeckName> temp = new HashMap<>();
         temp.put("Player1", DeckName.DESERT_KING);
@@ -179,7 +177,6 @@ class PublicModelTest {
         try {
             model = new Model(0, temp, GameMode.EXPERT_MODE);
         } catch (Exception e) {
-
         }
         return model;
     }

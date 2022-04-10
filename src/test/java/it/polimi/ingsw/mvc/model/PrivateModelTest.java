@@ -3,8 +3,6 @@ package it.polimi.ingsw.mvc.model;
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.enums.DeckName;
-import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.BoardNotInGameException;
 import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.NoTowerException;
@@ -17,9 +15,7 @@ import it.polimi.ingsw.player.Player;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,11 +23,11 @@ class PrivateModelTest {
 
     @Test
     void getProfessorOwner() {
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
         model.currentPlayer = model.players.get(0);
         Board testBoard;
         for (Color c : Color.values())
-            assertEquals(null, model.privateModel.getProfessorOwner(c));
+            assertNull(model.privateModel.getProfessorOwner(c));
 
         Color studentColor = model.currentPlayer.getBoard().getEntrance().get(0).getColor();
         try {
@@ -52,7 +48,7 @@ class PrivateModelTest {
     @Test
     void removeStudentFromEntrance() {
 
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
         Board testBoard = new Board();
         List<Student> tempEntrance = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
@@ -66,7 +62,6 @@ class PrivateModelTest {
             model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard);
             assert false;
         } catch (NotFoundException e) {
-
         }
 
         // Entrance contains only Yellows, exception expected
@@ -102,7 +97,7 @@ class PrivateModelTest {
 
     @Test
     void addStudentToIsland() {
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
         Island island = new Island();
         model.privateModel.addStudentToIsland(new Student(Color.YELLOW_GNOMES, 0), island);
         assertEquals(island.getStudents().size(), 1);
@@ -113,7 +108,7 @@ class PrivateModelTest {
 
     @Test
     void addStudentToDiningRoom() {
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
         Board testBoard = new Board();
         try {
             model.privateModel.addStudentToDiningRoom(new Student(Color.GREEN_FROGS, 0), testBoard);
@@ -141,7 +136,6 @@ class PrivateModelTest {
             model.privateModel.addStudentToDiningRoom(new Student(Color.YELLOW_GNOMES, 12), testBoard);
             assert false;
         } catch (DiningRoomFullException e) {
-
         }
 
     }
@@ -149,7 +143,7 @@ class PrivateModelTest {
     @Test
     void getInfluence() {
         // TODO: Check 3 player, 4 players, and tie in both cases
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
 
         Island targetIsland = model.islands.get(0);
 
@@ -159,9 +153,7 @@ class PrivateModelTest {
         Color firstPlayerFirstStudentColor = firstPlayer.getBoard().getEntrance().get(0).getColor();
         try {
             model.publicModel.moveStudentToDiningRoom(firstPlayerFirstStudentColor);
-        } catch (DiningRoomFullException e) {
-            assert false;
-        } catch (NotFoundException e) {
+        } catch (DiningRoomFullException | NotFoundException e) {
             assert false;
         }
 
@@ -175,7 +167,7 @@ class PrivateModelTest {
 
     @Test
     void removeAllTowers() {
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
         Board board0 = model.players.get(0).getBoard();
 
         Island targetIsland = model.publicModel.getMotherNatureIsland();
@@ -204,7 +196,7 @@ class PrivateModelTest {
 
     @Test
     void mergeIslands() {
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
         Board board0 = model.players.get(0).getBoard();
         Island motherNatureIsland = model.publicModel.getMotherNatureIsland();
         try {
@@ -227,7 +219,6 @@ class PrivateModelTest {
             model.islands.get(1).addTower(board0.removeTower());
             motherNatureIsland = model.publicModel.getMotherNatureIsland();
         } catch (Exception e) {
-
         }
         try {
             model.privateModel.mergeIslands(motherNatureIsland);
@@ -237,7 +228,7 @@ class PrivateModelTest {
         } catch (Exception e) {
             assert false;
         }
-        model = twoPlayersBasicSetup();
+        model = PublicModelTest.twoPlayersBasicSetup();
         board0 = model.players.get(0).getBoard();
         try {
             model.islands.get(0).addTower(board0.removeTower());
@@ -257,14 +248,14 @@ class PrivateModelTest {
     @Test
     void checkVictoryConditions() {
         // 2 players Test
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
         Player p = model.privateModel.checkVictoryConditions();
-        assertEquals(null, p);
+        assertNull(p);
         model.players.get(0).getBoard().getTowers().clear();
         p = model.privateModel.checkVictoryConditions();
         assertEquals(model.players.get(0), p);
         // <=3 islands
-        model = twoPlayersBasicSetup();
+        model = PublicModelTest.twoPlayersBasicSetup();
         model.islands.clear();
         model.islands.add(new Island());
         model.islands.add(new Island());
@@ -281,7 +272,7 @@ class PrivateModelTest {
         p = model.privateModel.checkVictoryConditions();
         assertEquals(p, winningPlayer);
         // assistant cards empty
-        model = twoPlayersBasicSetup();
+        model = PublicModelTest.twoPlayersBasicSetup();
         for (AssistantCard ac : AssistantCard.values()) {
             try {
                 model.players.get(0).getDeck().playAssistantCard(ac);
@@ -295,7 +286,7 @@ class PrivateModelTest {
         p = model.privateModel.checkVictoryConditions();
         assertEquals(model.players.get(0), p);
         // empty bag
-        model = twoPlayersBasicSetup();
+        model = PublicModelTest.twoPlayersBasicSetup();
         model.bag = new Bag(0);
         model.players.get(0).getDeck().getHand().clear();
         model.professors.get(0).move(model.players.get(0).getBoard());
@@ -314,7 +305,7 @@ class PrivateModelTest {
 
     @Test
     void getPlayerFromBoard() {
-        Model model = twoPlayersBasicSetup();
+        Model model = PublicModelTest.twoPlayersBasicSetup();
 
         for (Player p : model.players) {
             try {
@@ -324,18 +315,5 @@ class PrivateModelTest {
             }
         }
 
-    }
-
-    Model twoPlayersBasicSetup() {
-        Model model = null;
-        Map<String, DeckName> temp = new HashMap<>();
-        temp.put("Player1", DeckName.DESERT_KING);
-        temp.put("Player2", DeckName.CLOUD_WITCH);
-        try {
-            model = new Model(0, temp, GameMode.EASY_MODE);
-        } catch (Exception e) {
-
-        }
-        return model;
     }
 }
