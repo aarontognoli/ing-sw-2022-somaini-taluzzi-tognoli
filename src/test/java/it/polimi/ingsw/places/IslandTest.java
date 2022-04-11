@@ -5,13 +5,13 @@ import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class IslandTest {
+class IslandTest {
 
     Island island;
 

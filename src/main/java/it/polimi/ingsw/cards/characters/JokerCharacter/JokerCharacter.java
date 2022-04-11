@@ -3,6 +3,7 @@ package it.polimi.ingsw.cards.characters.JokerCharacter;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.mvc.model.Model;
@@ -27,6 +28,22 @@ public class JokerCharacter extends CharacterCard {
         }
 
         students = initialStudents;
+    }
+
+    public JokerCharacter(Model model)
+    {
+        super(model, 1);
+        List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
+        for (int j = 0; j < JokerCharacter.INITIAL_STUDENT_SIZE; j++) {
+            try {
+                studentsForJoker.add(model.characterModel.drawStudentFromBag());
+            }
+            catch (BagEmptyException e)
+            {
+                throw new RuntimeException("This should never happen");
+            }
+        }
+        students=studentsForJoker;
     }
 
     private int indexOfStudentId(int studentId, List<Student> students) {

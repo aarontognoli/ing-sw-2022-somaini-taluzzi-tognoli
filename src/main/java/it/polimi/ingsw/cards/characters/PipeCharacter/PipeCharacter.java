@@ -1,14 +1,13 @@
-package it.polimi.ingsw.cards.characters.MushroomCharacter;
+package it.polimi.ingsw.cards.characters.PipeCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.mvc.model.InfluenceCalculatorMushroom;
 import it.polimi.ingsw.mvc.model.Model;
 
-public class MushroomCharacter extends CharacterCard {
-    public MushroomCharacter(Model model) {
-        super(model, 2);
+public class PipeCharacter extends CharacterCard {
+    public PipeCharacter(Model model) {
+        super(model, 3);
     }
 
     @Override
@@ -16,9 +15,12 @@ public class MushroomCharacter extends CharacterCard {
         if (!(arguments instanceof Color)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
+        Color whichColor = (Color) arguments;
+        try {
+            model.characterModel.removeStudentsFromAllBoards(3, whichColor);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("This should never happen");
+        }
 
-        Color targetColor = (Color) arguments;
-
-        model.characterModel.updateInfluenceCalculator(new InfluenceCalculatorMushroom(model, targetColor));
     }
 }

@@ -43,6 +43,16 @@ public class Bag {
         return returnValue;
     }
 
+    public void reinsert(Student s) throws IllegalArgumentException {
+        if (s == null)
+            throw new IllegalArgumentException("Studente non valido");
+
+        students.add(s);
+
+        Collections.shuffle(students);
+
+    }
+
     public boolean isEmpty() {
         return students.size() == 0;
     }

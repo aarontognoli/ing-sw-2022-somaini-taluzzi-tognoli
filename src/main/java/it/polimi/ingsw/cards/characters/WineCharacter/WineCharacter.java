@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cards.characters.WineCharacter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.bag.BagEmptyException;
@@ -24,6 +25,20 @@ public class WineCharacter extends CharacterCard {
         }
 
         students = studentsToPlace;
+    }
+
+    public WineCharacter(Model model) {
+        super(model, 1);
+        List<Student> studentsForWine = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
+        for (int j = 0; j < WineCharacter.INITIAL_STUDENT_SIZE; j++) {
+            try {
+                studentsForWine.add(model.characterModel.drawStudentFromBag());
+            } catch (BagEmptyException e) {
+                throw new RuntimeException("This should never happen");
+            }
+
+        }
+        students = studentsForWine;
     }
 
     @Override

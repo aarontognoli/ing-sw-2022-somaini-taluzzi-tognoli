@@ -1,12 +1,12 @@
 package it.polimi.ingsw.bag;
 
 import it.polimi.ingsw.pawn.Student;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BagTest {
 

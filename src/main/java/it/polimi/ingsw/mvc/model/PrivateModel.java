@@ -6,13 +6,9 @@ import static java.lang.Math.floorMod;
 
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.bag.BagEmptyException;
-import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.cards.characters.FlagCharacter.FlagCharacter;
+import it.polimi.ingsw.cards.characters.CharacterFactory;
 import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
-import it.polimi.ingsw.cards.characters.JokerCharacter.JokerCharacter;
-import it.polimi.ingsw.cards.characters.PostManCharacter.PostManCharacter;
-import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
@@ -35,6 +31,7 @@ public class PrivateModel {
 
     static final int INITIAL_STUDENT_ENTRANCE_3 = 9;
     static final int INITIAL_STUDENT_ENTRANCE_2_4 = 7;
+    static final int INITIAL_CHARACTERS_COUNT = 3;
 
     final Model fatherModel;
 
@@ -71,7 +68,8 @@ public class PrivateModel {
             }
         }
 
-        // (Expert only) choose 3 random character cards
+        // (Expert only) choose 3 random character cards, and assign initial coin to
+        // everyone
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
             // give 1 coin to each player
             for (Player player : fatherModel.players) {
@@ -80,39 +78,9 @@ public class PrivateModel {
 
             fatherModel.currentGameCards = new ArrayList<>(3);
 
-            // TODO: add all character cards
-            // following the alphabetical order: Bard, Flag, Herbalist, Joker, Postman, Wine
-            Random random = new Random();
-            int previousIndex1 = -1;
-            int previousIndex2 = -1;
-            for (int i = 0; i < 3; i++) {
-                int index = random.nextInt(6);
-                while (index == previousIndex1 || index == previousIndex2) {
-                    index = random.nextInt(6);
-                }
-                previousIndex2 = previousIndex1;
-                previousIndex1 = index;
-
-                switch (index) {
-                    case 0 -> fatherModel.currentGameCards.add(new BardCharacter(fatherModel));
-                    case 1 -> fatherModel.currentGameCards.add(new FlagCharacter(fatherModel));
-                    case 2 -> fatherModel.currentGameCards.add(new HerbalistCharacter(fatherModel));
-                    case 3 -> {
-                        List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
-                        for (int j = 0; j < JokerCharacter.INITIAL_STUDENT_SIZE; j++) {
-                            studentsForJoker.add(drawStudentFromBag());
-                        }
-                        fatherModel.currentGameCards.add(new JokerCharacter(fatherModel, studentsForJoker));
-                    }
-                    case 4 -> fatherModel.currentGameCards.add(new PostManCharacter(fatherModel));
-                    case 5 -> {
-                        List<Student> studentsForWine = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
-                        for (int j = 0; j < WineCharacter.INITIAL_STUDENT_SIZE; j++) {
-                            studentsForWine.add(drawStudentFromBag());
-                        }
-                        fatherModel.currentGameCards.add(new WineCharacter(fatherModel, studentsForWine));
-                    }
-                }
+            CharacterFactory characterFactory = new CharacterFactory();
+            for (int i = 0; i < INITIAL_CHARACTERS_COUNT; i++) {
+                fatherModel.currentGameCards.add(characterFactory.getRandomCharacter(fatherModel));
             }
         }
     }
