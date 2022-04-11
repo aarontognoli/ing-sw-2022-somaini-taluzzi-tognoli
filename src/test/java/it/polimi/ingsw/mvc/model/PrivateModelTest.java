@@ -58,11 +58,9 @@ class PrivateModelTest {
         tempEntrance.add(new Student(Color.RED_DRAGONS, 7));
 
         // Entrance is empty. Exception expected.
-        try {
-            model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard);
-            assert false;
-        } catch (NotFoundException e) {
-        }
+        assertThrows(NotFoundException.class,
+                () -> model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard));
+
 
         // Entrance contains only Yellows, exception expected
         try {
@@ -70,11 +68,8 @@ class PrivateModelTest {
         } catch (EntranceFullException e1) {
             assert false;
         }
-        try {
-            model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard);
-            assert false;
-        } catch (NotFoundException e) {
-        }
+        assertThrows(NotFoundException.class,
+                () -> model.privateModel.removeStudentFromEntrance(Color.GREEN_FROGS, testBoard));
 
         // Trying to remove a yellow, check entrance size
         try {
@@ -132,12 +127,9 @@ class PrivateModelTest {
         } catch (DiningRoomFullException e) {
             assert false;
         }
-        try {
-            model.privateModel.addStudentToDiningRoom(new Student(Color.YELLOW_GNOMES, 12), testBoard);
-            assert false;
-        } catch (DiningRoomFullException e) {
-        }
 
+        assertThrows(DiningRoomFullException.class,
+                () -> model.privateModel.addStudentToDiningRoom(new Student(Color.YELLOW_GNOMES, 12), testBoard));
     }
 
     @Test
@@ -212,13 +204,15 @@ class PrivateModelTest {
         }
         try {
             model.privateModel.mergeIslands(motherNatureIsland);
-            assert false;
+            assertEquals(12, model.islands.size());
         } catch (Exception e) {
+            assert false;
         }
         try {
             model.islands.get(1).addTower(board0.removeTower());
             motherNatureIsland = model.publicModel.getMotherNatureIsland();
         } catch (Exception e) {
+            // Ok
         }
         try {
             model.privateModel.mergeIslands(motherNatureIsland);

@@ -171,4 +171,8 @@ public class PublicModelTest {
         temp.put("Player2", DeckName.CLOUD_WITCH);
         return createModel(temp, GameMode.EXPERT_MODE);
     }
+
+    public static void incrementCurrentPlayer(Model model) {
+        model.privateModel.incrementCurrentPlayer();
+    }
 }
