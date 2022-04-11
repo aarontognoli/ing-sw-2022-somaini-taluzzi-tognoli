@@ -1,42 +1,24 @@
 package it.polimi.ingsw.cards.characters.BardCharacter;
 
+import it.polimi.ingsw.cards.characters.AllCharacterTest;
+import it.polimi.ingsw.cards.characters.CCArgumentException;
+import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.mvc.model.PrivateModel;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import it.polimi.ingsw.cards.characters.CCArgumentException;
-import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.exceptions.InsufficientCoinException;
-import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.model.PublicModelTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-class BardCharacterTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    Model model;
+class BardCharacterTest extends AllCharacterTest {
 
-    @BeforeEach
-    void setUp() {
-        model = PublicModelTest.twoPlayersExpertMode();
-        PublicModelTest.setupPlayCharacterCard(model, new BardCharacter(model));
-    }
-
-    @Test
-    void invalidArgument() {
-        try {
-            model.publicModel.playCharacterCard(0, new Object());
-        } catch (InsufficientCoinException e) {
-            assert false;
-        } catch (CCArgumentException e) {
-            assertEquals(CCArgumentException.INVALID_CLASS_MESSAGE, e.getMessage());
-        }
+    BardCharacterTest() {
+        super(BardCharacter.class);
     }
 
     @Test
