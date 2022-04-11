@@ -19,6 +19,10 @@ public abstract class AllCharacterTest {
         characterCardClass = cardClass;
     }
 
+    protected void playCard(Object argument) throws InsufficientCoinException, CCArgumentException {
+        model.publicModel.playCharacterCard(0, argument);
+    }
+
     @BeforeEach
     void setUp() {
         model = PublicModelTest.twoPlayersExpertMode();
@@ -36,7 +40,7 @@ public abstract class AllCharacterTest {
     @Test
     void invalidArgument() {
         try {
-            model.publicModel.playCharacterCard(0, new Object());
+            playCard(new Object());
             assert false;
         } catch (InsufficientCoinException e) {
             assert false;

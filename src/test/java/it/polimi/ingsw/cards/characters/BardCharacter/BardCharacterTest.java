@@ -24,7 +24,7 @@ class BardCharacterTest extends AllCharacterTest {
     @Test
     void emptyList() {
         try {
-            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+            playCard(new BardCharacterArgument(
                     List.of(),
                     List.of()
             ));
@@ -36,7 +36,7 @@ class BardCharacterTest extends AllCharacterTest {
     @Test
     void notMatchingSize() {
         try {
-            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+            playCard(new BardCharacterArgument(
                     List.of(Color.BLUE_UNICORNS),
                     List.of()
             ));
@@ -52,7 +52,7 @@ class BardCharacterTest extends AllCharacterTest {
     @Test
     void tooBigSize() {
         try {
-            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+            playCard(new BardCharacterArgument(
                     Arrays.asList(Color.BLUE_UNICORNS, Color.BLUE_UNICORNS, Color.BLUE_UNICORNS),
                     Arrays.asList(Color.BLUE_UNICORNS, Color.BLUE_UNICORNS, Color.BLUE_UNICORNS)
             ));
@@ -81,10 +81,11 @@ class BardCharacterTest extends AllCharacterTest {
 
         int oldEntranceSize = entrance.size();
         try {
-            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
-                    Arrays.asList(entranceStud1.getColor(), entranceStud2.getColor()),
-                    Arrays.asList(diningStud1.getColor(), diningStud2.getColor())
-            ));
+            playCard(new BardCharacterArgument(
+                            Arrays.asList(entranceStud1.getColor(), entranceStud2.getColor()),
+                            Arrays.asList(diningStud1.getColor(), diningStud2.getColor())
+                    )
+            );
         } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;
         }
@@ -119,7 +120,7 @@ class BardCharacterTest extends AllCharacterTest {
         assertDoesNotThrow(() -> board.addStudentsToDiningRoom(studentDining));
 
         try {
-            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+            playCard(new BardCharacterArgument(
                     List.of(studentEntrance.getColor()),
                     List.of(studentDining.getColor())
             ));
@@ -140,7 +141,7 @@ class BardCharacterTest extends AllCharacterTest {
         assertDoesNotThrow(() -> board.addStudentsToDiningRoom(studInDining));
 
         try {
-            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+            playCard(new BardCharacterArgument(
                     List.of(Color.RED_DRAGONS),
                     List.of(Color.RED_DRAGONS)
             ));
@@ -165,7 +166,7 @@ class BardCharacterTest extends AllCharacterTest {
         entrance.set(0, studInEntrance);
 
         try {
-            model.publicModel.playCharacterCard(0, new BardCharacterArgument(
+            playCard(new BardCharacterArgument(
                     List.of(Color.RED_DRAGONS),
                     List.of(Color.RED_DRAGONS)
             ));
