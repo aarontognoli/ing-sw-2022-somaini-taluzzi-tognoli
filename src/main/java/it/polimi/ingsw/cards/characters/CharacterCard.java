@@ -8,6 +8,7 @@ abstract public class CharacterCard {
 
     public CharacterCard(Model model, int coinCost) {
         this.model = model;
+        this.coinCost = coinCost;
     }
 
     public int getCoinCost() {

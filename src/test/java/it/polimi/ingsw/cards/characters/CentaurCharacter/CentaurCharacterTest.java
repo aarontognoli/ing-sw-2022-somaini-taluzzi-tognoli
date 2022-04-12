@@ -83,6 +83,8 @@ class CentaurCharacterTest extends AllCharacterTest {
 
         // Now play card and check that the owner changed
         try {
+            currentBoard.rewardCoin();
+            currentBoard.rewardCoin();
             playCard(null);
         } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;

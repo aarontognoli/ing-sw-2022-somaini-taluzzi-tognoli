@@ -54,6 +54,8 @@ class FlagCharacterTest extends AllCharacterTest {
 
         try {
             // 4
+            currentPlayerBoard.rewardCoin();
+            currentPlayerBoard.rewardCoin();
             playCard(model.publicModel.getMotherNatureIsland());
         } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;

@@ -3,6 +3,7 @@ package it.polimi.ingsw.cards.characters;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.model.PublicModelTest;
+import it.polimi.ingsw.player.Board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +40,11 @@ public abstract class AllCharacterTest {
 
     @Test
     void invalidArgument() {
+        // Making sure that I have enough coins for each card
+        Board currentPlayerBoard = model.publicModel.getCurrentPlayer().getBoard();
+        for (int i = 0; i < 10; i++) {
+            currentPlayerBoard.rewardCoin();
+        }
         try {
             playCard(new Object());
             assert false;
