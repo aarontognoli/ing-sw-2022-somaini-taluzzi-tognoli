@@ -38,7 +38,7 @@ class FlagCharacterTest extends AllCharacterTest {
         List<Student> entrance = currentPlayerBoard.getEntrance();
 
         entrance.set(0, new Student(Color.RED_DRAGONS, 12345));
-        entrance.set(0, new Student(Color.RED_DRAGONS, 22345));
+        entrance.set(1, new Student(Color.RED_DRAGONS, 22345));
 
         try {
             // 1
