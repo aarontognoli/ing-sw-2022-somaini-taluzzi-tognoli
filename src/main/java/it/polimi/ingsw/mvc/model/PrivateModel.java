@@ -117,16 +117,26 @@ public class PrivateModel {
         return fatherModel.bag.draw();
     }
 
+    HerbalistCharacter findHerbalist() throws NotFoundException {
+        for (CharacterCard card : fatherModel.currentGameCards) {
+            if (card.getClass() == HerbalistCharacter.class) {
+                return (HerbalistCharacter) card;
+            }
+        }
+
+        throw new NotFoundException("Herbalist not found in character cards");
+    }
+
     Board getInfluence(Island island) {
         if (island.hasNoEntryTile()) {
             island.removeNoEntryTile();
-            for (CharacterCard card : fatherModel.currentGameCards) {
-                if (card.getClass() == HerbalistCharacter.class) {
-                    ((HerbalistCharacter) card).addNoEntryTile();
-                    return null;
-                }
+            try {
+                HerbalistCharacter card = findHerbalist();
+                card.moveEntryTileBackToCard();
+                return null;
+            } catch (NotFoundException e) {
+                throw new RuntimeException("Herbalist not found after finding no-entry tile. What?");
             }
-            throw new RuntimeException("Impossible state of the game");
         } else {
             return fatherModel.influenceCalculator.getInfluence(island);
         }

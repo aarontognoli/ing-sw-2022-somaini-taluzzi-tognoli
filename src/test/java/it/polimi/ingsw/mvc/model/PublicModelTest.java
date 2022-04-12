@@ -3,6 +3,7 @@ package it.polimi.ingsw.mvc.model;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacterArgument;
 import it.polimi.ingsw.enums.Color;
@@ -10,11 +11,14 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
+import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Student;
+import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -179,5 +183,13 @@ public class PublicModelTest {
 
     public static Board getProfessorOwner(Model model, Color color) {
         return model.privateModel.getProfessorOwner(color);
+    }
+
+    public static HerbalistCharacter findHerbalist(Model model) throws NotFoundException {
+        return model.privateModel.findHerbalist();
+    }
+
+    public static List<Island> getIslands(Model model) {
+        return model.islands;
     }
 }

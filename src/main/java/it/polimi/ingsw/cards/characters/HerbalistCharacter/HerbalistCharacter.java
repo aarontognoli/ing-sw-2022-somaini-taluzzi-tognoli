@@ -6,15 +6,20 @@ import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.places.Island;
 
 public class HerbalistCharacter extends CharacterCard {
-    private int activeNoEntryTiles;
+    int entryTilesInIslandCount;
 
     public HerbalistCharacter(Model model) {
         super(model, 2);
-        activeNoEntryTiles = 0;
+        entryTilesInIslandCount = 0;
     }
 
-    public void addNoEntryTile() {
-        activeNoEntryTiles++;
+    public void moveEntryTileBackToCard() {
+        if (entryTilesInIslandCount == 0) {
+            throw new RuntimeException(
+                    "Moving a no-entry tile back to HerbalistCharacter while there are no no-entry tiles around. What?"
+            );
+        }
+        entryTilesInIslandCount--;
     }
 
     @Override
@@ -22,13 +27,13 @@ public class HerbalistCharacter extends CharacterCard {
         if (!(arguments instanceof Island)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
-        if (activeNoEntryTiles == 4) {
+        if (entryTilesInIslandCount == 4) {
             throw new CCArgumentException("There are no more No Entry tiles to use");
         }
         try {
             ((Island) arguments).putNoEntryTile();
-            activeNoEntryTiles++;
-        }catch (Exception e) {
+            entryTilesInIslandCount++;
+        } catch (Exception e) {
             throw new CCArgumentException(e.getMessage());
         }
     }
