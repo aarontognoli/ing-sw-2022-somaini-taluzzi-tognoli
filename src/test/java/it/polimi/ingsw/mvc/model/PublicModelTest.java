@@ -1,9 +1,9 @@
 package it.polimi.ingsw.mvc.model;
 
+import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacterArgument;
 import it.polimi.ingsw.enums.Color;
@@ -11,7 +11,6 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
-import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
@@ -185,11 +184,15 @@ public class PublicModelTest {
         return model.privateModel.getProfessorOwner(color);
     }
 
-    public static HerbalistCharacter findHerbalist(Model model) throws NotFoundException {
-        return model.privateModel.findHerbalist();
+    public static CharacterCard getCharCard(Model model) {
+        return model.currentGameCards.get(0);
     }
 
     public static List<Island> getIslands(Model model) {
         return model.islands;
+    }
+
+    public static void setBag(Model model, Bag newBag) {
+        model.bag = newBag;
     }
 }

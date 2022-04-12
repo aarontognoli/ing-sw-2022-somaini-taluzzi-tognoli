@@ -29,13 +29,7 @@ class HerbalistCharacterTest extends AllCharacterTest {
 
     @Test
     void restoringWhileNoActiveEntryTile() {
-        HerbalistCharacter card;
-        try {
-            card = PublicModelTest.findHerbalist(model);
-        } catch (NotFoundException e) {
-            assert false;
-            return;
-        }
+        HerbalistCharacter card = (HerbalistCharacter) PublicModelTest.getCharCard(model);
 
         assertThrows(RuntimeException.class, card::moveEntryTileBackToCard);
     }
@@ -85,13 +79,7 @@ class HerbalistCharacterTest extends AllCharacterTest {
      */
     @Test
     void normalEffect() {
-        HerbalistCharacter herbalistCharacter;
-        try {
-            herbalistCharacter = PublicModelTest.findHerbalist(model);
-        } catch (NotFoundException e) {
-            assert false;
-            return;
-        }
+        HerbalistCharacter herbalistCharacter = (HerbalistCharacter) PublicModelTest.getCharCard(model);
 
         assertEquals(0, herbalistCharacter.entryTilesInIslandCount);
 
