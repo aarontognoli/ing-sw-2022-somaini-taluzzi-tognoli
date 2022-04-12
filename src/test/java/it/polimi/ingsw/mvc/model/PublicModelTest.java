@@ -11,6 +11,7 @@ import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.pawn.Student;
+import it.polimi.ingsw.player.Board;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -174,5 +175,9 @@ public class PublicModelTest {
 
     public static void incrementCurrentPlayer(Model model) {
         model.privateModel.incrementCurrentPlayer();
+    }
+
+    public static Board getProfessorOwner(Model model, Color color) {
+        return model.privateModel.getProfessorOwner(color);
     }
 }
