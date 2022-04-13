@@ -195,4 +195,13 @@ public class PublicModelTest {
     public static void setBag(Model model, Bag newBag) {
         model.bag = newBag;
     }
+
+    //Only for test
+    public  static void resetInfluenceCalculatorRules(Model fatherModel) {
+        fatherModel.influenceCalculator.setInfluenceCalculatorRules(new DefaultInfluenceCalculatorRules(fatherModel));
+    }
+
+    public static InfluenceCalculator getInfluenceCalculator(Model fatherModel) {
+        return fatherModel.influenceCalculator;
+    }
 }

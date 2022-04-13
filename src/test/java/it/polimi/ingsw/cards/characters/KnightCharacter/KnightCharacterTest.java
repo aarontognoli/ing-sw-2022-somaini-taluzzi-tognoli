@@ -91,8 +91,8 @@ public class KnightCharacterTest extends AllCharacterTest {
         } catch (NoTowerException e) {
             assert false;
         }
-        assertEquals(InfluenceCalculator_2_3.class, model.characterModel.getInfluenceCalculator().getClass());
-        model.characterModel.resetInfluenceCalculatorRules();
+        assertEquals(InfluenceCalculator_2_3.class, PublicModelTest.getInfluenceCalculator(model).getClass());
+        PublicModelTest.resetInfluenceCalculatorRules(model);
         //increase player 1 influence by two
         PublicModelTest.incrementCurrentPlayer(model);
         entrance1.set(0, new Student(Color.RED_DRAGONS, 7));

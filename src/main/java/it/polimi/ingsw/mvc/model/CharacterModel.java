@@ -37,12 +37,4 @@ public class CharacterModel {
         }
     }
 
-    //Only for test
-    public void resetInfluenceCalculatorRules() {
-        fatherModel.influenceCalculator.setInfluenceCalculatorRules(new DefaultInfluenceCalculatorRules(fatherModel));
-    }
-
-    public InfluenceCalculator getInfluenceCalculator() {
-        return fatherModel.influenceCalculator;
-    }
 }
