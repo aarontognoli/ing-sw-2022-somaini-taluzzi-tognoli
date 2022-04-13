@@ -172,7 +172,7 @@ public class PublicModelTest {
     public static Model twoPlayersExpertMode() {
         Map<String, DeckName> temp = new HashMap<>();
         temp.put("Player1", DeckName.DESERT_KING);
-        temp.put("Player2", DeckName.CLOUD_WITCH);
+        temp.put("Player0", DeckName.CLOUD_WITCH);
         return createModel(temp, GameMode.EXPERT_MODE);
     }
 
@@ -194,5 +194,14 @@ public class PublicModelTest {
 
     public static void setBag(Model model, Bag newBag) {
         model.bag = newBag;
+    }
+
+    //Only for test
+    public  static void resetInfluenceCalculatorRules(Model fatherModel) {
+        fatherModel.influenceCalculator.setInfluenceCalculatorRules(new DefaultInfluenceCalculatorRules(fatherModel));
+    }
+
+    public static InfluenceCalculator getInfluenceCalculator(Model fatherModel) {
+        return fatherModel.influenceCalculator;
     }
 }

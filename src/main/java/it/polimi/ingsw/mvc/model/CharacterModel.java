@@ -26,7 +26,7 @@ public class CharacterModel {
         fatherModel.influenceCalculator.setInfluenceCalculatorRules(newInfluenceCalculatorRules);
     }
 
-    public void removeStudentsFromAllBoards(int howMany, Color whichColor) throws IllegalArgumentException{
+    public void removeStudentsFromAllBoards(int howMany, Color whichColor) throws IllegalArgumentException {
         for (Player p : fatherModel.players) {
             List<Student> diningRoom = p.getBoard().getDiningRoom().get(whichColor.ordinal());
             for (int i = 0; i < howMany; i++) {
@@ -36,4 +36,5 @@ public class CharacterModel {
             }
         }
     }
+
 }
