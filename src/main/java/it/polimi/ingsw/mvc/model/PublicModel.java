@@ -91,7 +91,7 @@ public class PublicModel {
         // Assign a new Coin to current player
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
             List<List<Student>> currentDiningRoom = fatherModel.currentPlayer.getBoard().getDiningRoom();
-            int indexAddedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).size();
+            int indexAddedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).size()-1;
 
             if (indexAddedStudent == 2 || indexAddedStudent == 5 || indexAddedStudent == 8) {
                 fatherModel.privateModel.rewardCoin();
