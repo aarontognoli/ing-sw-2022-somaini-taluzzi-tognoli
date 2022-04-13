@@ -17,16 +17,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PipeCharacterTest extends AllCharacterTest {
-    public PipeCharacterTest() {super(PipeCharacter.class);}
+    public PipeCharacterTest() {
+        super(PipeCharacter.class);
+    }
+
     /**
      * 1.Add 2 red students and 1 blue student to player 0 dining rooms
      * 2.Add 4 red students to player 1 dining room
      * 3.Play Card on red color
      * 4.Check 1 blue remaining on player 0 and one red remaining on player 1 in dining rooms
-    */
+     */
     @Test
-    void pipeTest()
-    {
+    void pipeTest() {
         //two red and one blue in p0
         Board p0Board = model.publicModel.getCurrentPlayer().getBoard();
 
@@ -74,18 +76,17 @@ public class PipeCharacterTest extends AllCharacterTest {
             assert false;
         }
 
-        for(Color c:Color.values())
-        {
+        for (Color c : Color.values()) {
 
-            if(c.equals(Color.BLUE_UNICORNS))
-                assertEquals(1,p0Board.getDiningRoom().get(c.ordinal()).size());
+            if (c.equals(Color.BLUE_UNICORNS))
+                assertEquals(1, p0Board.getDiningRoom().get(c.ordinal()).size());
             else
-                assertEquals(0,p0Board.getDiningRoom().get(c.ordinal()).size());
+                assertEquals(0, p0Board.getDiningRoom().get(c.ordinal()).size());
 
-            if(c.equals(Color.RED_DRAGONS))
-                assertEquals(1,p1Board.getDiningRoom().get(c.ordinal()).size());
+            if (c.equals(Color.RED_DRAGONS))
+                assertEquals(1, p1Board.getDiningRoom().get(c.ordinal()).size());
             else
-                assertEquals(0,p1Board.getDiningRoom().get(c.ordinal()).size());
+                assertEquals(0, p1Board.getDiningRoom().get(c.ordinal()).size());
         }
     }
 }
