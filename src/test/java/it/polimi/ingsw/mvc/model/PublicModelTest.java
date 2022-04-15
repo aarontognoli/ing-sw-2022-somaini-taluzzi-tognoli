@@ -148,16 +148,16 @@ public class PublicModelTest {
 
         setupPlayCharacterCard(model, wineCharacter);
 
-        int studentToMoveId = wineCharacter.getStudents().get(0).getID();
+        Color targetStudentColor = wineCharacter.getStudents().get(0).getColor();
         try {
             model.publicModel.playCharacterCard(0,
-                    new WineCharacterArgument(model.islands.get(0), studentToMoveId));
+                    new WineCharacterArgument(0, targetStudentColor));
         } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;
         }
 
         assertEquals(1, model.islands.get(0).getStudents().size());
-        assertEquals(studentToMoveId, model.islands.get(0).getStudents().get(0).getID());
+        assertEquals(targetStudentColor, model.islands.get(0).getStudents().get(0).getColor());
     }
 
     @Test

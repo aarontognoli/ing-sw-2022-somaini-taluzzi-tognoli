@@ -1,21 +1,21 @@
 package it.polimi.ingsw.cards.characters.WineCharacter;
 
-import it.polimi.ingsw.places.Island;
+import it.polimi.ingsw.enums.Color;
 
 public class WineCharacterArgument {
-    private Island targetIsland;
-    private int targetStudentId;
+    final private int targetIslandIndex;
+    final private Color targetStudentColor;
 
-    public WineCharacterArgument(Island targetIsland, int targetStudentId) {
-        this.targetIsland = targetIsland;
-        this.targetStudentId = targetStudentId;
+    public WineCharacterArgument(int targetIslandIndex, Color targetStudentColor) {
+        this.targetIslandIndex = targetIslandIndex;
+        this.targetStudentColor = targetStudentColor;
     }
 
-    public Island getTargetIsland() {
-        return targetIsland;
+    public int getTargetIslandIndex() {
+        return targetIslandIndex;
     }
 
-    public int getTargetStudentId() {
-        return targetStudentId;
+    public Color getTargetStudentColor() {
+        return targetStudentColor;
     }
 }
