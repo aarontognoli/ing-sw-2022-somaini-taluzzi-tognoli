@@ -3,90 +3,74 @@ package it.polimi.ingsw.cards.characters.PrincessCharacter;
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Student;
+import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
-import it.polimi.ingsw.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PrincessCharacter extends CharacterCard {
     public static final int INITIAL_STUDENT_SIZE = 4;
+    public static final String STUDENT_NOT_FOUND = "Student not found in Princess card";
+    public static final String DINING_ROOM_FULL = "Dining room full for this color";
 
-    private List<Student> students;
+    final List<Student> students;
 
     public List<Student> getStudents() {
         return new ArrayList<>(students);
     }
 
-
-    public PrincessCharacter(Model model, List<Student> initialStudents) {
-        super(model, 2);
-
-        if (initialStudents.size() != INITIAL_STUDENT_SIZE) {
-            // Should never happen
-            throw new RuntimeException("Invalid count of students in JokerCharacter constructor");
-        }
-
-        students = initialStudents;
-    }
-
     public PrincessCharacter(Model model) {
         super(model, 2);
 
-        List<Student> studentsForPrincess = new ArrayList<>(WineCharacter.INITIAL_STUDENT_SIZE);
-        for (int j = 0; j < WineCharacter.INITIAL_STUDENT_SIZE; j++) {
+        students = new ArrayList<>(INITIAL_STUDENT_SIZE);
+        for (int j = 0; j < INITIAL_STUDENT_SIZE; j++) {
             try {
-                studentsForPrincess.add(model.characterModel.drawStudentFromBag());
+                students.add(model.characterModel.drawStudentFromBag());
             } catch (BagEmptyException e) {
                 throw new RuntimeException("This should never happen");
             }
 
         }
-        students = studentsForPrincess;
     }
-
-    private int indexOfStudentId(int studentId, List<Student> students) {
-
-        for (int i = 0; i < students.size(); i++) {
-            if (students.get(i).getID() == studentId) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
 
     @Override
     protected void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (!(arguments instanceof Integer)) {
+        if (!(arguments instanceof Color targetColor)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 
-        int studentIdToGet = (int) arguments;
-        int studentIndex = indexOfStudentId(studentIdToGet, students);
+        int studentIndex = -1;
+        for (int i = 0; i < students.size(); i++) {
+            if (students.get(i).getColor() == targetColor) {
+                studentIndex = i;
+                break;
+            }
+        }
 
         if (studentIndex == -1) {
-            throw new CCArgumentException("Student ID Not Valid");
+            throw new CCArgumentException(STUDENT_NOT_FOUND);
         }
 
-        Player caller = model.publicModel.getCurrentPlayer();
+        Board currentPlayerBoard = model.publicModel.getCurrentPlayer().getBoard();
 
         try {
-            caller.getBoard().addStudentsToDiningRoom(students.get(studentIndex));
+            currentPlayerBoard.addStudentsToDiningRoom(students.get(studentIndex));
         } catch (DiningRoomFullException e) {
-            throw new CCArgumentException("Dining room Full");
+            throw new CCArgumentException(DINING_ROOM_FULL);
         }
 
-        students.remove(studentIndex);
-
         try {
-            students.add(model.characterModel.drawStudentFromBag());
+            Student studentFromBag = model.characterModel.drawStudentFromBag();
+            students.set(studentIndex, studentFromBag);
         } catch (BagEmptyException e) {
-            System.out.println("Empty Bag, finish round.");
+            // Bag empty, just remove the student from the card
+            students.remove(studentIndex);
+
+            // TODO: At the end of the round check for winning player
         }
     }
 }
