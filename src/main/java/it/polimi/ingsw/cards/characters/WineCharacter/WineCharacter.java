@@ -8,6 +8,8 @@ import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 
+import java.util.List;
+
 public class WineCharacter extends CharacterCardWithStudents {
     public static final String STUDENT_NOT_FOUND = "Student ID not found in wine character card";
 
@@ -61,5 +63,14 @@ public class WineCharacter extends CharacterCardWithStudents {
 
             // TODO: At the end of the round check for winner
         }
+    }
+
+
+    /**
+     * @return pointer to the students list
+     * @apiNote should only be used by tests, in fact is package private
+     */
+    List<Student> getStudentsListReference() {
+        return students;
     }
 }

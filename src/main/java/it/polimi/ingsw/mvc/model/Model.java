@@ -3,19 +3,25 @@ package it.polimi.ingsw.mvc.model;
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cloud.Cloud;
-import it.polimi.ingsw.enums.*;
-import it.polimi.ingsw.pawn.*;
+import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.enums.DeckName;
+import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.pawn.MotherNature;
+import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Model {
 
     private static final int INITIAL_TOWER_COUNT_2_4_PLAYERS = 8;
     private static final int INITIAL_TOWER_COUNT_3_PLAYERS = 6;
 
-    static final int TOTAL_ISLANDS_NUMBER = 12;
+    public static final int TOTAL_ISLANDS_NUMBER = 12;
     List<Island> islands;
 
     // Professor with board that has them
@@ -53,7 +59,7 @@ public class Model {
     // Initialize game with starting rules
 
     public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks, GameMode gameMode)
-            throws IllegalArgumentException, Exception {
+            throws Exception {
 
         // Models
         privateModel = new PrivateModel(this);
@@ -67,7 +73,7 @@ public class Model {
         this.gameMode = gameMode;
 
         // Initialize islands
-        islands = new ArrayList<Island>();
+        islands = new ArrayList<>();
         for (int i = 0; i < TOTAL_ISLANDS_NUMBER; i++) {
             islands.add(new Island());
         }
