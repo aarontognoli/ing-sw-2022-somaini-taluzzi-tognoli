@@ -12,15 +12,10 @@ public class PipeCharacter extends CharacterCard {
 
     @Override
     protected void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (!(arguments instanceof Color)) {
+        if (!(arguments instanceof Color whichColor)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
-        Color whichColor = (Color) arguments;
-        try {
-            model.characterModel.removeStudentsFromAllBoards(3, whichColor);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("This should never happen");
-        }
 
+        model.characterModel.removeStudentsFromAllBoards(whichColor, 3);
     }
 }

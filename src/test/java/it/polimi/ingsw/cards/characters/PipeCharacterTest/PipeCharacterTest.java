@@ -22,10 +22,10 @@ public class PipeCharacterTest extends AllCharacterTest {
     }
 
     /**
-     * 1.Add 2 red students and 1 blue student to player 0 dining rooms
-     * 2.Add 4 red students to player 1 dining room
-     * 3.Play Card on red color
-     * 4.Check 1 blue remaining on player 0 and one red remaining on player 1 in dining rooms
+     * 1. Add 2 red students and 1 blue student to player 0 dining rooms
+     * 2. Add 4 red students to player 1 dining room
+     * 3. Play Card on red color
+     * 4. Check 1 blue remaining on player 0 and one red remaining on player 1 in dining rooms
      */
     @Test
     void pipeTest() {
