@@ -2,39 +2,23 @@ package it.polimi.ingsw.cards.characters.PrincessCharacter;
 
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
-import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PrincessCharacter extends CharacterCard {
+public class PrincessCharacter extends CharacterCardWithStudents {
     public static final int INITIAL_STUDENT_SIZE = 4;
+
     public static final String STUDENT_NOT_FOUND = "Student not found in Princess card";
     public static final String DINING_ROOM_FULL = "Dining room full for this color";
 
-    final List<Student> students;
-
-    public List<Student> getStudents() {
-        return new ArrayList<>(students);
-    }
-
     public PrincessCharacter(Model model) {
-        super(model, 2);
-
-        students = new ArrayList<>(INITIAL_STUDENT_SIZE);
-        for (int j = 0; j < INITIAL_STUDENT_SIZE; j++) {
-            try {
-                students.add(model.characterModel.drawStudentFromBag());
-            } catch (BagEmptyException e) {
-                throw new RuntimeException("This should never happen");
-            }
-
-        }
+        super(model, 2, INITIAL_STUDENT_SIZE);
     }
 
     @Override
@@ -72,5 +56,13 @@ public class PrincessCharacter extends CharacterCard {
 
             // TODO: At the end of the round check for winning player
         }
+    }
+
+    /**
+     * @return pointer to the students list
+     * @apiNote should only be used by tests, in fact is package private
+     */
+    List<Student> getStudentsListReference() {
+        return students;
     }
 }

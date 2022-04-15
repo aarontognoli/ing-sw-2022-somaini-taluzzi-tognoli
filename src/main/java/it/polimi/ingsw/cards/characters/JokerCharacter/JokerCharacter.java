@@ -1,8 +1,7 @@
 package it.polimi.ingsw.cards.characters.JokerCharacter;
 
-import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
-import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.mvc.model.Model;
@@ -11,7 +10,7 @@ import it.polimi.ingsw.pawn.Student;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JokerCharacter extends CharacterCard {
+public class JokerCharacter extends CharacterCardWithStudents {
 
     public static final
     String SIZE_DONT_MATCH = "Must move same amount of players from player board and from Joker card";
@@ -26,24 +25,9 @@ public class JokerCharacter extends CharacterCard {
 
     public static final int INITIAL_STUDENT_SIZE = 6;
 
-    final List<Student> jokerStudents;
-
-    public List<Student> getJokerStudents() {
-        return new ArrayList<>(jokerStudents);
-    }
-
 
     public JokerCharacter(Model model) {
-        super(model, 1);
-
-        jokerStudents = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
-        for (int i = 0; i < JokerCharacter.INITIAL_STUDENT_SIZE; i++) {
-            try {
-                jokerStudents.add(model.characterModel.drawStudentFromBag());
-            } catch (BagEmptyException e) {
-                throw new RuntimeException("Cannot draw students from bag in JokerCharacter. What? " + e.getMessage());
-            }
-        }
+        super(model, 1, INITIAL_STUDENT_SIZE);
     }
 
     /**
@@ -99,7 +83,7 @@ public class JokerCharacter extends CharacterCard {
         List<Student> playerEntrance = model.publicModel.getCurrentPlayer().getBoard().getEntrance();
 
         List<Student> backupEntrance = new ArrayList<>(playerEntrance);
-        List<Student> backupJokerStudents = new ArrayList<>(jokerStudents);
+        List<Student> backupJokerStudents = new ArrayList<>(students);
 
         List<Student> studentsFromEntrance = new ArrayList<>(colorRemoveJoker.size());
         for (Color colorToMove : colorRemoveBoard) {
@@ -115,18 +99,26 @@ public class JokerCharacter extends CharacterCard {
         List<Student> studentsFromJoker = new ArrayList<>(colorRemoveJoker.size());
         for (Color colorToMove : colorRemoveJoker) {
             try {
-                studentsFromJoker.add(findStudentByColorAndNull(jokerStudents, colorToMove));
+                studentsFromJoker.add(findStudentByColorAndNull(students, colorToMove));
             } catch (NotFoundException e) {
                 playerEntrance.clear();
                 playerEntrance.addAll(backupEntrance);
-                jokerStudents.clear();
-                jokerStudents.addAll(backupJokerStudents);
+                students.clear();
+                students.addAll(backupJokerStudents);
 
                 throw new CCArgumentException(COLOR_NOT_FOUND_JOKER);
             }
         }
 
-        swapNullsWith(jokerStudents, studentsFromEntrance);
+        swapNullsWith(students, studentsFromEntrance);
         swapNullsWith(playerEntrance, studentsFromJoker);
+    }
+
+    /**
+     * @return pointer to the students list
+     * @apiNote should only be used by tests, in fact is package private
+     */
+    List<Student> getStudentsListReference() {
+        return students;
     }
 }

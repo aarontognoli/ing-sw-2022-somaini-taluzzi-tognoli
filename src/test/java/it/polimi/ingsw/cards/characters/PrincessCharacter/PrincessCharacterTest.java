@@ -1,7 +1,7 @@
 package it.polimi.ingsw.cards.characters.PrincessCharacter;
 
 import it.polimi.ingsw.bag.Bag;
-import it.polimi.ingsw.cards.characters.AllCharacterTest;
+import it.polimi.ingsw.cards.characters.AllCharacterWithStudentsTest;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.mvc.model.PublicModelTest;
@@ -14,31 +14,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PrincessCharacterTest extends AllCharacterTest {
+class PrincessCharacterTest extends AllCharacterWithStudentsTest {
 
     PrincessCharacterTest() {
         super(PrincessCharacter.class);
-    }
-
-    @Test
-    void constructorWithEmptyBag() {
-        PublicModelTest.setBag(model, new Bag(0));
-
-        assertThrows(RuntimeException.class, () -> new PrincessCharacter(model));
-    }
-
-    @Test
-    void getStudents() {
-        PrincessCharacter princessCharacter = (PrincessCharacter) PublicModelTest.getCharCard(model);
-
-        List<Student> students = princessCharacter.students;
-        List<Student> studentsCopy = princessCharacter.getStudents();
-
-        assertEquals(students, studentsCopy);
-
-        studentsCopy.set(0, new Student(Color.GREEN_FROGS, 9876));
-
-        assertNotEquals(students, studentsCopy);
     }
 
     /**
@@ -48,7 +27,7 @@ class PrincessCharacterTest extends AllCharacterTest {
     void studentNotFound() {
         PrincessCharacter princessCharacter = (PrincessCharacter) PublicModelTest.getCharCard(model);
 
-        List<Student> students = princessCharacter.students;
+        List<Student> students = princessCharacter.getStudentsListReference();
         students.clear();
 
         model.publicModel.getCurrentPlayer().getBoard().rewardCoin();
@@ -73,7 +52,7 @@ class PrincessCharacterTest extends AllCharacterTest {
         }
 
         PrincessCharacter princessCharacter = (PrincessCharacter) PublicModelTest.getCharCard(model);
-        List<Student> princessStudents = princessCharacter.students;
+        List<Student> princessStudents = princessCharacter.getStudentsListReference();
 
         princessStudents.set(0, new Student(Color.RED_DRAGONS, 54321));
 
@@ -96,7 +75,7 @@ class PrincessCharacterTest extends AllCharacterTest {
      */
     private void checkStudentMoved(int expectedPrincessStudSizeAfter) {
         PrincessCharacter princessCharacter = (PrincessCharacter) PublicModelTest.getCharCard(model);
-        List<Student> princessStudents = princessCharacter.students;
+        List<Student> princessStudents = princessCharacter.getStudentsListReference();
 
         assertEquals(PrincessCharacter.INITIAL_STUDENT_SIZE, princessStudents.size());
 
