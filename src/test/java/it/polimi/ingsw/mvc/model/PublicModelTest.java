@@ -11,6 +11,8 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
+import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.exceptions.TooMuchStepsException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
@@ -28,10 +30,17 @@ public class PublicModelTest {
     void playAssistant() {
         Model model = twoPlayersBasicSetup();
         assertNull(model.currentPlayer.getCurrentAssistantCard());
-        model.publicModel.playAssistant(AssistantCard.CARD_6);
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_6));
         assertEquals(AssistantCard.CARD_6, model.currentPlayer.getCurrentAssistantCard());
-        model.publicModel.playAssistant(AssistantCard.CARD_3);
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_3));
         assertEquals(AssistantCard.CARD_3, model.currentPlayer.getCurrentAssistantCard());
+    }
+
+    @Test
+    void playAssistantNotInHand() {
+        Model model = twoPlayersBasicSetup();
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_6));
+        assertThrows(NotFoundException.class, () -> model.publicModel.playAssistant(AssistantCard.CARD_6));
     }
 
     @Test
@@ -67,13 +76,20 @@ public class PublicModelTest {
     @Test
     void moveMotherNature() {
         Model model = twoPlayersBasicSetup();
-        model.currentPlayer.setCurrentAssistantCard(AssistantCard.CARD_3);
-        try {
-            model.publicModel.moveMotherNature(2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AssistantCard card = AssistantCard.CARD_3;
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(card));
+        assertDoesNotThrow(() -> model.publicModel.moveMotherNature(card.getMaxMotherNatureMovementValue()));
         assertEquals(model.islands.get(2), model.motherNature.getPosition());
+    }
+
+    @Test
+    void invalidMoveMotherNature() {
+        Model model = twoPlayersBasicSetup();
+        AssistantCard card = AssistantCard.CARD_3;
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(card));
+        assertThrows(TooMuchStepsException.class, () -> model.publicModel.moveMotherNature(card.getMaxMotherNatureMovementValue() + 1));
+
+        assertEquals(model.islands.get(0), model.motherNature.getPosition());
     }
 
     @Test

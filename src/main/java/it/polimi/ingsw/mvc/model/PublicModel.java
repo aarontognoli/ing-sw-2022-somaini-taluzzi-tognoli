@@ -22,7 +22,7 @@ public class PublicModel {
         this.fatherModel = fatherModel;
     }
 
-    public void playAssistant(AssistantCard assistantCard) {
+    public void playAssistant(AssistantCard assistantCard) throws NotFoundException {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
