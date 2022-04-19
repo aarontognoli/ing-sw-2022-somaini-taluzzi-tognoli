@@ -22,6 +22,7 @@ public class Player {
     public Player(String nickname, TowerColor towerColor, DeckName deckName, int towersNumber) {
         this.nickname = nickname;
         this.towerColor = towerColor;
+        currentAssistantCard = null;
 
         board = new Board(towerColor, towersNumber);
         setDeck(new Deck(deckName));

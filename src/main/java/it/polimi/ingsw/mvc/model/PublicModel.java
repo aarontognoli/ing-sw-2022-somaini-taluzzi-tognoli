@@ -22,7 +22,11 @@ public class PublicModel {
         this.fatherModel = fatherModel;
     }
 
-    public void playAssistant(AssistantCard assistantCard) throws NotFoundException {
+    public void playAssistant(AssistantCard assistantCard) throws NotFoundException, PlayerAlreadyChosenAssistantCard {
+        for (Player p : fatherModel.players) {
+            if (p.getCurrentAssistantCard() != null && p.getCurrentAssistantCard().equals(assistantCard))
+                throw new PlayerAlreadyChosenAssistantCard();
+        }
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
