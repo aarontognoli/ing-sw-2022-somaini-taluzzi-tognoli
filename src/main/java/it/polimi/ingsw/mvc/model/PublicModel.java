@@ -14,6 +14,8 @@ import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PublicModel {
@@ -56,8 +58,10 @@ public class PublicModel {
                 }
 
                 if (everyonePlayedAnAssistantCard) {
-                    //todo order players for action phase
+                    List<Player> playersToBeOrdered = new ArrayList<>(fatherModel.players);
+                    fatherModel.actionPlayerOrder = new ArrayDeque<>(playersToBeOrdered.stream().sorted((a, b) -> a.getCurrentAssistantCard().getTurnOrderValue() < b.getCurrentAssistantCard().getTurnOrderValue() ? -1 : +1).toList());
                     fatherModel.gamePhase = GamePhase.ACTION;
+                    fatherModel.privateModel.incrementCurrentPlayerAction();
                 } else {
                     fatherModel.privateModel.incrementCurrentPlayer();
                 }
@@ -72,19 +76,6 @@ public class PublicModel {
                 }
             }
         }
-        //Todo: remove this after
-        /*Different implementation in Pianification Phase and in Action Phase
-        Pianification:
-            Check if all player played an assistant Card
-            yes -> order players for action phase and change phase
-            no -> next player in fathermodel.players
-
-        Action:
-            check if all player played
-            yes -> end round()
-            no -> next player in player order for action phase
-
-         */
     }
 
     //all players played their turn

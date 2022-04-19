@@ -10,9 +10,9 @@ import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Player;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 public class Model {
 
@@ -28,7 +28,7 @@ public class Model {
     // Player data and their board
     int totalPlayerCount;
     List<Player> players;
-    Stack<Player> actionPlayerOrder;
+    Deque<Player> actionPlayerOrder;
     Player currentPlayer;
 
     GameMode gameMode;

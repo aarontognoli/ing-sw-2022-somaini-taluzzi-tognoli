@@ -180,7 +180,7 @@ public class PublicModelTest {
     public static Model twoPlayersBasicSetup() {
         Map<String, DeckName> temp = new HashMap<>();
         temp.put("Player1", DeckName.DESERT_KING);
-        temp.put("Player2", DeckName.CLOUD_WITCH);
+        temp.put("Player0", DeckName.CLOUD_WITCH);
         return createModel(temp, GameMode.EASY_MODE);
     }
 
