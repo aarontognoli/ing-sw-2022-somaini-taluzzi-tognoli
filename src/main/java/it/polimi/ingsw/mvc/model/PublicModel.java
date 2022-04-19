@@ -34,9 +34,11 @@ public class PublicModel {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
-    public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException {
+    public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException, CloudEmptyException {
 
         List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudents();
+        if (studentsFromCloud == null)
+            throw new CloudEmptyException();
         try {
             fatherModel.currentPlayer.getBoard().addStudentsToEntrance(studentsFromCloud);
         } catch (EntranceFullException e) {
@@ -63,6 +65,7 @@ public class PublicModel {
                     fatherModel.actionPlayerOrder = new ArrayDeque<>(playersToBeOrdered.stream().sorted((a, b) -> a.getCurrentAssistantCard().getTurnOrderValue() < b.getCurrentAssistantCard().getTurnOrderValue() ? -1 : +1).toList());
                     fatherModel.gamePhase = GamePhase.ACTION;
                     fatherModel.privateModel.incrementCurrentPlayerAction();
+                    fatherModel.firstPlayer = fatherModel.currentPlayer;
                 } else {
                     fatherModel.privateModel.incrementCurrentPlayer();
                 }
@@ -80,7 +83,8 @@ public class PublicModel {
     }
 
     //all players played their turn
-    public void endRound() {
+
+    void endRound() {
 
         Player winner = fatherModel.privateModel.checkVictoryConditions();
         if (winner != null) {
@@ -88,12 +92,7 @@ public class PublicModel {
             return;
         }
         for (Player p : fatherModel.players) {
-            try {
-                p.setCurrentAssistantCard(null);
-            } catch (NotFoundException e) {
-                e.printStackTrace();
-                throw new RuntimeException("How did you get here?");
-            }
+            p.draftAssistantCard();
         }
 
         try {
@@ -102,6 +101,7 @@ public class PublicModel {
             //todo signal that bag is empty
         }
         fatherModel.gamePhase = GamePhase.PIANIFICATION;
+        fatherModel.currentPlayer = fatherModel.firstPlayer;
     }
 
     public Island getMotherNatureIsland() {

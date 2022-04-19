@@ -50,6 +50,10 @@ public class Player {
         return currentAssistantCard;
     }
 
+    public void draftAssistantCard() {
+        currentAssistantCard = null;
+    }
+
     public String getNickname() {
         return nickname;
     }

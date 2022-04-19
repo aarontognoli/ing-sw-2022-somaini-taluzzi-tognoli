@@ -9,15 +9,15 @@ import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacterArgument;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
-import it.polimi.ingsw.exceptions.EntranceFullException;
-import it.polimi.ingsw.exceptions.InsufficientCoinException;
-import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.exceptions.TooMuchStepsException;
+import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
+import it.polimi.ingsw.player.Player;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,23 +43,8 @@ public class PublicModelTest {
         assertThrows(NotFoundException.class, () -> model.publicModel.playAssistant(AssistantCard.CARD_6));
     }
 
-    @Test
-    void drawStudentsIntoEntrance() {
-        Model model = twoPlayersBasicSetup();
-        assertFalse(model.currentPlayer.getBoard().getEntrance().isEmpty());
-        try {
-            model.privateModel.fillClouds();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        model.currentPlayer.getBoard().getEntrance().clear();
-        try {
-            model.publicModel.drawStudentsIntoEntrance(1);
-        } catch (EntranceFullException e) {
-            assert false;
-        }
-        assertEquals(3, model.currentPlayer.getBoard().getEntrance().size());
+    public static List<Professor> getProfessors(Model fatherModel) {
+        return new ArrayList<>(fatherModel.professors);
     }
 
     @Test
@@ -212,11 +197,38 @@ public class PublicModelTest {
     }
 
     //Only for test
-    public  static void resetInfluenceCalculatorRules(Model fatherModel) {
+    public static void resetInfluenceCalculatorRules(Model fatherModel) {
         fatherModel.influenceCalculator.setInfluenceCalculatorRules(new DefaultInfluenceCalculatorRules(fatherModel));
     }
 
     public static InfluenceCalculator getInfluenceCalculator(Model fatherModel) {
         return fatherModel.influenceCalculator;
+    }
+
+    public static Player getProfessorOwnerPlayer(Model fatherModel, Professor p) {
+        try {
+            return fatherModel.privateModel.getPlayerFromBoard(p.getPosition());
+        } catch (BoardNotInGameException e) {
+            return null;
+        }
+    }
+
+    @Test
+    void drawStudentsIntoEntrance() {
+        Model model = twoPlayersBasicSetup();
+        assertFalse(model.currentPlayer.getBoard().getEntrance().isEmpty());
+        try {
+            model.privateModel.fillClouds();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.currentPlayer.getBoard().getEntrance().clear();
+        try {
+            model.publicModel.drawStudentsIntoEntrance(1);
+        } catch (EntranceFullException | CloudEmptyException e) {
+            assert false;
+        }
+        assertEquals(3, model.currentPlayer.getBoard().getEntrance().size());
     }
 }

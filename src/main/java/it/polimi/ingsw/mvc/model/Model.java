@@ -30,6 +30,7 @@ public class Model {
     List<Player> players;
     Deque<Player> actionPlayerOrder;
     Player currentPlayer;
+    Player firstPlayer;
 
     GameMode gameMode;
     GamePhase gamePhase;
