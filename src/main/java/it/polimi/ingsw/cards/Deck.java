@@ -18,7 +18,7 @@ public class Deck {
 
     }
 
-    //Default deck definition, just for testing
+    @Deprecated
     public Deck() {
         this(DeckName.DESERT_KING);
     }

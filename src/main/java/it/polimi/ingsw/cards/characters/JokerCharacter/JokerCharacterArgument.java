@@ -1,24 +1,26 @@
 package it.polimi.ingsw.cards.characters.JokerCharacter;
 
+import it.polimi.ingsw.enums.Color;
+
 import java.util.List;
 
 public class JokerCharacterArgument {
 
-    private List<Integer> studentsIDToRemoveFromJoker;
-    private List<Integer> studentsIDToRemoveFromPlayerBoard;
+    final private List<Color> colorRemoveJoker;
+    final private List<Color> colorRemoveBoard;
 
     public JokerCharacterArgument(
-            List<Integer> studentsIDToRemoveFromJoker,
-            List<Integer> studentsIDToRemoveFromPlayerBoard) {
-        this.studentsIDToRemoveFromJoker = studentsIDToRemoveFromJoker;
-        this.studentsIDToRemoveFromPlayerBoard = studentsIDToRemoveFromPlayerBoard;
+            List<Color> colorRemoveJoker,
+            List<Color> colorRemoveBoard) {
+        this.colorRemoveJoker = colorRemoveJoker;
+        this.colorRemoveBoard = colorRemoveBoard;
     }
 
-    public List<Integer> getStudentsIDToRemoveFromPlayerBoard() {
-        return studentsIDToRemoveFromPlayerBoard;
+    public List<Color> getColorRemoveBoard() {
+        return colorRemoveBoard;
     }
 
-    public List<Integer> getStudentsIDToRemoveFromJoker() {
-        return studentsIDToRemoveFromJoker;
+    public List<Color> getColorRemoveJoker() {
+        return colorRemoveJoker;
     }
 }

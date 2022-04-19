@@ -1,7 +1,5 @@
 package it.polimi.ingsw.mvc.model;
 
-import java.util.List;
-
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
@@ -15,6 +13,8 @@ import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
+import java.util.List;
+
 public class PublicModel {
     final Model fatherModel;
 
@@ -22,7 +22,7 @@ public class PublicModel {
         this.fatherModel = fatherModel;
     }
 
-    public void playAssistant(AssistantCard assistantCard) {
+    public void playAssistant(AssistantCard assistantCard) throws NotFoundException {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
@@ -91,7 +91,7 @@ public class PublicModel {
         // Assign a new Coin to current player
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
             List<List<Student>> currentDiningRoom = fatherModel.currentPlayer.getBoard().getDiningRoom();
-            int indexAddedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).size();
+            int indexAddedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).size()-1;
 
             if (indexAddedStudent == 2 || indexAddedStudent == 5 || indexAddedStudent == 8) {
                 fatherModel.privateModel.rewardCoin();
@@ -149,14 +149,8 @@ public class PublicModel {
                 throw new RuntimeException(
                         "No tower in player board (?) How did they not win already?\n" + e1.getMessage());
             }
-            try {
-                fatherModel.privateModel.mergeIslands(island);
-                return;
-            } catch (NoTowerException e) {
-                e.printStackTrace();
-                throw new RuntimeException(
-                        "We just added a tower. How is that possible that there is no tower now?" + e.getMessage());
-            }
+            fatherModel.privateModel.mergeIslands(island);
+            return;
         }
 
         TowerColor islandTowerColor;
@@ -168,10 +162,7 @@ public class PublicModel {
         }
 
         try {
-            if (playerOwnerBoard.getTowerColor().equals(islandTowerColor)) {
-                // Ok, this player was already the owner. Do nothing.
-                return;
-            } else {
+            if (!playerOwnerBoard.getTowerColor().equals(islandTowerColor)) {
                 // Remove all towers from this island
                 int towerRemovedCount = island.getTowers().size();
                 fatherModel.privateModel.removeAllTowers(island);
@@ -190,14 +181,7 @@ public class PublicModel {
                         return;
                     }
                 }
-                try {
-                    fatherModel.privateModel.mergeIslands(island);
-                    return;
-                } catch (NoTowerException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(
-                            "We just added a tower. How is that possible that there is no tower now?" + e.getMessage());
-                }
+                fatherModel.privateModel.mergeIslands(island);
             }
         } catch (NoTowerException e) {
             e.printStackTrace();
@@ -211,9 +195,9 @@ public class PublicModel {
 
     /**
      * @return null if everyone has at least a tower, otherwise returns the player
-     *         who has placed their last tower
-     *         This method also checks for 4-players game, it only checks the board
-     *         of the teammate who originally got the towers in their board
+     * who has placed their last tower
+     * This method also checks for 4-players game, it only checks the board
+     * of the teammate who originally got the towers in their board
      */
     public Player checkFinishedTowers() {
         for (int i = 0; i < fatherModel.players.size(); i++) {

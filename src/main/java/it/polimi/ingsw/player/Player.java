@@ -4,6 +4,7 @@ import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.NotFoundException;
 
 import java.util.Objects;
 
@@ -30,7 +31,8 @@ public class Player {
         this.deck = deck;
     }
 
-    public void setCurrentAssistantCard(AssistantCard currentAssistantCard) {
+    public void setCurrentAssistantCard(AssistantCard currentAssistantCard) throws NotFoundException {
+        deck.playAssistantCard(currentAssistantCard);
         this.currentAssistantCard = currentAssistantCard;
         this.maxMotherNatureMovementValue = currentAssistantCard.getMaxMotherNatureMovementValue();
     }

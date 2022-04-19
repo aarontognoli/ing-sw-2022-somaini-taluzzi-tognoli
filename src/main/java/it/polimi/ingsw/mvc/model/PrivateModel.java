@@ -1,9 +1,5 @@
 package it.polimi.ingsw.mvc.model;
 
-import java.util.*;
-
-import static java.lang.Math.floorMod;
-
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
@@ -13,11 +9,7 @@ import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.TowerColor;
-import it.polimi.ingsw.exceptions.BoardNotInGameException;
-import it.polimi.ingsw.exceptions.EntranceFullException;
-import it.polimi.ingsw.exceptions.NoTowerException;
-import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.exceptions.TowerDifferentColorException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.pawn.MotherNature;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
@@ -27,10 +19,18 @@ import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static java.lang.Math.floorMod;
+
 public class PrivateModel {
 
     static final int INITIAL_STUDENT_ENTRANCE_3 = 9;
-    static final int INITIAL_STUDENT_ENTRANCE_2_4 = 7;
+    public static final int INITIAL_STUDENT_ENTRANCE_2_4 = 7;
     static final int INITIAL_CHARACTERS_COUNT = 3;
 
     final Model fatherModel;
@@ -117,16 +117,26 @@ public class PrivateModel {
         return fatherModel.bag.draw();
     }
 
+    HerbalistCharacter findHerbalist() throws NotFoundException {
+        for (CharacterCard card : fatherModel.currentGameCards) {
+            if (card.getClass() == HerbalistCharacter.class) {
+                return (HerbalistCharacter) card;
+            }
+        }
+
+        throw new NotFoundException("Herbalist not found in character cards");
+    }
+
     Board getInfluence(Island island) {
         if (island.hasNoEntryTile()) {
             island.removeNoEntryTile();
-            for (CharacterCard card : fatherModel.currentGameCards) {
-                if (card.getClass() == HerbalistCharacter.class) {
-                    ((HerbalistCharacter) card).addNoEntryTile();
-                    return null;
-                }
+            try {
+                HerbalistCharacter card = findHerbalist();
+                card.moveEntryTileBackToCard();
+                return null;
+            } catch (NotFoundException e) {
+                throw new RuntimeException("Herbalist not found after finding no-entry tile. What?");
             }
-            throw new RuntimeException("Impossible state of the game");
         } else {
             return fatherModel.influenceCalculator.getInfluence(island);
         }
@@ -152,51 +162,61 @@ public class PrivateModel {
         }
     }
 
-    void mergeIslands(Island island) throws NoTowerException {
+    /**
+     * Try to merge currentIsland to otherIsland, and if we can do the merge, set otherIsland to null
+     *
+     * @param currentIslandColor Color of the island we want the nearby ones to be merged
+     * @param currentIndex       Index of the island we want the nearby ones to be merged
+     * @param otherIndex         Index of the nearby island we want to merge and set to null
+     * @implNote We pass currentIslandColor to better handle exception in the mergeIslands method
+     */
+    private void mergeAndSetNull(TowerColor currentIslandColor, int currentIndex, int otherIndex) {
+        Island currentIsland = fatherModel.islands.get(currentIndex);
+        try {
+            TowerColor otherIslandColor = fatherModel.islands.get(otherIndex).getTowerColor();
+            if (otherIslandColor == currentIslandColor) {
+                fatherModel.islands.set(currentIndex,
+                        new Island(currentIsland, fatherModel.islands.get(otherIndex))
+                );
+                fatherModel.islands.set(otherIndex, null);
+            }
+        } catch (NoTowerException e) {
+            // Other island has no tower, do nothing.
+        } catch (TowerDifferentColorException e) {
+            throw new RuntimeException(
+                    "Merge failed saying they have different color, but we just checked (?) "
+                            + e.getMessage());
+        }
+    }
+
+    /**
+     * Merge island with nearby ones if they have same tower color
+     *
+     * @param island island where we just added a tower
+     * @implNote When we merge a nearby island, set them as null. At the end, we filter out null elements
+     */
+    void mergeIslands(Island island) {
         int currentIslandIndex = fatherModel.islands.indexOf(island);
+
+        TowerColor islandTowerColor;
+        try {
+            islandTowerColor = island.getTowerColor();
+        } catch (NoTowerException e) {
+            throw new RuntimeException("Who called mergeIslands when target island has no towers?! " + e.getMessage());
+        }
+
         int prev = floorMod(currentIslandIndex - 1, fatherModel.islands.size());
+        mergeAndSetNull(islandTowerColor, currentIslandIndex, prev);
         int next = floorMod(currentIslandIndex + 1, fatherModel.islands.size());
-        boolean prevDone = false, nextDone = false, noTowers = false;
-        try {
-            if (fatherModel.islands.get(prev).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
-                    .getTowerColor()) {
-                fatherModel.islands.set(currentIslandIndex,
-                        new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(prev)));
-                prevDone = true;
+        mergeAndSetNull(islandTowerColor, currentIslandIndex, next);
 
-            }
-        } catch (NoTowerException e) {
-            noTowers = true;
-        } catch (TowerDifferentColorException e) {
-            // This can't happen
-            throw new RuntimeException("Can't enter here");
-        }
-        try {
-            if (fatherModel.islands.get(next).getTowerColor() == fatherModel.islands.get(currentIslandIndex)
-                    .getTowerColor()) {
-                fatherModel.islands.set(currentIslandIndex,
-                        new Island(fatherModel.islands.get(currentIslandIndex), fatherModel.islands.get(next)));
-                nextDone = true;
-            }
-        } catch (NoTowerException e) {
-            if (noTowers)
-                throw e;
-        } catch (TowerDifferentColorException e) {
-            // This can't happen
-            throw new RuntimeException("Can't enter here");
-        }
-        // the index changes if i remove islands
-        Island tempIslandToGetIndex = fatherModel.islands.get(currentIslandIndex);
-        if (prevDone) {
-            fatherModel.islands.remove(
-                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) - 1, fatherModel.islands.size()));
-        }
-        if (nextDone) {
-            fatherModel.islands.remove(
-                    floorMod(fatherModel.islands.indexOf(tempIslandToGetIndex) + 1, fatherModel.islands.size()));
-        }
-        fatherModel.motherNature.move(tempIslandToGetIndex);
+        fatherModel.motherNature.move(fatherModel.islands.get(currentIslandIndex));
 
+        // Filter out null
+        fatherModel.islands = fatherModel.islands
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     // the method will be called in the right moments
@@ -354,5 +374,12 @@ public class PrivateModel {
         }
 
         fatherModel.professors.get(professColor.ordinal()).move(maxBoard);
+    }
+
+    void incrementCurrentPlayer() {
+        int currentPlayerIndex = fatherModel.players.indexOf(fatherModel.currentPlayer);
+
+        int nextPlayerIndex = (currentPlayerIndex + 1) % fatherModel.players.size();
+        fatherModel.currentPlayer = fatherModel.players.get(nextPlayerIndex);
     }
 }

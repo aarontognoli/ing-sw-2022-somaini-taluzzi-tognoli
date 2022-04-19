@@ -43,14 +43,14 @@ public class Bag {
         return returnValue;
     }
 
-    public void reinsert(Student s) throws IllegalArgumentException {
-        if (s == null)
-            throw new IllegalArgumentException("Studente non valido");
-
-        students.add(s);
-
+    /**
+     * @param studentList students list to reinsert in the bag
+     * @implNote the students in the bug are shuffled again
+     * to maintain random draw of students
+     */
+    public void reinsert(List<Student> studentList) {
+        students.addAll(studentList);
         Collections.shuffle(students);
-
     }
 
     public boolean isEmpty() {

@@ -1,112 +1,124 @@
 package it.polimi.ingsw.cards.characters.JokerCharacter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
-import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
+import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Student;
 
-public class JokerCharacter extends CharacterCard {
+import java.util.ArrayList;
+import java.util.List;
+
+public class JokerCharacter extends CharacterCardWithStudents {
+
+    public static final
+    String SIZE_DONT_MATCH = "Must move same amount of players from player board and from Joker card";
+    public static final
+    String SIZE_TOO_BIG = "Cannot move more than 3 players from player board and from Joker card";
+
+    public static final
+    String COLOR_NOT_FOUND_ENTRANCE = "A student with one of the chosen colors was not found in entrance";
+
+    public static final
+    String COLOR_NOT_FOUND_JOKER = "A student with one of the chosen colors was not found in joker";
 
     public static final int INITIAL_STUDENT_SIZE = 6;
 
-    private List<Student> students;
 
-    public List<Student> getStudents() {
-        return new ArrayList<>(students);
+    public JokerCharacter(Model model) {
+        super(model, 1, INITIAL_STUDENT_SIZE);
     }
 
-    public JokerCharacter(Model model, List<Student> initialStudents) {
-        super(model, 1);
-
-        if (initialStudents.size() != INITIAL_STUDENT_SIZE) {
-            // Should never happen
-            throw new RuntimeException("Invalid count of students in JokerCharacter constructor");
-        }
-
-        students = initialStudents;
-    }
-
-    public JokerCharacter(Model model)
-    {
-        super(model, 1);
-        List<Student> studentsForJoker = new ArrayList<>(JokerCharacter.INITIAL_STUDENT_SIZE);
-        for (int j = 0; j < JokerCharacter.INITIAL_STUDENT_SIZE; j++) {
-            try {
-                studentsForJoker.add(model.characterModel.drawStudentFromBag());
-            }
-            catch (BagEmptyException e)
-            {
-                throw new RuntimeException("This should never happen");
-            }
-        }
-        students=studentsForJoker;
-    }
-
-    private int indexOfStudentId(int studentId, List<Student> students) {
-
-        for (int i = 0; i < students.size(); i++) {
-            if (students.get(i).getID() == studentId) {
-                return i;
+    /**
+     * @param list        List where I should look for the student
+     * @param targetColor color of the student I should set as null and return
+     * @return first student in list with targetColor as color
+     */
+    private Student findStudentByColorAndNull(List<Student> list, Color targetColor) throws NotFoundException {
+        for (int i = 0; i < list.size(); i++) {
+            Student stud = list.get(i);
+            if (stud != null && stud.getColor() == targetColor) {
+                list.set(i, null);
+                return stud;
             }
         }
 
-        return -1;
+        throw new NotFoundException("Student not found with color " + targetColor.toString());
+    }
+
+    /**
+     * @param listWithNull  list with some null values
+     * @param studentsToAdd list with the students to add in the null places
+     */
+    private void swapNullsWith(List<Student> listWithNull, List<Student> studentsToAdd) {
+        for (Student s : studentsToAdd) {
+            int nullIndex = listWithNull.indexOf(null);
+
+            if (nullIndex == -1) {
+                throw new RuntimeException("We are just swapping, why can't we find a null value?!?");
+            }
+
+            listWithNull.set(nullIndex, s);
+        }
     }
 
     @Override
     public void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (!(arguments instanceof JokerCharacterArgument)) {
+        if (!(arguments instanceof JokerCharacterArgument jokerCharacterArgument)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 
-        JokerCharacterArgument classArgument = (JokerCharacterArgument) arguments;
+        List<Color> colorRemoveBoard = jokerCharacterArgument.getColorRemoveBoard();
+        List<Color> colorRemoveJoker = jokerCharacterArgument.getColorRemoveJoker();
 
-        List<Integer> stuIdToRemFromJoker = classArgument.getStudentsIDToRemoveFromJoker();
-        List<Integer> stuIdToRemFromPlayer = classArgument.getStudentsIDToRemoveFromPlayerBoard();
-
-        if (stuIdToRemFromJoker.size() != stuIdToRemFromPlayer.size()) {
-            throw new CCArgumentException("Must remove same amount of players from player board and from Joker card");
+        if (colorRemoveJoker.size() != colorRemoveBoard.size()) {
+            throw new CCArgumentException(SIZE_DONT_MATCH);
         }
 
-        int studentsToMoveCount = stuIdToRemFromJoker.size();
+        if (colorRemoveJoker.size() > 3) {
+            throw new CCArgumentException(SIZE_TOO_BIG);
+        }
 
-        List<Student> currentPlayerEntrance = model.publicModel.getCurrentPlayer().getBoard().getEntrance();
+        List<Student> playerEntrance = model.publicModel.getCurrentPlayer().getBoard().getEntrance();
 
-        List<Integer> stuIndexToRemFromJoker = new ArrayList<>(studentsToMoveCount);
-        List<Integer> stuIndexToRemFromPlayer = new ArrayList<>(studentsToMoveCount);
+        List<Student> backupEntrance = new ArrayList<>(playerEntrance);
+        List<Student> backupJokerStudents = new ArrayList<>(students);
 
-        // Check that all the IDs exist in the corresponding array. Cannot do the
-        // exchange directly because we do not know, until we checked them
-        // all, that the argument is valid (There could be an ID that does not exist)
-        for (int i = 0; i < studentsToMoveCount; i++) {
-            int indexJoker = indexOfStudentId(stuIdToRemFromJoker.get(i), students);
-
-            if (indexJoker == -1) {
-                throw new CCArgumentException("Student ID not found in Joker Character card");
+        List<Student> studentsFromEntrance = new ArrayList<>(colorRemoveJoker.size());
+        for (Color colorToMove : colorRemoveBoard) {
+            try {
+                studentsFromEntrance.add(findStudentByColorAndNull(playerEntrance, colorToMove));
+            } catch (NotFoundException e) {
+                playerEntrance.clear();
+                playerEntrance.addAll(backupEntrance);
+                throw new CCArgumentException(COLOR_NOT_FOUND_ENTRANCE);
             }
+        }
 
-            int indexPlayer = indexOfStudentId(stuIdToRemFromJoker.get(i), currentPlayerEntrance);
+        List<Student> studentsFromJoker = new ArrayList<>(colorRemoveJoker.size());
+        for (Color colorToMove : colorRemoveJoker) {
+            try {
+                studentsFromJoker.add(findStudentByColorAndNull(students, colorToMove));
+            } catch (NotFoundException e) {
+                playerEntrance.clear();
+                playerEntrance.addAll(backupEntrance);
+                students.clear();
+                students.addAll(backupJokerStudents);
 
-            if (indexPlayer == -1) {
-                throw new CCArgumentException("Student ID not found in current player entrance");
+                throw new CCArgumentException(COLOR_NOT_FOUND_JOKER);
             }
-
-            stuIndexToRemFromJoker.add(indexJoker);
-            stuIndexToRemFromPlayer.add(indexPlayer);
         }
 
-        // All the IDs exist in the corresponding array, swap them
-        for (int i = 0; i < studentsToMoveCount; i++) {
-            int indexJoker = stuIndexToRemFromJoker.get(i);
-            int indexPlayer = stuIndexToRemFromPlayer.get(i);
+        swapNullsWith(students, studentsFromEntrance);
+        swapNullsWith(playerEntrance, studentsFromJoker);
+    }
 
-            Student temp = students.get(indexJoker);
-            students.set(indexJoker, currentPlayerEntrance.get(indexPlayer));
-            currentPlayerEntrance.set(indexPlayer, temp);
-        }
+    /**
+     * @return pointer to the students list
+     * @apiNote should only be used by tests, in fact is package private
+     */
+    List<Student> getStudentsListReference() {
+        return students;
     }
 }
