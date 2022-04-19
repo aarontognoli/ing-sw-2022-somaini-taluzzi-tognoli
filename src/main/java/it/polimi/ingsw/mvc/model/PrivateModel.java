@@ -83,6 +83,7 @@ public class PrivateModel {
                 fatherModel.currentGameCards.add(characterFactory.getRandomCharacter(fatherModel));
             }
         }
+        fillClouds();
     }
 
     Board getProfessorOwner(Color c) {

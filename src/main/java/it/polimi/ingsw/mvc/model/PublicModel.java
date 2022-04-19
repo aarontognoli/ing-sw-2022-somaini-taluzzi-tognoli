@@ -1,5 +1,6 @@
 package it.polimi.ingsw.mvc.model;
 
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
@@ -80,11 +81,27 @@ public class PublicModel {
 
     //all players played their turn
     public void endRound() {
-        //TODO
-        //reset assistant cards
-        //check victory conditions
-        //back to pianification phase
-        // different method to make code more readable
+
+        Player winner = fatherModel.privateModel.checkVictoryConditions();
+        if (winner != null) {
+            //todo win method
+            return;
+        }
+        for (Player p : fatherModel.players) {
+            try {
+                p.setCurrentAssistantCard(null);
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException("How did you get here?");
+            }
+        }
+
+        try {
+            fatherModel.privateModel.fillClouds();
+        } catch (BagEmptyException e) {
+            //todo signal that bag is empty
+        }
+        fatherModel.gamePhase = GamePhase.PIANIFICATION;
     }
 
     public Island getMotherNatureIsland() {
