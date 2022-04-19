@@ -41,8 +41,28 @@ public class PublicModel {
         }
     }
 
+    //player Turn
     public void endTurn() {
         // TODO
+        /*Different implementation in Pianification Phase and in Action Phase
+        Pianification:
+            Check if all player played an assistant Card
+            yes -> order players for action phase and change phase
+            no -> next player in fathermodel.players
+
+        Action:
+            check if all player played
+            yes -> end round()
+            no -> next player in player order for action phase
+
+         */
+    }
+
+    //all players played their turn
+    public void endRound() {
+        //TODO
+        //reset assistant cards
+        //check victory conditions
     }
 
     public Island getMotherNatureIsland() {
