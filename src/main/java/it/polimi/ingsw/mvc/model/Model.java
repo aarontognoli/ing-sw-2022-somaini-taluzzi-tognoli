@@ -3,10 +3,7 @@ package it.polimi.ingsw.mvc.model;
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cloud.Cloud;
-import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.enums.DeckName;
-import it.polimi.ingsw.enums.GameMode;
-import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.enums.*;
 import it.polimi.ingsw.pawn.MotherNature;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.places.Island;
@@ -15,6 +12,7 @@ import it.polimi.ingsw.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 public class Model {
 
@@ -30,9 +28,11 @@ public class Model {
     // Player data and their board
     int totalPlayerCount;
     List<Player> players;
+    Stack<Player> actionPlayerOrder;
     Player currentPlayer;
 
     GameMode gameMode;
+    GamePhase gamePhase;
 
     // Bag where I can draw new students
     Bag bag;
@@ -137,6 +137,7 @@ public class Model {
         }
 
         currentPlayer = players.get(0);
+        gamePhase = GamePhase.PIANIFICATION;
 
         privateModel.prepareMatch(motherNatureStartingPosition);
     }

@@ -382,4 +382,8 @@ public class PrivateModel {
         int nextPlayerIndex = (currentPlayerIndex + 1) % fatherModel.players.size();
         fatherModel.currentPlayer = fatherModel.players.get(nextPlayerIndex);
     }
+
+    void incrementCurrentPlayerAction() {
+        fatherModel.currentPlayer = fatherModel.actionPlayerOrder.pop();
+    }
 }

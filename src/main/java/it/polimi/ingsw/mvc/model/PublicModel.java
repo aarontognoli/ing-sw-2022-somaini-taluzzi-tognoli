@@ -5,6 +5,7 @@ import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.pawn.Student;
@@ -43,7 +44,35 @@ public class PublicModel {
 
     //player Turn
     public void endTurn() {
-        // TODO
+        // TODO Strategy(?)
+        switch (fatherModel.gamePhase) {
+            case PIANIFICATION -> {
+                boolean everyonePlayedAnAssistantCard = true;
+                for (Player p : fatherModel.players) {
+                    if (p.getCurrentAssistantCard() == null) {
+                        everyonePlayedAnAssistantCard = false;
+                        break;
+                    }
+                }
+
+                if (everyonePlayedAnAssistantCard) {
+                    //todo order players for action phase
+                    fatherModel.gamePhase = GamePhase.ACTION;
+                } else {
+                    fatherModel.privateModel.incrementCurrentPlayer();
+                }
+
+            }
+
+            case ACTION -> {
+                if (fatherModel.actionPlayerOrder.isEmpty()) {
+                    endRound();
+                } else {
+                    fatherModel.privateModel.incrementCurrentPlayerAction();
+                }
+            }
+        }
+        //Todo: remove this after
         /*Different implementation in Pianification Phase and in Action Phase
         Pianification:
             Check if all player played an assistant Card
@@ -63,6 +92,8 @@ public class PublicModel {
         //TODO
         //reset assistant cards
         //check victory conditions
+        //back to pianification phase
+        // different method to make code more readable
     }
 
     public Island getMotherNatureIsland() {
@@ -115,7 +146,7 @@ public class PublicModel {
         // Assign a new Coin to current player
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
             List<List<Student>> currentDiningRoom = fatherModel.currentPlayer.getBoard().getDiningRoom();
-            int indexAddedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).size()-1;
+            int indexAddedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).size() - 1;
 
             if (indexAddedStudent == 2 || indexAddedStudent == 5 || indexAddedStudent == 8) {
                 fatherModel.privateModel.rewardCoin();
