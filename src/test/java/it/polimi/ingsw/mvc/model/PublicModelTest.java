@@ -168,7 +168,6 @@ public class PublicModelTest {
     private static Model createModel(Map<String, DeckName> nicknamesAndDecks, GameMode gameMode) {
         try {
             Model model = new Model(0, nicknamesAndDecks, gameMode);
-            model.currentPlayer = model.players.get(0);
             return model;
         } catch (Exception e) {
             assert false;

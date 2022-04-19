@@ -135,6 +135,9 @@ public class Model {
                 clouds.add(new Cloud(4));
             }
         }
+
+        currentPlayer = players.get(0);
+
         privateModel.prepareMatch(motherNatureStartingPosition);
     }
 
