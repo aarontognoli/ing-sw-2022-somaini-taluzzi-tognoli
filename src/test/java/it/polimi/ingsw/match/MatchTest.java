@@ -2,9 +2,9 @@ package it.polimi.ingsw.match;
 
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.AssistantCardAlreadyPlayedException;
 import it.polimi.ingsw.exceptions.CloudEmptyException;
 import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.exceptions.PlayerAlreadyChosenAssistantCard;
 import it.polimi.ingsw.exceptions.TooMuchStepsException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Professor;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import static it.polimi.ingsw.mvc.model.PublicModelTest.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class matchTest {
+public class MatchTest {
     @Test
     public void twoPlayersEasyMatchTest() {
         Model model = twoPlayersBasicSetup();
@@ -25,7 +25,7 @@ public class matchTest {
         assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_2));//(2 turn, 1 movement)
         model.publicModel.endTurn();
         Player p1 = model.publicModel.getCurrentPlayer();
-        assertThrows(PlayerAlreadyChosenAssistantCard.class, () -> model.publicModel.playAssistant(AssistantCard.CARD_2));
+        assertThrows(AssistantCardAlreadyPlayedException.class, () -> model.publicModel.playAssistant(AssistantCard.CARD_2));
         assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_1));//(1 turn, 1 movement)
         model.publicModel.endTurn();
         assertEquals(p1, model.publicModel.getCurrentPlayer());

@@ -26,11 +26,20 @@ public class PublicModel {
         this.fatherModel = fatherModel;
     }
 
-    public void playAssistant(AssistantCard assistantCard) throws NotFoundException, PlayerAlreadyChosenAssistantCard {
-        for (Player p : fatherModel.players) {
-            if (p != getCurrentPlayer() && p.getCurrentAssistantCard() != null && p.getCurrentAssistantCard().equals(assistantCard))
-                throw new PlayerAlreadyChosenAssistantCard();
+    public void playAssistant(AssistantCard assistantCard) throws NotFoundException, AssistantCardAlreadyPlayedException {
+        if (fatherModel.currentPlayer.getCurrentAssistantCard() != null) {
+            throw new AssistantCardAlreadyPlayedException();
         }
+
+        // If we have more than one card in the deck, check that we are not playing a card already played by someone else
+        if (fatherModel.currentPlayer.getDeck().getHand().size() > 1) {
+            for (Player p : fatherModel.players) {
+                if (p.getCurrentAssistantCard() != null && p.getCurrentAssistantCard().equals(assistantCard)) {
+                    throw new AssistantCardAlreadyPlayedException();
+                }
+            }
+        }
+
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
@@ -49,7 +58,6 @@ public class PublicModel {
 
     //player Turn
     public void endTurn() {
-        // TODO Strategy(?)
         switch (fatherModel.gamePhase) {
             case PIANIFICATION -> {
                 boolean everyonePlayedAnAssistantCard = true;
@@ -62,6 +70,7 @@ public class PublicModel {
 
                 if (everyonePlayedAnAssistantCard) {
                     List<Player> playersToBeOrdered = new ArrayList<>(fatherModel.players);
+                    // TODO: if turn order of assistant card is the same, use order in players array starting from firstPlayer
                     fatherModel.actionPlayerOrder = new ArrayDeque<>(playersToBeOrdered.stream().sorted((a, b) -> a.getCurrentAssistantCard().getTurnOrderValue() < b.getCurrentAssistantCard().getTurnOrderValue() ? -1 : +1).toList());
                     fatherModel.gamePhase = GamePhase.ACTION;
                     fatherModel.privateModel.incrementCurrentPlayerAction();
