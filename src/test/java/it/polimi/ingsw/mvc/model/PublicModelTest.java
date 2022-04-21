@@ -32,6 +32,8 @@ public class PublicModelTest {
         assertNull(model.currentPlayer.getCurrentAssistantCard());
         assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_6));
         assertEquals(AssistantCard.CARD_6, model.currentPlayer.getCurrentAssistantCard());
+        assertThrows(AssistantCardAlreadyPlayedException.class, () -> model.publicModel.playAssistant(AssistantCard.CARD_3));
+        model.publicModel.endTurn();
         assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_3));
         assertEquals(AssistantCard.CARD_3, model.currentPlayer.getCurrentAssistantCard());
     }
@@ -39,8 +41,12 @@ public class PublicModelTest {
     @Test
     void playAssistantNotInHand() {
         Model model = twoPlayersBasicSetup();
-        assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_6));
-        assertThrows(NotFoundException.class, () -> model.publicModel.playAssistant(AssistantCard.CARD_6));
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_1));//p0
+        model.publicModel.endTurn();
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_6));//p1
+        model.publicModel.endTurn();
+        model.publicModel.endRound();
+        assertThrows(NotFoundException.class, () -> model.publicModel.playAssistant(AssistantCard.CARD_1));
     }
 
     public static List<Professor> getProfessors(Model fatherModel) {
