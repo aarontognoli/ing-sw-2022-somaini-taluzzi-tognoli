@@ -9,6 +9,7 @@ import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.mvc.ModelActions;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
@@ -19,7 +20,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PublicModel {
+public class PublicModel implements ModelActions {
     final Model fatherModel;
 
     PublicModel(Model fatherModel) {
@@ -71,7 +72,7 @@ public class PublicModel {
                 if (everyonePlayedAnAssistantCard) {
                     List<Player> playersToBeOrdered = new ArrayList<>(fatherModel.players);
                     // TODO: if turn order of assistant card is the same, use order in players array starting from firstPlayer
-                    fatherModel.actionPlayerOrder = new ArrayDeque<>(playersToBeOrdered.stream().sorted(fatherModel.privateModel::compareAssistantCardOrder).toList());
+                    fatherModel.actionPlayerOrder = new ArrayDeque<>(playersToBeOrdered.stream().sorted((a, b) -> a.getCurrentAssistantCard().getTurnOrderValue() < b.getCurrentAssistantCard().getTurnOrderValue() ? -1 : +1).toList());
                     fatherModel.gamePhase = GamePhase.ACTION;
                     fatherModel.privateModel.incrementCurrentPlayerAction();
                     fatherModel.firstPlayer = fatherModel.currentPlayer;
@@ -93,7 +94,7 @@ public class PublicModel {
 
     //all players played their turn
 
-    void endRound() {
+    public void endRound() {
 
         Player winner = fatherModel.privateModel.checkVictoryConditions();
         if (winner != null) {
