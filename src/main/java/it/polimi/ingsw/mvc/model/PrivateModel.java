@@ -39,6 +39,18 @@ public class PrivateModel {
         this.fatherModel = fatherModel;
     }
 
+    public int compareAssistantCardOrder(Player a, Player b) {
+        int aTurnOrder = a.getCurrentAssistantCard().getTurnOrderValue();
+        int bTurnOrder = b.getCurrentAssistantCard().getTurnOrderValue();
+
+        if (aTurnOrder == bTurnOrder) {
+            int firstPlayingPlayerIndex = fatherModel.players.indexOf(fatherModel.firstPlayer);
+            aTurnOrder = floorMod(fatherModel.players.indexOf(a) - firstPlayingPlayerIndex, fatherModel.totalPlayerCount);
+            bTurnOrder = floorMod(fatherModel.players.indexOf(b) - firstPlayingPlayerIndex, fatherModel.totalPlayerCount);
+        }
+        return aTurnOrder < bTurnOrder ? -1 : +1;
+    }
+
     void prepareMatch(int motherNatureIslandIndex) throws BagEmptyException {
         fatherModel.bag = new Bag(2);
 
@@ -83,6 +95,7 @@ public class PrivateModel {
                 fatherModel.currentGameCards.add(characterFactory.getRandomCharacter(fatherModel));
             }
         }
+        fillClouds();
     }
 
     Board getProfessorOwner(Color c) {
@@ -381,5 +394,9 @@ public class PrivateModel {
 
         int nextPlayerIndex = (currentPlayerIndex + 1) % fatherModel.players.size();
         fatherModel.currentPlayer = fatherModel.players.get(nextPlayerIndex);
+    }
+
+    void incrementCurrentPlayerAction() {
+        fatherModel.currentPlayer = fatherModel.actionPlayerOrder.pop();
     }
 }

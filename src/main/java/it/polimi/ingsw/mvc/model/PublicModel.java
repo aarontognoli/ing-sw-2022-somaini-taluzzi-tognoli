@@ -1,10 +1,12 @@
 package it.polimi.ingsw.mvc.model;
 
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.pawn.Student;
@@ -13,6 +15,8 @@ import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PublicModel {
@@ -22,13 +26,28 @@ public class PublicModel {
         this.fatherModel = fatherModel;
     }
 
-    public void playAssistant(AssistantCard assistantCard) throws NotFoundException {
+    public void playAssistant(AssistantCard assistantCard) throws NotFoundException, AssistantCardAlreadyPlayedException {
+        if (fatherModel.currentPlayer.getCurrentAssistantCard() != null) {
+            throw new AssistantCardAlreadyPlayedException();
+        }
+
+        // If we have more than one card in the deck, check that we are not playing a card already played by someone else
+        if (fatherModel.currentPlayer.getDeck().getHand().size() > 1) {
+            for (Player p : fatherModel.players) {
+                if (p.getCurrentAssistantCard() != null && p.getCurrentAssistantCard().equals(assistantCard)) {
+                    throw new AssistantCardAlreadyPlayedException();
+                }
+            }
+        }
+
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
-    public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException {
+    public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException, CloudEmptyException {
 
         List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudents();
+        if (studentsFromCloud == null)
+            throw new CloudEmptyException();
         try {
             fatherModel.currentPlayer.getBoard().addStudentsToEntrance(studentsFromCloud);
         } catch (EntranceFullException e) {
@@ -37,8 +56,61 @@ public class PublicModel {
         }
     }
 
+    //player Turn
     public void endTurn() {
-        // TODO
+        switch (fatherModel.gamePhase) {
+            case PIANIFICATION -> {
+                boolean everyonePlayedAnAssistantCard = true;
+                for (Player p : fatherModel.players) {
+                    if (p.getCurrentAssistantCard() == null) {
+                        everyonePlayedAnAssistantCard = false;
+                        break;
+                    }
+                }
+
+                if (everyonePlayedAnAssistantCard) {
+                    List<Player> playersToBeOrdered = new ArrayList<>(fatherModel.players);
+                    // TODO: if turn order of assistant card is the same, use order in players array starting from firstPlayer
+                    fatherModel.actionPlayerOrder = new ArrayDeque<>(playersToBeOrdered.stream().sorted(fatherModel.privateModel::compareAssistantCardOrder).toList());
+                    fatherModel.gamePhase = GamePhase.ACTION;
+                    fatherModel.privateModel.incrementCurrentPlayerAction();
+                    fatherModel.firstPlayer = fatherModel.currentPlayer;
+                } else {
+                    fatherModel.privateModel.incrementCurrentPlayer();
+                }
+
+            }
+
+            case ACTION -> {
+                if (fatherModel.actionPlayerOrder.isEmpty()) {
+                    endRound();
+                } else {
+                    fatherModel.privateModel.incrementCurrentPlayerAction();
+                }
+            }
+        }
+    }
+
+    //all players played their turn
+
+    void endRound() {
+
+        Player winner = fatherModel.privateModel.checkVictoryConditions();
+        if (winner != null) {
+            //todo win method
+            return;
+        }
+        for (Player p : fatherModel.players) {
+            p.draftAssistantCard();
+        }
+
+        try {
+            fatherModel.privateModel.fillClouds();
+        } catch (BagEmptyException e) {
+            //todo signal that bag is empty
+        }
+        fatherModel.gamePhase = GamePhase.PIANIFICATION;
+        fatherModel.currentPlayer = fatherModel.firstPlayer;
     }
 
     public Island getMotherNatureIsland() {
@@ -91,7 +163,7 @@ public class PublicModel {
         // Assign a new Coin to current player
         if (fatherModel.gameMode.equals(GameMode.EXPERT_MODE)) {
             List<List<Student>> currentDiningRoom = fatherModel.currentPlayer.getBoard().getDiningRoom();
-            int indexAddedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).size()-1;
+            int indexAddedStudent = currentDiningRoom.get(selectedStudent.getColor().ordinal()).size() - 1;
 
             if (indexAddedStudent == 2 || indexAddedStudent == 5 || indexAddedStudent == 8) {
                 fatherModel.privateModel.rewardCoin();
