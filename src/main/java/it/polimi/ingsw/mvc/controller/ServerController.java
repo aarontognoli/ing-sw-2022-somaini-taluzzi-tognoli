@@ -21,8 +21,12 @@ public class ServerController extends Controller implements ModelActions {
     }
 
     @Override
-    public void subscribeNotification(Message newValue) {
-        // TODO: Decode message, and call the correct method of this class
+    public void subscribeNotification(Message message) {
+        try {
+            message.controllerCallback(this);
+        } catch (Exception e) {
+            message.getRemoteView().sendErrorMessage(e);
+        }
     }
 
     @Override

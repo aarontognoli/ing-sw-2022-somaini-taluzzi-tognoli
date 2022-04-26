@@ -15,15 +15,21 @@ import it.polimi.ingsw.notifier.Subscriber;
 public class RemoteView extends View {
 
     private final Notifier<Message> messageNotifier;
+    private final String username;
 
-    public RemoteView(Notifier<Model> modelNotifier) {
+    public RemoteView(Notifier<Model> modelNotifier, String username) {
         super(modelNotifier);
 
+        this.username = username;
         messageNotifier = new Notifier<>();
 
         // TODO: subscribe MessageReceiver to ClientConnection, which should be
         // passed as argument to the constructor
         // clientConnection.addSubscriber(new MessageReceiver())
+    }
+
+    public void sendErrorMessage(Exception e) {
+        // TODO: Send error message to the client
     }
 
     /**
@@ -33,7 +39,14 @@ public class RemoteView extends View {
         messageNotifier.addSubscriber(controller);
     }
 
+    /**
+     * @param message message to be sent to the ServerController
+     * @implNote Updated username of the message before sending it to the ServerController,
+     * so that it can know who did this move
+     */
     private void redirectMessageToController(Message message) {
+        message.setUsername(username);
+        message.setRemoteView(this);
         messageNotifier.notifySubscribers(message);
     }
 
