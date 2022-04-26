@@ -96,7 +96,7 @@ public class PublicModel {
 
         Player winner = fatherModel.privateModel.checkVictoryConditions();
         if (winner != null) {
-            //todo win method
+            fatherModel.winner = winner;
             return;
         }
         for (Player p : fatherModel.players) {
@@ -247,7 +247,11 @@ public class PublicModel {
                         throw new RuntimeException("Player board has no tower. What? " + e.getMessage());
                     }
                     if (playerOwnerBoard.getTowers().size() == 0) {
-                        // VICTORY TODO: Notify remote-views of victory
+                        try {
+                            fatherModel.winner = fatherModel.privateModel.getPlayerFromBoard(playerOwnerBoard);
+                        } catch (BoardNotInGameException e) {
+                            throw new RuntimeException("Impossible state of the game");
+                        }
 
                         return;
                     }
@@ -284,4 +288,7 @@ public class PublicModel {
         return null;
     }
 
+    public Player getWinner() {
+        return fatherModel.winner;
+    }
 }

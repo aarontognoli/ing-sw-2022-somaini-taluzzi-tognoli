@@ -31,6 +31,7 @@ public class Model {
     Deque<Player> actionPlayerOrder;
     Player currentPlayer;
     Player firstPlayer;
+    Player winner;
 
     GameMode gameMode;
     GamePhase gamePhase;
@@ -139,7 +140,7 @@ public class Model {
 
         currentPlayer = players.get(0);
         gamePhase = GamePhase.PIANIFICATION;
-
+        winner = null;
         privateModel.prepareMatch(motherNatureStartingPosition);
     }
 
