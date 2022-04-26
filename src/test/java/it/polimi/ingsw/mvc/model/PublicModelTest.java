@@ -215,6 +215,10 @@ public class PublicModelTest {
         }
     }
 
+    public static List<Player> getPlayers(Model fatherModel) {
+        return fatherModel.players;
+    }
+
     @Test
     void drawStudentsIntoEntrance() {
         Model model = twoPlayersBasicSetup();
