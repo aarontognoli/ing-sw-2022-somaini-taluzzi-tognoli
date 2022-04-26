@@ -2,10 +2,7 @@ package it.polimi.ingsw.match;
 
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.exceptions.AssistantCardAlreadyPlayedException;
-import it.polimi.ingsw.exceptions.CloudEmptyException;
-import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.exceptions.TooMuchStepsException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
@@ -19,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MatchTest {
     @Test
     public void twoPlayersEasyMatchTest() {
+        System.out.println("---------------- Two Players Easy Match -----------------");
         Model model = twoPlayersBasicSetup();
         //SAME DECKNAME CHECK IN CONTROLLER(?)
         Player p0 = model.publicModel.getCurrentPlayer();
@@ -47,6 +45,7 @@ public class MatchTest {
         assertDoesNotThrow(() -> model.publicModel.drawStudentsIntoEntrance(0));
         assertThrows(TooMuchStepsException.class, () -> model.publicModel.moveMotherNature(2));
         assertDoesNotThrow(() -> model.publicModel.moveMotherNature(1));
+        model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
         //Just to see what's happening
         Player curr;
         for (Professor p : getProfessors(model)) {
@@ -54,7 +53,7 @@ public class MatchTest {
             System.out.print(p.getColor() + ": " + (curr == null ? "Null" : curr.getNickname()) + " { ");
             //print player one dining rooms
             for (Student s : p1.getBoard().getDiningRoom().get(p.getColor().ordinal())) {
-                System.out.print("[ " + s.getID() + " ] ");
+                System.out.print("[ " + s.getID().toString() + " ] ");
             }
             System.out.print("}\n");
         }
@@ -67,7 +66,7 @@ public class MatchTest {
         for (Color c : Color.values()) {
             while (i < 3) {
                 try {
-                    model.publicModel.moveStudentToIsland(c, 1);
+                    model.publicModel.moveStudentToIsland(c, 2);
                     i++;
                 } catch (NotFoundException e) {
                     break;
@@ -75,13 +74,21 @@ public class MatchTest {
             }
         }
         assertEquals(3, i);
-        System.out.println("Island number 1 ");
+        assertDoesNotThrow(() -> model.publicModel.moveMotherNature(1));
+        model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
+        System.out.println("Island number 2 ");
         System.out.print("{ ");
         for (Student s : model.publicModel.getMotherNatureIsland().getStudents()) {
-            System.out.print("[ " + s.getID() + " , " + s.getColor() + " ] ");
+            System.out.print("[ " + s.getID().toString() + " , " + s.getColor() + " ] ");
         }
         System.out.print("}\n");
-        assertDoesNotThrow(() -> model.publicModel.moveMotherNature(1));
+        System.out.print("Tower color: ");
+        try {
+            System.out.println(model.publicModel.getMotherNatureIsland().getTowerColor());
+        } catch (NoTowerException e) {
+            System.out.println("No Tower");
+        }
+
         assertThrows(CloudEmptyException.class, () -> model.publicModel.drawStudentsIntoEntrance(0));
         assertDoesNotThrow(() -> model.publicModel.drawStudentsIntoEntrance(1));
         model.publicModel.endTurn();
