@@ -133,7 +133,7 @@ class PrivateModelTest {
     }
 
     @Test
-    void getInfluence() {
+    void getInfluenceTwoPlayers() {
         // TODO: Check 3 player, 4 players, and tie in both cases
         Model model = PublicModelTest.twoPlayersBasicSetup();
 
