@@ -29,12 +29,5 @@ public enum AssistantCard {
     public int getMaxMotherNatureMovementValue() {
         return maxMotherNatureMovementValue;
     }
-
-    public static AssistantCard getCardByIndex(int ordinalIndex) {
-        return AssistantCard.values()[ordinalIndex];
-    }
-
-    public static int getIndexByCard(AssistantCard card) {
-        return card.ordinal();
-    }
 }
+

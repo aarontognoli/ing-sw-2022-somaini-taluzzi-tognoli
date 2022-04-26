@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class AllCharacterTest {
 
@@ -53,5 +54,11 @@ public abstract class AllCharacterTest {
         } catch (CCArgumentException e) {
             assertEquals(CCArgumentException.INVALID_CLASS_MESSAGE, e.getMessage());
         }
+    }
+
+    @Test
+    void insufficientCoin() {
+        Board currentPlayerBoard = model.publicModel.getCurrentPlayer().getBoard();
+        assertThrows(InsufficientCoinException.class, () -> currentPlayerBoard.useCoins(10));
     }
 }

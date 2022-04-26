@@ -18,10 +18,6 @@ public class Deck {
 
     }
 
-    @Deprecated
-    public Deck() {
-        this(DeckName.DESERT_KING);
-    }
 
     public void playAssistantCard(AssistantCard card) throws NotFoundException {
         if (cards.contains(card)) {

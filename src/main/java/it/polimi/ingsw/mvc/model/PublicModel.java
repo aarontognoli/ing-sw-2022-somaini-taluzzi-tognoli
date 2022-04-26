@@ -70,7 +70,6 @@ public class PublicModel {
 
                 if (everyonePlayedAnAssistantCard) {
                     List<Player> playersToBeOrdered = new ArrayList<>(fatherModel.players);
-                    // TODO: if turn order of assistant card is the same, use order in players array starting from firstPlayer
                     fatherModel.actionPlayerOrder = new ArrayDeque<>(playersToBeOrdered.stream().sorted(fatherModel.privateModel::compareAssistantCardOrder).toList());
                     fatherModel.gamePhase = GamePhase.ACTION;
                     fatherModel.privateModel.incrementCurrentPlayerAction();

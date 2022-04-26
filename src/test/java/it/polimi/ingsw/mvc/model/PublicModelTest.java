@@ -53,10 +53,6 @@ public class PublicModelTest {
         return new ArrayList<>(fatherModel.professors);
     }
 
-    @Test
-    void endTurn() {
-        // TODO once the method is complete
-    }
 
     @Test
     void getMotherNatureIsland() {
