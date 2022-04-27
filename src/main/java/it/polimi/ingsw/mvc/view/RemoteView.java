@@ -28,7 +28,7 @@ public class RemoteView extends View {
         // clientConnection.addSubscriber(new MessageReceiver())
     }
 
-    public void sendErrorMessage(Exception e) {
+    public void sendErrorMessage(String error) {
         // TODO: Send error message to the client
     }
 
