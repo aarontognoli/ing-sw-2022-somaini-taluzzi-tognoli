@@ -22,6 +22,7 @@ public class ServerController extends Controller implements PlayerActions {
     public void subscribeNotification(Message message) {
         if (!message.getUsername().equals(model.publicModel.getCurrentPlayer().getNickname())) {
             message.getRemoteView().sendErrorMessage("It is not your turn!");
+            return;
         }
         try {
             message.controllerCallback(this);
