@@ -25,7 +25,9 @@ public class ServerController extends Controller implements PlayerActions {
             return;
         }
         try {
-            message.controllerCallback(this);
+            synchronized (this) {
+                message.controllerCallback(this);
+            }
         } catch (Exception e) {
             message.getRemoteView().sendErrorMessage(e.getMessage());
         }

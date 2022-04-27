@@ -4,6 +4,9 @@ import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
+import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.mvc.view.View;
+import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.pawn.MotherNature;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.places.Island;
@@ -14,7 +17,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 
-public class Model {
+public class Model extends Notifier<Message> {
 
     private static final int INITIAL_TOWER_COUNT_2_4_PLAYERS = 8;
     private static final int INITIAL_TOWER_COUNT_3_PLAYERS = 6;
