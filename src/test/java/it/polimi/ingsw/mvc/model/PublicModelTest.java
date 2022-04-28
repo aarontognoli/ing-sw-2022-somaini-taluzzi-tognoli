@@ -171,8 +171,42 @@ public class PublicModelTest {
         return createModel(temp, GameMode.EASY_MODE);
     }
 
+    public static Model threePlayersBasicSetup() {
+        Map<String, DeckName> temp = new HashMap<>();
+        temp.put("Player2", DeckName.FOREST_MAGE);
+        temp.put("Player1", DeckName.DESERT_KING);
+        temp.put("Player0", DeckName.CLOUD_WITCH);
+        return createModel(temp, GameMode.EASY_MODE);
+    }
+
+    public static Model fourPlayersBasicSetup() {
+        Map<String, DeckName> temp = new HashMap<>();
+        temp.put("Player3", DeckName.MOUNTAIN_SAGE);
+        temp.put("Player2", DeckName.FOREST_MAGE);
+        temp.put("Player1", DeckName.DESERT_KING);
+        temp.put("Player0", DeckName.CLOUD_WITCH);
+        return createModel(temp, GameMode.EASY_MODE);
+    }
+
     public static Model twoPlayersExpertMode() {
         Map<String, DeckName> temp = new HashMap<>();
+        temp.put("Player1", DeckName.DESERT_KING);
+        temp.put("Player0", DeckName.CLOUD_WITCH);
+        return createModel(temp, GameMode.EXPERT_MODE);
+    }
+
+    public static Model threePlayersExpertMode() {
+        Map<String, DeckName> temp = new HashMap<>();
+        temp.put("Player2", DeckName.FOREST_MAGE);
+        temp.put("Player1", DeckName.DESERT_KING);
+        temp.put("Player0", DeckName.CLOUD_WITCH);
+        return createModel(temp, GameMode.EXPERT_MODE);
+    }
+
+    public static Model fourPlayersExpertMode() {
+        Map<String, DeckName> temp = new HashMap<>();
+        temp.put("Player3", DeckName.MOUNTAIN_SAGE);
+        temp.put("Player2", DeckName.FOREST_MAGE);
         temp.put("Player1", DeckName.DESERT_KING);
         temp.put("Player0", DeckName.CLOUD_WITCH);
         return createModel(temp, GameMode.EXPERT_MODE);
