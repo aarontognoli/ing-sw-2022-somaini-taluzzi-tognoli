@@ -2,10 +2,7 @@ package it.polimi.ingsw.match;
 
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
-import it.polimi.ingsw.exceptions.CloudEmptyException;
-import it.polimi.ingsw.exceptions.NoTowerException;
-import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.exceptions.TooMuchStepsException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
@@ -51,7 +48,16 @@ public class MatchTest {
         }
     }
 
-    //todo add comment to describe test
+    /*
+     *   Create twoPlayersEasyMatch
+     *   p0 plays a card so that they play before p1
+     *   p0 places students in their dining room or if the dining room is full they place them on the island next to motherNature
+     *   p0 moves motherNature by 1
+     *   p1 places students in the island next to motherNature
+     *   p1 moves motherNature by 1
+     *   keep repeating these moves until someone wins
+     *   check that the winner is p0
+     * */
     @Test
     public void twoPlayersEasyMatchTest() {
         System.out.println("---------------- Two Players Easy Match -----------------");
@@ -69,13 +75,11 @@ public class MatchTest {
             System.out.println("--------- TURN" + (++turn) + " ------------");
             writeTable(model);
             AssistantCard card = AssistantCard.values()[(turn - 1) % 10];
-            assertDoesNotThrow(() -> model.publicModel.playAssistant(card));//(2 turn, 1 movement)
+            assertDoesNotThrow(() -> model.publicModel.playAssistant(card));
             model.publicModel.endTurn();
-
-
-            //assertThrows(AssistantCardAlreadyPlayedException.class, () -> model.publicModel.playAssistant(card));
+            assertThrows(AssistantCardAlreadyPlayedException.class, () -> model.publicModel.playAssistant(card));
             AssistantCard card1 = AssistantCard.values()[(turn) % 10];
-            assertDoesNotThrow(() -> model.publicModel.playAssistant(card1));//(1 turn, 1 movement)
+            assertDoesNotThrow(() -> model.publicModel.playAssistant(card1));
 
 
             model.publicModel.endTurn();
@@ -106,7 +110,6 @@ public class MatchTest {
             if (model.publicModel.getWinner() != null)
                 break;
 
-            //Just to see what's happening
             writePlayerDiningRoom(p0, model);
             model.publicModel.endTurn();
 
