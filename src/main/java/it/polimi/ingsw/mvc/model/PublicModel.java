@@ -221,6 +221,14 @@ public class PublicModel {
                         "No tower in player board (?) How did they not win already?\n" + e1.getMessage());
             }
             fatherModel.privateModel.mergeIslands(island);
+            if (playerOwnerBoard.getTowers().size() == 0) {
+                try {
+                    fatherModel.winner = fatherModel.privateModel.getPlayerFromBoard(playerOwnerBoard);
+                } catch (BoardNotInGameException e) {
+                    throw new RuntimeException("Impossible state of the game");
+                }
+
+            }
             return;
         }
 
