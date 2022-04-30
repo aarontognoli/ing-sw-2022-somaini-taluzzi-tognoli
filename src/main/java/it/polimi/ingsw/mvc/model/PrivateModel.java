@@ -357,11 +357,7 @@ public class PrivateModel {
         fatherModel.currentPlayer.getBoard().rewardCoin();
     }
 
-    void placeMotherNature(int islandIndex) throws Exception {
-        if (fatherModel.motherNature != null) {
-            throw new Exception("Mother Nature already chosen");
-        }
-
+    void placeMotherNature(int islandIndex) {
         fatherModel.motherNature = new MotherNature(fatherModel.islands.get(islandIndex));
     }
 

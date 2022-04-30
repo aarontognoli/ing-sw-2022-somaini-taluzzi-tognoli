@@ -1,6 +1,7 @@
 package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.bag.Bag;
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
@@ -17,7 +18,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 
-public class Model extends Notifier<Message> {
+public class Model extends Notifier<Model> {
 
     private static final int INITIAL_TOWER_COUNT_2_4_PLAYERS = 8;
     private static final int INITIAL_TOWER_COUNT_3_PLAYERS = 6;
@@ -62,8 +63,7 @@ public class Model extends Notifier<Message> {
 
     // Initialize game with starting rules
 
-    public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks, GameMode gameMode)
-            throws Exception {
+    public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks, GameMode gameMode) {
 
         // Models
         privateModel = new PrivateModel(this);
@@ -118,9 +118,6 @@ public class Model extends Notifier<Message> {
                     towerColorIndex++;
                 }
                 break;
-
-            default:
-                throw new IllegalArgumentException("Illegal number of Players");
         }
 
         // Initialize InfluenceCalculator
@@ -143,7 +140,12 @@ public class Model extends Notifier<Message> {
         currentPlayer = players.get(0);
         gamePhase = GamePhase.PIANIFICATION;
 
-        privateModel.prepareMatch(motherNatureStartingPosition);
+        try {
+            privateModel.prepareMatch(motherNatureStartingPosition);
+        }catch (BagEmptyException e) {
+            throw new RuntimeException("How is it possible that the bag is empty during the" +
+                    "initialisation of the game?");
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.mvc.PlayerActions;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.server.gameMessage;
 
 /**
  * The server controller receives message from the remote-view,
@@ -21,7 +22,7 @@ public class ServerController extends Controller implements PlayerActions {
     @Override
     public void subscribeNotification(Message message) {
         if (!message.getUsername().equals(model.publicModel.getCurrentPlayer().getNickname())) {
-            message.getRemoteView().sendErrorMessage("It is not your turn!");
+            message.getRemoteView().sendErrorMessage(gameMessage.wrongTurnMessage);
             return;
         }
         try {

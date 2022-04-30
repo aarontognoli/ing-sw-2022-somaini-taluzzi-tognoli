@@ -1,5 +1,7 @@
 package it.polimi.ingsw.mvc.view;
 
+import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.mvc.controller.Controller;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.notifier.Subscriber;
@@ -8,7 +10,7 @@ import it.polimi.ingsw.notifier.Subscriber;
  * Base Class for the View, subscribes to the model so that every time
  * the model updates, subscribeNotification is called
  */
-public abstract class View implements Subscriber<Model> {
+public abstract class View extends Notifier<Message> implements Subscriber<Model> {
     protected Model model;
 
     View(Notifier<Model> modelNotifier) {
