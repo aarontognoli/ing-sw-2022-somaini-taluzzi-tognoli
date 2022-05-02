@@ -33,6 +33,7 @@ public class Model extends Notifier<Model> {
     Deque<Player> actionPlayerOrder;
     Player currentPlayer;
     Player firstPlayer;
+    Player winner;
 
     GameMode gameMode;
     GamePhase gamePhase;
@@ -143,7 +144,7 @@ public class Model extends Notifier<Model> {
 
         currentPlayer = players.get(0);
         gamePhase = GamePhase.PIANIFICATION;
-
+        winner = null;
         try {
             privateModel.prepareMatch(motherNatureStartingPosition);
         }catch (BagEmptyException e) {
