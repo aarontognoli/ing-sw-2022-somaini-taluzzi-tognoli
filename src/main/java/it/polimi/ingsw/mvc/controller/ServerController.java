@@ -21,6 +21,10 @@ public class ServerController extends Controller implements PlayerActions {
 
     @Override
     public void subscribeNotification(Message message) {
+        if (model.publicModel.getWinner() != null) {
+            message.getRemoteView().sendErrorMessage(gameMessage.playerAlreadyWonMessage + model.publicModel.getWinner().getNickname());
+            return;
+        }
         if (!message.getUsername().equals(model.publicModel.getCurrentPlayer().getNickname())) {
             message.getRemoteView().sendErrorMessage(gameMessage.wrongTurnMessage);
             return;

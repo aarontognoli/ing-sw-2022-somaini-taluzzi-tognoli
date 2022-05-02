@@ -11,4 +11,5 @@ public class gameMessage {
     public static String winMessage = "You win!";
     public static String loseMessage = "You lose!";
     public static String wrongTurnMessage = "It is not your turn!";
+    public static String playerAlreadyWonMessage = "Forbidden move, match already won by player ";
 }
