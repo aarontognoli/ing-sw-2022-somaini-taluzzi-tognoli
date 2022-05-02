@@ -32,6 +32,9 @@ public class ServerController extends Controller implements PlayerActions {
         } catch (Exception e) {
             message.getRemoteView().sendErrorMessage(e.getMessage());
         }
+
+        // here the model notifies the remote views with its new state
+        model.notifySubscribers(model);
     }
 
     @Override

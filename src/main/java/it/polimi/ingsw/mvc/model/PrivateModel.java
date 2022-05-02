@@ -405,7 +405,7 @@ public class PrivateModel {
      * This method also checks for 4-players game, it only checks the board
      * of the teammate who originally got the towers in their board
      */
-    private Player checkFinishedTowers() {
+    Player checkFinishedTowers() {
         for (int i = 0; i < fatherModel.players.size(); i++) {
             // In 4 players games, just check for player 0 and 2
             if (fatherModel.totalPlayerCount != 4 || i % 2 == 0) {
