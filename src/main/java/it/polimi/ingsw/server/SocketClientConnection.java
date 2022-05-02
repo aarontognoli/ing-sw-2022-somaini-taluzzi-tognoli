@@ -4,13 +4,11 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
 import it.polimi.ingsw.messages.Message;
-import it.polimi.ingsw.mvc.view.RemoteView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.rmi.Remote;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -19,7 +17,6 @@ public class SocketClientConnection implements ClientConnection, Runnable {
     private final Socket socket;
     private ObjectOutputStream out;
     private final Server server;
-    private RemoteView remoteView;
 
     private boolean active = true;
 
@@ -28,18 +25,13 @@ public class SocketClientConnection implements ClientConnection, Runnable {
         this.server = server;
     }
 
-    public void setRemoteView(RemoteView remoteView) {
-        this.remoteView = remoteView;
-    }
-
     public void redirectToRemoteView(Object message) throws ObjectIsNotMessageException {
         if (!(message instanceof Message)) {
             throw new ObjectIsNotMessageException();
         } else {
-            remoteView.receiveClientCommunication((Message) message);
+            ((Message) message).getRemoteView().redirectMessageToController((Message) message);
         }
     }
-
 
     private synchronized boolean isActive(){
         return active;
@@ -81,10 +73,10 @@ public class SocketClientConnection implements ClientConnection, Runnable {
     public void run() {
         Scanner in;
         String read;
+        int numRead = 0;
         String name;
-        DeckName deckName = null;
-        GameMode gameMode = null;
-        boolean valid = true;
+        DeckName deckName;
+        boolean valid;
         boolean firstPlayer = false;
         try{
             in = new Scanner(socket.getInputStream());
@@ -113,28 +105,35 @@ public class SocketClientConnection implements ClientConnection, Runnable {
                 }
             }while(!valid);
 
-            send("Choose a Deck Name from the following: DESERT_KING, MOUNTAIN_SAGE, " +
-                    "CLOUD_WITCH, FOREST_MAGE.");
+            send("Choose a Deck Name from the following: DESERT_KING, MOUNTAIN_SAGE, CLOUD_WITCH, " +
+                    "FOREST_MAGE. Type 1 for DESERT_KING, 2 for MOUNTAIN_SAGE, 3 for CLOUD_WITCH, " +
+                    "4 for FOREST_MAGE");
             do {
                 read = in.nextLine();
                 valid = true;
                 try {
-                    deckName = DeckName.valueOf(read);
-                } catch (IllegalArgumentException e) {
-                    send("Deck Name not valid. Try again!");
+                    numRead = Integer.parseInt(read);
+                } catch (NumberFormatException e) {
+                    send("Please select a valid number!");
                     valid = false;
                 }
                 if (valid) {
-                    synchronized (server.nicknamesAndDecks) {
-                        for (DeckName d : server.nicknamesAndDecks.values()) {
-                            if (d.equals(deckName)) {
-                                send("This deck name was already chosen. Choose another one!");
-                                valid = false;
-                                break;
+                    if (numRead < 1 || numRead > 4) {
+                        send("Please select a valid number!");
+                        valid = false;
+                    } else {
+                        deckName = DeckName.values()[numRead - 1];
+                        synchronized (server.nicknamesAndDecks) {
+                            for (DeckName d : server.nicknamesAndDecks.values()) {
+                                if (d.equals(deckName)) {
+                                    send("This deck name was already chosen. Choose another one!");
+                                    valid = false;
+                                    break;
+                                }
                             }
-                        }
-                        if (valid) {
-                            server.nicknamesAndDecks.replace(name, deckName);
+                            if (valid) {
+                                server.nicknamesAndDecks.replace(name, deckName);
+                            }
                         }
                     }
                 }
@@ -142,37 +141,43 @@ public class SocketClientConnection implements ClientConnection, Runnable {
 
             if (firstPlayer) {
                 send("Select the number of players: 2, 3 or 4");
-                int num = 0;
                 do {
                     read = in.nextLine();
                     valid = true;
                     try {
-                        num = Integer.parseInt(read);
+                        numRead = Integer.parseInt(read);
                     } catch (NumberFormatException e) {
                         send("Please select a valid number!");
                         valid = false;
                     }
                     if (valid) {
-                        if (num < 2 || num > 4) {
+                        if (numRead < 2 || numRead > 4) {
                             send("Please select a valid number!");
                             valid = false;
                         }
                     }
                 }while(!valid);
-                server.numberOfPlayers = num;
+                server.numberOfPlayers = numRead;
 
-                send("Choose a Game Mode from the following: EASY_MODE, EXPERT_MODE");
+                send("Choose a Game Mode from the following: EASY_MODE, EXPERT_MODE. " +
+                        "Type 1 for EASY_MODE, 2 for EXPERT_MODE.");
                 do {
                     read = in.nextLine();
                     valid = true;
                     try {
-                        gameMode = GameMode.valueOf(read);
-                    } catch (IllegalArgumentException e) {
-                        send("Game Mode not valid. Try again!");
+                        numRead = Integer.parseInt(read);
+                    } catch (NumberFormatException e) {
+                        send("Please select a valid number!");
                         valid = false;
                     }
+                    if (valid) {
+                        if (numRead < 1 || numRead > 2) {
+                            send("Please select a valid number!");
+                            valid = false;
+                        }
+                    }
                 }while(!valid);
-                server.gameMode = gameMode;
+                server.gameMode = GameMode.values()[numRead - 1];
 
                 send("Select a number from 1 to 12, Mother Nature will be positioned" +
                         "in the correspondent island!");
@@ -180,19 +185,19 @@ public class SocketClientConnection implements ClientConnection, Runnable {
                     read = in.nextLine();
                     valid = true;
                     try {
-                        num = Integer.parseInt(read);
+                        numRead = Integer.parseInt(read);
                     } catch (NumberFormatException e) {
                         send("Please select a valid number!");
                         valid = false;
                     }
                     if (valid) {
-                        if (num < 1 || num > 12) {
+                        if (numRead < 1 || numRead > 12) {
                             send("Please select a valid number!");
                             valid = false;
                         }
                     }
                 }while(!valid);
-                server.motherNatureStartingPosition = num;
+                server.motherNatureStartingPosition = numRead;
             }
 
             server.lobby(this, name);

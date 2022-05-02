@@ -28,6 +28,9 @@ public class Server {
     protected int numberOfPlayers;
     protected int motherNatureStartingPosition;
 
+    public Server() throws IOException {
+        this.serverSocket = new ServerSocket(PORT);
+    }
 
     //Deregister connection
     public synchronized void closePlayersConnections() {
@@ -70,7 +73,7 @@ public class Server {
                     }
                 }
                 Player player = new Player(keys.get(i), TowerColor.values()[i], nicknamesAndDecks.get(keys.get(0)), numberOfTowers);
-                View playerView = new RemoteView(model, keys.get(i));
+                View playerView = new RemoteView(model, keys.get(i), connection);
                 model.addSubscriber(playerView);
                 playerView.addSubscriber(controller);
                 playersConnections.add(connection);
@@ -85,10 +88,6 @@ public class Server {
                 }
             }
         }
-    }
-
-    public Server() throws IOException {
-        this.serverSocket = new ServerSocket(PORT);
     }
 
     public void runServer() {

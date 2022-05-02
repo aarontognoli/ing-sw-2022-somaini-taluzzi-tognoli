@@ -3,7 +3,7 @@ package it.polimi.ingsw.mvc.view;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
-import it.polimi.ingsw.notifier.Subscriber;
+import it.polimi.ingsw.server.ClientConnection;
 
 /**
  * The RemoteView class gets updates from the model, as the base View, and
@@ -15,15 +15,17 @@ import it.polimi.ingsw.notifier.Subscriber;
 public class RemoteView extends View {
 
     private final String username;
+    private final ClientConnection connection;
 
-    public RemoteView(Notifier<Model> modelNotifier, String username) {
+    public RemoteView(Notifier<Model> modelNotifier, String username, ClientConnection connection) {
         super(modelNotifier);
 
         this.username = username;
+        this.connection = connection;
     }
 
     public void sendErrorMessage(String error) {
-        // TODO: Send error message to the client
+        connection.asyncSend(error);
     }
 
     /**
@@ -31,20 +33,15 @@ public class RemoteView extends View {
      * @implNote Updated username of the message before sending it to the ServerController,
      * so that it can know who did this move
      */
-    private void redirectMessageToController(Message message) {
+    public void redirectMessageToController(Message message) {
         message.setUsername(username);
         message.setRemoteView(this);
         notifySubscribers(message);
     }
 
-    public void receiveClientCommunication(Message m) {
-        //TODO trasformo o in un Message, controlli su o...
-    }
-
     @Override
     public void subscribeNotification(Model newValue) {
         super.subscribeNotification(newValue);
-
-        // TODO: Using client connection, send the new value to the client
+        connection.asyncSend(newValue);
     }
 }
