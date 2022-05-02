@@ -25,7 +25,7 @@ public class SocketClientConnection implements ClientConnection, Runnable {
         this.server = server;
     }
 
-    public void redirectToRemoteView(Object message) throws ObjectIsNotMessageException {
+    private void redirectToRemoteView(Object message) throws ObjectIsNotMessageException {
         if (!(message instanceof Message)) {
             throw new ObjectIsNotMessageException();
         } else {
