@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.mvc.model.Model;
 
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class Client {
     private final String ip;
@@ -44,11 +46,16 @@ public class Client {
         return t;
     }
 
-    public Thread asyncWriteToSocket(ObjectOutputStream socketOut) {
+    // TODO GUI?
+    public Thread asyncWriteToSocket(Scanner stdin, ObjectOutputStream socketOut) {
         Thread t = new Thread(() -> {
             try {
                 while (isActive()) {
-                    // TODO once views are implemented: I receive a Message and i sent it to the server
+                    String inputLine = stdin.nextLine();
+                    Message message = null;
+                    // TODO create message and send it to server
+                    socketOut.writeObject(message);
+                    socketOut.flush();
                 }
             } catch (Exception e) {
                 setActive(false);
@@ -63,14 +70,16 @@ public class Client {
         System.out.println("Connection established");
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
         ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
+        Scanner stdin = new Scanner(System.in);
         try {
             Thread t0 = asyncReadFromSocket(socketIn);
-            Thread t1 = asyncWriteToSocket(socketOut);
+            Thread t1 = asyncWriteToSocket(stdin, socketOut);
             t0.join();
             t1.join();
         } catch (InterruptedException | NoSuchElementException e) {
             System.out.println("Connection closed from the client side");
         } finally {
+            stdin.close();
             socketIn.close();
             socketOut.close();
             socket.close();
