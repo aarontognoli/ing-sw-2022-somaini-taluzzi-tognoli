@@ -1,9 +1,9 @@
-package it.polimi.ingsw.messages;
+package it.polimi.ingsw.messages.game;
 
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.mvc.controller.ServerController;
 
-public class PlayAssistantMessage extends Message {
+public class PlayAssistantMessage extends GameMessage {
 
     final private AssistantCard assistantCard;
 

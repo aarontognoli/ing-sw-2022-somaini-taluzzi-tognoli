@@ -4,6 +4,7 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
 import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.messages.game.GameMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -26,10 +27,10 @@ public class SocketClientConnection implements ClientConnection, Runnable {
     }
 
     private void redirectToRemoteView(Object message) throws ObjectIsNotMessageException {
-        if (!(message instanceof Message)) {
+        if (!(message instanceof GameMessage)) {
             throw new ObjectIsNotMessageException();
         } else {
-            ((Message) message).getRemoteView().redirectMessageToController((Message) message);
+            ((GameMessage) message).getRemoteView().redirectMessageToController((Message) message);
         }
     }
 

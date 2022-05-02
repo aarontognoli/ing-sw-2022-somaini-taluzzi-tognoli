@@ -5,6 +5,7 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.exceptions.WrongActionException;
 import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.mvc.PlayerActions;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.server.gameMessage;
@@ -23,20 +24,25 @@ public class ServerController extends Controller implements PlayerActions {
 
     @Override
     public void subscribeNotification(Message message) {
+
+        if (!(message instanceof GameMessage gameMsg)) {
+            throw new RuntimeException("How did a wrong message get to the controller?");
+        }
+
         if (model.publicModel.getWinner() != null) {
-            message.getRemoteView().sendErrorMessage(gameMessage.playerAlreadyWonMessage + model.publicModel.getWinner().getNickname());
+            gameMsg.getRemoteView().sendErrorMessage(gameMessage.playerAlreadyWonMessage + model.publicModel.getWinner().getNickname());
             return;
         }
-        if (!message.getUsername().equals(model.publicModel.getCurrentPlayer().getNickname())) {
-            message.getRemoteView().sendErrorMessage(gameMessage.wrongTurnMessage);
+        if (!gameMsg.getUsername().equals(model.publicModel.getCurrentPlayer().getNickname())) {
+            gameMsg.getRemoteView().sendErrorMessage(gameMessage.wrongTurnMessage);
             return;
         }
         try {
             synchronized (this) {
-                message.controllerCallback(this);
+                gameMsg.controllerCallback(this);
             }
         } catch (Exception e) {
-            message.getRemoteView().sendErrorMessage(e.getMessage());
+            gameMsg.getRemoteView().sendErrorMessage(e.getMessage());
         }
 
         // here the model notifies the remote views with its new state

@@ -1,8 +1,8 @@
-package it.polimi.ingsw.messages;
+package it.polimi.ingsw.messages.game;
 
 import it.polimi.ingsw.mvc.controller.ServerController;
 
-public class MoveMotherNatureMessage extends Message {
+public class MoveMotherNatureMessage extends GameMessage {
     private final int steps;
 
     public MoveMotherNatureMessage(int steps) {
