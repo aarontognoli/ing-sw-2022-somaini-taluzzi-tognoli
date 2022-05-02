@@ -18,7 +18,7 @@ import it.polimi.ingsw.player.Player;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -165,16 +165,52 @@ public class PublicModelTest {
     }
 
     public static Model twoPlayersBasicSetup() {
-        Map<String, DeckName> temp = new HashMap<>();
-        temp.put("Player1", DeckName.DESERT_KING);
+        Map<String, DeckName> temp = new LinkedHashMap<>();
         temp.put("Player0", DeckName.CLOUD_WITCH);
+        temp.put("Player1", DeckName.DESERT_KING);
+
+        return createModel(temp, GameMode.EASY_MODE);
+    }
+
+    public static Model threePlayersBasicSetup() {
+        Map<String, DeckName> temp = new LinkedHashMap<>();
+        temp.put("Player0", DeckName.CLOUD_WITCH);
+        temp.put("Player1", DeckName.DESERT_KING);
+        temp.put("Player2", DeckName.FOREST_MAGE);
+
+        return createModel(temp, GameMode.EASY_MODE);
+    }
+
+    public static Model fourPlayersBasicSetup() {
+        Map<String, DeckName> temp = new LinkedHashMap<>();
+        temp.put("Player0", DeckName.MOUNTAIN_SAGE);
+        temp.put("Player1", DeckName.FOREST_MAGE);
+        temp.put("Player2", DeckName.DESERT_KING);
+        temp.put("Player3", DeckName.CLOUD_WITCH);
         return createModel(temp, GameMode.EASY_MODE);
     }
 
     public static Model twoPlayersExpertMode() {
-        Map<String, DeckName> temp = new HashMap<>();
+        Map<String, DeckName> temp = new LinkedHashMap<>();
+        temp.put("Player0", DeckName.DESERT_KING);
+        temp.put("Player1", DeckName.CLOUD_WITCH);
+        return createModel(temp, GameMode.EXPERT_MODE);
+    }
+
+    public static Model threePlayersExpertMode() {
+        Map<String, DeckName> temp = new LinkedHashMap<>();
+        temp.put("Player0", DeckName.FOREST_MAGE);
         temp.put("Player1", DeckName.DESERT_KING);
-        temp.put("Player0", DeckName.CLOUD_WITCH);
+        temp.put("Player2", DeckName.CLOUD_WITCH);
+        return createModel(temp, GameMode.EXPERT_MODE);
+    }
+
+    public static Model fourPlayersExpertMode() {
+        Map<String, DeckName> temp = new LinkedHashMap<>();
+        temp.put("Player0", DeckName.MOUNTAIN_SAGE);
+        temp.put("Player1", DeckName.FOREST_MAGE);
+        temp.put("Player2", DeckName.DESERT_KING);
+        temp.put("Player3", DeckName.CLOUD_WITCH);
         return createModel(temp, GameMode.EXPERT_MODE);
     }
 
@@ -213,6 +249,10 @@ public class PublicModelTest {
         } catch (BoardNotInGameException e) {
             return null;
         }
+    }
+
+    public static List<Player> getPlayers(Model fatherModel) {
+        return fatherModel.players;
     }
 
     @Test
