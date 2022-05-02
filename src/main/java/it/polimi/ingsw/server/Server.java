@@ -48,33 +48,41 @@ public class Server {
     //Wait for players
     public synchronized void lobby(ClientConnection c, String nickname) {
         waitingConnection.put(nickname, c);
-        if (numberOfPlayers == 2 && waitingConnection.size() == 2) {
-            List<String> keys = new ArrayList<>(waitingConnection.keySet());
-            ClientConnection c1 = waitingConnection.get(keys.get(0));
-            ClientConnection c2 = waitingConnection.get(keys.get(1));
-            Player player1 = new Player(keys.get(0), TowerColor.BLACK, nicknamesAndDecks.get(keys.get(0)), 8);
-            Player player2 = new Player(keys.get(1), TowerColor.WHITE, nicknamesAndDecks.get(keys.get(1)), 8);
+        if (numberOfPlayers == waitingConnection.size()) {
             Model model = new Model(motherNatureStartingPosition, nicknamesAndDecks, gameMode);
-            View player1View = new RemoteView(model, keys.get(0));
-            View player2View = new RemoteView(model, keys.get(1));
             Controller controller = new ServerController(model);
-            model.addSubscriber(player1View);
-            model.addSubscriber(player2View);
-            player1View.addSubscriber(controller);
-            player2View.addSubscriber(controller);
-            playersConnections.add(c1);
-            playersConnections.add(c2);
-            waitingConnection.clear();
 
-            c1.asyncSend(model);
-            c2.asyncSend(model);
+            List<String> keys = new ArrayList<>(waitingConnection.keySet());
+            int numberOfTowers;
+            if (numberOfPlayers == 3) {
+                numberOfTowers = 6;
+            }
+            else {
+                numberOfTowers = 8;
+            }
+            // with this implementation the order of the players and the 2 teams (with 4 players) are casual
+            for (int i = 0; i < keys.size(); i++) {
+                ClientConnection connection = waitingConnection.get(keys.get(i));
+                if (numberOfPlayers == 4) {
+                    connection.asyncSend("You are in team with " + keys.get((i + 2) % 4));
+                    if (i % 2 == 1){
+                        numberOfTowers = 0;
+                    }
+                }
+                Player player = new Player(keys.get(i), TowerColor.values()[i], nicknamesAndDecks.get(keys.get(0)), numberOfTowers);
+                View playerView = new RemoteView(model, keys.get(i));
+                model.addSubscriber(playerView);
+                playerView.addSubscriber(controller);
+                playersConnections.add(connection);
+                waitingConnection.clear();
 
-            if (model.publicModel.getCurrentPlayer().equals(player1)) {
-                c1.asyncSend(gameMessage.assistantCardMessage);
-                c2.asyncSend(gameMessage.waitMessage);
-            } else {
-                c2.asyncSend(gameMessage.assistantCardMessage);
-                c1.asyncSend(gameMessage.waitMessage);
+                connection.asyncSend(model);
+
+                if (model.publicModel.getCurrentPlayer().equals(player)) {
+                    connection.asyncSend(gameMessage.assistantCardMessage);
+                } else {
+                    connection.asyncSend(gameMessage.waitMessage);
+                }
             }
         }
     }

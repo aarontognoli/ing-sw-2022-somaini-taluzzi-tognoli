@@ -2,9 +2,12 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
+import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.mvc.view.RemoteView;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.Remote;
@@ -29,8 +32,12 @@ public class SocketClientConnection implements ClientConnection, Runnable {
         this.remoteView = remoteView;
     }
 
-    public void redirectToRemoteView(Object o) {
-        remoteView.receiveClientCommunication(o);
+    public void redirectToRemoteView(Object message) throws ObjectIsNotMessageException {
+        if (!(message instanceof Message)) {
+            throw new ObjectIsNotMessageException();
+        } else {
+            remoteView.receiveClientCommunication((Message) message);
+        }
     }
 
 
@@ -72,7 +79,7 @@ public class SocketClientConnection implements ClientConnection, Runnable {
 
     @Override
     public void run() {
-        Scanner in; //valid for the CLI, TODO GUI...
+        Scanner in;
         String read;
         String name;
         DeckName deckName = null;
@@ -190,12 +197,15 @@ public class SocketClientConnection implements ClientConnection, Runnable {
 
             server.lobby(this, name);
 
+            //now the player should only send objects of class Message
+            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+            Object o;
             while(isActive()){
-                read = in.nextLine();
-                redirectToRemoteView(read);
+                o = inputStream.readObject();
+                redirectToRemoteView(o);
             }
 
-        } catch (IOException | NoSuchElementException e) {
+        } catch (IOException | NoSuchElementException | ClassNotFoundException | ObjectIsNotMessageException e) {
             System.err.println("Error!" + e.getMessage());
         } finally {
             close();

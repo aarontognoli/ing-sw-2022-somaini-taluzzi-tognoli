@@ -37,7 +37,7 @@ public class RemoteView extends View {
         notifySubscribers(message);
     }
 
-    public void receiveClientCommunication(Object o) {
+    public void receiveClientCommunication(Message m) {
         //TODO trasformo o in un Message, controlli su o...
     }
 
