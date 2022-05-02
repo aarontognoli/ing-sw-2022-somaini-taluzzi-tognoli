@@ -121,7 +121,7 @@ public class SocketClientConnection implements ClientConnection, Runnable {
                     synchronized (server.nicknamesAndDecks) {
                         for (DeckName d : server.nicknamesAndDecks.values()) {
                             if (d.equals(deckName)) {
-                                send("This nickname was already chosen. Choose another one!");
+                                send("This deck name was already chosen. Choose another one!");
                                 valid = false;
                                 break;
                             }

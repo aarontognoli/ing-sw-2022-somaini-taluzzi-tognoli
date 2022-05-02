@@ -5,8 +5,6 @@ import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
-import it.polimi.ingsw.messages.Message;
-import it.polimi.ingsw.mvc.view.View;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.pawn.MotherNature;
 import it.polimi.ingsw.pawn.Professor;
@@ -86,7 +84,11 @@ public class Model extends Notifier<Model> {
             professors.add(c.ordinal(), new Professor(c));
         }
 
-        privateModel.placeMotherNature(motherNatureStartingPosition);
+        try {
+            privateModel.placeMotherNature(motherNatureStartingPosition);
+        }catch (Exception e) {
+            throw new RuntimeException("How is it possible that that mother nature was already chosen ?");
+        }
 
         int towerColorIndex = 0;
         totalPlayerCount = nicknamesAndDecks.size();
@@ -118,6 +120,8 @@ public class Model extends Notifier<Model> {
                     towerColorIndex++;
                 }
                 break;
+            default:
+                throw new IllegalArgumentException("Illegal number of Players");
         }
 
         // Initialize InfluenceCalculator
