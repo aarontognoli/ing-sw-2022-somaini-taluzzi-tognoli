@@ -280,4 +280,8 @@ public class PublicModel implements PlayerActions {
     public Player getWinner() {
         return fatherModel.winner;
     }
+
+    public GamePhase getGamePhase() {
+        return fatherModel.gamePhase;
+    }
 }
