@@ -37,16 +37,19 @@ public class ServerController extends Controller implements PlayerActions {
             gameMsg.getRemoteView().sendErrorMessage(gameMessage.wrongTurnMessage);
             return;
         }
-        try {
-            synchronized (this) {
+
+        synchronized (this) {
+            try {
                 gameMsg.controllerCallback(this);
+                // here the model notifies the remote views with its new state
+                model.notifySubscribers(model);
+
+            } catch (Exception e) {
+                gameMsg.getRemoteView().sendErrorMessage(e.getMessage());
             }
-        } catch (Exception e) {
-            gameMsg.getRemoteView().sendErrorMessage(e.getMessage());
         }
 
-        // here the model notifies the remote views with its new state
-        model.notifySubscribers(model);
+
     }
 
     // TODO: Check for exceptions and turn order
