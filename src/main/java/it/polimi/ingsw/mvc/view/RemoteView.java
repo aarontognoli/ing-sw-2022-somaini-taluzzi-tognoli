@@ -1,5 +1,6 @@
 package it.polimi.ingsw.mvc.view;
 
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.mvc.model.Model;
@@ -26,7 +27,8 @@ public class RemoteView extends View {
     }
 
     public void sendErrorMessage(String error) {
-        connection.asyncSend(error);
+
+        connection.asyncSend(new ErrorMessage(error));
     }
 
     /**
