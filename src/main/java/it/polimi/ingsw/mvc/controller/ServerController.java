@@ -16,9 +16,29 @@ import it.polimi.ingsw.server.gameMessage;
 public class ServerController extends Controller implements PlayerActions {
 
     private final Model model;
+    //Turn actions checks
+    //Move in dedicated class(?)
+    Boolean characterCardPlayed;
+    Boolean motherNatureMoved;
+    int studentsPlaced;
 
     public ServerController(Model model) {
         this.model = model;
+        resetChecks();
+    }
+
+    void resetChecks() {
+        characterCardPlayed = false;
+        studentsPlaced = 0;
+        motherNatureMoved = false;
+    }
+
+    Boolean enoughStudentsPlaced() {
+        int maxStudentsToMove = 3;
+        if (model.publicModel.getTotalPlayerCount() == 3) {
+            maxStudentsToMove = 4;
+        }
+        return studentsPlaced >= maxStudentsToMove;
     }
 
     @Override
@@ -58,8 +78,15 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
+        if (!enoughStudentsPlaced()) {
+            throw new WrongActionException(gameMessage.notEnoughStudentsAlreadyPlaced);
+        }
+        if (!motherNatureMoved) {
+            throw new WrongActionException(gameMessage.motherNatureNotMovedMessage);
+        }
         model.publicModel.drawStudentsIntoEntrance(cloudIndex);
         model.publicModel.endTurn();
+        resetChecks();
     }
 
     @Override
@@ -67,8 +94,12 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
+        if (!enoughStudentsPlaced()) {
+            throw new WrongActionException(gameMessage.notEnoughStudentsAlreadyPlaced);
+        }
         model.publicModel.moveMotherNature(steps);
         model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
+        motherNatureMoved = true;
     }
 
     @Override
@@ -76,7 +107,11 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
+        if (enoughStudentsPlaced()) {
+            throw new WrongActionException(gameMessage.maxStudentsAlreadyPlacedMessage);
+        }
         model.publicModel.moveStudentToIsland(studentColor, islandIndex);
+        studentsPlaced++;
     }
 
     @Override
@@ -84,7 +119,11 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
+        if (enoughStudentsPlaced()) {
+            throw new WrongActionException(gameMessage.maxStudentsAlreadyPlacedMessage);
+        }
         model.publicModel.moveStudentToDiningRoom(studentColor);
+        studentsPlaced++;
     }
 
     @Override
@@ -92,6 +131,10 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
+        if (characterCardPlayed) {
+            throw new WrongActionException(gameMessage.characterCardAlreadyPlayedMessage);
+        }
         model.publicModel.playCharacterCard(cardIndex, effectArgument);
+        characterCardPlayed = true;
     }
 }
