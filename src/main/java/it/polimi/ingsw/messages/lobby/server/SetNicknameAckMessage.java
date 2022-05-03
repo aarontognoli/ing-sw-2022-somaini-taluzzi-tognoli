@@ -1,8 +1,6 @@
 package it.polimi.ingsw.messages.lobby.server;
 
-import it.polimi.ingsw.messages.lobby.LobbyMessage;
-
-public class SetNicknameAckMessage extends LobbyMessage {
+public class SetNicknameAckMessage extends ServerLobbyMessage {
     final private boolean isUsed;
 
 
