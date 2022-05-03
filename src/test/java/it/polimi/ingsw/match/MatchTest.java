@@ -61,7 +61,7 @@ public class MatchTest {
     @Test
     public void twoPlayersEasyMatchTest() {
         System.out.println("---------------- Two Players Easy Match -----------------");
-        Model model = twoPlayersBasicSetup();
+        Model model = twoPlayersTestAllRed();
 
         Player p0 = getPlayers(model).get(0);
 
@@ -86,22 +86,23 @@ public class MatchTest {
             assertEquals(p0, model.publicModel.getCurrentPlayer());
 
             int i = 0;
-            for (Color c : Color.values()) {
-                while (i < 3) {
+
+            while (i < 3) {
+                try {
+                    model.publicModel.moveStudentToDiningRoom(Color.RED_DRAGONS);
+                    i++;
+                } catch (NotFoundException e) {
+                    assert false;
+                } catch (DiningRoomFullException e) {
                     try {
-                        model.publicModel.moveStudentToDiningRoom(c);
+                        model.publicModel.moveStudentToIsland(Color.RED_DRAGONS, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % getIslands(model).size());
                         i++;
-                    } catch (NotFoundException e) {
-                        break;
-                    } catch (DiningRoomFullException e) {
-                        try {
-                            model.publicModel.moveStudentToIsland(c, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % getIslands(model).size());
-                        } catch (NotFoundException ecc) {
-                            break;
-                        }
+                    } catch (NotFoundException ecc) {
+                        assert false;
                     }
                 }
             }
+
             assertEquals(3, i);
             assertDoesNotThrow(() -> model.publicModel.drawStudentsIntoEntrance(0));
             assertThrows(TooMuchStepsException.class, () -> model.publicModel.moveMotherNature(10));
@@ -165,7 +166,7 @@ public class MatchTest {
     @Test
     public void fourPlayersEasyMatchTest() {
         System.out.println("---------------- Four Players Easy Match -----------------");
-        Model model = fourPlayersBasicSetup();
+        Model model = fourPlayersTestAllRed();
 
         Player p0 = getPlayers(model).get(0);
 
@@ -355,7 +356,7 @@ public class MatchTest {
     @Test
     public void threePlayersEasyMatchTest() {
         System.out.println("---------------- Three Players Easy Match -----------------");
-        Model model = threePlayersBasicSetup();
+        Model model = threePlayersTestAllRed();
 
         Player p0 = getPlayers(model).get(0);
 

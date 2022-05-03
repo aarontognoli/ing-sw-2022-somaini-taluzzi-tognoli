@@ -32,6 +32,7 @@ public class Bag {
         Collections.shuffle(students);
     }
 
+
     public Student draw() throws BagEmptyException {
         if (isEmpty())
             throw new BagEmptyException();
@@ -55,5 +56,15 @@ public class Bag {
 
     public boolean isEmpty() {
         return students.size() == 0;
+    }
+
+    //only for testing
+    public Bag BagForTestingAllRed(int howMany) {
+        students.clear();
+        for (int j = 0; j < howMany; j++) {
+            students.add(new Student(Color.RED_DRAGONS, incremental_id));
+            incremental_id++;
+        }
+        return this;
     }
 }
