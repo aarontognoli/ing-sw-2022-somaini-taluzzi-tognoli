@@ -105,8 +105,13 @@ public class SocketClientConnection implements Runnable {
         return message;
     }
 
-    private UsernameInUse tryAddUsername(String newUsername) {
+    private UsernameInUse tryAddUsername(String newUsername) throws IOException {
         synchronized (server.nicknamesAndDecks) {
+            // If this is not the first player to enter the lobby, wait for the game options to be defined
+            if (server.nicknamesAndDecks.size() != 0) {
+                server.currentLobby.waitForGameOptions(server);
+            }
+
             for (String n : server.nicknamesAndDecks.keySet()) {
                 if (n.equals(newUsername)) {
                     return new UsernameInUse(true, false);
