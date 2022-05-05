@@ -61,7 +61,7 @@ public class MatchTest {
     @Test
     public void twoPlayersEasyMatchTest() {
         System.out.println("---------------- Two Players Easy Match -----------------");
-        Model model = twoPlayersBasicSetup();
+        Model model = twoPlayersTestAllRed();
 
         Player p0 = getPlayers(model).get(0);
 
@@ -86,22 +86,23 @@ public class MatchTest {
             assertEquals(p0, model.publicModel.getCurrentPlayer());
 
             int i = 0;
-            for (Color c : Color.values()) {
-                while (i < 3) {
+
+            while (i < 3) {
+                try {
+                    model.publicModel.moveStudentToDiningRoom(Color.RED_DRAGONS);
+                    i++;
+                } catch (NotFoundException e) {
+                    assert false;
+                } catch (DiningRoomFullException e) {
                     try {
-                        model.publicModel.moveStudentToDiningRoom(c);
+                        model.publicModel.moveStudentToIsland(Color.RED_DRAGONS, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % getIslands(model).size());
                         i++;
-                    } catch (NotFoundException e) {
-                        break;
-                    } catch (DiningRoomFullException e) {
-                        try {
-                            model.publicModel.moveStudentToIsland(c, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % getIslands(model).size());
-                        } catch (NotFoundException ecc) {
-                            break;
-                        }
+                    } catch (NotFoundException ecc) {
+                        assert false;
                     }
                 }
             }
+
             assertEquals(3, i);
             assertDoesNotThrow(() -> model.publicModel.drawStudentsIntoEntrance(0));
             assertThrows(TooMuchStepsException.class, () -> model.publicModel.moveMotherNature(10));
@@ -165,7 +166,7 @@ public class MatchTest {
     @Test
     public void fourPlayersEasyMatchTest() {
         System.out.println("---------------- Four Players Easy Match -----------------");
-        Model model = fourPlayersBasicSetup();
+        Model model = fourPlayersTestAllRed();
 
         Player p0 = getPlayers(model).get(0);
 
@@ -233,21 +234,15 @@ public class MatchTest {
 
             //P3 Turn
             assertEquals(p3, model.publicModel.getCurrentPlayer());
-            i = 0;
 
+            i = 0;
             for (Color c : Color.values()) {
                 while (i < 3) {
                     try {
-                        model.publicModel.moveStudentToDiningRoom(c);
+                        model.publicModel.moveStudentToIsland(c, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % (getIslands(model).size()));
                         i++;
                     } catch (NotFoundException e) {
                         break;
-                    } catch (DiningRoomFullException e) {
-                        try {
-                            model.publicModel.moveStudentToIsland(c, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % getIslands(model).size());
-                        } catch (NotFoundException ecc) {
-                            break;
-                        }
                     }
                 }
             }
@@ -339,6 +334,177 @@ public class MatchTest {
 
     }
 
+    @Test
+    public void fourPlayersEasyMatchTestSecondTeamWinning() {
+        System.out.println("---------------- Four Players Easy Match -----------------");
+        Model model = fourPlayersTestAllRed();
+
+        Player p0 = getPlayers(model).get(0);
+
+        Player p1 = getPlayers(model).get(1);
+
+        Player p2 = getPlayers(model).get(2);
+
+        Player p3 = getPlayers(model).get(3);
+
+
+        int turn = 0;
+
+        do {
+
+            System.out.println("--------- TURN" + (++turn) + " ------------");
+            writeTable(model);
+            for (int i = 0; i < 4; i++) {
+                if (model.publicModel.getCurrentPlayer().equals(p3)) {
+                    AssistantCard card2 = AssistantCard.values()[(turn - 1) % 10];
+                    assertDoesNotThrow(() -> model.publicModel.playAssistant(card2));
+                } else if (model.publicModel.getCurrentPlayer().equals(p1)) {
+                    AssistantCard card = AssistantCard.values()[(turn) % 10];
+                    assertDoesNotThrow(() -> model.publicModel.playAssistant(card));
+
+                } else if (model.publicModel.getCurrentPlayer().equals(p2)) {
+                    AssistantCard card1 = AssistantCard.values()[(turn + 1) % 10];
+                    assertDoesNotThrow(() -> model.publicModel.playAssistant(card1));
+                } else {
+                    AssistantCard card1 = AssistantCard.values()[(turn + 2) % 10];
+                    assertDoesNotThrow(() -> model.publicModel.playAssistant(card1));
+                }
+                model.publicModel.endTurn();
+            }
+
+
+            assertEquals(p3, model.publicModel.getCurrentPlayer());
+            //P3 TURN
+            int i = 0;
+            for (Color c : Color.values()) {
+                while (i < 3) {
+                    try {
+                        model.publicModel.moveStudentToDiningRoom(c);
+                        i++;
+                    } catch (NotFoundException e) {
+                        break;
+                    } catch (DiningRoomFullException e) {
+                        try {
+                            model.publicModel.moveStudentToIsland(c, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % getIslands(model).size());
+                        } catch (NotFoundException ecc) {
+                            break;
+                        }
+                    }
+                }
+            }
+            assertEquals(3, i);
+            assertDoesNotThrow(() -> model.publicModel.drawStudentsIntoEntrance(0));
+            assertThrows(TooMuchStepsException.class, () -> model.publicModel.moveMotherNature(10));
+            assertDoesNotThrow(() -> model.publicModel.moveMotherNature(1));
+            model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
+            if (model.publicModel.getWinner() != null)
+                break;
+
+            writePlayerDiningRoom(p0, model);
+            model.publicModel.endTurn();
+
+            //P1 Turn
+            assertEquals(p1, model.publicModel.getCurrentPlayer());
+
+            i = 0;
+            for (Color c : Color.values()) {
+                while (i < 3) {
+                    try {
+                        model.publicModel.moveStudentToIsland(c, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % (getIslands(model).size()));
+                        i++;
+                    } catch (NotFoundException e) {
+                        break;
+                    }
+                }
+            }
+            assertEquals(3, i);
+
+            assertThrows(CloudEmptyException.class, () -> model.publicModel.drawStudentsIntoEntrance(0));
+
+            assertDoesNotThrow(() -> model.publicModel.drawStudentsIntoEntrance(1));
+            assertThrows(TooMuchStepsException.class, () -> model.publicModel.moveMotherNature(10));
+            assertDoesNotThrow(() -> model.publicModel.moveMotherNature(1));
+            model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
+            if (model.publicModel.getWinner() != null)
+                break;
+
+            writePlayerDiningRoom(p3, model);
+            model.publicModel.endTurn();
+
+
+            //P2 Turn
+            assertEquals(p2, model.publicModel.getCurrentPlayer());
+
+            i = 0;
+            for (Color c : Color.values()) {
+                while (i < 3) {
+                    try {
+                        model.publicModel.moveStudentToIsland(c, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % (getIslands(model).size()));
+                        i++;
+                    } catch (NotFoundException e) {
+                        break;
+                    }
+                }
+            }
+            assertEquals(3, i);
+            assertDoesNotThrow(() -> model.publicModel.moveMotherNature(1));
+            model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
+
+            writeTable(model);
+            if (model.publicModel.getWinner() != null)
+                break;
+            assertThrows(CloudEmptyException.class, () -> model.publicModel.drawStudentsIntoEntrance(0));
+            assertThrows(CloudEmptyException.class, () -> model.publicModel.drawStudentsIntoEntrance(1));
+            assertDoesNotThrow(() -> model.publicModel.drawStudentsIntoEntrance(2));
+            model.publicModel.endTurn();
+
+            //P0 Turn
+            assertEquals(p0, model.publicModel.getCurrentPlayer());
+
+            i = 0;
+            for (Color c : Color.values()) {
+                while (i < 3) {
+                    try {
+                        model.publicModel.moveStudentToIsland(c, (getIslands(model).indexOf(model.publicModel.getMotherNatureIsland()) + 1) % (getIslands(model).size()));
+                        i++;
+                    } catch (NotFoundException e) {
+                        break;
+                    }
+                }
+            }
+            assertEquals(3, i);
+            assertDoesNotThrow(() -> model.publicModel.moveMotherNature(1));
+            model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
+
+            writeTable(model);
+            if (model.publicModel.getWinner() != null)
+                break;
+            assertThrows(CloudEmptyException.class, () -> model.publicModel.drawStudentsIntoEntrance(0));
+            assertThrows(CloudEmptyException.class, () -> model.publicModel.drawStudentsIntoEntrance(1));
+            assertThrows(CloudEmptyException.class, () -> model.publicModel.drawStudentsIntoEntrance(2));
+            assertDoesNotThrow(() -> model.publicModel.drawStudentsIntoEntrance(3));
+            model.publicModel.endTurn();
+
+
+            if (model.publicModel.getWinner() != null)
+                break;
+            assertEquals(p3, model.publicModel.getCurrentPlayer());
+
+
+        } while (true);
+        Player win = null;
+        if (p0.getBoard().getTowers().size() == 0) {
+            assertNotEquals(0, p2.getBoard().getTowers().size());
+            win = p0;
+        } else {
+            win = p2;
+        }
+        System.out.println(win.getNickname() + " WINS");
+        assertEquals(win, model.publicModel.getWinner());
+
+
+    }
+
     /*
      *   Create threePlayersEasyMatch
      *   p1 plays a card so that they play first then p2 then p0
@@ -355,7 +521,7 @@ public class MatchTest {
     @Test
     public void threePlayersEasyMatchTest() {
         System.out.println("---------------- Three Players Easy Match -----------------");
-        Model model = threePlayersBasicSetup();
+        Model model = threePlayersTestAllRed();
 
         Player p0 = getPlayers(model).get(0);
 

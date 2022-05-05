@@ -9,12 +9,12 @@ import java.util.List;
 
 
 public class Bag {
-    static private int incremental_id = 0;
+    static int incremental_id = 0;
 
     static final private int COLORS_COUNT = Color.values().length;
     static final private Color[] COLORS_BY_INDEX = Color.values();
 
-    final private List<Student> students;
+    final List<Student> students;
 
     public Bag(int studentsCountPerColor) {
         students = new ArrayList<>(COLORS_COUNT * studentsCountPerColor);
@@ -31,6 +31,7 @@ public class Bag {
 
         Collections.shuffle(students);
     }
+
 
     public Student draw() throws BagEmptyException {
         if (isEmpty())
