@@ -4,7 +4,7 @@ import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
-import it.polimi.ingsw.server.ClientConnection;
+import it.polimi.ingsw.server.SocketClientConnection;
 
 /**
  * The RemoteView class gets updates from the model, as the base View, and
@@ -16,9 +16,9 @@ import it.polimi.ingsw.server.ClientConnection;
 public class RemoteView extends View {
 
     private final String username;
-    private final ClientConnection connection;
+    private final SocketClientConnection connection;
 
-    public RemoteView(Notifier<Model> modelNotifier, String username, ClientConnection connection) {
+    public RemoteView(Notifier<Model> modelNotifier, String username, SocketClientConnection connection) {
         super(modelNotifier);
 
         this.username = username;

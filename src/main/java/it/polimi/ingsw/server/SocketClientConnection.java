@@ -11,19 +11,22 @@ import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.server.SetDeckAckMessage;
 import it.polimi.ingsw.messages.lobby.server.SetGameOptionsAckMessage;
 import it.polimi.ingsw.messages.lobby.server.SetNicknameAckMessage;
+import it.polimi.ingsw.mvc.view.RemoteView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class SocketClientConnection implements ClientConnection, Runnable {
+public class SocketClientConnection implements Runnable {
 
     private final Socket socket;
     private final Server server;
     private final ObjectInputStream socketIn;
     private final ObjectOutputStream socketOut;
     private boolean active = true;
+
+    private RemoteView remoteView;
 
     public SocketClientConnection(Socket socket, Server server) throws IOException {
         this.socket = socket;
@@ -37,7 +40,7 @@ public class SocketClientConnection implements ClientConnection, Runnable {
             throw new ObjectIsNotMessageException();
         }
 
-        gameMsg.getRemoteView().redirectMessageToController(gameMsg);
+        remoteView.redirectMessageToController(gameMsg);
     }
 
     private synchronized boolean isActive() {
@@ -133,9 +136,7 @@ public class SocketClientConnection implements ClientConnection, Runnable {
                 gameOptions.getMotherNatureIslandIndex() >= 12
         ) return false;
 
-        server.motherNatureStartingPosition = gameOptions.getMotherNatureIslandIndex();
-        server.numberOfPlayers = gameOptions.getPlayerCount();
-        server.gameMode = gameOptions.getGameMode();
+        server.currentLobby.setGameOptions(gameOptions);
 
         return true;
     }
@@ -204,6 +205,10 @@ public class SocketClientConnection implements ClientConnection, Runnable {
                 return;
             }
         }
+    }
+
+    public void setRemoteView(RemoteView remoteView) {
+        this.remoteView = remoteView;
     }
 
     private record UsernameInUse(boolean isInUse, boolean isFirstPlayer) {
