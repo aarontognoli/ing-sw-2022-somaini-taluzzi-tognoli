@@ -9,12 +9,12 @@ import java.util.List;
 
 
 public class Bag {
-    static private int incremental_id = 0;
+    static int incremental_id = 0;
 
     static final private int COLORS_COUNT = Color.values().length;
     static final private Color[] COLORS_BY_INDEX = Color.values();
 
-    final private List<Student> students;
+    final List<Student> students;
 
     public Bag(int studentsCountPerColor) {
         students = new ArrayList<>(COLORS_COUNT * studentsCountPerColor);
@@ -56,15 +56,5 @@ public class Bag {
 
     public boolean isEmpty() {
         return students.size() == 0;
-    }
-
-    //only for testing
-    public Bag BagForTestingAllRed(int howMany) {
-        students.clear();
-        for (int j = 0; j < howMany; j++) {
-            students.add(new Student(Color.RED_DRAGONS, incremental_id));
-            incremental_id++;
-        }
-        return this;
     }
 }

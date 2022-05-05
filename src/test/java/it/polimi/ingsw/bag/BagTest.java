@@ -1,12 +1,14 @@
 package it.polimi.ingsw.bag;
 
+import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.pawn.Student;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.bag.Bag.incremental_id;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BagTest {
 
@@ -38,6 +40,14 @@ public class BagTest {
             assert false;
         } catch (BagEmptyException e) {
             // OK, the bag was empty.
+        }
+    }
+
+    public static void fillBagWithRedStudents(Bag bag, int studentsCount) {
+        bag.students.clear();
+        for (int j = 0; j < studentsCount; j++) {
+            bag.students.add(new Student(Color.RED_DRAGONS, incremental_id));
+            incremental_id++;
         }
     }
 }

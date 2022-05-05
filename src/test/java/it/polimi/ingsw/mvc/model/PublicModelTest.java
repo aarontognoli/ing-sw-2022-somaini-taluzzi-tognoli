@@ -2,6 +2,7 @@ package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.bag.Bag;
 import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.bag.BagTest;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
@@ -156,8 +157,7 @@ public class PublicModelTest {
 
     private static Model createModel(Map<String, DeckName> nicknamesAndDecks, GameMode gameMode) {
         try {
-            Model model = new Model(0, nicknamesAndDecks, gameMode);
-            return model;
+            return new Model(0, nicknamesAndDecks, gameMode);
         } catch (Exception e) {
             assert false;
         }
@@ -175,7 +175,7 @@ public class PublicModelTest {
     }
 
     static void makeModelAllRed(Model model) {
-        model.bag = model.bag.BagForTestingAllRed(240);
+        BagTest.fillBagWithRedStudents(model.bag, 240);
         for (Player p : model.players) {
 
             for (int i = 0; i < p.getBoard().getEntrance().size(); i++) {
