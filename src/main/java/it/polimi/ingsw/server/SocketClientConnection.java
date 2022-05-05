@@ -1,24 +1,28 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.enums.DeckName;
-import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.exceptions.BadLobbyMessageException;
 import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
+import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
+import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
+import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
+import it.polimi.ingsw.messages.lobby.server.SetDeckAckMessage;
+import it.polimi.ingsw.messages.lobby.server.SetNicknameAckMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class SocketClientConnection implements ClientConnection, Runnable {
 
     private final Socket socket;
-    private ObjectOutputStream out;
     private final Server server;
-
+    private ObjectInputStream socketIn;
+    private ObjectOutputStream socketOut;
     private boolean active = true;
 
     public SocketClientConnection(Socket socket, Server server) {
@@ -34,16 +38,16 @@ public class SocketClientConnection implements ClientConnection, Runnable {
         }
     }
 
-    private synchronized boolean isActive(){
+    private synchronized boolean isActive() {
         return active;
     }
 
     private synchronized void send(Object message) {
         try {
-            out.reset();
-            out.writeObject(message);
-            out.flush();
-        } catch(IOException e){
+            socketOut.reset();
+            socketOut.writeObject(message);
+            socketOut.flush();
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
 
@@ -66,155 +70,103 @@ public class SocketClientConnection implements ClientConnection, Runnable {
         System.out.println("Game ended");
     }
 
-    public void asyncSend(Object message){
+    public void asyncSend(Object message) {
         new Thread(() -> send(message)).start();
     }
 
+    private SetNicknameMessage waitForUsername() throws BadLobbyMessageException {
+        // TODO: read from socket
+        return null;
+    }
+
+    private SetDeckMessage waitForDeck() throws BadLobbyMessageException {
+        // TODO: read from socket
+        return null;
+    }
+
+    private SetGameOptionsMessage waitForGameOptions() throws BadLobbyMessageException {
+        // TODO: read from socket
+        return null;
+    }
+
+    private UsernameInUse tryAddUsername(String newUsername) {
+        synchronized (server.nicknamesAndDecks) {
+            for (String n : server.nicknamesAndDecks.keySet()) {
+                if (n.equals(newUsername)) {
+                    return new UsernameInUse(true, false);
+                }
+            }
+            server.nicknamesAndDecks.put(newUsername, null);
+            return new UsernameInUse(false, server.nicknamesAndDecks.size() == 1);
+        }
+    }
+
+    private boolean tryAddDeckAndCheckIsUsed(String username, DeckName deckName) {
+        synchronized (server.nicknamesAndDecks) {
+            for (DeckName d : server.nicknamesAndDecks.values()) {
+                if (d.equals(deckName)) {
+                    return true;
+                }
+            }
+            server.nicknamesAndDecks.replace(username, deckName);
+            return false;
+        }
+    }
+
+    private boolean tryAddGameOptionsAndCheckValid(SetGameOptionsMessage gameOptions) {
+        if (gameOptions.getPlayerCount() <= 1 ||
+                gameOptions.getPlayerCount() > 4 ||
+                gameOptions.getMotherNatureIslandIndex() < 0 ||
+                gameOptions.getMotherNatureIslandIndex() >= 12
+        ) return false;
+
+        // TODO: Prepare lobby/model with these options
+
+        return true;
+    }
+
+
     @Override
     public void run() {
-        Scanner in;
-        String read;
-        int numRead = 0;
-        String name;
-        DeckName deckName;
-        boolean valid;
-        boolean firstPlayer = false;
-        try{
-            in = new Scanner(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
-
-            send("Welcome!\nWhat is your name?");
+        try {
+            String username;
+            UsernameInUse usernameInUse;
             do {
-                name = in.nextLine();
-                valid = true;
-                synchronized (server.nicknamesAndDecks) {
-                    for (String n : server.nicknamesAndDecks.keySet()) {
-                        if (n.equals(name)) {
-                            send("This nickname was already chosen. Choose another one!");
-                            valid = false;
-                            break;
-                        }
-                    }
-                    // First player (who gets to choose game mode and number of players)
-                    // is the first who inserts his nickname
-                    if (valid) {
-                        server.nicknamesAndDecks.put(name, null);
-                        if (server.nicknamesAndDecks.size() == 1) {
-                            firstPlayer = true;
-                        }
-                    }
-                }
-            }while(!valid);
+                username = waitForUsername().getNickname();
+                usernameInUse = tryAddUsername(username);
 
-            send("Choose a Deck Name from the following: DESERT_KING, MOUNTAIN_SAGE, CLOUD_WITCH, " +
-                    "FOREST_MAGE. Type 1 for DESERT_KING, 2 for MOUNTAIN_SAGE, 3 for CLOUD_WITCH, " +
-                    "4 for FOREST_MAGE");
+                if (usernameInUse.isInUse) {
+                    send(new SetNicknameAckMessage(true));
+                }
+            } while (usernameInUse.isInUse);
+
+            send(new SetNicknameAckMessage(false));
+
+            DeckName chosenDeck;
+            boolean deckInUse;
             do {
-                read = in.nextLine();
-                valid = true;
-                try {
-                    numRead = Integer.parseInt(read);
-                } catch (NumberFormatException e) {
-                    send("Please select a valid number!");
-                    valid = false;
+                chosenDeck = waitForDeck().getDeckName();
+                deckInUse = tryAddDeckAndCheckIsUsed(username, chosenDeck);
+                if (deckInUse) {
+                    send(new SetDeckAckMessage(false, false));
                 }
-                if (valid) {
-                    if (numRead < 1 || numRead > 4) {
-                        send("Please select a valid number!");
-                        valid = false;
-                    } else {
-                        deckName = DeckName.values()[numRead - 1];
-                        synchronized (server.nicknamesAndDecks) {
-                            for (DeckName d : server.nicknamesAndDecks.values()) {
-                                if (d.equals(deckName)) {
-                                    send("This deck name was already chosen. Choose another one!");
-                                    valid = false;
-                                    break;
-                                }
-                            }
-                            if (valid) {
-                                server.nicknamesAndDecks.replace(name, deckName);
-                            }
-                        }
-                    }
-                }
-            }while(!valid);
+            } while (deckInUse);
 
-            if (firstPlayer) {
-                send("Select the number of players: 2, 3 or 4");
-                do {
-                    read = in.nextLine();
-                    valid = true;
-                    try {
-                        numRead = Integer.parseInt(read);
-                    } catch (NumberFormatException e) {
-                        send("Please select a valid number!");
-                        valid = false;
-                    }
-                    if (valid) {
-                        if (numRead < 2 || numRead > 4) {
-                            send("Please select a valid number!");
-                            valid = false;
-                        }
-                    }
-                }while(!valid);
-                server.numberOfPlayers = numRead;
+            send(new SetDeckAckMessage(true, usernameInUse.isFirstPlayer));
 
-                send("Choose a Game Mode from the following: EASY_MODE, EXPERT_MODE. " +
-                        "Type 1 for EASY_MODE, 2 for EXPERT_MODE.");
-                do {
-                    read = in.nextLine();
-                    valid = true;
-                    try {
-                        numRead = Integer.parseInt(read);
-                    } catch (NumberFormatException e) {
-                        send("Please select a valid number!");
-                        valid = false;
-                    }
-                    if (valid) {
-                        if (numRead < 1 || numRead > 2) {
-                            send("Please select a valid number!");
-                            valid = false;
-                        }
-                    }
-                }while(!valid);
-                server.gameMode = GameMode.values()[numRead - 1];
+            if (usernameInUse.isFirstPlayer) {
+                SetGameOptionsMessage gameOptions = null;
 
-                send("Select a number from 1 to 12, Mother Nature will be positioned" +
-                        "in the correspondent island!");
-                do {
-                    read = in.nextLine();
-                    valid = true;
-                    try {
-                        numRead = Integer.parseInt(read);
-                    } catch (NumberFormatException e) {
-                        send("Please select a valid number!");
-                        valid = false;
-                    }
-                    if (valid) {
-                        if (numRead < 1 || numRead > 12) {
-                            send("Please select a valid number!");
-                            valid = false;
-                        }
-                    }
-                }while(!valid);
-                server.motherNatureStartingPosition = numRead;
             }
 
-            server.lobby(this, name);
-
-            //now the player should only send objects of class Message
-            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            Object o;
-            while(isActive()){
-                o = inputStream.readObject();
-                redirectToRemoteView(o);
-            }
-
-        } catch (IOException | NoSuchElementException | ClassNotFoundException | ObjectIsNotMessageException e) {
-            System.err.println("Error!" + e.getMessage());
-        } finally {
-            close();
+            server.lobby(this, username);
+        } catch (BadLobbyMessageException e) {
+            send(new ErrorMessage(e.getMessage()));
         }
+
+        // TODO: Listen for other messages from the network and such
+    }
+
+    private record UsernameInUse(boolean isInUse, boolean isFirstPlayer) {
     }
 }
