@@ -4,12 +4,12 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.exceptions.BadLobbyMessageException;
 import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
 import it.polimi.ingsw.messages.ErrorMessage;
-import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.server.SetDeckAckMessage;
+import it.polimi.ingsw.messages.lobby.server.SetGameOptionsAckMessage;
 import it.polimi.ingsw.messages.lobby.server.SetNicknameAckMessage;
 
 import java.io.IOException;
@@ -21,21 +21,23 @@ public class SocketClientConnection implements ClientConnection, Runnable {
 
     private final Socket socket;
     private final Server server;
-    private ObjectInputStream socketIn;
-    private ObjectOutputStream socketOut;
+    private final ObjectInputStream socketIn;
+    private final ObjectOutputStream socketOut;
     private boolean active = true;
 
-    public SocketClientConnection(Socket socket, Server server) {
+    public SocketClientConnection(Socket socket, Server server) throws IOException {
         this.socket = socket;
+        socketIn = new ObjectInputStream(socket.getInputStream());
+        socketOut = new ObjectOutputStream(socket.getOutputStream());
         this.server = server;
     }
 
     private void redirectToRemoteView(Object message) throws ObjectIsNotMessageException {
-        if (!(message instanceof GameMessage)) {
+        if (!(message instanceof GameMessage gameMsg)) {
             throw new ObjectIsNotMessageException();
-        } else {
-            ((GameMessage) message).getRemoteView().redirectMessageToController((Message) message);
         }
+
+        gameMsg.getRemoteView().redirectMessageToController(gameMsg);
     }
 
     private synchronized boolean isActive() {
@@ -50,7 +52,6 @@ public class SocketClientConnection implements ClientConnection, Runnable {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-
     }
 
     public synchronized void closeConnection() {
@@ -74,19 +75,31 @@ public class SocketClientConnection implements ClientConnection, Runnable {
         new Thread(() -> send(message)).start();
     }
 
-    private SetNicknameMessage waitForUsername() throws BadLobbyMessageException {
-        // TODO: read from socket
-        return null;
+    private SetNicknameMessage waitForUsername() throws BadLobbyMessageException, IOException, ClassNotFoundException {
+        Object objectFromNetwork = socketIn.readObject();
+
+        if (!(objectFromNetwork instanceof SetNicknameMessage message))
+            throw new BadLobbyMessageException(objectFromNetwork);
+
+        return message;
     }
 
-    private SetDeckMessage waitForDeck() throws BadLobbyMessageException {
-        // TODO: read from socket
-        return null;
+    private SetDeckMessage waitForDeck() throws BadLobbyMessageException, IOException, ClassNotFoundException {
+        Object objectFromNetwork = socketIn.readObject();
+
+        if (!(objectFromNetwork instanceof SetDeckMessage message))
+            throw new BadLobbyMessageException(objectFromNetwork);
+
+        return message;
     }
 
-    private SetGameOptionsMessage waitForGameOptions() throws BadLobbyMessageException {
-        // TODO: read from socket
-        return null;
+    private SetGameOptionsMessage waitForGameOptions() throws BadLobbyMessageException, IOException, ClassNotFoundException {
+        Object objectFromNetwork = socketIn.readObject();
+
+        if (!(objectFromNetwork instanceof SetGameOptionsMessage message))
+            throw new BadLobbyMessageException(objectFromNetwork);
+
+        return message;
     }
 
     private UsernameInUse tryAddUsername(String newUsername) {
@@ -120,7 +133,9 @@ public class SocketClientConnection implements ClientConnection, Runnable {
                 gameOptions.getMotherNatureIslandIndex() >= 12
         ) return false;
 
-        // TODO: Prepare lobby/model with these options
+        server.motherNatureStartingPosition = gameOptions.getMotherNatureIslandIndex();
+        server.numberOfPlayers = gameOptions.getPlayerCount();
+        server.gameMode = gameOptions.getGameMode();
 
         return true;
     }
@@ -155,16 +170,40 @@ public class SocketClientConnection implements ClientConnection, Runnable {
             send(new SetDeckAckMessage(true, usernameInUse.isFirstPlayer));
 
             if (usernameInUse.isFirstPlayer) {
-                SetGameOptionsMessage gameOptions = null;
+                SetGameOptionsMessage gameOptions;
 
+                boolean gameOptionsValid;
+                do {
+                    gameOptions = waitForGameOptions();
+                    gameOptionsValid = tryAddGameOptionsAndCheckValid(gameOptions);
+                    if (!gameOptionsValid) {
+                        send(new SetGameOptionsAckMessage(false));
+                    }
+                } while (!gameOptionsValid);
+                send(new SetGameOptionsAckMessage(true));
             }
 
             server.lobby(this, username);
-        } catch (BadLobbyMessageException e) {
+        } catch (BadLobbyMessageException | IOException | ClassNotFoundException e) {
+            e.printStackTrace();
             send(new ErrorMessage(e.getMessage()));
+            closeConnection();
+            return;
         }
 
-        // TODO: Listen for other messages from the network and such
+        // From now on, we are only expecting to be receiving GameMessages
+        Object objectFromNetwork;
+        while (isActive()) {
+            try {
+                objectFromNetwork = socketIn.readObject();
+                redirectToRemoteView(objectFromNetwork);
+            } catch (IOException | ClassNotFoundException | ObjectIsNotMessageException e) {
+                e.printStackTrace();
+                send(new ErrorMessage(e.getMessage()));
+                closeConnection();
+                return;
+            }
+        }
     }
 
     private record UsernameInUse(boolean isInUse, boolean isFirstPlayer) {

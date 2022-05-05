@@ -1,7 +1,6 @@
 package it.polimi.ingsw.mvc.view;
 
 import it.polimi.ingsw.messages.ErrorMessage;
-import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
@@ -36,12 +35,9 @@ public class RemoteView extends View {
      * @implNote Updated username of the message before sending it to the ServerController,
      * so that it can know who did this move
      */
-    public void redirectMessageToController(Message message) {
-        if (!(message instanceof GameMessage gameMsg)) {
-            throw new RuntimeException("Invalid message sent to RemoteView");
-        }
-        gameMsg.setUsername(username);
-        gameMsg.setRemoteView(this);
+    public void redirectMessageToController(GameMessage message) {
+        message.setUsername(username);
+        message.setRemoteView(this);
         notifySubscribers(message);
     }
 
