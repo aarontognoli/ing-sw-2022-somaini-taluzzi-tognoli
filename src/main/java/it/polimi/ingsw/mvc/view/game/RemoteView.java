@@ -1,4 +1,4 @@
-package it.polimi.ingsw.mvc.view;
+package it.polimi.ingsw.mvc.view.game;
 
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.game.GameMessage;
@@ -13,7 +13,7 @@ import it.polimi.ingsw.server.SocketClientConnection;
  * (The controller has subscribed to the RemoveView, so it is the one that at the
  * end receives this messages)
  */
-public class RemoteView extends View {
+public class RemoteView extends GameView {
 
     private final String username;
     private final SocketClientConnection connection;

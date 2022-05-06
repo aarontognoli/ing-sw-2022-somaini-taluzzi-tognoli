@@ -11,7 +11,7 @@ import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.server.SetDeckAckMessage;
 import it.polimi.ingsw.messages.lobby.server.SetGameOptionsAckMessage;
 import it.polimi.ingsw.messages.lobby.server.SetNicknameAckMessage;
-import it.polimi.ingsw.mvc.view.RemoteView;
+import it.polimi.ingsw.mvc.view.game.RemoteView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

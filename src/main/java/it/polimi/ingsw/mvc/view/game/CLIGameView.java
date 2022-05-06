@@ -1,11 +1,11 @@
-package it.polimi.ingsw.mvc.view;
+package it.polimi.ingsw.mvc.view.game;
 
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
 
-public class CLIView extends View {
+public class CLIGameView extends GameView {
 
-    public CLIView(Notifier<Model> modelNotifier) {
+    public CLIGameView(Notifier<Model> modelNotifier) {
         super(modelNotifier);
     }
 

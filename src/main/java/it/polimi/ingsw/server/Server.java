@@ -6,7 +6,7 @@ import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.mvc.controller.Controller;
 import it.polimi.ingsw.mvc.controller.ServerController;
 import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.view.RemoteView;
+import it.polimi.ingsw.mvc.view.game.RemoteView;
 import it.polimi.ingsw.player.Player;
 
 import java.io.IOException;
