@@ -5,9 +5,10 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.exceptions.WrongActionException;
 import it.polimi.ingsw.messages.Message;
-import it.polimi.ingsw.messages.game.GameMessage;
+import it.polimi.ingsw.messages.game.*;
 import it.polimi.ingsw.mvc.PlayerActions;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.player.Player;
 import it.polimi.ingsw.server.gameMessage;
 
 /**
@@ -17,9 +18,22 @@ import it.polimi.ingsw.server.gameMessage;
 public class ServerController extends Controller implements PlayerActions {
 
     private final Model model;
+    private int studentsMoved = 0;
 
     public ServerController(Model model) {
         this.model = model;
+    }
+
+    private void setStudentsMoved() {
+        if (studentsMoved == 3) {
+            studentsMoved = 0;
+        } else {
+            studentsMoved++;
+        }
+    }
+
+    private int getStudentsMoved() {
+        return studentsMoved;
     }
 
     @Override
@@ -40,7 +54,12 @@ public class ServerController extends Controller implements PlayerActions {
 
         synchronized (this) {
             try {
+                Player player = model.publicModel.getCurrentPlayer();
+
                 gameMsg.controllerCallback(this);
+
+                player.setPreviousMove(gameMsg);
+
                 // here the model notifies the remote views with its new state
                 model.notifySubscribers(model);
 
@@ -52,7 +71,6 @@ public class ServerController extends Controller implements PlayerActions {
 
     }
 
-    // TODO: Check for exceptions and turn order
     @Override
     public void playAssistant(AssistantCard assistantCard) throws Exception {
         if (model.publicModel.getGamePhase() != GamePhase.PIANIFICATION) {
@@ -67,7 +85,12 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
+        if (!model.publicModel.getCurrentPlayer().getPreviousMove().getClass()
+                .equals(MoveMotherNatureMessage.class)) {
+            throw new WrongActionException(gameMessage.wrongMoveMessage);
+        }
         model.publicModel.drawStudentsIntoEntrance(cloudIndex);
+        setStudentsMoved();
         model.publicModel.endTurn();
     }
 
@@ -75,6 +98,12 @@ public class ServerController extends Controller implements PlayerActions {
     public void moveMotherNature(int steps) throws Exception {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
+        }
+        if (!model.publicModel.getCurrentPlayer().getPreviousMove().getClass()
+                    .equals(MoveStudentToDiningRoomMessage.class) &&
+                !model.publicModel.getCurrentPlayer().getPreviousMove().getClass()
+                    .equals(MoveStudentToIslandMessage.class)) {
+            throw new WrongActionException(gameMessage.wrongMoveMessage);
         }
         model.publicModel.moveMotherNature(steps);
         model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
@@ -85,7 +114,11 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
+        if (isMoveStudentWrongAction() || getStudentsMoved() == 3) {
+            throw new WrongActionException(gameMessage.wrongMoveMessage);
+        }
         model.publicModel.moveStudentToIsland(studentColor, islandIndex);
+        setStudentsMoved();
     }
 
     @Override
@@ -93,7 +126,11 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
+        if (isMoveStudentWrongAction() || getStudentsMoved() == 3) {
+            throw new WrongActionException(gameMessage.wrongMoveMessage);
+        }
         model.publicModel.moveStudentToDiningRoom(studentColor);
+        setStudentsMoved();
     }
 
     @Override
@@ -102,5 +139,14 @@ public class ServerController extends Controller implements PlayerActions {
             throw new WrongActionException(gameMessage.wrongGamePhaseMessage);
         }
         model.publicModel.playCharacterCard(cardIndex, effectArgument);
+    }
+
+    private boolean isMoveStudentWrongAction() {
+        return !model.publicModel.getCurrentPlayer().getPreviousMove().getClass()
+                        .equals(MoveStudentToDiningRoomMessage.class) &&
+                !model.publicModel.getCurrentPlayer().getPreviousMove().getClass()
+                        .equals(MoveStudentToIslandMessage.class) &&
+                !model.publicModel.getCurrentPlayer().getPreviousMove().getClass()
+                        .equals(PlayAssistantMessage.class);
     }
 }
