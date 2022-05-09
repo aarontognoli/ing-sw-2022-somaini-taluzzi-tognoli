@@ -35,6 +35,10 @@ public class ServerController extends Controller implements PlayerActions {
 
     Boolean enoughStudentsPlaced() {
         int maxStudentsToMove = 3;
+        //if entrance is empty the player must keep playing
+        if (model.publicModel.getCurrentPlayer().getBoard().getEntrance().isEmpty())
+            return true;
+
         if (model.publicModel.getTotalPlayerCount() == 3) {
             maxStudentsToMove = 4;
         }
