@@ -69,7 +69,6 @@ public class SocketClientConnection implements Runnable {
 
     private void close() {
         closeConnection();
-        System.out.println("A player disconnected... End of the game");
         server.closePlayersConnections();
         System.out.println("Game ended");
     }
@@ -193,7 +192,7 @@ public class SocketClientConnection implements Runnable {
         } catch (BadLobbyMessageException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
             send(new ErrorMessage(e.getMessage()));
-            closeConnection();
+            close();
             return;
         }
 
@@ -206,7 +205,7 @@ public class SocketClientConnection implements Runnable {
             } catch (IOException | ClassNotFoundException | ObjectIsNotMessageException e) {
                 e.printStackTrace();
                 send(new ErrorMessage(e.getMessage()));
-                closeConnection();
+                close();
                 return;
             }
         }
