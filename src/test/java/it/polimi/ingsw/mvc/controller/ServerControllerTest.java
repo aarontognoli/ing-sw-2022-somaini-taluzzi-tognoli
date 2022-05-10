@@ -2,16 +2,15 @@ package it.polimi.ingsw.mvc.controller;
 
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.WrongActionException;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.game.*;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.model.PublicModelTest;
-
-import java.lang.*;
 import it.polimi.ingsw.mvc.view.game.RemoteView;
 import it.polimi.ingsw.notifier.Notifier;
-import it.polimi.ingsw.server.gameMessage;
+import it.polimi.ingsw.server.GameMessageConstants;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,12 +70,12 @@ class ServerControllerTest {
 
         message = new DrawStudentIntoEntranceMessage(0);
         sendMessagePlayer0(message);
-        assertEquals(gameMessage.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
 
         errorMessage = null;
         message = new PlayAssistantMessage(AssistantCard.CARD_1);
         sendMessagePlayer1(message);
-        assertEquals(gameMessage.wrongTurnMessage, errorMessage.getErrorMessageString());
+        assertEquals(GameMessageConstants.wrongTurnMessage, errorMessage.getErrorMessageString());
 
         errorMessage = null;
         sendMessagePlayer0(message);
@@ -88,15 +87,15 @@ class ServerControllerTest {
 
         message = new PlayAssistantMessage(AssistantCard.CARD_3);
         sendMessagePlayer0(message);
-        assertEquals(gameMessage.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
 
         message = new DrawStudentIntoEntranceMessage(0);
         sendMessagePlayer0(message);
-        assertEquals(gameMessage.wrongMoveMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.notEnoughStudentsAlreadyPlaced, errorMessage.getErrorMessageString());
 
         message = new MoveMotherNatureMessage(2);
         sendMessagePlayer0(message);
-        assertEquals(gameMessage.wrongMoveMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.notEnoughStudentsAlreadyPlaced, errorMessage.getErrorMessageString());
 
         errorMessage = null;
         Color color0 = model.publicModel.getCurrentPlayer().getBoard().getEntrance().get(0).getColor();
@@ -113,7 +112,7 @@ class ServerControllerTest {
 
         message = new MoveStudentToDiningRoomMessage(color3);
         sendMessagePlayer0(message);
-        assertEquals(gameMessage.wrongMoveMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.maxStudentsAlreadyPlacedMessage, errorMessage.getErrorMessageString());
 
         message = new MoveMotherNatureMessage(3);
         sendMessagePlayer0(message);
@@ -136,7 +135,7 @@ class ServerControllerTest {
 
         message = new DrawStudentIntoEntranceMessage(0);
         sendMessagePlayer0(message);
-        assertEquals(gameMessage.wrongTurnMessage, errorMessage.getErrorMessageString());
+        assertEquals(GameMessageConstants.wrongTurnMessage, errorMessage.getErrorMessageString());
     }
 
     @Test
@@ -144,6 +143,6 @@ class ServerControllerTest {
         initialiseTwoPlayersExpertMode();
         message = new MoveMotherNatureMessage(1);
         sendMessagePlayer0(message);
-        assertEquals(gameMessage.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
     }
 }
