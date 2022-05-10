@@ -66,6 +66,7 @@ public class Client {
                     String inputLine = stdin.nextLine();
                     Message message = null;
                     // TODO create message and send it to server
+                    socketOut.reset();
                     socketOut.writeObject(message);
                     socketOut.flush();
                 }
@@ -80,8 +81,8 @@ public class Client {
     public void run() throws IOException {
         Socket socket = new Socket(ip, port);
         System.out.println("Connection established");
-        ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
         ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
         Scanner stdin = new Scanner(System.in);
         try {
             Thread t0 = asyncReadFromSocket(socketIn);
