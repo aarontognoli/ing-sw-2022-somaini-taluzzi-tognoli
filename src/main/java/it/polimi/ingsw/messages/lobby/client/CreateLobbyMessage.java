@@ -1,8 +1,8 @@
 package it.polimi.ingsw.messages.lobby.client;
 
-import it.polimi.ingsw.messages.lobby.LobbyManagementMessage;
+import it.polimi.ingsw.messages.lobby.LobbySetupMessage;
 
-public class CreateLobbyMessage extends LobbyManagementMessage {
+public class CreateLobbyMessage extends LobbySetupMessage {
     public CreateLobbyMessage(String s) {
         super(s);
     }

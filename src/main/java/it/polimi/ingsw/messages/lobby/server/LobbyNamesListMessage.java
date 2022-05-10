@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SendLobbyNamesListMessage {
+public class LobbyNamesListMessage {
 
     List<String> lobbyNames;
 
-    public SendLobbyNamesListMessage(List<String> names) {
+    public LobbyNamesListMessage(List<String> names) {
         lobbyNames = new ArrayList<>(names);
     }
 
-    public SendLobbyNamesListMessage(Map<String, Lobby> lobbyMap) {
+    public LobbyNamesListMessage(Map<String, Lobby> lobbyMap) {
         this(lobbyMap.keySet().stream().toList());
     }
 }
