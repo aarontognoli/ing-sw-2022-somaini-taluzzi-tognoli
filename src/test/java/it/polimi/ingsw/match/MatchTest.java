@@ -19,7 +19,7 @@ public class MatchTest {
     void writeTable(Model m) {
         System.out.println("Professors:");
         for (Professor p : getProfessors(m))
-            System.out.println(p.getColor() + " [ " + (getProfessorOwnerPlayer(m, p) == null ? "null" : getProfessorOwnerPlayer(m, p).getNickname()) + " ]");
+            System.out.printf("%s [ %s ]%n", p.getColor(), getProfessorOwnerPlayer(m, p) == null ? "null" : getProfessorOwnerPlayer(m, p).getNickname());
         for (Island i : getIslands(m)) {
             System.out.print(getIslands(m).indexOf(i) + ") ");
             try {
@@ -28,7 +28,7 @@ public class MatchTest {
                 System.out.print("No Tower");
             }
             for (Student s : i.getStudents()) {
-                System.out.print(" [ " + s.getID().toString() + " ]");
+                System.out.printf(" [ %s ]", s.getID().toString());
             }
             System.out.print("\n");
         }
@@ -321,7 +321,7 @@ public class MatchTest {
 
 
         } while (true);
-        Player win = null;
+        Player win;
         if (p0.getBoard().getTowers().size() == 0) {
             assertNotEquals(0, p2.getBoard().getTowers().size());
             win = p0;
@@ -492,7 +492,7 @@ public class MatchTest {
 
 
         } while (true);
-        Player win = null;
+        Player win;
         if (p0.getBoard().getTowers().size() == 0) {
             assertNotEquals(0, p2.getBoard().getTowers().size());
             win = p0;
@@ -642,6 +642,4 @@ public class MatchTest {
 
 
     }
-
-
 }

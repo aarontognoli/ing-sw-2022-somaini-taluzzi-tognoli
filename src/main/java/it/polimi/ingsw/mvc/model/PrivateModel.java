@@ -235,7 +235,7 @@ public class PrivateModel {
     // the method will be called in the right moments
     Player checkVictoryConditions() {
 
-        Player winner = fatherModel.publicModel.checkFinishedTowers();
+        Player winner = checkFinishedTowers();
 
         if (winner != null)
             return winner;
@@ -361,7 +361,6 @@ public class PrivateModel {
         if (fatherModel.motherNature != null) {
             throw new RuntimeException("Mother Nature already chosen");
         }
-
         fatherModel.motherNature = new MotherNature(fatherModel.islands.get(islandIndex));
     }
 
@@ -398,5 +397,25 @@ public class PrivateModel {
 
     void incrementCurrentPlayerAction() {
         fatherModel.currentPlayer = fatherModel.actionPlayerOrder.pop();
+    }
+
+    /**
+     * @return null if everyone has at least a tower, otherwise returns the player
+     * who has placed their last tower
+     * This method also checks for 4-players game, it only checks the board
+     * of the teammate who originally got the towers in their board
+     */
+    Player checkFinishedTowers() {
+        for (int i = 0; i < fatherModel.players.size(); i++) {
+            // In 4 players games, just check for player 0 and 2
+            if (fatherModel.totalPlayerCount != 4 || i % 2 == 0) {
+                Player p = fatherModel.players.get(i);
+                if (p.getBoard().getTowers().isEmpty()) {
+                    return p;
+                }
+            }
+        }
+
+        return null;
     }
 }

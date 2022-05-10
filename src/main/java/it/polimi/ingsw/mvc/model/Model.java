@@ -1,9 +1,11 @@
 package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.bag.Bag;
+import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
+import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.pawn.MotherNature;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.places.Island;
@@ -14,7 +16,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 
-public class Model {
+public class Model extends Notifier<Model> {
 
     private static final int INITIAL_TOWER_COUNT_2_4_PLAYERS = 8;
     private static final int INITIAL_TOWER_COUNT_3_PLAYERS = 6;
@@ -60,8 +62,7 @@ public class Model {
 
     // Initialize game with starting rules
 
-    public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks, GameMode gameMode)
-            throws Exception {
+    public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks, GameMode gameMode) {
 
         // Models
         privateModel = new PrivateModel(this);
@@ -84,7 +85,11 @@ public class Model {
             professors.add(c.ordinal(), new Professor(c));
         }
 
-        privateModel.placeMotherNature(motherNatureStartingPosition);
+        try {
+            privateModel.placeMotherNature(motherNatureStartingPosition);
+        }catch (Exception e) {
+            throw new RuntimeException("How is it possible that that mother nature was already chosen ?");
+        }
 
         int towerColorIndex = 0;
         totalPlayerCount = nicknamesAndDecks.size();
@@ -116,7 +121,6 @@ public class Model {
                     towerColorIndex++;
                 }
                 break;
-
             default:
                 throw new IllegalArgumentException("Illegal number of Players");
         }
@@ -141,7 +145,12 @@ public class Model {
         currentPlayer = players.get(0);
         gamePhase = GamePhase.PIANIFICATION;
         winner = null;
-        privateModel.prepareMatch(motherNatureStartingPosition);
+        try {
+            privateModel.prepareMatch(motherNatureStartingPosition);
+        }catch (BagEmptyException e) {
+            throw new RuntimeException("How is it possible that the bag is empty during the" +
+                    "initialisation of the game?");
+        }
     }
 
 }

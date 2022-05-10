@@ -1,10 +1,10 @@
-package it.polimi.ingsw.observe;
+package it.polimi.ingsw.notifier;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ObservableTest {
+public class NotifierTest {
 
     static class TestDataClass {
         public int value;
@@ -15,7 +15,7 @@ public class ObservableTest {
     }
 
     @Test
-    public void testSubscription() {
+    public void testNotify() {
 
         final int THREE = 3;
 
@@ -28,15 +28,15 @@ public class ObservableTest {
         }
 
         // Creating observable with an initial value
-        Observable<TestDataClass> observable = new Observable<>(new TestDataClass(1));
+        Notifier<TestDataClass> observable = new Notifier<>();
         // Updating the value: I have not yet registered the dummy subscriber
-        observable.setValue(new TestDataClass(2));
+        observable.notifySubscribers(new TestDataClass(2));
 
         TestSubscriber dummySubscriber = new TestSubscriber();
         observable.addSubscriber(dummySubscriber);
 
         // When setting this value, dummySubscriber.subscribeNotification is called
         // And the test check that the value is correctly THREE
-        observable.setValue(new TestDataClass(THREE));
+        observable.notifySubscribers(new TestDataClass(THREE));
     }
 }
