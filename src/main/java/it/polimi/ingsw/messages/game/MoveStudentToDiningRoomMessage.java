@@ -1,9 +1,9 @@
-package it.polimi.ingsw.messages;
+package it.polimi.ingsw.messages.game;
 
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.mvc.controller.ServerController;
 
-public class MoveStudentToDiningRoomMessage extends Message{
+public class MoveStudentToDiningRoomMessage extends GameMessage {
     private final Color color;
 
     public MoveStudentToDiningRoomMessage(Color color) {

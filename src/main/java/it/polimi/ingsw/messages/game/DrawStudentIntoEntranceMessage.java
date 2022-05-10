@@ -1,11 +1,11 @@
-package it.polimi.ingsw.messages;
+package it.polimi.ingsw.messages.game;
 
 import it.polimi.ingsw.mvc.controller.ServerController;
 
-public class DrawStudentIntoEntranceMessage extends Message{
+public class DrawStudentIntoEntranceMessage extends GameMessage {
     private final int cloudIndex;
 
-    public DrawStudentIntoEntranceMessage (int cloudIndex) {
+    public DrawStudentIntoEntranceMessage(int cloudIndex) {
         this.cloudIndex = cloudIndex;
     }
 
