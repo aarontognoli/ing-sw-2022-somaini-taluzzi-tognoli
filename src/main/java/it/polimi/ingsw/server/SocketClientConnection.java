@@ -5,6 +5,7 @@ import it.polimi.ingsw.exceptions.BadLobbyMessageException;
 import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.game.GameMessage;
+import it.polimi.ingsw.messages.lobby.LobbyManagementMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
@@ -25,6 +26,7 @@ public class SocketClientConnection implements Runnable {
     private final ObjectInputStream socketIn;
     private final ObjectOutputStream socketOut;
     private boolean active = true;
+    private boolean okLobby = false;
 
     private RemoteView remoteView;
 
@@ -149,7 +151,21 @@ public class SocketClientConnection implements Runnable {
 
     @Override
     public void run() {
+        //todo callbacks and error management
+        //lobby setup
+        Object objectFromNetwork;
         try {
+            do {
+                objectFromNetwork = socketIn.readObject();
+                if (objectFromNetwork instanceof LobbyManagementMessage) {
+                    ((LobbyManagementMessage) objectFromNetwork).callbackFunction();
+                } else {
+                    throw new BadLobbyMessageException(objectFromNetwork);
+                }
+
+            } while (!okLobby);
+
+
             String username;
             UsernameInUse usernameInUse;
             do {
@@ -190,25 +206,20 @@ public class SocketClientConnection implements Runnable {
             }
 
             server.lobby(this, username);
-        } catch (BadLobbyMessageException | IOException | ClassNotFoundException e) {
+
+
+            // From now on, we are only expecting to be receiving GameMessages
+            while (isActive()) {
+
+                objectFromNetwork = socketIn.readObject();
+                redirectToRemoteView(objectFromNetwork);
+
+            }
+        } catch (IOException | ClassNotFoundException | ObjectIsNotMessageException | BadLobbyMessageException e) {
             e.printStackTrace();
             send(new ErrorMessage(e.getMessage()));
             closeConnection();
             return;
-        }
-
-        // From now on, we are only expecting to be receiving GameMessages
-        Object objectFromNetwork;
-        while (isActive()) {
-            try {
-                objectFromNetwork = socketIn.readObject();
-                redirectToRemoteView(objectFromNetwork);
-            } catch (IOException | ClassNotFoundException | ObjectIsNotMessageException e) {
-                e.printStackTrace();
-                send(new ErrorMessage(e.getMessage()));
-                closeConnection();
-                return;
-            }
         }
     }
 
