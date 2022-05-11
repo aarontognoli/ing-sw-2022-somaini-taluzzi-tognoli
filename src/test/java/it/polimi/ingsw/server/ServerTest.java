@@ -30,8 +30,8 @@ class ServerTest {
         Server server = runServerAsync();
 
         assertNotNull(server);
-
-        server.closePlayersConnections();
+        server.lobbyMap.put("Test", new Lobby());
+        server.closePlayersConnections(server.lobbyMap.get("Test"));
 
         Client c1 = new Client("localhost", Server.PORT);
         // c1.run();

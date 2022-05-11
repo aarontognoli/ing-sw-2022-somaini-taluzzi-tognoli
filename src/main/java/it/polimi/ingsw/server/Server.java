@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +25,7 @@ public class Server {
     private final ExecutorService executor = Executors.newFixedThreadPool(128);
 
 
-    Map<String, Lobby> lobbyMap;
+    Map<String, Lobby> lobbyMap = new HashMap<>();
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT);
