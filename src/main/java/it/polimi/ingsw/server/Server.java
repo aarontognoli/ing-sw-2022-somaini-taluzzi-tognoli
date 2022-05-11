@@ -31,20 +31,24 @@ public class Server {
         this.serverSocket = new ServerSocket(PORT);
     }
 
+    private String getNameFromLobby(Lobby l) {
+        for (Map.Entry<String, Lobby> entry : lobbyMap.entrySet()) {
+            if (entry.getValue().equals(l)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     //Deregister connection
     public synchronized void closePlayersConnections(Lobby whichLobby) {
-        // this method closes all connections and the server socket because the server
-        // manages only one match at a time: multiple matches is an advanced functionality
-        // that we can implement later
+        // this method closes all connections of whichLobby
+        // and removes the lobby from the list.
         for (SocketClientConnection players : whichLobby.playersConnections) {
             players.closeConnection();
         }
         whichLobby.playersConnections.clear();
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            System.err.println("Error when closing Server socket!");
-        }
+        lobbyMap.remove(getNameFromLobby(whichLobby), whichLobby);
     }
 
     //Wait for players
