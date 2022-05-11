@@ -1,9 +1,14 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Lobby {
 
@@ -11,6 +16,9 @@ public class Lobby {
     private int playersCount;
     private int motherNatureStartPosition;
     private GameMode gameMode;
+    public final Map<String, SocketClientConnection> waitingConnection = new HashMap<>();
+    public final List<SocketClientConnection> playersConnections = new ArrayList<>();
+    public final Map<String, DeckName> nicknamesAndDecks = new HashMap<>();
 
     public Lobby() {
         gameOptionsChosen = false;
@@ -27,10 +35,10 @@ public class Lobby {
         this.notifyAll();
     }
 
-    synchronized public void waitForGameOptions(Server server) throws IOException {
-        while (!server.currentLobby.gameOptionsChosen) {
+    synchronized public void waitForGameOptions(Lobby currentLobby) throws IOException {
+        while (!currentLobby.gameOptionsChosen) {
             try {
-                server.currentLobby.wait();
+                currentLobby.wait();
             } catch (InterruptedException e) {
                 throw new IOException("Interrupt received while server.currentLobby.wait()");
             }

@@ -5,13 +5,12 @@ import it.polimi.ingsw.exceptions.BadLobbyMessageException;
 import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.game.GameMessage;
-import it.polimi.ingsw.messages.lobby.LobbyManagementMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
-import it.polimi.ingsw.messages.lobby.server.SetDeckAckMessage;
-import it.polimi.ingsw.messages.lobby.server.SetGameOptionsAckMessage;
-import it.polimi.ingsw.messages.lobby.server.SetNicknameAckMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbyManagementMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbySetupMessage;
+import it.polimi.ingsw.messages.lobby.server.*;
 import it.polimi.ingsw.mvc.view.game.RemoteView;
 
 import java.io.IOException;
@@ -69,10 +68,10 @@ public class SocketClientConnection implements Runnable {
         active = false;
     }
 
-    private void close() {
+    private void close(Lobby whichLobby) {
         closeConnection();
         System.out.println("A player disconnected... End of the game");
-        server.closePlayersConnections();
+        server.closePlayersConnections(whichLobby);
         System.out.println("Game ended");
     }
 
@@ -107,70 +106,84 @@ public class SocketClientConnection implements Runnable {
         return message;
     }
 
-    private UsernameInUse tryAddUsername(String newUsername) throws IOException {
-        synchronized (server.nicknamesAndDecks) {
+    private UsernameInUse tryAddUsername(String newUsername, Lobby whichLobby) throws IOException {
+        synchronized (whichLobby.nicknamesAndDecks) {
             // If this is not the first player to enter the lobby, wait for the game options to be defined
-            if (server.nicknamesAndDecks.size() != 0) {
-                server.currentLobby.waitForGameOptions(server);
+            if (whichLobby.nicknamesAndDecks.size() != 0) {
+                whichLobby.waitForGameOptions(whichLobby);
             }
 
-            for (String n : server.nicknamesAndDecks.keySet()) {
+            for (String n : whichLobby.nicknamesAndDecks.keySet()) {
                 if (n.equals(newUsername)) {
                     return new UsernameInUse(true, false);
                 }
             }
-            server.nicknamesAndDecks.put(newUsername, null);
-            return new UsernameInUse(false, server.nicknamesAndDecks.size() == 1);
+            whichLobby.nicknamesAndDecks.put(newUsername, null);
+            return new UsernameInUse(false, whichLobby.nicknamesAndDecks.size() == 1);
         }
     }
 
-    private boolean tryAddDeckAndCheckIsUsed(String username, DeckName deckName) {
-        synchronized (server.nicknamesAndDecks) {
-            for (DeckName d : server.nicknamesAndDecks.values()) {
+    private boolean tryAddDeckAndCheckIsUsed(String username, DeckName deckName, Lobby whichLobby) {
+        synchronized (whichLobby.nicknamesAndDecks) {
+            for (DeckName d : whichLobby.nicknamesAndDecks.values()) {
                 if (d.equals(deckName)) {
                     return true;
                 }
             }
-            server.nicknamesAndDecks.replace(username, deckName);
+            whichLobby.nicknamesAndDecks.replace(username, deckName);
             return false;
         }
     }
 
-    private boolean tryAddGameOptionsAndCheckValid(SetGameOptionsMessage gameOptions) {
+    private boolean tryAddGameOptionsAndCheckValid(SetGameOptionsMessage gameOptions, Lobby whichLobby) {
         if (gameOptions.getPlayerCount() <= 1 ||
                 gameOptions.getPlayerCount() > 4 ||
                 gameOptions.getMotherNatureIslandIndex() < 0 ||
                 gameOptions.getMotherNatureIslandIndex() >= 12
         ) return false;
 
-        server.currentLobby.setGameOptions(gameOptions);
+        whichLobby.setGameOptions(gameOptions);
 
         return true;
     }
 
+    public ServerLobbyMessage sendLobbyNamesList() {
+        return new LobbyNamesListMessage(server.lobbyMap);
+    }
+
+    public ServerLobbyMessage createNewLobby(String lobbyName) {
+        //todo
+        return new LobbyNameAckMessage(true);
+    }
+
+    public ServerLobbyMessage joinExistingLobby(String lobbyName) {
+        //todo
+        return new LobbyNameAckMessage(true);
+    }
 
     @Override
     public void run() {
-        //todo callbacks and error management
         //lobby setup
         Object objectFromNetwork;
         try {
             do {
                 objectFromNetwork = socketIn.readObject();
                 if (objectFromNetwork instanceof LobbyManagementMessage) {
-                    ((LobbyManagementMessage) objectFromNetwork).callbackFunction();
+                    ServerLobbyMessage messageToSend = ((LobbyManagementMessage) objectFromNetwork).callbackFunction(this);
+                    send(messageToSend);
                 } else {
                     throw new BadLobbyMessageException(objectFromNetwork);
                 }
 
             } while (!okLobby);
-
+            //From here no more LobbyManagement, only ClientLobbyMessages
+            Lobby thisLobby = server.lobbyMap.get(((LobbySetupMessage) objectFromNetwork).getLobbyName());
 
             String username;
             UsernameInUse usernameInUse;
             do {
                 username = waitForUsername().getNickname();
-                usernameInUse = tryAddUsername(username);
+                usernameInUse = tryAddUsername(username, thisLobby);
 
                 if (usernameInUse.isInUse) {
                     send(new SetNicknameAckMessage(true));
@@ -183,7 +196,7 @@ public class SocketClientConnection implements Runnable {
             boolean deckInUse;
             do {
                 chosenDeck = waitForDeck().getDeckName();
-                deckInUse = tryAddDeckAndCheckIsUsed(username, chosenDeck);
+                deckInUse = tryAddDeckAndCheckIsUsed(username, chosenDeck, thisLobby);
                 if (deckInUse) {
                     send(new SetDeckAckMessage(false, false));
                 }
@@ -197,7 +210,7 @@ public class SocketClientConnection implements Runnable {
                 boolean gameOptionsValid;
                 do {
                     gameOptions = waitForGameOptions();
-                    gameOptionsValid = tryAddGameOptionsAndCheckValid(gameOptions);
+                    gameOptionsValid = tryAddGameOptionsAndCheckValid(gameOptions, thisLobby);
                     if (!gameOptionsValid) {
                         send(new SetGameOptionsAckMessage(false));
                     }
@@ -205,7 +218,7 @@ public class SocketClientConnection implements Runnable {
                 send(new SetGameOptionsAckMessage(true));
             }
 
-            server.lobby(this, username);
+            server.lobby(this, username, thisLobby);
 
 
             // From now on, we are only expecting to be receiving GameMessages
