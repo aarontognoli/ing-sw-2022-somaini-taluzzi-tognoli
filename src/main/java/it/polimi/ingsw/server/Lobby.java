@@ -6,7 +6,7 @@ import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,9 +16,9 @@ public class Lobby {
     private int playersCount;
     private int motherNatureStartPosition;
     private GameMode gameMode;
-    public final Map<String, SocketClientConnection> waitingConnection = new HashMap<>();
+    public final Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>();
     public final List<SocketClientConnection> playersConnections = new ArrayList<>();
-    public final Map<String, DeckName> nicknamesAndDecks = new HashMap<>();
+    public final Map<String, DeckName> nicknamesAndDecks = new LinkedHashMap<>();
 
     public Lobby() {
         gameOptionsChosen = false;
