@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LobbyNamesListMessage {
+public class LobbyNamesListMessage extends ServerLobbyMessage {
 
     List<String> lobbyNames;
 

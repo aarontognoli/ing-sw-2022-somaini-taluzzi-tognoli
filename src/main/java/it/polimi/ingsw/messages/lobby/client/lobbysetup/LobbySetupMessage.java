@@ -1,4 +1,4 @@
-package it.polimi.ingsw.messages.lobby;
+package it.polimi.ingsw.messages.lobby.client.lobbysetup;
 
 public abstract class LobbySetupMessage extends LobbyManagementMessage {
     String lobbyName;
