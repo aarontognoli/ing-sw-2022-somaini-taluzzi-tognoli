@@ -8,6 +8,6 @@ public class RequestLobbyNamesListMessage extends LobbyManagementMessage {
     @Override
     public ServerLobbyMessage callbackFunction(SocketClientConnection sCC) {
 
-        return sCC.sendLobbyNamesList();
+        return sCC.generateLobbyNamesList();
     }
 }
