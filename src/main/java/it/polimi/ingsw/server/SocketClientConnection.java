@@ -148,12 +148,12 @@ public class SocketClientConnection implements Runnable {
         return true;
     }
 
-    public ServerLobbyMessage sendLobbyNamesList() {
+    public ServerLobbyMessage generateLobbyNamesList() {
         return new LobbyNamesListMessage(server.lobbyMap);
     }
 
     public ServerLobbyMessage createNewLobby(String lobbyName) {
-        if (!server.lobbyMap.keySet().contains(lobbyName)) {
+        if (!server.lobbyMap.containsKey(lobbyName)) {
             server.lobbyMap.put(lobbyName, new Lobby());
             okLobby = true;
             return new LobbyNameAckMessage(true);
