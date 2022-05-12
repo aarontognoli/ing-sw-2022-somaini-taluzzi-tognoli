@@ -14,7 +14,8 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
     public LobbyNamesListMessage(Map<String, Lobby> lobbyMap) {
         lobbyNames = new HashMap<>();
         for (Map.Entry<String, Lobby> entry : lobbyMap.entrySet()) {
-            Map.Entry<Integer, Integer> thisEntry = new AbstractMap.SimpleEntry<>(entry.getValue().waitingConnection.size(), entry.getValue().getPlayersCount());
+            //maps lobbyName, currentPlayers and maxPlayers
+            Map.Entry<Integer, Integer> thisEntry = new AbstractMap.SimpleEntry<>(entry.getValue().waitingConnection.size(), entry.getValue().getMaxPlayersCount());
             lobbyNames.put(entry.getKey(), thisEntry);
         }
     }

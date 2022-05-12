@@ -8,6 +8,7 @@ import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbyManagementMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbySetupMessage;
 import it.polimi.ingsw.messages.lobby.server.*;
@@ -152,75 +153,104 @@ public class SocketClientConnection implements Runnable {
     }
 
     public ServerLobbyMessage createNewLobby(String lobbyName) {
-        //todo
-        return new LobbyNameAckMessage(true);
+        if (!server.lobbyMap.keySet().contains(lobbyName)) {
+            server.lobbyMap.put(lobbyName, new Lobby());
+            okLobby = true;
+            return new LobbyNameAckMessage(true);
+        }
+        return new LobbyNameAckMessage(false);
     }
 
     public ServerLobbyMessage joinExistingLobby(String lobbyName) {
-        //todo
-        return new LobbyNameAckMessage(true);
+        int currentPlayers, maxPlayers;
+        for (String s : server.lobbyMap.keySet()) {
+            if (s.equals(lobbyName)) {
+                maxPlayers = server.lobbyMap.get(s).getMaxPlayersCount();
+                currentPlayers = server.lobbyMap.get(s).waitingConnection.size();
+                if (currentPlayers < maxPlayers) {
+                    okLobby = true;
+                    return new LobbyNameAckMessage(true);
+                }
+            }
+        }
+        return new LobbyNameAckMessage(false);
+    }
+
+    private LobbySetupMessage createJoinLobby() throws IOException, ClassNotFoundException, BadLobbyMessageException {
+        Object objectFromNetwork;
+        do {
+            objectFromNetwork = socketIn.readObject();
+            if (objectFromNetwork instanceof LobbyManagementMessage) {
+                ServerLobbyMessage messageToSend = ((LobbyManagementMessage) objectFromNetwork).callbackFunction(this);
+                send(messageToSend);
+            } else {
+                throw new BadLobbyMessageException(objectFromNetwork);
+            }
+
+        } while (!okLobby);
+        return (LobbySetupMessage) objectFromNetwork;
+    }
+
+    private String assignUsernameAndDeck(Lobby thisLobby) throws BadLobbyMessageException, IOException, ClassNotFoundException {
+        String username;
+        UsernameInUse usernameInUse;
+        do {
+            username = waitForUsername().getNickname();
+            usernameInUse = tryAddUsername(username, thisLobby);
+
+            if (usernameInUse.isInUse) {
+                send(new SetNicknameAckMessage(true));
+            }
+        } while (usernameInUse.isInUse);
+
+        send(new SetNicknameAckMessage(false));
+
+        DeckName chosenDeck;
+        boolean deckInUse;
+        do {
+            chosenDeck = waitForDeck().getDeckName();
+            deckInUse = tryAddDeckAndCheckIsUsed(username, chosenDeck, thisLobby);
+            if (deckInUse) {
+                send(new SetDeckAckMessage(false, false));
+            }
+        } while (deckInUse);
+
+        send(new SetDeckAckMessage(true, usernameInUse.isFirstPlayer));
+        return username;
+    }
+
+    private void configureLobby(Lobby thisLobby) throws BadLobbyMessageException, IOException, ClassNotFoundException {
+        SetGameOptionsMessage gameOptions;
+
+        boolean gameOptionsValid;
+        do {
+            gameOptions = waitForGameOptions();
+            gameOptionsValid = tryAddGameOptionsAndCheckValid(gameOptions, thisLobby);
+            if (!gameOptionsValid) {
+                send(new SetGameOptionsAckMessage(false));
+            }
+        } while (!gameOptionsValid);
+        send(new SetGameOptionsAckMessage(true));
     }
 
     @Override
     public void run() {
         //lobby setup
-        Object objectFromNetwork;
+
         try {
-            do {
-                objectFromNetwork = socketIn.readObject();
-                if (objectFromNetwork instanceof LobbyManagementMessage) {
-                    ServerLobbyMessage messageToSend = ((LobbyManagementMessage) objectFromNetwork).callbackFunction(this);
-                    send(messageToSend);
-                } else {
-                    throw new BadLobbyMessageException(objectFromNetwork);
-                }
-
-            } while (!okLobby);
+            LobbySetupMessage receivedLobbyMessage = createJoinLobby();
             //From here no more LobbyManagement, only ClientLobbyMessages
-            Lobby thisLobby = server.lobbyMap.get(((LobbySetupMessage) objectFromNetwork).getLobbyName());
+            Lobby thisLobby = server.lobbyMap.get(receivedLobbyMessage.getLobbyName());
 
-            String username;
-            UsernameInUse usernameInUse;
-            do {
-                username = waitForUsername().getNickname();
-                usernameInUse = tryAddUsername(username, thisLobby);
-
-                if (usernameInUse.isInUse) {
-                    send(new SetNicknameAckMessage(true));
-                }
-            } while (usernameInUse.isInUse);
-
-            send(new SetNicknameAckMessage(false));
-
-            DeckName chosenDeck;
-            boolean deckInUse;
-            do {
-                chosenDeck = waitForDeck().getDeckName();
-                deckInUse = tryAddDeckAndCheckIsUsed(username, chosenDeck, thisLobby);
-                if (deckInUse) {
-                    send(new SetDeckAckMessage(false, false));
-                }
-            } while (deckInUse);
-
-            send(new SetDeckAckMessage(true, usernameInUse.isFirstPlayer));
-
-            if (usernameInUse.isFirstPlayer) {
-                SetGameOptionsMessage gameOptions;
-
-                boolean gameOptionsValid;
-                do {
-                    gameOptions = waitForGameOptions();
-                    gameOptionsValid = tryAddGameOptionsAndCheckValid(gameOptions, thisLobby);
-                    if (!gameOptionsValid) {
-                        send(new SetGameOptionsAckMessage(false));
-                    }
-                } while (!gameOptionsValid);
-                send(new SetGameOptionsAckMessage(true));
+            if (receivedLobbyMessage instanceof CreateLobbyMessage) {
+                configureLobby(thisLobby);
             }
+
+            String username = assignUsernameAndDeck(thisLobby);
 
             server.lobby(this, username, thisLobby);
 
-
+            Object objectFromNetwork;
             // From now on, we are only expecting to be receiving GameMessages
             while (isActive()) {
 

@@ -55,7 +55,7 @@ public class Server {
     public synchronized void lobby(SocketClientConnection c, String nickname, Lobby currentLobby) {
         currentLobby.waitingConnection.put(nickname, c);
 
-        if (currentLobby.waitingConnection.size() != currentLobby.getPlayersCount()) return;
+        if (currentLobby.waitingConnection.size() != currentLobby.getMaxPlayersCount()) return;
 
         Model model = new Model(currentLobby.getMotherNatureStartPosition(),
                 currentLobby.nicknamesAndDecks,
@@ -65,14 +65,14 @@ public class Server {
         Controller controller = new ServerController(model);
 
         List<String> keys = new ArrayList<>(currentLobby.waitingConnection.keySet());
-        int numberOfTowersBase = currentLobby.getPlayersCount() == 3 ? 6 : 8;
+        int numberOfTowersBase = currentLobby.getMaxPlayersCount() == 3 ? 6 : 8;
 
         // with this implementation the order of the players and the 2 teams (with 4 players) are casual
         for (int i = 0; i < keys.size(); i++) {
             SocketClientConnection connection = currentLobby.waitingConnection.get(keys.get(i));
 
             int numberOfTowersPlayer = numberOfTowersBase;
-            if (currentLobby.getPlayersCount() == 4 && i % 2 == 1) numberOfTowersPlayer = 0;
+            if (currentLobby.getMaxPlayersCount() == 4 && i % 2 == 1) numberOfTowersPlayer = 0;
             //(?)
             Player player = new Player(keys.get(i),
                     TowerColor.values()[i],

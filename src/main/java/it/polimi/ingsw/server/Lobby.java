@@ -13,7 +13,7 @@ import java.util.Map;
 public class Lobby {
 
     private boolean gameOptionsChosen;
-    private int playersCount;
+    private int maxPlayersCount;
     private int motherNatureStartPosition;
     private GameMode gameMode;
     public final Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>();
@@ -22,14 +22,14 @@ public class Lobby {
 
     public Lobby() {
         gameOptionsChosen = false;
-        playersCount = -1;
+        maxPlayersCount = -1;
         motherNatureStartPosition = -1;
         gameMode = null;
     }
 
     synchronized public void setGameOptions(SetGameOptionsMessage message) {
         gameOptionsChosen = true;
-        playersCount = message.getPlayerCount();
+        maxPlayersCount = message.getPlayerCount();
         motherNatureStartPosition = message.getMotherNatureIslandIndex();
         gameMode = message.getGameMode();
         this.notifyAll();
@@ -45,8 +45,8 @@ public class Lobby {
         }
     }
 
-    public int getPlayersCount() {
-        return playersCount;
+    public int getMaxPlayersCount() {
+        return maxPlayersCount;
     }
 
     public int getMotherNatureStartPosition() {
