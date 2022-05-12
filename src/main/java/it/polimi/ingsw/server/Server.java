@@ -1,12 +1,10 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.mvc.controller.Controller;
 import it.polimi.ingsw.mvc.controller.ServerController;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.game.RemoteView;
-import it.polimi.ingsw.player.Player;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -71,14 +69,6 @@ public class Server {
         for (int i = 0; i < keys.size(); i++) {
             SocketClientConnection connection = currentLobby.waitingConnection.get(keys.get(i));
 
-            int numberOfTowersPlayer = numberOfTowersBase;
-            if (currentLobby.getMaxPlayersCount() == 4 && i % 2 == 1) numberOfTowersPlayer = 0;
-            //(?)
-            Player player = new Player(keys.get(i),
-                    TowerColor.values()[i],
-                    currentLobby.nicknamesAndDecks.get(keys.get(0)),
-                    numberOfTowersPlayer
-            );
             RemoteView playerView = new RemoteView(model, keys.get(i), connection);
             connection.setRemoteView(playerView);
             model.addSubscriber(playerView);
