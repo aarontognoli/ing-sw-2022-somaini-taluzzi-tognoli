@@ -1,11 +1,10 @@
-package it.polimi.ingsw.mvc.view.lobby;
+package it.polimi.ingsw.mvc.view.lobby.CLI;
 
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
-import it.polimi.ingsw.messages.lobby.server.LobbyNamesListMessage;
-import it.polimi.ingsw.messages.lobby.server.LobbyState;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
-import it.polimi.ingsw.mvc.view.lobby.CLIStringHandler.BaseCLIStringHandler;
-import it.polimi.ingsw.mvc.view.lobby.CLIStringHandler.CLILobbyNameHandler;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.BaseCLIStringHandler;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLILobbyNameHandler;
+import it.polimi.ingsw.mvc.view.lobby.LobbyView;
 import it.polimi.ingsw.notifier.Notifier;
 
 import java.util.Scanner;
@@ -43,31 +42,19 @@ public class CLILobbyView extends LobbyView {
         asyncReadStdin();
     }
 
-    @Override
-    public void subscribeNotification(ServerLobbyMessage newMessage) {
-        // TODO: Try to handle message in ServerLobbyMessage passing CLILobbyView as argument?
-        if (newMessage instanceof LobbyNamesListMessage lobbiesMessage) {
-            handleLobbyMessage(lobbiesMessage);
-        } else {
-            throw new RuntimeException("Not implemented yet for message of type " + newMessage.getClass().getName());
-        }
-
-        show();
+    public void stop() {
+        readInputThread.interrupt();
     }
 
-    private void handleLobbyMessage(LobbyNamesListMessage lobbiesMessage) {
-        StringBuilder stringBuilder = new StringBuilder();
+    @Override
+    public void subscribeNotification(ServerLobbyMessage newMessage) {
+        CLILobbyViewUpdate update = newMessage.getUpdateForCLI();
 
-        for (LobbyState lobbyState : lobbiesMessage.getLobbies()) {
-            stringBuilder.append("%s - %d/%d\n".formatted(
-                    lobbyState.name(),
-                    lobbyState.currentPlayersCount(),
-                    lobbyState.maxPlayersCount()));
-        }
+        frontEnd = update.newFrontEnd();
+        currentQueryMessage = update.newCurrentQueryMessage();
+        cliStringHandler = update.newCliStringHandler();
 
-        frontEnd = stringBuilder.toString();
-        currentQueryMessage = "Choose a lobby or write 'new <new_lobby_name>' to create a new one";
-        cliStringHandler = new CLILobbyNameHandler();
+        show();
     }
 
     private void asyncReadStdin() {

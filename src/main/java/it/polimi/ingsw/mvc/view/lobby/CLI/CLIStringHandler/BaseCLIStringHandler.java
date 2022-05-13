@@ -1,4 +1,4 @@
-package it.polimi.ingsw.mvc.view.lobby.CLIStringHandler;
+package it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler;
 
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
 

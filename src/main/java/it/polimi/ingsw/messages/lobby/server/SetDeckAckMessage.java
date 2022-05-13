@@ -1,5 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyViewUpdate;
+
 public class SetDeckAckMessage extends ServerLobbyMessage {
     private final boolean isDeckValid;
     private final boolean isFirstPlayer;
@@ -15,5 +17,10 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
 
     public boolean getIsDeckValid() {
         return isDeckValid;
+    }
+
+    @Override
+    public CLILobbyViewUpdate getUpdateForCLI() {
+        throw new RuntimeException("Not Implemented yet");
     }
 }

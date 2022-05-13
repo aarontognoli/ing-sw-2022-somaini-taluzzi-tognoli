@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.mvc.controller.LobbyClientController;
-import it.polimi.ingsw.mvc.view.lobby.CLILobbyView;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 import it.polimi.ingsw.mvc.view.lobby.LobbyView;
 
 import java.io.IOException;

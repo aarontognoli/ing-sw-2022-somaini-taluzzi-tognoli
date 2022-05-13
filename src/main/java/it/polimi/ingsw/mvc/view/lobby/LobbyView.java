@@ -11,7 +11,7 @@ import it.polimi.ingsw.notifier.Subscriber;
  */
 public abstract class LobbyView extends View implements Subscriber<ServerLobbyMessage> {
 
-    LobbyView(Notifier<ServerLobbyMessage> modelNotifier) {
+    public LobbyView(Notifier<ServerLobbyMessage> modelNotifier) {
         modelNotifier.addSubscriber(this);
     }
 

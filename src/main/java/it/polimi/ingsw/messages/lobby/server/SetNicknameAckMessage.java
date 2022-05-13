@@ -1,5 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyViewUpdate;
+
 public class SetNicknameAckMessage extends ServerLobbyMessage {
     final private boolean isUsed;
 
@@ -10,5 +12,10 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
 
     public boolean getIsUsed() {
         return isUsed;
+    }
+
+    @Override
+    public CLILobbyViewUpdate getUpdateForCLI() {
+        throw new RuntimeException("Not Implemented yet");
     }
 }
