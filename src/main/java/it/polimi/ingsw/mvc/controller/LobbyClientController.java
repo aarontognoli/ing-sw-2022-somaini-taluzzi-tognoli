@@ -26,7 +26,7 @@ public class LobbyClientController extends ClientControllerBase {
     @Override
     protected void handleObjectFromNetwork(Object obj) {
         if (!(obj instanceof ServerLobbyMessage message)) {
-            throw new RuntimeException("Invalid message during Lobby");
+            throw new RuntimeException("Invalid message during Lobby, got " + obj.getClass().getName());
         }
 
         lobbyMessageNotifier.notifySubscribers(message);

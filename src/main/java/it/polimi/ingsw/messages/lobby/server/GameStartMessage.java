@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyViewUpdate;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 
 public class GameStartMessage extends ServerLobbyMessage {
     final private Model firstModel;
@@ -15,7 +15,7 @@ public class GameStartMessage extends ServerLobbyMessage {
     }
 
     @Override
-    public CLILobbyViewUpdate getUpdateForCLI() {
+    public void updateCLI(CLILobbyView cliLobbyView) {
         throw new RuntimeException("Not Implemented yet");
     }
 }

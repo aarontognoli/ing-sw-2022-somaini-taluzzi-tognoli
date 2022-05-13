@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.lobby.server;
 
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyViewUpdate;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLILobbyNameHandler;
 import it.polimi.ingsw.server.Lobby;
 
@@ -27,7 +27,7 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
     }
 
     @Override
-    public CLILobbyViewUpdate getUpdateForCLI() {
+    public void updateCLI(CLILobbyView cliLobbyView) {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (LobbyState lobbyState : lobbies) {
@@ -37,10 +37,8 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
                     lobbyState.maxPlayersCount()));
         }
 
-        return new CLILobbyViewUpdate(
-                stringBuilder.toString(),
-                "Choose a lobby or write 'new <new_lobby_name>' to create a new one",
-                new CLILobbyNameHandler()
-        );
+        cliLobbyView.setFrontEnd(stringBuilder.toString());
+        cliLobbyView.setCurrentQueryMessage("Choose a lobby or write 'new <new_lobby_name>' to create a new one");
+        cliLobbyView.setCliStringHandler(new CLILobbyNameHandler());
     }
 }

@@ -13,12 +13,14 @@ import java.util.Scanner;
  * CLI client View for the lobby
  */
 public class CLILobbyView extends LobbyView {
-
     private String frontEnd;
     private String currentQueryMessage;
+    private BaseCLIStringHandler cliStringHandler;
+
     private Thread readInputThread;
 
-    private BaseCLIStringHandler cliStringHandler;
+    // True if we created a new lobby, or at least we tried
+    private boolean isFirstPlayer;
 
     public CLILobbyView(Notifier<ServerLobbyMessage> modelNotifier) {
         super(modelNotifier);
@@ -48,11 +50,7 @@ public class CLILobbyView extends LobbyView {
 
     @Override
     public void subscribeNotification(ServerLobbyMessage newMessage) {
-        CLILobbyViewUpdate update = newMessage.getUpdateForCLI();
-
-        frontEnd = update.newFrontEnd();
-        currentQueryMessage = update.newCurrentQueryMessage();
-        cliStringHandler = update.newCliStringHandler();
+        newMessage.updateCLI(this);
 
         show();
     }
@@ -64,10 +62,30 @@ public class CLILobbyView extends LobbyView {
             while (true) {
                 String newLine = stdin.nextLine();
 
-                notifySubscribers(cliStringHandler.generateMessageFromInput(newLine));
+                notifySubscribers(cliStringHandler.generateMessageFromInput(this, newLine));
             }
         });
 
         readInputThread.start();
+    }
+
+    public void setFrontEnd(String frontEnd) {
+        this.frontEnd = frontEnd;
+    }
+
+    public void setCurrentQueryMessage(String currentQueryMessage) {
+        this.currentQueryMessage = currentQueryMessage;
+    }
+
+    public void setCliStringHandler(BaseCLIStringHandler cliStringHandler) {
+        this.cliStringHandler = cliStringHandler;
+    }
+
+    public boolean isFirstPlayer() {
+        return isFirstPlayer;
+    }
+
+    public void setFirstPlayer(boolean firstPlayer) {
+        isFirstPlayer = firstPlayer;
     }
 }
