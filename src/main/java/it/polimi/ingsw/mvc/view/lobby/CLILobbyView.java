@@ -7,8 +7,13 @@ import it.polimi.ingsw.notifier.Notifier;
  * CLI client View for the lobby
  */
 public class CLILobbyView extends LobbyView {
-    CLILobbyView(Notifier<ServerLobbyMessage> modelNotifier) {
+    public CLILobbyView(Notifier<ServerLobbyMessage> modelNotifier) {
         super(modelNotifier);
+    }
+
+    @Override
+    public void run() {
+        // TODO: Show initial view (ask if join on create lobby?)
     }
 
     @Override

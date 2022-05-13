@@ -1,7 +1,5 @@
 package it.polimi.ingsw.mvc.controller;
 
-import it.polimi.ingsw.notifier.Notifier;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,7 +9,6 @@ import java.io.ObjectOutputStream;
  * and then forwards the message to the server
  */
 public abstract class ClientControllerBase extends Controller {
-    final protected Notifier<Object> socketNotifier;
     final private ObjectInputStream socketIn;
     final private ObjectOutputStream socketOut;
 
@@ -19,13 +16,14 @@ public abstract class ClientControllerBase extends Controller {
         socketOut = objectOutputStream;
         socketIn = objectInputStream;
 
-        socketNotifier = new Notifier<>();
 
         new Thread(() -> {
-            try {
-                socketNotifier.notifySubscribers(socketIn.readObject());
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+            while (true) {
+                try {
+                    handleObjectFromNetwork(socketIn.readObject());
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
     }

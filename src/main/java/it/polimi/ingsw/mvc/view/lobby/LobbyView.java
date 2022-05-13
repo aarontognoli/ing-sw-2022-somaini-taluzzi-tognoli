@@ -15,6 +15,8 @@ public abstract class LobbyView extends View implements Subscriber<ServerLobbyMe
         modelNotifier.addSubscriber(this);
     }
 
+    public abstract void run();
+
     /**
      * Notification sent by the model every time it updates
      *
