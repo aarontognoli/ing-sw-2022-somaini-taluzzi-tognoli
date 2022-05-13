@@ -49,6 +49,10 @@ public class Lobby {
         return maxPlayersCount;
     }
 
+    public int getCurrentPlayersCount() {
+        return waitingConnection.size();
+    }
+
     public int getMotherNatureStartPosition() {
         return motherNatureStartPosition;
     }

@@ -38,13 +38,16 @@ public class Server {
         return null;
     }
 
-    //Deregister connection
+    /**
+     * Closes all the connection for the player of whichLobby,
+     * then removes the lobby from the list
+     *
+     * @param whichLobby target lobby
+     */
     public synchronized void closePlayersConnections(Lobby whichLobby) {
-        // this method closes all connections of whichLobby
-        // and removes the lobby from the list.
-        for (SocketClientConnection players : whichLobby.playersConnections) {
-            players.closeConnection();
-        }
+
+        whichLobby.playersConnections.forEach(SocketClientConnection::closeConnection);
+
         whichLobby.playersConnections.clear();
         lobbyMap.remove(getNameFromLobby(whichLobby), whichLobby);
     }
@@ -63,13 +66,12 @@ public class Server {
         Controller controller = new ServerController(model);
 
         List<String> keys = new ArrayList<>(currentLobby.waitingConnection.keySet());
-        int numberOfTowersBase = currentLobby.getMaxPlayersCount() == 3 ? 6 : 8;
 
         // with this implementation the order of the players and the 2 teams (with 4 players) are casual
-        for (int i = 0; i < keys.size(); i++) {
-            SocketClientConnection connection = currentLobby.waitingConnection.get(keys.get(i));
+        for (String key : keys) {
+            SocketClientConnection connection = currentLobby.waitingConnection.get(key);
 
-            RemoteView playerView = new RemoteView(model, keys.get(i), connection);
+            RemoteView playerView = new RemoteView(model, key, connection);
             connection.setRemoteView(playerView);
             model.addSubscriber(playerView);
             playerView.addSubscriber(controller);
