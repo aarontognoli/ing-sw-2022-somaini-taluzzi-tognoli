@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class LobbyNamesListMessage extends ServerLobbyMessage {
 
-    List<LobbyState> lobbies;
+    final private List<LobbyState> lobbies;
 
     public LobbyNamesListMessage(Map<String, Lobby> lobbyMap) {
         lobbies = new ArrayList<>();
@@ -18,5 +18,9 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
 
             lobbies.add(new LobbyState(lobbyName, lobby.getCurrentPlayersCount(), lobby.getMaxPlayersCount()));
         }
+    }
+
+    public List<LobbyState> getLobbies() {
+        return lobbies;
     }
 }

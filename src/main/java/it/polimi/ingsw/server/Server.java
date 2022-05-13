@@ -27,6 +27,7 @@ public class Server {
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT);
+        System.out.println("Server listening on port " + PORT);
     }
 
     private String getNameFromLobby(Lobby l) {

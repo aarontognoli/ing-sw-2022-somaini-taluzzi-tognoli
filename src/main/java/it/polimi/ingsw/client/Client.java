@@ -24,17 +24,19 @@ public class Client {
         Socket socket = new Socket(ip, port);
         System.out.println("Connection established");
 
-        ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
         ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
 
-        LobbyView lobbyView;
         LobbyClientController clientController = new LobbyClientController(socketIn, socketOut);
 
+        LobbyView lobbyView;
         if (isCLI) {
             lobbyView = new CLILobbyView(clientController.getLobbyMessageNotifier());
         } else {
             throw new RuntimeException("GUI not implemented yet");
         }
+
+        lobbyView.addSubscriber(clientController);
 
         lobbyView.run();
     }
