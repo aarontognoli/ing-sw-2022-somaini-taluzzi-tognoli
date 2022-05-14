@@ -23,7 +23,7 @@ public class Server {
     private final ExecutorService executor = Executors.newFixedThreadPool(128);
 
 
-    Map<String, Lobby> lobbyMap = new HashMap<>();
+    final Map<String, Lobby> lobbyMap = new HashMap<>();
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT);

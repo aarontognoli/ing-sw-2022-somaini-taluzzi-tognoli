@@ -155,12 +155,14 @@ public class SocketClientConnection implements Runnable {
     }
 
     public ServerLobbyMessage createNewLobby(String lobbyName) {
-        if (!server.lobbyMap.containsKey(lobbyName)) {
-            server.lobbyMap.put(lobbyName, new Lobby());
-            okLobby = true;
-            return new LobbyNameAckMessage(true);
+        synchronized (server.lobbyMap) {
+            if (!server.lobbyMap.containsKey(lobbyName)) {
+                server.lobbyMap.put(lobbyName, new Lobby());
+                okLobby = true;
+                return new LobbyNameAckMessage(true);
+            }
+            return new LobbyNameAckMessage(false);
         }
-        return new LobbyNameAckMessage(false);
     }
 
     public ServerLobbyMessage joinExistingLobby(String lobbyName) {
