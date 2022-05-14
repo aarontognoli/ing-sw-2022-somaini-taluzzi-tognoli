@@ -1,5 +1,6 @@
 package it.polimi.ingsw.mvc.view.lobby.CLI;
 
+import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.BaseCLIStringHandler;
@@ -67,6 +68,12 @@ public class CLILobbyView extends LobbyView {
         });
 
         readInputThread.start();
+    }
+
+    public void handleError() {
+        frontEnd = "Error!";
+        currentQueryMessage = "Try again!";
+        show();
     }
 
     public void setFrontEnd(String frontEnd) {
