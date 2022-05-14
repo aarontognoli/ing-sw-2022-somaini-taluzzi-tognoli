@@ -72,7 +72,9 @@ public class SocketClientConnection implements Runnable {
     private void close(Lobby whichLobby) {
         closeConnection();
         System.out.println("A player disconnected... End of the game");
-        server.closePlayersConnections(whichLobby);
+        if (whichLobby != null) {
+            server.closePlayersConnections(whichLobby);
+        }
         System.out.println("Game ended");
     }
 
@@ -237,10 +239,12 @@ public class SocketClientConnection implements Runnable {
     public void run() {
         //lobby setup
 
+        Lobby thisLobby = null;
+
         try {
             LobbySetupMessage receivedLobbyMessage = createJoinLobby();
             //From here no more LobbyManagement, only ClientLobbyMessages
-            Lobby thisLobby = server.lobbyMap.get(receivedLobbyMessage.getLobbyName());
+            thisLobby = server.lobbyMap.get(receivedLobbyMessage.getLobbyName());
 
             if (receivedLobbyMessage instanceof CreateLobbyMessage) {
                 configureLobby(thisLobby);
@@ -261,7 +265,7 @@ public class SocketClientConnection implements Runnable {
         } catch (IOException | ClassNotFoundException | ObjectIsNotMessageException | BadLobbyMessageException e) {
             e.printStackTrace();
             send(new ErrorMessage(e.getMessage()));
-            closeConnection();
+            close(thisLobby);
             return;
         }
     }
