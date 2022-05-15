@@ -127,6 +127,9 @@ public class SocketClientConnection implements Runnable {
     private boolean tryAddDeckAndCheckIsUsed(String username, DeckName deckName, Lobby whichLobby) {
         synchronized (whichLobby.nicknamesAndDecks) {
             for (DeckName d : whichLobby.nicknamesAndDecks.values()) {
+                if (d == null) {
+                    continue;
+                }
                 if (d.equals(deckName)) {
                     return true;
                 }
@@ -262,7 +265,6 @@ public class SocketClientConnection implements Runnable {
             e.printStackTrace();
             send(new ErrorMessage(e.getMessage()));
             closeConnection();
-            return;
         }
     }
 

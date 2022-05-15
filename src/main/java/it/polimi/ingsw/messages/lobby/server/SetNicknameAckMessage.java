@@ -19,11 +19,10 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
     public void updateCLI(CLILobbyView cliLobbyView) {
         if(getIsUsed()) {
             cliLobbyView.setFrontEnd("This username is already in use.");
-            cliLobbyView.setCurrentQueryMessage("Choose another one: ");
         } else {
             cliLobbyView.setFrontEnd("Good!");
             cliLobbyView.setCurrentQueryMessage("""
-                    Now choose a deck name: 'desert king',
+                    Choose a deck name: 'desert king',
                         'mountain sage',
                         'cloud witch',
                         'forest mage'.""");

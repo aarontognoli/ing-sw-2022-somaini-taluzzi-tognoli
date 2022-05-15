@@ -70,9 +70,8 @@ public class CLILobbyView extends LobbyView {
         readInputThread.start();
     }
 
-    public void handleError() {
-        frontEnd = "Error!";
-        currentQueryMessage = "Try again!";
+    public void handleError(String wrongElement) {
+        frontEnd = "Error in the given " + wrongElement + "!";
         show();
     }
 

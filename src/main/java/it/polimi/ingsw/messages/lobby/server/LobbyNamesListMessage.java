@@ -38,7 +38,8 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
         }
 
         cliLobbyView.setFrontEnd(stringBuilder.toString());
-        cliLobbyView.setCurrentQueryMessage("Choose a lobby or write 'new <new_lobby_name>' to create a new one");
+        cliLobbyView.setCurrentQueryMessage("Choose a lobby or write 'new <new_lobby_name>' to create a new one.\n" +
+                "Write 'reload' to reload the lobbies.");
         cliLobbyView.setCliStringHandler(new CLILobbyNameHandler());
     }
 }

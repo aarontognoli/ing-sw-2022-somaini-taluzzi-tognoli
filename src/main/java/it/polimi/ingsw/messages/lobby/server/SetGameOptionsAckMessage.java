@@ -22,7 +22,6 @@ public class SetGameOptionsAckMessage extends ServerLobbyMessage {
             cliLobbyView.setCliStringHandler(new CLIUsernameHandler());
         } else {
             cliLobbyView.setFrontEnd("There was an error in the setting of the game.");
-            cliLobbyView.setCurrentQueryMessage("Try again: ");
         }
     }
 }

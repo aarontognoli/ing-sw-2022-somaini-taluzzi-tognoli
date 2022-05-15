@@ -22,8 +22,7 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
     @Override
     public void updateCLI(CLILobbyView cliLobbyView) {
         if (!getIsDeckValid()) {
-            cliLobbyView.setFrontEnd("You cannot use that deck");
-            cliLobbyView.setCurrentQueryMessage("Try again!");
+            cliLobbyView.setFrontEnd("This deck is already in use.");
         } else {
             cliLobbyView.setFrontEnd("Perfect!");
             cliLobbyView.setCurrentQueryMessage("Now wait for other players to join the lobby!");

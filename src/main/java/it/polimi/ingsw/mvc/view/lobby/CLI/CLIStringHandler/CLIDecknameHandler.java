@@ -16,7 +16,7 @@ public class CLIDecknameHandler implements BaseCLIStringHandler {
             case "mountain sage" -> new SetDeckMessage(DeckName.MOUNTAIN_SAGE);
             case "cloud witch" -> new SetDeckMessage(DeckName.CLOUD_WITCH);
             case "forest mage" -> new SetDeckMessage(DeckName.FOREST_MAGE);
-            default -> new LobbyErrorMessage(cliLobbyView);
+            default -> new LobbyErrorMessage(cliLobbyView, "deck name");
         };
     }
 }

@@ -33,7 +33,7 @@ public class CLIGameOptionsHandler implements BaseCLIStringHandler {
             }
 
         } catch (Exception e) {
-            return new LobbyErrorMessage(cliLobbyView);
+            return new LobbyErrorMessage(cliLobbyView, "game options");
         }
 
         return new SetGameOptionsMessage(playerCount, gameMode, motherNatureIslandIndex);
