@@ -21,6 +21,15 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateCLI(CLILobbyView cliLobbyView) {
-        throw new RuntimeException("Not Implemented yet");
+        if (!getIsDeckValid()) {
+            cliLobbyView.setFrontEnd("You cannot use that deck");
+            cliLobbyView.setCurrentQueryMessage("Try again!");
+        } else {
+            cliLobbyView.setFrontEnd("Perfect!");
+            cliLobbyView.setCurrentQueryMessage("Now wait for other players to join the lobby!");
+            //TODO pass the control to GameClientController and create CLIGameView
+            //if first player, make him do the first move
+            //update future LobbyNamesListMessages : add current player
+        }
     }
 }

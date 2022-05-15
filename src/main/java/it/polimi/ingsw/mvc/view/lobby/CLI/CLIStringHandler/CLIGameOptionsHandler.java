@@ -22,7 +22,7 @@ public class CLIGameOptionsHandler implements BaseCLIStringHandler {
 
             String gameModeInput = input.substring(2, input.lastIndexOf(" "));
 
-            motherNatureIslandIndex = parseInt(input.substring(input.lastIndexOf(" ") + 1));
+            motherNatureIslandIndex = parseInt(input.substring(input.lastIndexOf(" ") + 1)) - 1;
 
             if (gameModeInput.equals("easy")) {
                 gameMode = GameMode.EASY_MODE;

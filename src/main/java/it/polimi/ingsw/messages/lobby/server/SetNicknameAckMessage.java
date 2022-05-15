@@ -1,6 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLIDecknameHandler;
 
 public class SetNicknameAckMessage extends ServerLobbyMessage {
     final private boolean isUsed;
@@ -16,6 +17,17 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateCLI(CLILobbyView cliLobbyView) {
-        throw new RuntimeException("Not Implemented yet");
+        if(getIsUsed()) {
+            cliLobbyView.setFrontEnd("This username is already in use.");
+            cliLobbyView.setCurrentQueryMessage("Choose another one: ");
+        } else {
+            cliLobbyView.setFrontEnd("Good!");
+            cliLobbyView.setCurrentQueryMessage("""
+                    Now choose a deck name: 'desert king',
+                        'mountain sage',
+                        'cloud witch',
+                        'forest mage'.""");
+            cliLobbyView.setCliStringHandler(new CLIDecknameHandler());
+        }
     }
 }

@@ -32,7 +32,7 @@ public class LobbyNameAckMessage extends ServerLobbyMessage {
             if (cliLobbyView.isFirstPlayer()) {
                 cliLobbyView.setCurrentQueryMessage("Cannot create lobby with that name. Please try again: ");
             } else {
-                cliLobbyView.setCurrentQueryMessage("Cannot to join that lobby. Please try again: ");
+                cliLobbyView.setCurrentQueryMessage("Cannot join that lobby. Please try again: ");
             }
         }
     }
