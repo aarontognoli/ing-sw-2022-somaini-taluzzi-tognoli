@@ -28,7 +28,6 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
             cliLobbyView.setCurrentQueryMessage("Now wait for other players to join the lobby!");
             //TODO pass the control to GameClientController and create CLIGameView
             //if first player, make him do the first move
-            //update future LobbyNamesListMessages : add current player
         }
     }
 }

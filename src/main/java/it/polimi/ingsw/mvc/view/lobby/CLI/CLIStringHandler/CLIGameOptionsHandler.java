@@ -16,17 +16,26 @@ public class CLIGameOptionsHandler implements BaseCLIStringHandler {
         GameMode gameMode;
         int motherNatureIslandIndex;
         input = input.trim().replaceAll(" +", " ");
+        String[] words = input.split(" ");
 
         try {
-            playerCount = parseInt(input.substring(0, 1));
+            if (words.length != 3) {
+                throw new IllegalArgumentException();
+            }
 
-            String gameModeInput = input.substring(2, input.lastIndexOf(" "));
+            playerCount = parseInt(words[0]);
+            if (playerCount < 1 || playerCount > 4) {
+                throw new IllegalArgumentException();
+            }
 
-            motherNatureIslandIndex = parseInt(input.substring(input.lastIndexOf(" ") + 1)) - 1;
+            motherNatureIslandIndex = parseInt(words[2]) - 1;
+            if(motherNatureIslandIndex < 0 || motherNatureIslandIndex > 11) {
+                throw new IllegalArgumentException();
+            }
 
-            if (gameModeInput.equals("easy")) {
+            if (words[1].equals("easy")) {
                 gameMode = GameMode.EASY_MODE;
-            } else if (gameModeInput.equals("difficult")) {
+            } else if (words[2].equals("difficult")) {
                 gameMode = GameMode.EXPERT_MODE;
             } else {
                 throw new IllegalArgumentException();
