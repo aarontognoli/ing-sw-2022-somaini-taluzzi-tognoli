@@ -93,4 +93,8 @@ public class Server {
             }
         }
     }
+
+    public void closeServer() throws IOException {
+        serverSocket.close();
+    }
 }

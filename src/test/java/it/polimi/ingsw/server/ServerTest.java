@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ServerTest {
@@ -35,5 +36,6 @@ class ServerTest {
 
         Client c1 = new Client("localhost", Server.PORT);
         // c1.run();
+        assertDoesNotThrow(server::closeServer);
     }
 }
