@@ -2,7 +2,6 @@ package it.polimi.ingsw.mvc.controller;
 
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
-import it.polimi.ingsw.messages.lobby.client.LobbyErrorMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.notifier.Notifier;
 
@@ -37,11 +36,6 @@ public class LobbyClientController extends ClientControllerBase {
     public void subscribeNotification(Message newValue) {
         if (!(newValue instanceof ClientLobbyMessage)) {
             throw new RuntimeException("Invalid message received by LobbyClientController. Why did he subscribe to this?");
-        }
-
-        if (newValue instanceof LobbyErrorMessage errorMessage) {
-            errorMessage.handleErrorLocally();
-            return;
         }
 
         asyncSendObject(newValue);

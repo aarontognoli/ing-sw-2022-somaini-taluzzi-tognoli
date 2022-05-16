@@ -14,8 +14,9 @@ public class CLILobbyNameHandler implements BaseCLIStringHandler {
             cliLobbyView.setFirstPlayer(true);
             String newLobbyName = input.substring(input.indexOf(" ") + 1);
             return new CreateLobbyMessage(newLobbyName);
-        } else if (input.trim().equals("reload")) {
+        } else if (input.equals("reload")) {
             // We want to reload the lobbies
+            cliLobbyView.setLobbyReloadMessagesAndHandler();
             return new RequestLobbyNamesListMessage();
         } else {
             // We want to join an existing lobby

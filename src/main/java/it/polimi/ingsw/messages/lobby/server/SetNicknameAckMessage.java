@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLIDecknameHandler;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLIDeckNameHandler;
 
 public class SetNicknameAckMessage extends ServerLobbyMessage {
     final private boolean isUsed;
@@ -22,11 +22,12 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
         } else {
             cliLobbyView.setFrontEnd("Good!");
             cliLobbyView.setCurrentQueryMessage("""
-                    Choose a deck name: 'desert king',
+                    Choose a deck name:
+                        'desert king',
                         'mountain sage',
                         'cloud witch',
-                        'forest mage'.""");
-            cliLobbyView.setCliStringHandler(new CLIDecknameHandler());
+                        'forest mage'""");
+            cliLobbyView.setCliStringHandler(new CLIDeckNameHandler());
         }
     }
 }
