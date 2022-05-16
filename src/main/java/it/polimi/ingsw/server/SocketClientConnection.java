@@ -139,30 +139,31 @@ public class SocketClientConnection implements Runnable {
         }
     }
 
-    private boolean tryAddGameOptionsAndCheckValid(SetGameOptionsMessage gameOptions, Lobby whichLobby) {
-        if (gameOptions.getPlayerCount() <= 1 ||
-                gameOptions.getPlayerCount() > 4 ||
-                gameOptions.getMotherNatureIslandIndex() < 0 ||
-                gameOptions.getMotherNatureIslandIndex() >= 12
-        ) return false;
-
-        whichLobby.setGameOptions(gameOptions);
-
-        return true;
+    private boolean checkValidGameOptions(CreateLobbyMessage createLobbyMessage) {
+        return createLobbyMessage.getPlayerCount() > 1 &&
+                createLobbyMessage.getPlayerCount() <= 4 &&
+                createLobbyMessage.getMotherNatureIslandIndex() >= 0 &&
+                createLobbyMessage.getMotherNatureIslandIndex() < 12;
     }
+
 
     public ServerLobbyMessage generateLobbyNamesList() {
         return new LobbyNamesListMessage(server.lobbyMap);
     }
 
-    public ServerLobbyMessage createNewLobby(String lobbyName) {
+    public ServerLobbyMessage createNewLobby(CreateLobbyMessage message) {
+        boolean areOptionsValid = false;
         synchronized (server.lobbyMap) {
-            if (!server.lobbyMap.containsKey(lobbyName)) {
-                server.lobbyMap.put(lobbyName, new Lobby());
-                okLobby = true;
-                return new LobbyNameAckMessage(true);
+            if (checkValidGameOptions(message)) {
+                areOptionsValid = true;
+                if (!server.lobbyMap.containsKey(message.getLobbyName())) {
+                    server.lobbyMap.put(message.getLobbyName(), new Lobby());
+                    okLobby = true;
+                    server.lobbyMap.get(message.getLobbyName()).setGameOptions(message);
+                    return new LobbyCreationAckMessage(true, true);
+                }
             }
-            return new LobbyNameAckMessage(false);
+            return new LobbyCreationAckMessage(false, areOptionsValid);
         }
     }
 
@@ -224,19 +225,7 @@ public class SocketClientConnection implements Runnable {
         return username;
     }
 
-    private void configureLobby(Lobby thisLobby) throws BadLobbyMessageException, IOException, ClassNotFoundException {
-        SetGameOptionsMessage gameOptions;
 
-        boolean gameOptionsValid;
-        do {
-            gameOptions = waitForGameOptions();
-            gameOptionsValid = tryAddGameOptionsAndCheckValid(gameOptions, thisLobby);
-            if (!gameOptionsValid) {
-                send(new SetGameOptionsAckMessage(false));
-            }
-        } while (!gameOptionsValid);
-        send(new SetGameOptionsAckMessage(true));
-    }
 
     @Override
     public void run() {
@@ -249,9 +238,6 @@ public class SocketClientConnection implements Runnable {
             //From here no more LobbyManagement, only ClientLobbyMessages
             thisLobby = server.lobbyMap.get(receivedLobbyMessage.getLobbyName());
 
-            if (receivedLobbyMessage instanceof CreateLobbyMessage) {
-                configureLobby(thisLobby);
-            }
 
             String username = assignUsernameAndDeck(thisLobby);
 

@@ -2,7 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
-import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class Lobby {
         gameMode = null;
     }
 
-    synchronized public void setGameOptions(SetGameOptionsMessage message) {
+    synchronized public void setGameOptions(CreateLobbyMessage message) {
         gameOptionsChosen = true;
         maxPlayersCount = message.getPlayerCount();
         motherNatureStartPosition = message.getMotherNatureIslandIndex();
