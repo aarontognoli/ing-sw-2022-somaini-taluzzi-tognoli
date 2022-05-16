@@ -74,6 +74,7 @@ public class SocketClientConnection implements Runnable {
         System.out.println("A player disconnected... End of the game");
         if (whichLobby != null) {
             server.closePlayersConnections(whichLobby);
+            server.lobbyMap.remove(server.getNameFromLobby(whichLobby), whichLobby);
         }
         System.out.println("Game ended");
     }

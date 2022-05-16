@@ -29,7 +29,7 @@ public class Server {
         this.serverSocket = new ServerSocket(PORT);
     }
 
-    private String getNameFromLobby(Lobby l) {
+    public String getNameFromLobby(Lobby l) {
         for (Map.Entry<String, Lobby> entry : lobbyMap.entrySet()) {
             if (entry.getValue().equals(l)) {
                 return entry.getKey();
