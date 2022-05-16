@@ -1,11 +1,13 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.mvc.controller.ClientControllerBase;
+import it.polimi.ingsw.mvc.controller.GameClientController;
+import it.polimi.ingsw.mvc.controller.LobbyClientController;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.game.CLI.CLIGameView;
-import it.polimi.ingsw.mvc.view.game.GameView;
+import it.polimi.ingsw.mvc.view.game.ClientGameView;
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 import it.polimi.ingsw.mvc.view.lobby.LobbyView;
+import it.polimi.ingsw.notifier.Notifier;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -30,32 +32,38 @@ public class Client {
         ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
 
-        ClientControllerBase clientController = new ClientControllerBase(socketIn, socketOut);
+        LobbyClientController lobbyClientController = new LobbyClientController(socketIn, socketOut);
 
         LobbyView lobbyView;
         if (isCLI) {
-            lobbyView = new CLILobbyView(clientController.getLobbyMessageNotifier());
+            lobbyView = new CLILobbyView(lobbyClientController.getLobbyMessageNotifier());
         } else {
             throw new RuntimeException("GUI not implemented yet");
         }
 
-        lobbyView.addSubscriber(clientController);
+        lobbyView.addSubscriber(lobbyClientController);
 
         lobbyView.run();
 
-        Model firstModel = lobbyView.getFirstModel();
-        clientController.setModelNotifier(firstModel);
+        lobbyClientController.stopObjectRead();
 
-        GameView gameView;
+        Notifier<Model> modelNotifier = new Notifier<>();
+        GameClientController gameClientController = new GameClientController(socketIn, socketOut, modelNotifier);
+
+        ClientGameView gameView;
         if (isCLI) {
-            gameView = new CLIGameView(firstModel);
+            gameView = new CLIGameView(modelNotifier);
         } else {
             throw new RuntimeException("GUI not implemented yet");
         }
 
-        gameView.addSubscriber(clientController);
+        gameView.addSubscriber(gameClientController);
 
-        ((CLIGameView)gameView).run();
+        modelNotifier.notifySubscribers(lobbyView.getFirstModel());
+
+        gameView.run();
+
+        gameClientController.stopObjectRead();
     }
 }
 

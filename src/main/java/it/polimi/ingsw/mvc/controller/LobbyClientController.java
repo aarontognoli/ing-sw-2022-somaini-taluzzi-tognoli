@@ -2,6 +2,7 @@ package it.polimi.ingsw.mvc.controller;
 
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
+import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.notifier.Notifier;
 
@@ -27,6 +28,11 @@ public class LobbyClientController extends ClientControllerBase {
     protected void handleObjectFromNetwork(Object obj) {
         if (!(obj instanceof ServerLobbyMessage message)) {
             throw new RuntimeException("Invalid message during Lobby, got " + obj.getClass().getName());
+        }
+
+        // When the GameStartMessage arrives, stop reading new objects from the network
+        if (obj instanceof GameStartMessage) {
+            this.stopObjectRead();
         }
 
         lobbyMessageNotifier.notifySubscribers(message);

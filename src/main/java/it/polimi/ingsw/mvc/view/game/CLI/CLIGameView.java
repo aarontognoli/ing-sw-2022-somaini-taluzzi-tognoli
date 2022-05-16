@@ -3,10 +3,10 @@ package it.polimi.ingsw.mvc.view.game.CLI;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLIPlayAssistantHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.GameCLIStringHandler;
-import it.polimi.ingsw.mvc.view.game.GameView;
+import it.polimi.ingsw.mvc.view.game.ClientGameView;
 import it.polimi.ingsw.notifier.Notifier;
 
-public class CLIGameView extends GameView {
+public class CLIGameView extends ClientGameView {
     private String frontEnd;
     private String currentQueryMessage;
     private GameCLIStringHandler cliStringHandler;
