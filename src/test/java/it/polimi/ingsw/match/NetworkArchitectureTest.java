@@ -1,8 +1,8 @@
 package it.polimi.ingsw.match;
 
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
-import it.polimi.ingsw.messages.lobby.server.SetNicknameAckMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.server.Server;
 import org.junit.jupiter.api.Test;
@@ -14,19 +14,21 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class NetworkArchitectureTest {
     @Test
     void NetworkTest() {
         Server server = runServerAsync();
+        assertNotNull(server);
         ClientStub client1 = runClientAsync();
         ClientStub client2 = runClientAsync();
         assertTrue(client1.isActive());
         assertTrue(client2.isActive());
         client1.sendMessage(new SetNicknameMessage("Prova"));
-        assertEquals(SetNicknameAckMessage.class, client1.waitToRecieveMessage().getClass());
+        assertEquals(ErrorMessage.class, client1.waitToRecieveMessage().getClass());
+        assertDoesNotThrow(server::closeServer);
+
     }
 
     private Server runServerAsync() {

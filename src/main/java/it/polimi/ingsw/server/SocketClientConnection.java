@@ -8,9 +8,10 @@ import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
-import it.polimi.ingsw.messages.lobby.server.SetDeckAckMessage;
-import it.polimi.ingsw.messages.lobby.server.SetGameOptionsAckMessage;
-import it.polimi.ingsw.messages.lobby.server.SetNicknameAckMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbyManagementMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbySetupMessage;
+import it.polimi.ingsw.messages.lobby.server.*;
 import it.polimi.ingsw.mvc.view.game.RemoteView;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class SocketClientConnection implements Runnable {
     private final ObjectInputStream socketIn;
     private final ObjectOutputStream socketOut;
     private boolean active = true;
+    private boolean okLobby = false;
 
     private RemoteView remoteView;
 
@@ -67,9 +69,13 @@ public class SocketClientConnection implements Runnable {
         active = false;
     }
 
-    private void close() {
+    private void close(Lobby whichLobby) {
         closeConnection();
-        server.closePlayersConnections();
+        System.out.println("A player disconnected... End of the game");
+        if (whichLobby != null) {
+            server.closePlayersConnections(whichLobby);
+            server.lobbyMap.remove(server.getNameFromLobby(whichLobby), whichLobby);
+        }
         System.out.println("Game ended");
     }
 
@@ -104,110 +110,152 @@ public class SocketClientConnection implements Runnable {
         return message;
     }
 
-    private UsernameInUse tryAddUsername(String newUsername) throws IOException {
-        synchronized (server.nicknamesAndDecks) {
+    private UsernameInUse tryAddUsername(String newUsername, Lobby whichLobby) throws IOException {
+        synchronized (whichLobby.nicknamesAndDecks) {
             // If this is not the first player to enter the lobby, wait for the game options to be defined
-            if (server.nicknamesAndDecks.size() != 0) {
-                server.currentLobby.waitForGameOptions(server);
+            if (whichLobby.nicknamesAndDecks.size() != 0) {
+                whichLobby.waitForGameOptions(whichLobby);
             }
 
-            for (String n : server.nicknamesAndDecks.keySet()) {
+            for (String n : whichLobby.nicknamesAndDecks.keySet()) {
                 if (n.equals(newUsername)) {
                     return new UsernameInUse(true, false);
                 }
             }
-            server.nicknamesAndDecks.put(newUsername, null);
-            return new UsernameInUse(false, server.nicknamesAndDecks.size() == 1);
+            whichLobby.nicknamesAndDecks.put(newUsername, null);
+            return new UsernameInUse(false, whichLobby.nicknamesAndDecks.size() == 1);
         }
     }
 
-    private boolean tryAddDeckAndCheckIsUsed(String username, DeckName deckName) {
-        synchronized (server.nicknamesAndDecks) {
-            for (DeckName d : server.nicknamesAndDecks.values()) {
+    private boolean tryAddDeckAndCheckIsUsed(String username, DeckName deckName, Lobby whichLobby) {
+        synchronized (whichLobby.nicknamesAndDecks) {
+            for (DeckName d : whichLobby.nicknamesAndDecks.values()) {
                 if (d.equals(deckName)) {
                     return true;
                 }
             }
-            server.nicknamesAndDecks.replace(username, deckName);
+            whichLobby.nicknamesAndDecks.replace(username, deckName);
             return false;
         }
     }
 
-    private boolean tryAddGameOptionsAndCheckValid(SetGameOptionsMessage gameOptions) {
-        if (gameOptions.getPlayerCount() <= 1 ||
-                gameOptions.getPlayerCount() > 4 ||
-                gameOptions.getMotherNatureIslandIndex() < 0 ||
-                gameOptions.getMotherNatureIslandIndex() >= 12
-        ) return false;
-
-        server.currentLobby.setGameOptions(gameOptions);
-
-        return true;
+    private boolean checkValidGameOptions(CreateLobbyMessage createLobbyMessage) {
+        return createLobbyMessage.getPlayerCount() > 1 &&
+                createLobbyMessage.getPlayerCount() <= 4 &&
+                createLobbyMessage.getMotherNatureIslandIndex() >= 0 &&
+                createLobbyMessage.getMotherNatureIslandIndex() < 12;
     }
+
+
+    public ServerLobbyMessage generateLobbyNamesList() {
+        return new LobbyNamesListMessage(server.lobbyMap);
+    }
+
+    public ServerLobbyMessage createNewLobby(CreateLobbyMessage message) {
+        boolean areOptionsValid = false;
+        synchronized (server.lobbyMap) {
+            if (checkValidGameOptions(message)) {
+                areOptionsValid = true;
+                if (!server.lobbyMap.containsKey(message.getLobbyName())) {
+                    server.lobbyMap.put(message.getLobbyName(), new Lobby());
+                    okLobby = true;
+                    server.lobbyMap.get(message.getLobbyName()).setGameOptions(message);
+                    return new LobbyCreationAckMessage(true, true);
+                }
+            }
+            return new LobbyCreationAckMessage(false, areOptionsValid);
+        }
+    }
+
+    public ServerLobbyMessage joinExistingLobby(String lobbyName) {
+        int currentPlayers, maxPlayers;
+        for (String s : server.lobbyMap.keySet()) {
+            if (s.equals(lobbyName)) {
+                maxPlayers = server.lobbyMap.get(s).getMaxPlayersCount();
+                currentPlayers = server.lobbyMap.get(s).waitingConnection.size();
+                if (currentPlayers < maxPlayers) {
+                    okLobby = true;
+                    return new LobbyNameAckMessage(true);
+                }
+            }
+        }
+        return new LobbyNameAckMessage(false);
+    }
+
+    private LobbySetupMessage createJoinLobby() throws IOException, ClassNotFoundException, BadLobbyMessageException {
+        Object objectFromNetwork;
+        do {
+            objectFromNetwork = socketIn.readObject();
+            if (objectFromNetwork instanceof LobbyManagementMessage) {
+                ServerLobbyMessage messageToSend = ((LobbyManagementMessage) objectFromNetwork).callbackFunction(this);
+                send(messageToSend);
+            } else {
+                throw new BadLobbyMessageException(objectFromNetwork);
+            }
+
+        } while (!okLobby);
+        return (LobbySetupMessage) objectFromNetwork;
+    }
+
+    private String assignUsernameAndDeck(Lobby thisLobby) throws BadLobbyMessageException, IOException, ClassNotFoundException {
+        String username;
+        UsernameInUse usernameInUse;
+        do {
+            username = waitForUsername().getNickname();
+            usernameInUse = tryAddUsername(username, thisLobby);
+
+            if (usernameInUse.isInUse) {
+                send(new SetNicknameAckMessage(true));
+            }
+        } while (usernameInUse.isInUse);
+
+        send(new SetNicknameAckMessage(false));
+
+        DeckName chosenDeck;
+        boolean deckInUse;
+        do {
+            chosenDeck = waitForDeck().getDeckName();
+            deckInUse = tryAddDeckAndCheckIsUsed(username, chosenDeck, thisLobby);
+            if (deckInUse) {
+                send(new SetDeckAckMessage(false, false));
+            }
+        } while (deckInUse);
+
+        send(new SetDeckAckMessage(true, usernameInUse.isFirstPlayer));
+        return username;
+    }
+
 
 
     @Override
     public void run() {
+        //lobby setup
+
+        Lobby thisLobby = null;
+
         try {
-            String username;
-            UsernameInUse usernameInUse;
-            do {
-                username = waitForUsername().getNickname();
-                usernameInUse = tryAddUsername(username);
+            LobbySetupMessage receivedLobbyMessage = createJoinLobby();
+            //From here no more LobbyManagement, only ClientLobbyMessages
+            thisLobby = server.lobbyMap.get(receivedLobbyMessage.getLobbyName());
 
-                if (usernameInUse.isInUse) {
-                    send(new SetNicknameAckMessage(true));
-                }
-            } while (usernameInUse.isInUse);
 
-            send(new SetNicknameAckMessage(false));
+            String username = assignUsernameAndDeck(thisLobby);
 
-            DeckName chosenDeck;
-            boolean deckInUse;
-            do {
-                chosenDeck = waitForDeck().getDeckName();
-                deckInUse = tryAddDeckAndCheckIsUsed(username, chosenDeck);
-                if (deckInUse) {
-                    send(new SetDeckAckMessage(false, false));
-                }
-            } while (deckInUse);
+            server.lobby(this, username, thisLobby);
 
-            send(new SetDeckAckMessage(true, usernameInUse.isFirstPlayer));
+            Object objectFromNetwork;
+            // From now on, we are only expecting to be receiving GameMessages
+            while (isActive()) {
 
-            if (usernameInUse.isFirstPlayer) {
-                SetGameOptionsMessage gameOptions;
-
-                boolean gameOptionsValid;
-                do {
-                    gameOptions = waitForGameOptions();
-                    gameOptionsValid = tryAddGameOptionsAndCheckValid(gameOptions);
-                    if (!gameOptionsValid) {
-                        send(new SetGameOptionsAckMessage(false));
-                    }
-                } while (!gameOptionsValid);
-                send(new SetGameOptionsAckMessage(true));
-            }
-
-            server.lobby(this, username);
-        } catch (BadLobbyMessageException | IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            send(new ErrorMessage(e.getMessage()));
-            close();
-            return;
-        }
-
-        // From now on, we are only expecting to be receiving GameMessages
-        Object objectFromNetwork;
-        while (isActive()) {
-            try {
                 objectFromNetwork = socketIn.readObject();
                 redirectToRemoteView(objectFromNetwork);
-            } catch (IOException | ClassNotFoundException | ObjectIsNotMessageException e) {
-                e.printStackTrace();
-                send(new ErrorMessage(e.getMessage()));
-                close();
-                return;
+
             }
+        } catch (IOException | ClassNotFoundException | ObjectIsNotMessageException | BadLobbyMessageException e) {
+            e.printStackTrace();
+            send(new ErrorMessage(e.getMessage()));
+            close(thisLobby);
+            return;
         }
     }
 
