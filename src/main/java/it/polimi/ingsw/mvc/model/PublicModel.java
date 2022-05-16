@@ -284,4 +284,8 @@ public class PublicModel implements PlayerActions {
     public GamePhase getGamePhase() {
         return fatherModel.gamePhase;
     }
+
+    public int getTotalPlayerCount() {
+        return fatherModel.totalPlayerCount;
+    }
 }

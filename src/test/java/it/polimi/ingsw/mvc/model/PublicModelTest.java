@@ -1,6 +1,8 @@
 package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.bag.Bag;
+import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.bag.BagTest;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
@@ -152,10 +154,10 @@ public class PublicModelTest {
         // TODO once the method is complete
     }
 
+
     private static Model createModel(Map<String, DeckName> nicknamesAndDecks, GameMode gameMode) {
         try {
-            Model model = new Model(0, nicknamesAndDecks, gameMode);
-            return model;
+            return new Model(0, nicknamesAndDecks, gameMode);
         } catch (Exception e) {
             assert false;
         }
@@ -170,6 +172,55 @@ public class PublicModelTest {
         temp.put("Player1", DeckName.DESERT_KING);
 
         return createModel(temp, GameMode.EASY_MODE);
+    }
+
+    static void makeModelAllRed(Model model) {
+        BagTest.fillBagWithRedStudents(model.bag, 240);
+        for (Player p : model.players) {
+
+            for (int i = 0; i < p.getBoard().getEntrance().size(); i++) {
+                try {
+                    p.getBoard().getEntrance().set(i, model.bag.draw());
+                } catch (BagEmptyException e) {
+                    throw new RuntimeException("Impossible");
+                }
+
+            }
+        }
+        for (Island i : model.islands) {
+            if (i.getStudents().size() != 0) {
+                try {
+                    i.getStudents().set(0, model.bag.draw());
+
+                } catch (BagEmptyException e) {
+                    throw new RuntimeException("Impossible");
+                }
+            }
+        }
+        try {
+            model.privateModel.fillClouds();
+
+        } catch (BagEmptyException e) {
+            throw new RuntimeException("Impossible");
+        }
+    }
+
+    public static Model twoPlayersTestAllRed() {
+        Model model = twoPlayersBasicSetup();
+        makeModelAllRed(model);
+        return model;
+    }
+
+    public static Model threePlayersTestAllRed() {
+        Model model = threePlayersBasicSetup();
+        makeModelAllRed(model);
+        return model;
+    }
+
+    public static Model fourPlayersTestAllRed() {
+        Model model = fourPlayersBasicSetup();
+        makeModelAllRed(model);
+        return model;
     }
 
     public static Model threePlayersBasicSetup() {
