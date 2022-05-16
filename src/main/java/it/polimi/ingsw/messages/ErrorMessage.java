@@ -6,4 +6,8 @@ public class ErrorMessage extends Message {
     public ErrorMessage(String s) {
         errorMessageString = s;
     }
+
+    public String getErrorMessage() {
+        return errorMessageString;
+    }
 }

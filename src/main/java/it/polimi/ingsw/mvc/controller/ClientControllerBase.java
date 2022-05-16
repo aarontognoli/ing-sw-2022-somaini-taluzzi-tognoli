@@ -1,6 +1,7 @@
 package it.polimi.ingsw.mvc.controller;
 
 import it.polimi.ingsw.enums.ControllerPhase;
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
@@ -61,12 +62,13 @@ public class ClientControllerBase extends Controller {
 
             lobbyMessageNotifier.notifySubscribers(message);
         } else {
-            if (obj instanceof GameMessage msg) {
+            if (obj instanceof ErrorMessage err) {
                 // TODO: Send the message to the view
+                System.out.println(err.getErrorMessage());
                 return;
             }
             if (!(obj instanceof Model newModel)) {
-                throw new RuntimeException("Why did the server send a non-model Object nor a String message?");
+                throw new RuntimeException("Why did the server send a non-model Object nor a ErrorMessage?");
             }
 
             modelNotifier.notifySubscribers(newModel);
