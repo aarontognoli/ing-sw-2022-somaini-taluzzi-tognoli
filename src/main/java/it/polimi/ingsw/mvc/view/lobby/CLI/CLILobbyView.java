@@ -9,7 +9,9 @@ import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.LobbyCLIS
 import it.polimi.ingsw.mvc.view.lobby.LobbyView;
 import it.polimi.ingsw.notifier.Notifier;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * CLI client View for the lobby
@@ -67,10 +69,25 @@ public class CLILobbyView extends LobbyView {
 
     private void asyncReadStdin() {
         readInputThread = new Thread(() -> {
-            final Scanner stdin = new Scanner(System.in);
+            final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
             while (true) {
-                String newLine = stdin.nextLine().trim().replaceAll(" +", " ");
+                String newLine;
+                try {
+                    // We cannot directly do stdin.readLine() because it is not interruptible
+                    // therefore the solution is to continuosly poll stdin while explicitly
+                    // put the thread in a WAIT state, which is interruptible.
+                    while (!stdin.ready()) {
+                        Thread.sleep(200);
+                    }
+                    newLine = stdin.readLine().trim().replaceAll(" +", " ");
+                } catch (InterruptedException e) {
+                    // Interrupt received while polling input, stop() was called.
+                    break;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    break;
+                }
 
                 try {
                     notifySubscribers(cliStringHandler.generateMessageFromInput(this, newLine));
@@ -108,7 +125,6 @@ public class CLILobbyView extends LobbyView {
         this.firstModel = firstModel;
     }
 
-    @Override
     public Model getFirstModel() {
         return firstModel;
     }
