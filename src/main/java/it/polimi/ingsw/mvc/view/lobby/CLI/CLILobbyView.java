@@ -1,5 +1,6 @@
 package it.polimi.ingsw.mvc.view.lobby.CLI;
 
+import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.mvc.model.Model;
@@ -34,13 +35,18 @@ public class CLILobbyView extends LobbyView {
         System.out.println(currentQueryMessage);
     }
 
-    @Override
-    public void run() throws InterruptedException {
-        // Query lobbies from server, and set initial message
+    public void setLobbyReloadMessagesAndHandler() {
         frontEnd = "Loading lobbies...";
         currentQueryMessage = "";
         cliStringHandler = new CLILobbyNameHandler();
+
         show();
+    }
+
+    @Override
+    public void run() throws InterruptedException {
+        // Query lobbies from server, and set initial message
+        setLobbyReloadMessagesAndHandler();
 
         notifySubscribers(new RequestLobbyNamesListMessage());
 
@@ -64,18 +70,18 @@ public class CLILobbyView extends LobbyView {
             final Scanner stdin = new Scanner(System.in);
 
             while (true) {
-                String newLine = stdin.nextLine();
+                String newLine = stdin.nextLine().trim().replaceAll(" +", " ");
 
-                notifySubscribers(cliStringHandler.generateMessageFromInput(this, newLine));
+                try {
+                    notifySubscribers(cliStringHandler.generateMessageFromInput(this, newLine));
+                } catch (ClientSideCheckException e) {
+                    frontEnd = e.getMessage();
+                    show();
+                }
             }
         });
 
         readInputThread.start();
-    }
-
-    public void handleError(String wrongElement) {
-        frontEnd = "Error in the given " + wrongElement + "!";
-        show();
     }
 
     public void setFrontEnd(String frontEnd) {

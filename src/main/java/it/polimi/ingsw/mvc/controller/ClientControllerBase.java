@@ -4,7 +4,6 @@ import it.polimi.ingsw.enums.ControllerPhase;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
-import it.polimi.ingsw.messages.lobby.client.LobbyErrorMessage;
 import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.mvc.model.Model;
@@ -91,11 +90,6 @@ public class ClientControllerBase extends Controller {
         if (controllerPhase.equals(ControllerPhase.LOBBY)) {
             if (!(newValue instanceof ClientLobbyMessage)) {
                 throw new RuntimeException("Invalid message received by LobbyClientController. Why did he subscribe to this?");
-            }
-
-            if (newValue instanceof LobbyErrorMessage errorMessage) {
-                errorMessage.handleErrorLocally();
-                return;
             }
 
         } else {

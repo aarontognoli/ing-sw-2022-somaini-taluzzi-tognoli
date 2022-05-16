@@ -1,8 +1,8 @@
 package it.polimi.ingsw.messages.lobby.server;
 
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIGameOptionsHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 
 public class LobbyNameAckMessage extends ServerLobbyMessage {
     final private boolean isValid;
