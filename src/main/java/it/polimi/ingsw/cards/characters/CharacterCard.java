@@ -2,7 +2,9 @@ package it.polimi.ingsw.cards.characters;
 
 import it.polimi.ingsw.mvc.model.Model;
 
-abstract public class CharacterCard {
+import java.io.Serializable;
+
+abstract public class CharacterCard implements Serializable {
     protected final Model model;
     private int coinCost;
 

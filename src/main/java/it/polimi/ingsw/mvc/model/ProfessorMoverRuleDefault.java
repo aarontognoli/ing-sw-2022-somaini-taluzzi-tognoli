@@ -1,6 +1,8 @@
 package it.polimi.ingsw.mvc.model;
 
-public class ProfessorMoverRuleDefault {
+import java.io.Serializable;
+
+public class ProfessorMoverRuleDefault implements Serializable {
     public boolean isMaxStudentsCount(int newStudentCount, int previousMax, String playerName) {
         return newStudentCount > previousMax;
     }

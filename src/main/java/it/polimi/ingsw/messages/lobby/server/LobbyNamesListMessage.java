@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLILobbyNameHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
 import it.polimi.ingsw.server.Lobby;
 
 import java.util.ArrayList;

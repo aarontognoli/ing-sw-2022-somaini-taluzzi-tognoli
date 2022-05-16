@@ -2,11 +2,12 @@ package it.polimi.ingsw.cloud;
 
 import it.polimi.ingsw.pawn.Student;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 // Package-only accessible class (only the Factory can instantiate it)
-public class Cloud {
+public class Cloud implements Serializable {
     private List<Student> students;
 
     public Cloud(int studentsCount) {

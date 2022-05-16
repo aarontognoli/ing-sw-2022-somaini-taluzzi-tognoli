@@ -4,10 +4,11 @@ import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.exceptions.NotFoundException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Deck {
+public class Deck implements Serializable {
     List<AssistantCard> cards;
 
     DeckName deckName;

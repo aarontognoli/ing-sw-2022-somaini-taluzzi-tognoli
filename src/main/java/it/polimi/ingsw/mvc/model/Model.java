@@ -11,12 +11,13 @@ import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 
-public class Model extends Notifier<Model> {
+public class Model extends Notifier<Model> implements Serializable {
 
     private static final int INITIAL_TOWER_COUNT_2_4_PLAYERS = 8;
     private static final int INITIAL_TOWER_COUNT_3_PLAYERS = 6;

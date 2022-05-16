@@ -1,4 +1,4 @@
-package it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler;
+package it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler;
 
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
@@ -8,7 +8,7 @@ import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 
 import static java.lang.Integer.parseInt;
 
-public class CLIGameOptionsHandler implements BaseCLIStringHandler {
+public class CLIGameOptionsHandler implements LobbyCLIStringHandler {
     @Override
     public ClientLobbyMessage generateMessageFromInput(CLILobbyView cliLobbyView, String input) {
         //throw new RuntimeException("Not implemented yet");

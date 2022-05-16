@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLIDecknameHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIDecknameHandler;
 
 public class SetNicknameAckMessage extends ServerLobbyMessage {
     final private boolean isUsed;

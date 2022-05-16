@@ -3,7 +3,9 @@ package it.polimi.ingsw.mvc.model;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.places.Island;
 
-public abstract class InfluenceCalculatorRules {
+import java.io.Serializable;
+
+public abstract class InfluenceCalculatorRules implements Serializable {
 
     final Model fatherModel;
 

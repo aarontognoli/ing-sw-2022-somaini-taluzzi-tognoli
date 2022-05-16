@@ -6,9 +6,10 @@ import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.NotFoundException;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Player {
+public class Player implements Serializable {
 
     final private Board board;
     final private String nickname;

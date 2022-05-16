@@ -1,13 +1,11 @@
-package it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler;
+package it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler;
 
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
-import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 
-public class CLIUsernameHandler implements BaseCLIStringHandler {
-
+public class CLIPlayAssistantHandler implements GameCLIStringHandler {
     @Override
     public ClientLobbyMessage generateMessageFromInput(CLILobbyView cliLobbyView, String input) {
-        return new SetNicknameMessage(input);
+        return null;
     }
 }

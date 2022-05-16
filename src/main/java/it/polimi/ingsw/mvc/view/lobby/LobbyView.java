@@ -1,6 +1,8 @@
 package it.polimi.ingsw.mvc.view.lobby;
 
+import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
+import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.View;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.notifier.Subscriber;
@@ -15,7 +17,9 @@ public abstract class LobbyView extends View implements Subscriber<ServerLobbyMe
         modelNotifier.addSubscriber(this);
     }
 
-    public abstract void run();
+    public abstract void run() throws InterruptedException;
+
+    public abstract Model getFirstModel();
 
     /**
      * Notification sent by the model every time it updates

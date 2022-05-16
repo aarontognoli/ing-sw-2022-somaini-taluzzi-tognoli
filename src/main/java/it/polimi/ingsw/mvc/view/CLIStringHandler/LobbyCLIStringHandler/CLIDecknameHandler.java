@@ -1,4 +1,4 @@
-package it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler;
+package it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler;
 
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
@@ -6,7 +6,7 @@ import it.polimi.ingsw.messages.lobby.client.LobbyErrorMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 
-public class CLIDecknameHandler implements BaseCLIStringHandler {
+public class CLIDecknameHandler implements LobbyCLIStringHandler {
 
     @Override
     public ClientLobbyMessage generateMessageFromInput(CLILobbyView cliLobbyView, String input) {

@@ -9,8 +9,10 @@ public abstract class GameView extends View implements Subscriber<Model> {
 
     protected Model model;
 
-    GameView(Notifier<Model> modelNotifier) {
+    public GameView(Notifier<Model> modelNotifier) {
         modelNotifier.addSubscriber(this);
+
+        model = (Model)modelNotifier;
     }
 
     /**

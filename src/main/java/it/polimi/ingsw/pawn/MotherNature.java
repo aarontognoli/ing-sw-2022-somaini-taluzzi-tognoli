@@ -2,7 +2,9 @@ package it.polimi.ingsw.pawn;
 
 import it.polimi.ingsw.places.Island;
 
-public class MotherNature {
+import java.io.Serializable;
+
+public class MotherNature implements Serializable {
     private Island position;
 
     public MotherNature(Island position) {

@@ -2,6 +2,8 @@ package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
+
+import java.io.Serializable;
 /*
     Modified effects:
     1. CentaurCharacter  : Tower have no influence
@@ -9,7 +11,7 @@ import it.polimi.ingsw.player.Board;
     3. MushroomCharacter : The chosen color's students have no influence
 */
 
-public abstract class InfluenceCalculator {
+public abstract class InfluenceCalculator implements Serializable {
     protected final Model fatherModel;
     protected InfluenceCalculatorRules influenceRules;
 

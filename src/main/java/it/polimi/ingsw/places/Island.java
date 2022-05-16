@@ -6,12 +6,13 @@ import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Island {
+public class Island implements Serializable {
 
     static private final int INITIAL_TOWER_CAPACITY = 8;
     static private final int INITIAL_STUDENT_CAPACITY = 8;

@@ -3,12 +3,13 @@ package it.polimi.ingsw.bag;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.pawn.Student;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
-public class Bag {
+public class Bag implements Serializable {
     static private int incremental_id = 0;
 
     static final private int COLORS_COUNT = Color.values().length;

@@ -19,6 +19,7 @@ import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.Math.floorMod;
 
-public class PrivateModel {
+public class PrivateModel implements Serializable {
 
     static final int INITIAL_STUDENT_ENTRANCE_3 = 9;
     public static final int INITIAL_STUDENT_ENTRANCE_2_4 = 7;

@@ -1,10 +1,10 @@
 package it.polimi.ingsw.mvc.view.lobby.CLI;
 
-import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.BaseCLIStringHandler;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLILobbyNameHandler;
+import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.LobbyCLIStringHandler;
 import it.polimi.ingsw.mvc.view.lobby.LobbyView;
 import it.polimi.ingsw.notifier.Notifier;
 
@@ -16,7 +16,9 @@ import java.util.Scanner;
 public class CLILobbyView extends LobbyView {
     private String frontEnd;
     private String currentQueryMessage;
-    private BaseCLIStringHandler cliStringHandler;
+    private LobbyCLIStringHandler cliStringHandler;
+
+    private Model firstModel;
 
     private Thread readInputThread;
 
@@ -33,7 +35,7 @@ public class CLILobbyView extends LobbyView {
     }
 
     @Override
-    public void run() {
+    public void run() throws InterruptedException {
         // Query lobbies from server, and set initial message
         frontEnd = "Loading lobbies...";
         currentQueryMessage = "";
@@ -43,6 +45,7 @@ public class CLILobbyView extends LobbyView {
         notifySubscribers(new RequestLobbyNamesListMessage());
 
         asyncReadStdin();
+        readInputThread.join();
     }
 
     public void stop() {
@@ -83,7 +86,7 @@ public class CLILobbyView extends LobbyView {
         this.currentQueryMessage = currentQueryMessage;
     }
 
-    public void setCliStringHandler(BaseCLIStringHandler cliStringHandler) {
+    public void setCliStringHandler(LobbyCLIStringHandler cliStringHandler) {
         this.cliStringHandler = cliStringHandler;
     }
 
@@ -93,5 +96,14 @@ public class CLILobbyView extends LobbyView {
 
     public void setFirstPlayer(boolean firstPlayer) {
         isFirstPlayer = firstPlayer;
+    }
+
+    public void setFirstModel(Model firstModel) {
+        this.firstModel = firstModel;
+    }
+
+    @Override
+    public Model getFirstModel() {
+        return firstModel;
     }
 }

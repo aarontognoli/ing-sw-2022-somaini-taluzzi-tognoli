@@ -16,6 +16,9 @@ public class GameStartMessage extends ServerLobbyMessage {
 
     @Override
     public void updateCLI(CLILobbyView cliLobbyView) {
-        throw new RuntimeException("Not Implemented yet");
+        cliLobbyView.setFirstModel(getFirstModel());
+        cliLobbyView.setFrontEnd("");
+        cliLobbyView.setCurrentQueryMessage("");
+        cliLobbyView.stop();
     }
 }

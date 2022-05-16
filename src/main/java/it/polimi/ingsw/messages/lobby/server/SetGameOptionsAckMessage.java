@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLIStringHandler.CLIUsernameHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
 
 public class SetGameOptionsAckMessage extends ServerLobbyMessage {
     final private boolean isValidOptions;
