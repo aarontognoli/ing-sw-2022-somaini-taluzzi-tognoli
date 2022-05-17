@@ -78,7 +78,7 @@ public class Server {
             connection.setRemoteView(playerView);
             modelNotifier.addSubscriber(playerView);
             playerView.addSubscriber(controller);
-            currentLobby.playersConnections.add(connection);
+
 
             connection.asyncSend(new GameStartMessage(model));
         }

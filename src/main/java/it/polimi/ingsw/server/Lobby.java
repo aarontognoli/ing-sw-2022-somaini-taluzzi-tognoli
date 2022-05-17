@@ -50,7 +50,7 @@ public class Lobby {
     }
 
     public int getCurrentPlayersCount() {
-        return waitingConnection.size();
+        return playersConnections.size();
     }
 
     public int getMotherNatureStartPosition() {
