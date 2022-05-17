@@ -6,6 +6,7 @@ import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.LobbyCLIStringHandler;
+import it.polimi.ingsw.mvc.view.CLIView;
 import it.polimi.ingsw.mvc.view.lobby.LobbyView;
 import it.polimi.ingsw.notifier.Notifier;
 
@@ -16,7 +17,7 @@ import java.io.InputStreamReader;
 /**
  * CLI client View for the lobby
  */
-public class CLILobbyView extends LobbyView {
+public class CLILobbyView extends LobbyView implements CLIView {
     private String frontEnd;
     private String currentQueryMessage;
     private LobbyCLIStringHandler cliStringHandler;

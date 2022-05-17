@@ -5,7 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * The client controller receives message from the client View (Be it CLI or GUI)
+ * The client controller receives message from the client View (Be it CLI or
+ * GUI)
  * and then forwards the message to the server
  */
 public abstract class ClientControllerBase extends Controller {
