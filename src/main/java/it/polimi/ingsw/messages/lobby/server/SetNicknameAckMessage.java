@@ -11,13 +11,13 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
         this.isUsed = isUsed;
     }
 
-    public boolean getIsUsed() {
+    public boolean isUsed() {
         return isUsed;
     }
 
     @Override
     public void updateCLI(CLILobbyView cliLobbyView) {
-        if(getIsUsed()) {
+        if (isUsed()) {
             cliLobbyView.setFrontEnd("This username is already in use.");
         } else {
             cliLobbyView.setFrontEnd("Good!");

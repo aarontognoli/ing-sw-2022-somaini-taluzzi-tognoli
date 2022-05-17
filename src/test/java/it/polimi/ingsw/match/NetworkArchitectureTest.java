@@ -1,13 +1,15 @@
 package it.polimi.ingsw.match;
 
+import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.JoinLobbyMessage;
-import it.polimi.ingsw.messages.lobby.server.LobbyCreationAckMessage;
-import it.polimi.ingsw.messages.lobby.server.LobbyNameAckMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
+import it.polimi.ingsw.messages.lobby.server.*;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.server.Server;
 import org.junit.jupiter.api.Test;
@@ -38,30 +40,75 @@ public class NetworkArchitectureTest {
 
     @Test
     void LobbyCreationTest() {
-        Message received1, received2;
+        Message received1, received2, received3;
         Server server = runServerAsync();
         assertNotNull(server);
         ClientStub client1 = runClientAsync();
         ClientStub client2 = runClientAsync();
+        ClientStub client3 = runClientAsync();
         assertTrue(client1.isActive());
         assertTrue(client2.isActive());
-        //c1 create lobby Prova
+
+        //c1 creates lobby Prova
         client1.sendMessage(new CreateLobbyMessage("Prova", 2, GameMode.EXPERT_MODE, 1));
         received1 = client1.waitToRecieveMessage();
         assertEquals(LobbyCreationAckMessage.class, received1.getClass());
         assertTrue(((LobbyCreationAckMessage) received1).isNameValid());
         assertTrue(((LobbyCreationAckMessage) received1).areOptionsValid());
+
         //c2 tries to create same lobby
-        client2.sendMessage(new CreateLobbyMessage("Prova", 2, GameMode.EXPERT_MODE, 1));
+        client2.sendMessage(new CreateLobbyMessage("Prova", 0, GameMode.EXPERT_MODE, 1));
         received2 = client2.waitToRecieveMessage();
         assertEquals(LobbyCreationAckMessage.class, received2.getClass());
         assertFalse(((LobbyCreationAckMessage) received2).isNameValid());
-        assertTrue(((LobbyCreationAckMessage) received2).areOptionsValid());
+        assertFalse(((LobbyCreationAckMessage) received2).areOptionsValid());
 
         client2.sendMessage(new JoinLobbyMessage("Prova"));
         received2 = client2.waitToRecieveMessage();
         assertEquals(LobbyNameAckMessage.class, received2.getClass());
         assertTrue(((LobbyNameAckMessage) received2).isValid());
+
+
+        //c3 tries to join lobby prova, which is full
+        client3.sendMessage(new RequestLobbyNamesListMessage());
+        received3 = client3.waitToRecieveMessage();
+        assertEquals(LobbyNamesListMessage.class, received3.getClass());
+        assertEquals(2, ((LobbyNamesListMessage) received3).getLobbies().get(0).currentPlayersCount());
+        client3.sendMessage(new JoinLobbyMessage("Prova"));
+        received3 = client3.waitToRecieveMessage();
+        assertEquals(LobbyNameAckMessage.class, received3.getClass());
+        assertFalse(((LobbyNameAckMessage) received3).isValid());
+        //client1 inserts username and deck
+        client1.sendMessage(new SetNicknameMessage("one"));
+        received1 = client1.waitToRecieveMessage();
+        assertEquals(SetNicknameAckMessage.class, received1.getClass());
+        assertFalse(((SetNicknameAckMessage) received1).isUsed());
+        client1.sendMessage(new SetDeckMessage(DeckName.DESERT_KING));
+        received1 = client1.waitToRecieveMessage();
+        assertEquals(SetDeckAckMessage.class, received1.getClass());
+        assertTrue(((SetDeckAckMessage) received1).isDeckValid());
+
+        //client2 tries to insert same username and deck
+        client2.sendMessage(new SetNicknameMessage("one"));
+        received2 = client2.waitToRecieveMessage();
+        assertEquals(SetNicknameAckMessage.class, received2.getClass());
+        assertTrue(((SetNicknameAckMessage) received2).isUsed());
+
+        client2.sendMessage(new SetNicknameMessage("two"));
+        received2 = client2.waitToRecieveMessage();
+        assertEquals(SetNicknameAckMessage.class, received2.getClass());
+        assertFalse(((SetNicknameAckMessage) received2).isUsed());
+
+        client2.sendMessage(new SetDeckMessage(DeckName.DESERT_KING));
+        received2 = client2.waitToRecieveMessage();
+        assertEquals(SetDeckAckMessage.class, received2.getClass());
+        assertFalse(((SetDeckAckMessage) received2).isDeckValid());
+
+        client2.sendMessage(new SetDeckMessage(DeckName.CLOUD_WITCH));
+        received2 = client2.waitToRecieveMessage();
+        assertEquals(SetDeckAckMessage.class, received2.getClass());
+        assertFalse(((SetDeckAckMessage) received2).isDeckValid());
+
         System.out.println("Ended network test");
         assertDoesNotThrow(server::closeServer);
 
