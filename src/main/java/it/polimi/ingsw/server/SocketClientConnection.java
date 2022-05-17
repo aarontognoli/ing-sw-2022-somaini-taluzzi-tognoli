@@ -6,7 +6,6 @@ import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
-import it.polimi.ingsw.messages.lobby.client.SetGameOptionsMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbyManagementMessage;
@@ -101,15 +100,6 @@ public class SocketClientConnection implements Runnable {
         return message;
     }
 
-    private SetGameOptionsMessage waitForGameOptions()
-            throws BadLobbyMessageException, IOException, ClassNotFoundException {
-        Object objectFromNetwork = socketIn.readObject();
-
-        if (!(objectFromNetwork instanceof SetGameOptionsMessage message))
-            throw new BadLobbyMessageException(objectFromNetwork);
-
-        return message;
-    }
 
     private UsernameInUse tryAddUsername(String newUsername, Lobby whichLobby) throws IOException {
         synchronized (whichLobby.nicknamesAndDecks) {
@@ -164,6 +154,7 @@ public class SocketClientConnection implements Runnable {
                     server.lobbyMap.put(message.getLobbyName(), new Lobby());
                     okLobby = true;
                     server.lobbyMap.get(message.getLobbyName()).setGameOptions(message);
+                    server.lobbyMap.get(message.getLobbyName()).playersConnections.add(this);
                     return new LobbyCreationAckMessage(true, true);
                 }
             }
@@ -176,9 +167,10 @@ public class SocketClientConnection implements Runnable {
         for (String s : server.lobbyMap.keySet()) {
             if (s.equals(lobbyName)) {
                 maxPlayers = server.lobbyMap.get(s).getMaxPlayersCount();
-                currentPlayers = server.lobbyMap.get(s).waitingConnection.size();
+                currentPlayers = server.lobbyMap.get(s).playersConnections.size();
                 if (currentPlayers < maxPlayers) {
                     okLobby = true;
+                    server.lobbyMap.get(s).playersConnections.add(this);
                     return new LobbyNameAckMessage(true);
                 }
             }

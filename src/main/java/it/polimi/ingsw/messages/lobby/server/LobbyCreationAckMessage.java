@@ -15,7 +15,7 @@ public class LobbyCreationAckMessage extends ServerLobbyMessage {
         return isNameValid;
     }
 
-    public boolean isAreOptionsValid() {
+    public boolean areOptionsValid() {
         return areOptionsValid;
     }
 
