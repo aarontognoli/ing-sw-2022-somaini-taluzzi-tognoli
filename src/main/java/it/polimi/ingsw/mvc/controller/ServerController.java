@@ -8,6 +8,7 @@ import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.mvc.PlayerActions;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.server.gameMessage;
 
 /**
@@ -17,9 +18,11 @@ import it.polimi.ingsw.server.gameMessage;
 public class ServerController extends Controller implements PlayerActions {
 
     private final Model model;
+    private final Notifier<Model> modelNotifier;
 
     public ServerController(Model model) {
         this.model = model;
+        modelNotifier = new Notifier<>();
     }
 
     @Override
@@ -41,8 +44,8 @@ public class ServerController extends Controller implements PlayerActions {
         synchronized (this) {
             try {
                 gameMsg.controllerCallback(this);
-                // here the model notifies the remote views with its new state
-                model.notifySubscribers(model);
+                // we notify the remote views with the new model
+                modelNotifier.notifySubscribers(model);
 
             } catch (Exception e) {
                 gameMsg.getRemoteView().sendErrorMessage(e.getMessage());

@@ -1,18 +1,17 @@
 package it.polimi.ingsw.mvc.view.game.CLI;
 
-import it.polimi.ingsw.exceptions.ClientSideCheckException;
-import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLIPlayAssistantHandler;
-import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.GameCLIStringHandler;
-import it.polimi.ingsw.mvc.view.CLIView;
-import it.polimi.ingsw.mvc.view.game.GameView;
-import it.polimi.ingsw.notifier.Notifier;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class CLIGameView extends GameView implements CLIView {
+import it.polimi.ingsw.exceptions.ClientSideCheckException;
+import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLIPlayAssistantHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.GameCLIStringHandler;
+import it.polimi.ingsw.mvc.view.game.ClientGameView;
+import it.polimi.ingsw.notifier.Notifier;
+
+public class CLIGameView extends ClientGameView {
     private String frontEnd;
     private String currentQueryMessage;
     private GameCLIStringHandler cliStringHandler;
@@ -54,8 +53,9 @@ public class CLIGameView extends GameView implements CLIView {
     @Override
     public void subscribeNotification(Model newValue) {
         super.subscribeNotification(newValue);
-        //TODO if it's my turn I print the model and the new query message
-        //if(newValue.publicModel.getCurrentPlayer().getNickname().equals(...)) {show()}
+        // TODO if it's my turn I print the model and the new query message
+        // if(newValue.publicModel.getCurrentPlayer().getNickname().equals(...))
+        // {show()}
     }
 
     private void asyncReadStdin() {
@@ -103,6 +103,5 @@ public class CLIGameView extends GameView implements CLIView {
     public void setCliStringHandler(GameCLIStringHandler cliStringHandler) {
         this.cliStringHandler = cliStringHandler;
     }
-
 
 }
