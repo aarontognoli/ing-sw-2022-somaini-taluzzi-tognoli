@@ -23,7 +23,8 @@ public abstract class ClientControllerBase extends Controller {
         new Thread(() -> {
             while (networkActive) {
                 try {
-                    handleObjectFromNetwork(socketIn.readObject());
+                    Object o = socketIn.readObject();
+                    handleObjectFromNetwork(o);
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                     return;

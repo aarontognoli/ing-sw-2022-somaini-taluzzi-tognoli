@@ -26,9 +26,6 @@ public class CLILobbyView extends LobbyView implements CLIView {
 
     private Thread readInputThread;
 
-    // True if we created a new lobby, or at least we tried
-    private boolean isFirstPlayer;
-
     public CLILobbyView(Notifier<ServerLobbyMessage> modelNotifier) {
         super(modelNotifier);
     }
@@ -112,14 +109,6 @@ public class CLILobbyView extends LobbyView implements CLIView {
 
     public void setCliStringHandler(LobbyCLIStringHandler cliStringHandler) {
         this.cliStringHandler = cliStringHandler;
-    }
-
-    public boolean isFirstPlayer() {
-        return isFirstPlayer;
-    }
-
-    public void setFirstPlayer(boolean firstPlayer) {
-        isFirstPlayer = firstPlayer;
     }
 
     public void setFirstModel(Model firstModel) {

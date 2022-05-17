@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 import it.polimi.ingsw.server.Lobby;
 
 import java.util.ArrayList;
@@ -38,8 +38,18 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
         }
 
         cliLobbyView.setFrontEnd(stringBuilder.toString());
-        cliLobbyView.setCurrentQueryMessage("Choose a lobby or write 'new <new_lobby_name>' to create a new one.\n" +
-                "Write 'reload' to reload the lobbies.");
+        cliLobbyView.setCurrentQueryMessage("""
+                Type 'reload' to reload the names of the lobbies
+                If you want to join a lobby, just type the lobby name
+                If you want to create a new lobby, write:
+                                
+                new <lobby_name> <number_of_players> <game_mode> <mother_nature_island>
+                                
+                Where:
+                  2 <= number_of_players <= 4
+                  game_mode = 'easy' or 'expert'
+                  1 <= mother_nature_island <= 12
+                """);
         cliLobbyView.setCliStringHandler(new CLILobbyNameHandler());
     }
 }
