@@ -8,6 +8,7 @@ import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.mvc.PlayerActions;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.player.Player;
 import it.polimi.ingsw.server.GameMessageConstants;
 
@@ -18,6 +19,8 @@ import it.polimi.ingsw.server.GameMessageConstants;
 public class ServerController extends Controller implements PlayerActions {
 
     private final Model model;
+    private final Notifier<Model> modelNotifier;
+
     // Turn actions checks
     // Move in dedicated class(?)
     boolean characterCardPlayed;
@@ -27,6 +30,7 @@ public class ServerController extends Controller implements PlayerActions {
     public ServerController(Model model) {
         this.model = model;
         resetChecks();
+        modelNotifier = new Notifier<>();
     }
 
     void resetChecks() {
@@ -66,15 +70,10 @@ public class ServerController extends Controller implements PlayerActions {
 
         synchronized (this) {
             try {
-                Player player = model.publicModel.getCurrentPlayer();
-
                 gameMsg.controllerCallback(this);
 
-                player.setPreviousMove(gameMsg);
-
-                // here the model notifies the remote views with its new state
-                model.notifySubscribers(model);
-
+                // we notify the remote views with the new model
+                modelNotifier.notifySubscribers(model);
             } catch (Exception e) {
                 gameMsg.getRemoteView().sendErrorMessage(e.getMessage());
             }

@@ -43,9 +43,10 @@ class ServerControllerTest {
 
     private void initialiseTwoPlayersExpertMode() {
         model = PublicModelTest.twoPlayersExpertMode();
+        Notifier<Model> modelNotifier = new Notifier<>();
         controller = new ServerController(model);
-        player0View = new RemoteViewStub(model, "Player0");
-        player1View = new RemoteViewStub(model, "Player1");
+        player0View = new RemoteViewStub(modelNotifier, "Player0");
+        player1View = new RemoteViewStub(modelNotifier, "Player1");
     }
 
     private void sendMessagePlayer0(GameMessage message) {
@@ -60,17 +61,17 @@ class ServerControllerTest {
         controller.subscribeNotification(message);
     }
 
-
-
     @Test
     void subscribeNotification() {
         initialiseTwoPlayersExpertMode();
 
-        assertThrows(RuntimeException.class, () -> controller.subscribeNotification(new SetNicknameMessage("username1")));
+        assertThrows(RuntimeException.class,
+                () -> controller.subscribeNotification(new SetNicknameMessage("username1")));
 
         message = new DrawStudentIntoEntranceMessage(0);
         sendMessagePlayer0(message);
-        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage,
+                errorMessage.getErrorMessageString());
 
         errorMessage = null;
         message = new PlayAssistantMessage(AssistantCard.CARD_1);
@@ -87,15 +88,18 @@ class ServerControllerTest {
 
         message = new PlayAssistantMessage(AssistantCard.CARD_3);
         sendMessagePlayer0(message);
-        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage,
+                errorMessage.getErrorMessageString());
 
         message = new DrawStudentIntoEntranceMessage(0);
         sendMessagePlayer0(message);
-        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.notEnoughStudentsAlreadyPlaced, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.notEnoughStudentsAlreadyPlaced,
+                errorMessage.getErrorMessageString());
 
         message = new MoveMotherNatureMessage(2);
         sendMessagePlayer0(message);
-        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.notEnoughStudentsAlreadyPlaced, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.notEnoughStudentsAlreadyPlaced,
+                errorMessage.getErrorMessageString());
 
         errorMessage = null;
         Color color0 = model.publicModel.getCurrentPlayer().getBoard().getEntrance().get(0).getColor();
@@ -112,7 +116,8 @@ class ServerControllerTest {
 
         message = new MoveStudentToDiningRoomMessage(color3);
         sendMessagePlayer0(message);
-        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.maxStudentsAlreadyPlacedMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.maxStudentsAlreadyPlacedMessage,
+                errorMessage.getErrorMessageString());
 
         message = new MoveMotherNatureMessage(3);
         sendMessagePlayer0(message);
@@ -143,6 +148,7 @@ class ServerControllerTest {
         initialiseTwoPlayersExpertMode();
         message = new MoveMotherNatureMessage(1);
         sendMessagePlayer0(message);
-        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage, errorMessage.getErrorMessageString());
+        assertEquals(WrongActionException.MESSAGE_PREFIX + GameMessageConstants.wrongGamePhaseMessage,
+                errorMessage.getErrorMessageString());
     }
 }

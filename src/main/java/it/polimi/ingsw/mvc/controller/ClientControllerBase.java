@@ -1,31 +1,33 @@
 package it.polimi.ingsw.mvc.controller;
 
-import it.polimi.ingsw.notifier.Notifier;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * The client controller receives message from the client View (Be it CLI or GUI)
+ * The client controller receives message from the client View (Be it CLI or
+ * GUI)
  * and then forwards the message to the server
  */
 public abstract class ClientControllerBase extends Controller {
-    final protected Notifier<Object> socketNotifier;
     final private ObjectInputStream socketIn;
     final private ObjectOutputStream socketOut;
+
+    private boolean networkActive;
 
     public ClientControllerBase(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         socketOut = objectOutputStream;
         socketIn = objectInputStream;
-
-        socketNotifier = new Notifier<>();
+        networkActive = true;
 
         new Thread(() -> {
-            try {
-                socketNotifier.notifySubscribers(socketIn.readObject());
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+            while (networkActive) {
+                try {
+                    handleObjectFromNetwork(socketIn.readObject());
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                    return;
+                }
             }
         }).start();
     }
@@ -42,5 +44,9 @@ public abstract class ClientControllerBase extends Controller {
                 }
             }
         }).start();
+    }
+
+    public void stopObjectRead() {
+        networkActive = false;
     }
 }

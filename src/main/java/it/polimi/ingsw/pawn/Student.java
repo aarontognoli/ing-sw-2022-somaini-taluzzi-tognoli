@@ -2,10 +2,11 @@ package it.polimi.ingsw.pawn;
 
 import it.polimi.ingsw.enums.Color;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 
-public class Student {
+public class Student implements Serializable {
     private final Integer id;
     private final Color color;
 

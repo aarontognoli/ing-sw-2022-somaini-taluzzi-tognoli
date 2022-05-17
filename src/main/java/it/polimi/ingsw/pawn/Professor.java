@@ -3,7 +3,9 @@ package it.polimi.ingsw.pawn;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.player.Board;
 
-public class Professor {
+import java.io.Serializable;
+
+public class Professor implements Serializable {
     private final Color color;
     private Board position;
 

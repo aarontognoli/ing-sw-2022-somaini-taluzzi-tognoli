@@ -9,13 +9,12 @@ public class CreateLobbyMessage extends LobbySetupMessage {
     final private GameMode gameMode;
     final private int motherNatureIslandIndex;
 
-    public CreateLobbyMessage(String s, int playerCount, GameMode gameMode, int motherNatureIslandIndex) {
-        super(s);
+    public CreateLobbyMessage(String lobbyName, int playerCount, GameMode gameMode, int motherNatureIslandIndex) {
+        super(lobbyName);
         this.playerCount = playerCount;
         this.gameMode = gameMode;
         this.motherNatureIslandIndex = motherNatureIslandIndex;
     }
-
 
     @Override
     public ServerLobbyMessage callbackFunction(SocketClientConnection sCC) {

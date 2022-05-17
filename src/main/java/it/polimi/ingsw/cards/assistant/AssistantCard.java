@@ -1,6 +1,8 @@
 package it.polimi.ingsw.cards.assistant;
 
-public enum AssistantCard {
+import java.io.Serializable;
+
+public enum AssistantCard implements Serializable {
 
     CARD_1(1, 1),
     CARD_2(2, 1),

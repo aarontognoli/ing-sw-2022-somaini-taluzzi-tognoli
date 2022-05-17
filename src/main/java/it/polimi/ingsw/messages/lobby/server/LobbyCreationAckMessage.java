@@ -1,5 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
+import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+
 public class LobbyCreationAckMessage extends ServerLobbyMessage {
     final private boolean isNameValid;
     final private boolean areOptionsValid;
@@ -15,5 +17,10 @@ public class LobbyCreationAckMessage extends ServerLobbyMessage {
 
     public boolean isAreOptionsValid() {
         return areOptionsValid;
+    }
+
+    @Override
+    public void updateCLI(CLILobbyView cliLobbyView) {
+        throw new RuntimeException("Not implemented yet");
     }
 }

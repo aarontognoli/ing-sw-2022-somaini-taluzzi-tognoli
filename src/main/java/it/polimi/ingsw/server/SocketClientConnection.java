@@ -101,7 +101,8 @@ public class SocketClientConnection implements Runnable {
         return message;
     }
 
-    private SetGameOptionsMessage waitForGameOptions() throws BadLobbyMessageException, IOException, ClassNotFoundException {
+    private SetGameOptionsMessage waitForGameOptions()
+            throws BadLobbyMessageException, IOException, ClassNotFoundException {
         Object objectFromNetwork = socketIn.readObject();
 
         if (!(objectFromNetwork instanceof SetGameOptionsMessage message))
@@ -112,7 +113,8 @@ public class SocketClientConnection implements Runnable {
 
     private UsernameInUse tryAddUsername(String newUsername, Lobby whichLobby) throws IOException {
         synchronized (whichLobby.nicknamesAndDecks) {
-            // If this is not the first player to enter the lobby, wait for the game options to be defined
+            // If this is not the first player to enter the lobby, wait for the game options
+            // to be defined
             if (whichLobby.nicknamesAndDecks.size() != 0) {
                 whichLobby.waitForGameOptions(whichLobby);
             }
@@ -130,6 +132,9 @@ public class SocketClientConnection implements Runnable {
     private boolean tryAddDeckAndCheckIsUsed(String username, DeckName deckName, Lobby whichLobby) {
         synchronized (whichLobby.nicknamesAndDecks) {
             for (DeckName d : whichLobby.nicknamesAndDecks.values()) {
+                if (d == null) {
+                    continue;
+                }
                 if (d.equals(deckName)) {
                     return true;
                 }
@@ -145,7 +150,6 @@ public class SocketClientConnection implements Runnable {
                 createLobbyMessage.getMotherNatureIslandIndex() >= 0 &&
                 createLobbyMessage.getMotherNatureIslandIndex() < 12;
     }
-
 
     public ServerLobbyMessage generateLobbyNamesList() {
         return new LobbyNamesListMessage(server.lobbyMap);
@@ -197,7 +201,8 @@ public class SocketClientConnection implements Runnable {
         return (LobbySetupMessage) objectFromNetwork;
     }
 
-    private String assignUsernameAndDeck(Lobby thisLobby) throws BadLobbyMessageException, IOException, ClassNotFoundException {
+    private String assignUsernameAndDeck(Lobby thisLobby)
+            throws BadLobbyMessageException, IOException, ClassNotFoundException {
         String username;
         UsernameInUse usernameInUse;
         do {
@@ -225,19 +230,16 @@ public class SocketClientConnection implements Runnable {
         return username;
     }
 
-
-
     @Override
     public void run() {
-        //lobby setup
+        // lobby setup
 
         Lobby thisLobby = null;
 
         try {
             LobbySetupMessage receivedLobbyMessage = createJoinLobby();
-            //From here no more LobbyManagement, only ClientLobbyMessages
+            // From here no more LobbyManagement, only ClientLobbyMessages
             thisLobby = server.lobbyMap.get(receivedLobbyMessage.getLobbyName());
-
 
             String username = assignUsernameAndDeck(thisLobby);
 

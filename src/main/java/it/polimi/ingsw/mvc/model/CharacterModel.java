@@ -6,10 +6,11 @@ import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CharacterModel {
+public class CharacterModel implements Serializable {
     final Model fatherModel;
 
     public CharacterModel(Model fatherModel) {

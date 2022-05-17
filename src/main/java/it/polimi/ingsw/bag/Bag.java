@@ -3,12 +3,12 @@ package it.polimi.ingsw.bag;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.pawn.Student;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
-public class Bag {
+public class Bag implements Serializable {
     static int incremental_id = 0;
 
     static final private int COLORS_COUNT = Color.values().length;
@@ -32,7 +32,6 @@ public class Bag {
         Collections.shuffle(students);
     }
 
-
     public Student draw() throws BagEmptyException {
         if (isEmpty())
             throw new BagEmptyException();
@@ -47,7 +46,7 @@ public class Bag {
     /**
      * @param studentList students list to reinsert in the bag
      * @implNote the students in the bug are shuffled again
-     * to maintain random draw of students
+     *           to maintain random draw of students
      */
     public void reinsert(List<Student> studentList) {
         students.addAll(studentList);

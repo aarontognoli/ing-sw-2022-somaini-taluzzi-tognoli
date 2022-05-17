@@ -5,6 +5,7 @@ import it.polimi.ingsw.mvc.controller.Controller;
 import it.polimi.ingsw.mvc.controller.ServerController;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.game.RemoteView;
+import it.polimi.ingsw.notifier.Notifier;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -27,6 +28,7 @@ public class Server {
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT);
+        System.out.println("Server listening on port " + PORT);
     }
 
     public String getNameFromLobby(Lobby l) {
@@ -62,6 +64,7 @@ public class Server {
                 currentLobby.nicknamesAndDecks,
                 currentLobby.getGameMode()
         );
+        Notifier<Model> modelNotifier = new Notifier<>();
 
         Controller controller = new ServerController(model);
 
@@ -71,12 +74,11 @@ public class Server {
         for (String key : keys) {
             SocketClientConnection connection = currentLobby.waitingConnection.get(key);
 
-            RemoteView playerView = new RemoteView(model, key, connection);
+            RemoteView playerView = new RemoteView(modelNotifier, key, connection);
             connection.setRemoteView(playerView);
-            model.addSubscriber(playerView);
+            modelNotifier.addSubscriber(playerView);
             playerView.addSubscriber(controller);
             currentLobby.playersConnections.add(connection);
-            currentLobby.waitingConnection.clear();
 
             connection.asyncSend(new GameStartMessage(model));
         }

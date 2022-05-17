@@ -16,11 +16,12 @@ import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PublicModel implements PlayerActions {
+public class PublicModel implements PlayerActions, Serializable {
     final Model fatherModel;
 
     PublicModel(Model fatherModel) {

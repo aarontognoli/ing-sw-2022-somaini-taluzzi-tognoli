@@ -7,10 +7,11 @@ import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.pawn.Student;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board {
+public class Board implements Serializable {
 
     static private final int DINING_ROOMS_COUNT = 5;
     static public final int DINING_ROOM_MAX_STUDENT_COUNT = 10;
