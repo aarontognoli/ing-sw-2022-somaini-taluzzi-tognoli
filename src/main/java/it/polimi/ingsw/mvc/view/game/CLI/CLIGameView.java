@@ -1,15 +1,15 @@
 package it.polimi.ingsw.mvc.view.game.CLI;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLIPlayAssistantHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.GameCLIStringHandler;
 import it.polimi.ingsw.mvc.view.game.ClientGameView;
 import it.polimi.ingsw.notifier.Notifier;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class CLIGameView extends ClientGameView {
     private String frontEnd;
@@ -44,6 +44,11 @@ public class CLIGameView extends ClientGameView {
         show();
 
         asyncReadStdin();
+        try {
+            readInputThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void stop() {

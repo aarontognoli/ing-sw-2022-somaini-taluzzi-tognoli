@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.lobby.server;
 
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
 import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
 
 public class LobbyCreationAckMessage extends ServerLobbyMessage {
@@ -21,6 +22,18 @@ public class LobbyCreationAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateCLI(CLILobbyView cliLobbyView) {
-        throw new RuntimeException("Not implemented yet");
+        if (!isNameValid) {
+            cliLobbyView.setFrontEnd("Invalid lobby name. Name already in use");
+            return;
+        }
+
+        if (!areOptionsValid) {
+            cliLobbyView.setFrontEnd("Invalid game option");
+            return;
+        }
+
+        cliLobbyView.setFrontEnd("Lobby created");
+        cliLobbyView.setCurrentQueryMessage("Enter your username");
+        cliLobbyView.setCliStringHandler(new CLIUsernameHandler());
     }
 }

@@ -45,8 +45,6 @@ public class Client {
 
         lobbyView.run();
 
-        lobbyClientController.stopObjectRead();
-
         Notifier<Model> modelNotifier = new Notifier<>();
         GameClientController gameClientController = new GameClientController(socketIn, socketOut, modelNotifier);
 
