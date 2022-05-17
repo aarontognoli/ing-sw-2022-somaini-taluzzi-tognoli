@@ -184,6 +184,32 @@ class PrivateModelTest {
 
         assertEquals(8, board0.getTowers().size());
         assertEquals(0, targetIsland.getTowers().size());
+        //Four Players
+        model = PublicModelTest.fourPlayersBasicSetup();
+        Board board3 = model.players.get(0).getBoard();
+
+        targetIsland = model.publicModel.getMotherNatureIsland();
+        assertEquals(0, targetIsland.getTowers().size());
+
+        model.privateModel.removeAllTowers(targetIsland);
+
+        assertEquals(0, targetIsland.getTowers().size());
+
+        try {
+            for (int i = 0; i < 8; i++) {
+                targetIsland.addTower(board3.removeTower());
+            }
+        } catch (Exception e) {
+            assert false;
+        }
+
+        assertEquals(0, board3.getTowers().size());
+        assertEquals(8, targetIsland.getTowers().size());
+
+        model.privateModel.removeAllTowers(targetIsland);
+
+        assertEquals(8, board3.getTowers().size());
+        assertEquals(0, targetIsland.getTowers().size());
     }
 
     @Test
@@ -309,5 +335,50 @@ class PrivateModelTest {
             }
         }
 
+    }
+
+    @Test
+    void sameAssistantCardOrder() {
+        Model model = PublicModelTest.twoPlayersBasicSetup();
+        Player firstPlayer = model.players.get(0);
+        Player secondPlayer = model.players.get(1);
+        for (Player p : model.players) {
+            for (int i = 0; i < AssistantCard.values().length - 1; i++) {
+                try {
+                    p.getDeck().playAssistantCard(AssistantCard.values()[i]);
+                } catch (NotFoundException e) {
+                    assert false;
+                }
+            }
+        }
+        model.firstPlayer = firstPlayer;
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_10));
+        model.publicModel.endTurn();
+        assertDoesNotThrow(() -> model.publicModel.playAssistant(AssistantCard.CARD_10));
+        model.publicModel.endTurn();
+        assertEquals(firstPlayer, model.publicModel.getCurrentPlayer());
+    }
+
+    @Test
+    void winByProfessorFourPlayers() {
+        Model model = PublicModelTest.fourPlayersBasicSetup();
+        while (!model.bag.isEmpty()) {
+
+            assertDoesNotThrow(() -> model.bag.draw());
+
+        }
+
+        model.currentPlayer = model.players.get(3);
+        model.players.get(3).getBoard().getEntrance().set(1, new Student(Color.RED_DRAGONS, 1));
+        assertDoesNotThrow(() -> model.publicModel.moveStudentToDiningRoom(Color.RED_DRAGONS));
+        assertEquals(model.players.get(2), model.privateModel.checkVictoryConditions());
+
+    }
+
+    @Test
+    void tieInfluence4Players() {
+        Model model = PublicModelTest.fourPlayersBasicSetup();
+        model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
+        assertEquals(0, model.publicModel.getMotherNatureIsland().getTowers().size());
     }
 }

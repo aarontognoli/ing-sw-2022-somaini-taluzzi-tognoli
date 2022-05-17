@@ -8,14 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class Bag implements Serializable {
-    static private int incremental_id = 0;
+    static int incremental_id = 0;
 
     static final private int COLORS_COUNT = Color.values().length;
     static final private Color[] COLORS_BY_INDEX = Color.values();
 
-    final private List<Student> students;
+    final List<Student> students;
 
     public Bag(int studentsCountPerColor) {
         students = new ArrayList<>(COLORS_COUNT * studentsCountPerColor);
@@ -47,7 +46,7 @@ public class Bag implements Serializable {
     /**
      * @param studentList students list to reinsert in the bag
      * @implNote the students in the bug are shuffled again
-     * to maintain random draw of students
+     *           to maintain random draw of students
      */
     public void reinsert(List<Student> studentList) {
         students.addAll(studentList);

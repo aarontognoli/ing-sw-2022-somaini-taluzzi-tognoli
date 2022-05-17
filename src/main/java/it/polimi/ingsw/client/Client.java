@@ -64,6 +64,7 @@ public class Client {
         gameView.run();
 
         gameClientController.stopObjectRead();
+
+        socket.close();
     }
 }
-

@@ -285,4 +285,8 @@ public class PublicModel implements PlayerActions, Serializable {
     public GamePhase getGamePhase() {
         return fatherModel.gamePhase;
     }
+
+    public int getTotalPlayerCount() {
+        return fatherModel.totalPlayerCount;
+    }
 }

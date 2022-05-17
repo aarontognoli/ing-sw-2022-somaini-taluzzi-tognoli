@@ -24,14 +24,14 @@ public class Server {
     private final ExecutorService executor = Executors.newFixedThreadPool(128);
 
 
-    Map<String, Lobby> lobbyMap = new HashMap<>();
+    final Map<String, Lobby> lobbyMap = new HashMap<>();
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT);
         System.out.println("Server listening on port " + PORT);
     }
 
-    private String getNameFromLobby(Lobby l) {
+    public String getNameFromLobby(Lobby l) {
         for (Map.Entry<String, Lobby> entry : lobbyMap.entrySet()) {
             if (entry.getValue().equals(l)) {
                 return entry.getKey();
@@ -79,7 +79,6 @@ public class Server {
             modelNotifier.addSubscriber(playerView);
             playerView.addSubscriber(controller);
             currentLobby.playersConnections.add(connection);
-            currentLobby.waitingConnection.clear();
 
             connection.asyncSend(new GameStartMessage(model));
         }
@@ -95,5 +94,9 @@ public class Server {
                 System.out.println("Connection Error!");
             }
         }
+    }
+
+    public void closeServer() throws IOException {
+        serverSocket.close();
     }
 }

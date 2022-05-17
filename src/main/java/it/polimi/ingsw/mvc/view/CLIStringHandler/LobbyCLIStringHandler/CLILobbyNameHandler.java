@@ -13,7 +13,8 @@ public class CLILobbyNameHandler implements LobbyCLIStringHandler {
             // We want to create a new lobby, get the name of the new lobby
             cliLobbyView.setFirstPlayer(true);
             String newLobbyName = input.substring(input.indexOf(" ") + 1);
-            return new CreateLobbyMessage(newLobbyName);
+            throw new RuntimeException("TODO: implement me");
+            // return new CreateLobbyMessage(newLobbyName);
         } else if (input.trim().equals("reload")) {
             // We want to reload the lobbies
             return new RequestLobbyNamesListMessage();
