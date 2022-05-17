@@ -167,7 +167,7 @@ public class SocketClientConnection implements Runnable {
         for (String s : server.lobbyMap.keySet()) {
             if (s.equals(lobbyName)) {
                 maxPlayers = server.lobbyMap.get(s).getMaxPlayersCount();
-                currentPlayers = server.lobbyMap.get(s).playersConnections.size();
+                currentPlayers = server.lobbyMap.get(s).getCurrentPlayersCount();
                 if (currentPlayers < maxPlayers) {
                     okLobby = true;
                     server.lobbyMap.get(s).playersConnections.add(this);
