@@ -80,7 +80,7 @@ public class Server {
             playerView.addSubscriber(controller);
 
 
-            connection.asyncSend(new GameStartMessage(model));
+            connection.send(new GameStartMessage(model));
         }
     }
 
