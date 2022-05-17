@@ -1,8 +1,13 @@
 package it.polimi.ingsw.match;
 
+import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.JoinLobbyMessage;
+import it.polimi.ingsw.messages.lobby.server.LobbyCreationAckMessage;
+import it.polimi.ingsw.messages.lobby.server.LobbyNameAckMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.server.Server;
 import org.junit.jupiter.api.Test;
@@ -27,6 +32,37 @@ public class NetworkArchitectureTest {
         assertTrue(client2.isActive());
         client1.sendMessage(new SetNicknameMessage("Prova"));
         assertEquals(ErrorMessage.class, client1.waitToRecieveMessage().getClass());
+        assertDoesNotThrow(server::closeServer);
+
+    }
+
+    @Test
+    void LobbyCreationTest() {
+        Message received1, received2;
+        Server server = runServerAsync();
+        assertNotNull(server);
+        ClientStub client1 = runClientAsync();
+        ClientStub client2 = runClientAsync();
+        assertTrue(client1.isActive());
+        assertTrue(client2.isActive());
+        //c1 create lobby Prova
+        client1.sendMessage(new CreateLobbyMessage("Prova", 2, GameMode.EXPERT_MODE, 1));
+        received1 = client1.waitToRecieveMessage();
+        assertEquals(LobbyCreationAckMessage.class, received1.getClass());
+        assertTrue(((LobbyCreationAckMessage) received1).isNameValid());
+        assertTrue(((LobbyCreationAckMessage) received1).areOptionsValid());
+        //c2 tries to create same lobby
+        client2.sendMessage(new CreateLobbyMessage("Prova", 2, GameMode.EXPERT_MODE, 1));
+        received2 = client2.waitToRecieveMessage();
+        assertEquals(LobbyCreationAckMessage.class, received2.getClass());
+        assertFalse(((LobbyCreationAckMessage) received2).isNameValid());
+        assertTrue(((LobbyCreationAckMessage) received2).areOptionsValid());
+
+        client2.sendMessage(new JoinLobbyMessage("Prova"));
+        received2 = client2.waitToRecieveMessage();
+        assertEquals(LobbyNameAckMessage.class, received2.getClass());
+        assertTrue(((LobbyNameAckMessage) received2).isValid());
+        System.out.println("Ended network test");
         assertDoesNotThrow(server::closeServer);
 
     }
