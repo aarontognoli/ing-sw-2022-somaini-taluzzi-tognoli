@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
@@ -107,9 +109,18 @@ public class NetworkArchitectureTest {
         client2.sendMessage(new SetDeckMessage(DeckName.CLOUD_WITCH));
         received2 = client2.waitToRecieveMessage();
         assertEquals(SetDeckAckMessage.class, received2.getClass());
-        assertFalse(((SetDeckAckMessage) received2).isDeckValid());
+        assertTrue(((SetDeckAckMessage) received2).isDeckValid());
 
-        System.out.println("Ended network test");
+
+        received2 = client2.waitToRecieveMessage();
+        assertEquals(GameStartMessage.class, received2.getClass());
+
+
+        received1 = client1.waitToRecieveMessage();
+        assertEquals(GameStartMessage.class, received1.getClass());
+
+
+        System.out.println("Ended Lobby network test");
         assertDoesNotThrow(server::closeServer);
 
     }
@@ -153,6 +164,7 @@ public class NetworkArchitectureTest {
         private final Object messageToSendLock = new Object();
         public boolean recieved = false;
         private Message recievedMessage;
+        public List<Message> messageList = new LinkedList<>();
 
         public ClientStub(String ip, int port) {
             this.ip = ip;
@@ -177,7 +189,7 @@ public class NetworkArchitectureTest {
                         if (inputObject instanceof Message message) {
                             System.out.println(message);
                             recieved = true;
-                            recievedMessage = message;
+                            messageList.add(message);
                         } else if (inputObject instanceof Model) {
                             System.out.println("New Model received");
                         } else {
@@ -227,9 +239,9 @@ public class NetworkArchitectureTest {
                     e.printStackTrace();
                 }
 
-            } while (!recieved);
-            recieved = false;
-            return recievedMessage;
+            } while (messageList.isEmpty());
+
+            return messageList.remove(0);
         }
 
         public void setMessage(Message message) {
