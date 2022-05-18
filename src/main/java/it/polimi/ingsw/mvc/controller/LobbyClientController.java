@@ -1,5 +1,6 @@
 package it.polimi.ingsw.mvc.controller;
 
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
 import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
@@ -26,6 +27,9 @@ public class LobbyClientController extends ClientControllerBase {
      */
     @Override
     protected void handleObjectFromNetwork(Object obj) {
+        if (obj instanceof ErrorMessage) {
+            //TODO
+        }
         if (!(obj instanceof ServerLobbyMessage message)) {
             throw new RuntimeException("Invalid message during Lobby, got " + obj.getClass().getName());
         }

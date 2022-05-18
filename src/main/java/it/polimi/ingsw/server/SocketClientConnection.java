@@ -59,7 +59,7 @@ public class SocketClientConnection implements Runnable {
     }
 
     public synchronized void closeConnection() {
-        send("Connection closed!");
+        send(new ErrorMessage("Connection closed!"));
         try {
             socket.close();
         } catch (IOException e) {
@@ -249,7 +249,6 @@ public class SocketClientConnection implements Runnable {
             e.printStackTrace();
             send(new ErrorMessage(e.getMessage()));
             close(thisLobby);
-            return;
         }
     }
 
