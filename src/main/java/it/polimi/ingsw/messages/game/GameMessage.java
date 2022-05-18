@@ -1,10 +1,10 @@
 package it.polimi.ingsw.messages.game;
 
-import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.controller.ServerController;
-import it.polimi.ingsw.mvc.view.game.RemoteView;
+import it.polimi.ingsw.mvc.view.RemoteView;
 
-public abstract class GameMessage extends Message {
+public abstract class GameMessage extends ClientMessage {
     private String username;
     private RemoteView remoteView;
 

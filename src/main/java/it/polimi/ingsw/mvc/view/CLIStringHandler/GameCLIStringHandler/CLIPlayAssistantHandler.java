@@ -2,16 +2,23 @@ package it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler;
 
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
+import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.messages.game.PlayAssistantMessage;
-import it.polimi.ingsw.mvc.view.game.CLI.CLIGameView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 
 import static java.lang.Integer.parseInt;
 
 public class CLIPlayAssistantHandler implements GameCLIStringHandler {
     @Override
-    public GameMessage generateMessageFromInput(CLIGameView cliGameView, String input) throws ClientSideCheckException {
-        return switch (parseInt(input)) {
+    public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
+        int turnOrderValue;
+        try {
+            turnOrderValue = parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new ClientSideCheckException("Invalid number");
+        }
+        return switch (turnOrderValue) {
             case 1 -> new PlayAssistantMessage(AssistantCard.CARD_1);
             case 2 -> new PlayAssistantMessage(AssistantCard.CARD_2);
             case 3 -> new PlayAssistantMessage(AssistantCard.CARD_3);

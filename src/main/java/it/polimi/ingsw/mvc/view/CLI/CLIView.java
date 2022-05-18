@@ -1,13 +1,15 @@
-package it.polimi.ingsw.mvc.view.lobby.CLI;
+package it.polimi.ingsw.mvc.view.CLI;
 
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
+import it.polimi.ingsw.messages.ErrorMessage;
+import it.polimi.ingsw.messages.ServerMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
+import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIStringHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
-import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.LobbyCLIStringHandler;
-import it.polimi.ingsw.mvc.view.CLIView;
-import it.polimi.ingsw.mvc.view.lobby.LobbyView;
+import it.polimi.ingsw.mvc.view.ClientView;
 import it.polimi.ingsw.notifier.Notifier;
 
 import java.io.BufferedReader;
@@ -17,22 +19,25 @@ import java.io.InputStreamReader;
 /**
  * CLI client View for the lobby
  */
-public class CLILobbyView extends LobbyView implements CLIView {
+public class CLIView extends ClientView {
     private String frontEnd;
     private String currentQueryMessage;
-    private LobbyCLIStringHandler cliStringHandler;
-
-    private Model firstModel;
+    private CLIStringHandler cliStringHandler;
 
     private Thread readInputThread;
 
-    public CLILobbyView(Notifier<ServerLobbyMessage> modelNotifier) {
-        super(modelNotifier);
+    public CLIView(Notifier<ServerMessage> messageNotifier, Notifier<Model> modelNotifier) {
+        super(messageNotifier, modelNotifier);
     }
 
     public void show() {
         System.out.println(frontEnd);
         System.out.println(currentQueryMessage);
+    }
+
+    public void showModel() {
+        // TODO: Draw on screen the updated model
+        System.out.println(model);
     }
 
     public void setLobbyReloadMessagesAndHandler() {
@@ -44,25 +49,39 @@ public class CLILobbyView extends LobbyView implements CLIView {
     }
 
     @Override
-    public void run() throws InterruptedException {
+    public void run() {
         // Query lobbies from server, and set initial message
         setLobbyReloadMessagesAndHandler();
 
         notifySubscribers(new RequestLobbyNamesListMessage());
 
         asyncReadStdin();
-        readInputThread.join();
-    }
-
-    public void stop() {
-        readInputThread.interrupt();
     }
 
     @Override
-    public void subscribeNotification(ServerLobbyMessage newMessage) {
-        newMessage.updateCLI(this);
+    public void subscribeNotification(ServerMessage newMessage) {
+        if (newMessage instanceof ErrorMessage errorMessage) {
+            setFrontEnd(errorMessage.getErrorMessageString());
+            show();
+            return;
+        }
+        if (newMessage instanceof GameStartMessage gameStartMessage) {
+            setFrontEnd("Loading first model...");
+            setCurrentQueryMessage("");
+            show();
+            model = gameStartMessage.getFirstModel();
+            showModel();
+            gameStartMessage.updateCLI(this);
+            return;
+        }
+        if (newMessage instanceof ServerLobbyMessage serverLobbyMessage) {
+            serverLobbyMessage.updateCLI(this);
+            show();
+            return;
+        }
+        // TODO: if message instance of ServerGameMessage ...
 
-        show();
+
     }
 
     private void asyncReadStdin() {
@@ -72,16 +91,7 @@ public class CLILobbyView extends LobbyView implements CLIView {
             while (true) {
                 String newLine;
                 try {
-                    // We cannot directly do stdin.readLine() because it is not interruptible
-                    // therefore the solution is to continuosly poll stdin while explicitly
-                    // put the thread in a WAIT state, which is interruptible.
-                    while (!stdin.ready()) {
-                        Thread.sleep(200);
-                    }
                     newLine = stdin.readLine().trim().replaceAll(" +", " ");
-                } catch (InterruptedException e) {
-                    // Interrupt received while polling input, stop() was called.
-                    break;
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;
@@ -107,15 +117,7 @@ public class CLILobbyView extends LobbyView implements CLIView {
         this.currentQueryMessage = currentQueryMessage;
     }
 
-    public void setCliStringHandler(LobbyCLIStringHandler cliStringHandler) {
+    public void setCliStringHandler(CLIStringHandler cliStringHandler) {
         this.cliStringHandler = cliStringHandler;
-    }
-
-    public void setFirstModel(Model firstModel) {
-        this.firstModel = firstModel;
-    }
-
-    public Model getFirstModel() {
-        return firstModel;
     }
 }

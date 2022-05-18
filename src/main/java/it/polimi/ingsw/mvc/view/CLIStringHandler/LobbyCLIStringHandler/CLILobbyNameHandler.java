@@ -2,11 +2,12 @@ package it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler;
 
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
+import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.JoinLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 
 import static java.lang.Integer.parseInt;
 
@@ -56,7 +57,7 @@ public class CLILobbyNameHandler implements LobbyCLIStringHandler {
     }
 
     @Override
-    public ClientLobbyMessage generateMessageFromInput(CLILobbyView cliLobbyView, String input) throws ClientSideCheckException {
+    public ClientMessage generateMessageFromInput(CLIView cliLobbyView, String input) throws ClientSideCheckException {
         if (input.startsWith("new ")) {
             // We want to create a new lobby
             return newLobby(input);

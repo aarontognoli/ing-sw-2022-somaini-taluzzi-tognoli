@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIDeckNameHandler;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 
 public class SetNicknameAckMessage extends ServerLobbyMessage {
     final private boolean isUsed;
@@ -16,7 +16,7 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
     }
 
     @Override
-    public void updateCLI(CLILobbyView cliLobbyView) {
+    public void updateCLI(CLIView cliLobbyView) {
         if(getIsUsed()) {
             cliLobbyView.setFrontEnd("This username is already in use.");
         } else {

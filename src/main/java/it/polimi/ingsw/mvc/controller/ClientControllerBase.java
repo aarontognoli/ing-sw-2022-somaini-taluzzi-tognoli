@@ -1,5 +1,10 @@
 package it.polimi.ingsw.mvc.controller;
 
+import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.messages.ServerMessage;
+import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
+import it.polimi.ingsw.notifier.Notifier;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,10 +20,14 @@ public abstract class ClientControllerBase extends Controller {
 
     private boolean networkActive;
 
+    protected final Notifier<ServerMessage> serverMessageNotifier;
+
     public ClientControllerBase(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         socketOut = objectOutputStream;
         socketIn = objectInputStream;
         networkActive = true;
+
+        this.serverMessageNotifier = new Notifier<>();
 
         new Thread(() -> {
             while (networkActive) {

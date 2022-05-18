@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 
 public class LobbyNameAckMessage extends ServerLobbyMessage {
     final private boolean isValid;
@@ -11,7 +11,7 @@ public class LobbyNameAckMessage extends ServerLobbyMessage {
     }
 
     @Override
-    public void updateCLI(CLILobbyView cliLobbyView) {
+    public void updateCLI(CLIView cliLobbyView) {
         if (isValid) {
             cliLobbyView.setFrontEnd("Lobby joined successfully.\n");
             cliLobbyView.setCurrentQueryMessage("Enter your username");

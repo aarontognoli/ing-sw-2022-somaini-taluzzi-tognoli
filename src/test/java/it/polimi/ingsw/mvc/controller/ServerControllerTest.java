@@ -8,7 +8,7 @@ import it.polimi.ingsw.messages.game.*;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.model.PublicModelTest;
-import it.polimi.ingsw.mvc.view.game.RemoteView;
+import it.polimi.ingsw.mvc.view.RemoteView;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.server.GameMessageConstants;
 import org.junit.jupiter.api.Test;

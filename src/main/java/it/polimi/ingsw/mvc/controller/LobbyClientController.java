@@ -1,7 +1,6 @@
 package it.polimi.ingsw.mvc.controller;
 
-import it.polimi.ingsw.messages.ErrorMessage;
-import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
 import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
@@ -12,13 +11,8 @@ import java.io.ObjectOutputStream;
 
 public class LobbyClientController extends ClientControllerBase {
 
-    // Notifier needed for LobbyView
-    private final Notifier<ServerLobbyMessage> lobbyMessageNotifier;
-
     public LobbyClientController(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         super(objectInputStream, objectOutputStream);
-
-        this.lobbyMessageNotifier = new Notifier<>();
     }
 
     /**
@@ -27,8 +21,14 @@ public class LobbyClientController extends ClientControllerBase {
      */
     @Override
     protected void handleObjectFromNetwork(Object obj) {
-        if (obj instanceof ErrorMessage) {
-            //TODO
+        if (obj instanceof ConnectionClosedErrorMessage connectionClosedMessage) {
+            serverMessageNotifier.notifySubscribers(connectionClosedMessage);
+            stopObjectRead();
+            return;
+        }
+        if (obj instanceof ErrorMessage errorMessage) {
+            serverMessageNotifier.notifySubscribers(errorMessage);
+            return;
         }
         if (!(obj instanceof ServerLobbyMessage message)) {
             throw new RuntimeException("Invalid message during Lobby, got " + obj.getClass().getName());
@@ -39,11 +39,11 @@ public class LobbyClientController extends ClientControllerBase {
             this.stopObjectRead();
         }
 
-        lobbyMessageNotifier.notifySubscribers(message);
+        serverMessageNotifier.notifySubscribers(message);
     }
 
     @Override
-    public void subscribeNotification(Message newValue) {
+    public void subscribeNotification(ClientMessage newValue) {
         if (!(newValue instanceof ClientLobbyMessage)) {
             throw new RuntimeException("Invalid message received by LobbyClientController. Why did he subscribe to this?");
         }
@@ -51,7 +51,7 @@ public class LobbyClientController extends ClientControllerBase {
         asyncSendObject(newValue);
     }
 
-    public Notifier<ServerLobbyMessage> getLobbyMessageNotifier() {
-        return lobbyMessageNotifier;
+    public Notifier<ServerMessage> getServerMessageNotifier() {
+        return serverMessageNotifier;
     }
 }

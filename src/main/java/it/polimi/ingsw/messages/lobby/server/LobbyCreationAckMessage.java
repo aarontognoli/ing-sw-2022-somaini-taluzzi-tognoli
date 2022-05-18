@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 
 public class LobbyCreationAckMessage extends ServerLobbyMessage {
     final private boolean isNameValid;
@@ -21,7 +21,7 @@ public class LobbyCreationAckMessage extends ServerLobbyMessage {
     }
 
     @Override
-    public void updateCLI(CLILobbyView cliLobbyView) {
+    public void updateCLI(CLIView cliLobbyView) {
         if (!isNameValid) {
             cliLobbyView.setFrontEnd("Invalid lobby name. Name already in use");
             return;

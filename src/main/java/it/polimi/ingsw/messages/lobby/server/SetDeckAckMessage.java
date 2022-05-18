@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.lobby.server;
 
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 
 public class SetDeckAckMessage extends ServerLobbyMessage {
     private final boolean isDeckValid;
@@ -20,14 +20,12 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
     }
 
     @Override
-    public void updateCLI(CLILobbyView cliLobbyView) {
+    public void updateCLI(CLIView cliLobbyView) {
         if (!getIsDeckValid()) {
             cliLobbyView.setFrontEnd("This deck is already in use.");
         } else {
             cliLobbyView.setFrontEnd("Perfect!");
             cliLobbyView.setCurrentQueryMessage("Now wait for other players to join the lobby!");
-            //TODO pass the control to GameClientController and create CLIGameView
-            //if first player, make him do the first move
         }
     }
 }

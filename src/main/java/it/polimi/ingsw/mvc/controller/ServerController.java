@@ -4,6 +4,7 @@ import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.exceptions.WrongActionException;
+import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.mvc.PlayerActions;
@@ -52,7 +53,7 @@ public class ServerController extends Controller implements PlayerActions {
     }
 
     @Override
-    public void subscribeNotification(Message message) {
+    public void subscribeNotification(ClientMessage message) {
 
         if (!(message instanceof GameMessage gameMsg)) {
             throw new RuntimeException("How did a wrong message get to the controller?");
