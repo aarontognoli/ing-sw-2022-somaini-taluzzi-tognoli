@@ -3,6 +3,7 @@ package it.polimi.ingsw.mvc.view.CLI;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.ServerMessage;
+import it.polimi.ingsw.messages.game.ServerGameMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
 import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
@@ -23,8 +24,6 @@ public class CLIView extends ClientView {
     private String frontEnd;
     private String currentQueryMessage;
     private CLIStringHandler cliStringHandler;
-
-    private Thread readInputThread;
 
     public CLIView(Notifier<ServerMessage> messageNotifier, Notifier<Model> modelNotifier) {
         super(messageNotifier, modelNotifier);
@@ -61,7 +60,7 @@ public class CLIView extends ClientView {
     @Override
     public void subscribeNotification(ServerMessage newMessage) {
         if (newMessage instanceof ErrorMessage errorMessage) {
-            setFrontEnd(errorMessage.getErrorMessageString());
+            errorMessage.updateCLI(this);
             show();
             return;
         }
@@ -72,6 +71,7 @@ public class CLIView extends ClientView {
             model = gameStartMessage.getFirstModel();
             showModel();
             gameStartMessage.updateCLI(this);
+            show();
             return;
         }
         if (newMessage instanceof ServerLobbyMessage serverLobbyMessage) {
@@ -79,13 +79,15 @@ public class CLIView extends ClientView {
             show();
             return;
         }
-        // TODO: if message instance of ServerGameMessage ...
-
-
+        if (newMessage instanceof ServerGameMessage serverGameMessage) {
+            showModel();
+            serverGameMessage.updateCLI(this);
+            show();
+        }
     }
 
     private void asyncReadStdin() {
-        readInputThread = new Thread(() -> {
+        Thread readInputThread = new Thread(() -> {
             final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
             while (true) {
@@ -96,7 +98,6 @@ public class CLIView extends ClientView {
                     e.printStackTrace();
                     break;
                 }
-
                 try {
                     notifySubscribers(cliStringHandler.generateMessageFromInput(this, newLine));
                 } catch (ClientSideCheckException e) {

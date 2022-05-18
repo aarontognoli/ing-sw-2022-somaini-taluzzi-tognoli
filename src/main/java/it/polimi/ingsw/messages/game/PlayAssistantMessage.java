@@ -3,7 +3,7 @@ package it.polimi.ingsw.messages.game;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.mvc.controller.ServerController;
 
-public class PlayAssistantMessage extends GameMessage {
+public class PlayAssistantMessage extends ClientGameMessage {
 
     final private AssistantCard assistantCard;
 

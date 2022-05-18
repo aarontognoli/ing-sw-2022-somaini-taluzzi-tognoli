@@ -1,18 +1,16 @@
 package it.polimi.ingsw.mvc.controller;
 
+import it.polimi.ingsw.client.SocketClient;
 import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.messages.lobby.client.ClientLobbyMessage;
 import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.notifier.Notifier;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 public class LobbyClientController extends ClientControllerBase {
 
-    public LobbyClientController(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
-        super(objectInputStream, objectOutputStream);
+    public LobbyClientController(SocketClient socketClient) {
+        super(socketClient);
     }
 
     /**
@@ -20,12 +18,7 @@ public class LobbyClientController extends ClientControllerBase {
      * @implNote obj must be a ServerLobbyMessage
      */
     @Override
-    protected void handleObjectFromNetwork(Object obj) {
-        if (obj instanceof ConnectionClosedErrorMessage connectionClosedMessage) {
-            serverMessageNotifier.notifySubscribers(connectionClosedMessage);
-            stopObjectRead();
-            return;
-        }
+    public void handleObjectFromNetwork(Object obj) {
         if (obj instanceof ErrorMessage errorMessage) {
             serverMessageNotifier.notifySubscribers(errorMessage);
             return;
@@ -33,22 +26,21 @@ public class LobbyClientController extends ClientControllerBase {
         if (!(obj instanceof ServerLobbyMessage message)) {
             throw new RuntimeException("Invalid message during Lobby, got " + obj.getClass().getName());
         }
-
         // When the GameStartMessage arrives, stop reading new objects from the network
         if (obj instanceof GameStartMessage) {
-            this.stopObjectRead();
+            socketClient.stopToChangePhase();
         }
-
         serverMessageNotifier.notifySubscribers(message);
     }
 
     @Override
     public void subscribeNotification(ClientMessage newValue) {
+        //If it's not a client lobby message it means that it has to be managed
+        //by the game client controller
         if (!(newValue instanceof ClientLobbyMessage)) {
-            throw new RuntimeException("Invalid message received by LobbyClientController. Why did he subscribe to this?");
+            return;
         }
-
-        asyncSendObject(newValue);
+        socketClient.asyncSendObject(newValue);
     }
 
     public Notifier<ServerMessage> getServerMessageNotifier() {

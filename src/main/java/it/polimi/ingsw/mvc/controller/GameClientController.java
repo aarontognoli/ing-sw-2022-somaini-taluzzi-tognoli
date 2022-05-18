@@ -1,20 +1,17 @@
 package it.polimi.ingsw.mvc.controller;
 
+import it.polimi.ingsw.client.SocketClient;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.ErrorMessage;
-import it.polimi.ingsw.messages.game.GameMessage;
+import it.polimi.ingsw.messages.game.ClientGameMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
-
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class GameClientController extends ClientControllerBase {
     final private Notifier<Model> modelNotifier;
 
-    public GameClientController(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Notifier<Model> modelNotifier) {
-        super(objectInputStream, objectOutputStream);
-
+    public GameClientController(SocketClient socketClient, Notifier<Model> modelNotifier) {
+        super(socketClient);
         this.modelNotifier = modelNotifier;
     }
 
@@ -24,12 +21,11 @@ public class GameClientController extends ClientControllerBase {
      */
     @Override
     public void subscribeNotification(ClientMessage newValue) {
-        if (!(newValue instanceof GameMessage message)) {
-            throw new RuntimeException("Why did the view send a bad message to the client controller?");
+        if (!(newValue instanceof ClientGameMessage message)) {
+            return;
         }
-
         // Send the message received from the view to the server
-        this.asyncSendObject(newValue);
+        socketClient.asyncSendObject(newValue);
     }
 
     /**
@@ -37,7 +33,7 @@ public class GameClientController extends ClientControllerBase {
      * @implNote obj must be a String, for error messages, or the latest Model
      */
     @Override
-    protected void handleObjectFromNetwork(Object obj) {
+    public void handleObjectFromNetwork(Object obj) {
         if (obj instanceof ErrorMessage errorMessage) {
             serverMessageNotifier.notifySubscribers(errorMessage);
             return;

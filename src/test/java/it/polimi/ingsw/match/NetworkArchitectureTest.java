@@ -1,7 +1,6 @@
 package it.polimi.ingsw.match;
 
-import it.polimi.ingsw.messages.ConnectionClosedErrorMessage;
-import it.polimi.ingsw.messages.ErrorMessage;
+import it.polimi.ingsw.messages.ConnectionClosedMessage;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.mvc.model.Model;
@@ -27,7 +26,7 @@ public class NetworkArchitectureTest {
         assertTrue(client1.isActive());
         assertTrue(client2.isActive());
         client1.sendMessage(new SetNicknameMessage("Prova"));
-        assertEquals(ConnectionClosedErrorMessage.class, client1.waitToRecieveMessage().getClass());
+        assertEquals(ConnectionClosedMessage.class, client1.waitToRecieveMessage().getClass());
         assertDoesNotThrow(server::closeServer);
 
     }

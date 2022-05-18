@@ -2,7 +2,7 @@ package it.polimi.ingsw.messages.game;
 
 import it.polimi.ingsw.mvc.controller.ServerController;
 
-public class PlayCharacterCardMessage extends GameMessage {
+public class PlayCharacterCardMessage extends ClientGameMessage {
     private final int cardIndex;
     private final Object effectArgument;
 

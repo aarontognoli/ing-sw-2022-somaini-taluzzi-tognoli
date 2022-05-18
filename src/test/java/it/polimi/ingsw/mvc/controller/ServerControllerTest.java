@@ -19,7 +19,7 @@ class ServerControllerTest {
     Model model;
     Controller controller;
     ErrorMessage errorMessage;
-    GameMessage message;
+    ClientGameMessage message;
     RemoteView player0View;
     RemoteView player1View;
 
@@ -49,13 +49,13 @@ class ServerControllerTest {
         player1View = new RemoteViewStub(modelNotifier, "Player1");
     }
 
-    private void sendMessagePlayer0(GameMessage message) {
+    private void sendMessagePlayer0(ClientGameMessage message) {
         message.setUsername("Player0");
         message.setRemoteView(player0View);
         controller.subscribeNotification(message);
     }
 
-    private void sendMessagePlayer1(GameMessage message) {
+    private void sendMessagePlayer1(ClientGameMessage message) {
         message.setUsername("Player1");
         message.setRemoteView(player1View);
         controller.subscribeNotification(message);

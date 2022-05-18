@@ -3,7 +3,6 @@ package it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
-import it.polimi.ingsw.messages.game.GameMessage;
 import it.polimi.ingsw.messages.game.PlayAssistantMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 
