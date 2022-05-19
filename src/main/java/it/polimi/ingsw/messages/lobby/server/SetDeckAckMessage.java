@@ -15,13 +15,13 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
         return isFirstPlayer;
     }
 
-    public boolean getIsDeckValid() {
+    public boolean isDeckValid() {
         return isDeckValid;
     }
 
     @Override
     public void updateCLI(CLILobbyView cliLobbyView) {
-        if (!getIsDeckValid()) {
+        if (!isDeckValid()) {
             cliLobbyView.setFrontEnd("This deck is already in use.");
         } else {
             cliLobbyView.setFrontEnd("Perfect!");
