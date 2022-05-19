@@ -1,6 +1,7 @@
 package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
@@ -38,11 +39,15 @@ public class CLIModelPrinter {
         return ANSI_COLOR;
     }
 
-    private static void printStudent(Color color) {
+    static void printStudent(Color color) {
         System.out.print(getAnsiColor(color) + "*" + ANSI_RESET + " ");
     }
 
-    private static void printTower(TowerColor color) {
+    static void printProfessor(Color color) {
+        System.out.print(getAnsiColor(color) + "P" + ANSI_RESET + " ");
+    }
+
+    static void printTower(TowerColor color) {
         String towerColor = switch (color) {
             case BLACK -> "B";
             case GREY -> "G";
@@ -51,58 +56,51 @@ public class CLIModelPrinter {
         System.out.print(towerColor + " ");
     }
 
-    private static void printProfessor(Color color) {
-        System.out.print(getAnsiColor(color) + "P" + ANSI_RESET + " ");
+    static void printEntrance(Board board) {
+        System.out.print("Entrance: ");
+        if (board.getEntrance().isEmpty()) {
+            return;
+        }
+        for (Student student : board.getEntrance()) {
+            printStudent(student.getColor());
+        }
+        System.out.print("\n");
     }
 
-    public static void printModel(Model model) {
-        for (Player player : model.players) {
-
-            Board board = player.getBoard();
-            System.out.println("\n" + player.getNickname() + " Board");
-
-            System.out.print("Entrance: ");
-            for (Student student : board.getEntrance()) {
-                printStudent(student.getColor());
+    static void printDiningRoom(Board board, Model model) {
+        System.out.println("Dining room:");
+        for (List<Student> students : board.getDiningRoom()) {
+            if (students.isEmpty()) {
+                break;
             }
-            System.out.print("\n");
-
-
-            System.out.println("Dining room:");
-            for (List<Student> students : board.getDiningRoom()) {
-                if (students.isEmpty()) {
-                    break;
-                }
-                Color color = students.get(0).getColor();
-                for (Student ignored : students) {
-                    printStudent(color);
-                }
-                for (Professor professor : model.professors) {
-                    if (professor.getColor().equals(color) && professor.getPosition() != null) {
-                        if (professor.getPosition().equals(board)) {
-                            printProfessor(color);
-                        }
+            Color color = students.get(0).getColor();
+            for (Student ignored : students) {
+                printStudent(color);
+            }
+            for (Professor professor : model.professors) {
+                if (professor.getColor().equals(color) && professor.getPosition() != null) {
+                    if (professor.getPosition().equals(board)) {
+                        printProfessor(color);
                     }
                 }
-                System.out.print("\n");
-            }
-
-            //TODO if 4 players print the player which has the towers
-            System.out.print("Towers: ");
-            for (Tower ignored : board.getTowers()) {
-                try {
-                    printTower(board.getTowerColor());
-                } catch (NoTowerException e) {
-                    throw new RuntimeException("Impossible to have towers and no tower color");
-                }
             }
             System.out.print("\n");
+        }
+    }
 
-            if(model.gameMode.equals(GameMode.EXPERT_MODE)) {
-                System.out.println("Number of coins: "+ board.getCoinCount());
+    static void printTowers(Board board) {
+        System.out.print("Towers: ");
+        for (Tower ignored : board.getTowers()) {
+            try {
+                printTower(board.getTowerColor());
+            } catch (NoTowerException e) {
+                throw new RuntimeException("Impossible to have towers and no tower color");
             }
         }
+        System.out.print("\n");
+    }
 
+    static void printIslands(Model model) {
         System.out.println("\nIslands:");
         int i = 1;
         for (Island island : model.islands) {
@@ -118,23 +116,89 @@ public class CLIModelPrinter {
             }
             System.out.print("\n");
         }
+    }
 
+    static void printClouds(Model model) {
         System.out.println("\nClouds: ");
-        i = 1;
+        int i = 1;
         for (Cloud cloud : model.clouds) {
             System.out.print("Cloud " + i++ + ": ");
-            for (Student student : cloud.getStudents()) {
+            if (cloud.getStudentsWithoutEmptying() == null) {
+                System.out.print("\n");
+                continue;
+            }
+            for (Student student : cloud.getStudentsWithoutEmptying()) {
                 printStudent(student.getColor());
             }
             System.out.print("\n");
         }
+    }
 
-        if(model.gameMode.equals(GameMode.EXPERT_MODE)) {
-            System.out.println("\nCharacter Cards: ");
-            for (CharacterCard characterCard : model.currentGameCards) {
-                //TODO print a more pretty character card name...
-                System.out.println(characterCard.getClass() + ": " + characterCard.getCoinCost());
+    static void printCharacterCards(Model model) {
+        System.out.println("\nCharacter Cards: ");
+        for (CharacterCard characterCard : model.currentGameCards) {
+            System.out.print(characterCard.getClass().getSimpleName() + ": cost " + characterCard.getCoinCost() + " ");
+            if (characterCard instanceof CharacterCardWithStudents characterCardWithStudents) {
+                for (Student student : characterCardWithStudents.getStudents()) {
+                    printStudent(student.getColor());
+                }
+            }
+            System.out.print("\n");
+        }
+    }
+
+    static void printAssistantCard(Player player) {
+        System.out.print("Current assistant card: ");
+        if(player.getCurrentAssistantCard() != null) {
+            System.out.print(player.getCurrentAssistantCard().getClass().getSimpleName());
+        }
+        System.out.print("\n");
+    }
+
+    static void printTeammate(Player player, Model model) {
+        System.out.print("Teammate: ");
+        Player teammate;
+        for (int i = 0; i < 4; i++) {
+            if (player.getNickname().equals(model.players.get(i).getNickname())) {
+                teammate = switch (i) {
+                    case 0 -> model.players.get(1);
+                    case 1 -> model.players.get(0);
+                    case 2 -> model.players.get(3);
+                    case 3 -> model.players.get(2);
+                    default -> throw new RuntimeException("Impossible state");
+                };
+                System.out.print(teammate.getNickname() + "\n");
             }
         }
+    }
+
+    public static void printModel(Model model) {
+        for (Player player : model.players) {
+
+            Board board = player.getBoard();
+            System.out.println("\n" + player.getNickname() + " Board");
+
+            printEntrance(board);
+
+            printDiningRoom(board, model);
+
+            printTowers(board);
+
+            printAssistantCard(player);
+
+            if (model.totalPlayerCount == 4) {
+                printTeammate(player, model);
+            }
+        }
+
+        printIslands(model);
+
+        printClouds(model);
+
+        if(model.gameMode.equals(GameMode.EXPERT_MODE)) {
+            printCharacterCards(model);
+        }
+
+        System.out.print("\n");
     }
 }
