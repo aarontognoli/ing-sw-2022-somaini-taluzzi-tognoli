@@ -3,6 +3,7 @@ package it.polimi.ingsw.mvc.view.CLI;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ServerMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
+import it.polimi.ingsw.mvc.model.CLIModelPrinter;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIStringHandler;
@@ -36,9 +37,7 @@ public class CLIView extends ClientView {
     }
 
     protected void showModel() {
-        // TODO: implement toString
-        System.out.println(model.toString());
-
+        CLIModelPrinter.printModel(model);
 
         String currentPlayerNickname = model.publicModel.getCurrentPlayer().getNickname();
         if (!currentPlayerNickname.equals(this.myUsername)) {
