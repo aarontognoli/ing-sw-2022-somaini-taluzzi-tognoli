@@ -108,7 +108,6 @@ public class PublicModel implements PlayerActions, Serializable {
         try {
             fatherModel.privateModel.fillClouds();
         } catch (BagEmptyException e) {
-            //todo signal that bag is empty
         }
         fatherModel.gamePhase = GamePhase.PIANIFICATION;
         fatherModel.currentPlayer = fatherModel.firstPlayer;
