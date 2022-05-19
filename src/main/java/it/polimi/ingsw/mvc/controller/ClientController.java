@@ -36,7 +36,10 @@ public class ClientController extends Controller {
                 try {
                     Object o = socketIn.readObject();
                     handleObjectFromNetwork(o);
-                } catch (IOException | ClassNotFoundException e) {
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    break;
+                } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }

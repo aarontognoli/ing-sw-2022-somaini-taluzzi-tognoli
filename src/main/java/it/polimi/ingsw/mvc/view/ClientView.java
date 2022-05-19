@@ -11,7 +11,8 @@ public abstract class ClientView extends View implements Subscriber<ServerMessag
     class ModelSubscriber implements Subscriber<Model>{
 
         ModelSubscriber(Notifier<Model> modelNotifier) {
-            modelNotifier.addSubscriber(this);}
+            modelNotifier.addSubscriber(this);
+        }
 
         /**
          * Notification sent by the model every time it updates
@@ -26,7 +27,7 @@ public abstract class ClientView extends View implements Subscriber<ServerMessag
 
     public ClientView(Notifier<ServerMessage> messageNotifier, Notifier<Model> modelNotifier) {
         messageNotifier.addSubscriber(this);
-        modelNotifier.addSubscriber(new ModelSubscriber(modelNotifier));
+        new ModelSubscriber(modelNotifier);
     }
 
     public abstract void run() throws InterruptedException;
