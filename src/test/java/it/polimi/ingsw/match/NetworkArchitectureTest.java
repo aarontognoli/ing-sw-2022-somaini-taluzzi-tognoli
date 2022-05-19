@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class NetworkArchitectureTest {
     @Test
-    void NetworkTest() {
+    void NetworkTest() throws InterruptedException, IOException {
         Server server = runServerAsync();
         assertNotNull(server);
         ClientStub client1 = runClientAsync();
@@ -36,8 +36,11 @@ public class NetworkArchitectureTest {
         assertTrue(client2.isActive());
         client1.sendMessage(new SetNicknameMessage("Prova"));
         assertEquals(ErrorMessage.class, client1.waitToRecieveMessage().getClass());
+
         assertDoesNotThrow(server::closeServer);
 
+        client1.close();
+        client2.close();
     }
 
     @Test
@@ -159,6 +162,7 @@ public class NetworkArchitectureTest {
     private class ClientStub {
         private final String ip;
         private final int port;
+        Socket socket;
         private Message message;
         private boolean messageToSend = false;
         private final Object messageToSendLock = new Object();
@@ -251,8 +255,16 @@ public class NetworkArchitectureTest {
             }
         }
 
+        public void close() throws IOException {
+            if (!socket.isClosed()) {
+                socket.shutdownOutput();
+                socket.shutdownInput();
+                socket.close();
+            }
+        }
+
         public void run() throws IOException {
-            Socket socket = new Socket(ip, port);
+            socket = new Socket(ip, port);
             System.out.println("Connection established");
             ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
