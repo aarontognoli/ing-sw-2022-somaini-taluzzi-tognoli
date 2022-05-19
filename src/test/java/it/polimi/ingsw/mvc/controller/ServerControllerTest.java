@@ -44,7 +44,7 @@ class ServerControllerTest {
     private void initialiseTwoPlayersExpertMode() {
         model = PublicModelTest.twoPlayersExpertMode();
         Notifier<Model> modelNotifier = new Notifier<>();
-        controller = new ServerController(model);
+        controller = new ServerController(model, modelNotifier);
         player0View = new RemoteViewStub(modelNotifier, "Player0");
         player1View = new RemoteViewStub(modelNotifier, "Player1");
     }

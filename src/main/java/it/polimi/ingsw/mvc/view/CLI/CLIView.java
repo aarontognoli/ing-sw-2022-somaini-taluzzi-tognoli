@@ -1,14 +1,12 @@
 package it.polimi.ingsw.mvc.view.CLI;
 
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
-import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.ServerMessage;
-import it.polimi.ingsw.messages.game.ServerGameMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
-import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
-import it.polimi.ingsw.messages.lobby.server.ServerLobbyMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIStringHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLIPlayAssistantHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
 import it.polimi.ingsw.mvc.view.ClientView;
 import it.polimi.ingsw.notifier.Notifier;
@@ -30,13 +28,30 @@ public class CLIView extends ClientView {
     }
 
     public void show() {
+        if (model != null) {
+            showModel();
+        }
         System.out.println(frontEnd);
         System.out.println(currentQueryMessage);
     }
 
-    public void showModel() {
-        // TODO: Draw on screen the updated model
-        System.out.println(model);
+    protected void showModel() {
+        // TODO: implement toString
+        System.out.println(model.toString());
+
+
+        String currentPlayerNickname = model.publicModel.getCurrentPlayer().getNickname();
+        if (!currentPlayerNickname.equals(this.myUsername)) {
+            currentQueryMessage = "Wait for your turn. %s is playing.".formatted(currentPlayerNickname);
+            cliStringHandler = new CLIEmptyHandler();
+            return;
+        }
+
+        // TODO: Update currentQueryMessage considering the state of the model and your username
+        currentQueryMessage = "TODO";
+
+        // TODO: Update cliStringHandler considering the state of the model and your username
+        cliStringHandler = new CLIPlayAssistantHandler();
     }
 
     public void setLobbyReloadMessagesAndHandler() {
@@ -59,31 +74,8 @@ public class CLIView extends ClientView {
 
     @Override
     public void subscribeNotification(ServerMessage newMessage) {
-        if (newMessage instanceof ErrorMessage errorMessage) {
-            errorMessage.updateCLI(this);
-            show();
-            return;
-        }
-        if (newMessage instanceof GameStartMessage gameStartMessage) {
-            setFrontEnd("Loading first model...");
-            setCurrentQueryMessage("");
-            show();
-            model = gameStartMessage.getFirstModel();
-            showModel();
-            gameStartMessage.updateCLI(this);
-            show();
-            return;
-        }
-        if (newMessage instanceof ServerLobbyMessage serverLobbyMessage) {
-            serverLobbyMessage.updateCLI(this);
-            show();
-            return;
-        }
-        if (newMessage instanceof ServerGameMessage serverGameMessage) {
-            showModel();
-            serverGameMessage.updateCLI(this);
-            show();
-        }
+        newMessage.updateCLI(this);
+        show();
     }
 
     private void asyncReadStdin() {

@@ -26,10 +26,10 @@ public class ServerController extends Controller implements PlayerActions {
     boolean motherNatureMoved;
     int studentsPlaced;
 
-    public ServerController(Model model) {
+    public ServerController(Model model, Notifier<Model> modelNotifier) {
         this.model = model;
         resetChecks();
-        modelNotifier = new Notifier<>();
+        this.modelNotifier = modelNotifier;
     }
 
     void resetChecks() {

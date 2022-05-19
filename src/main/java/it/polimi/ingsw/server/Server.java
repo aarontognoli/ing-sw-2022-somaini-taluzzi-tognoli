@@ -66,7 +66,7 @@ public class Server {
         );
         Notifier<Model> modelNotifier = new Notifier<>();
 
-        Controller controller = new ServerController(model);
+        Controller controller = new ServerController(model, modelNotifier);
 
         List<String> keys = new ArrayList<>(currentLobby.waitingConnection.keySet());
 
@@ -76,9 +76,7 @@ public class Server {
 
             RemoteView playerView = new RemoteView(modelNotifier, key, connection);
             connection.setRemoteView(playerView);
-            modelNotifier.addSubscriber(playerView);
             playerView.addSubscriber(controller);
-
 
             connection.asyncSend(new GameStartMessage(model));
         }

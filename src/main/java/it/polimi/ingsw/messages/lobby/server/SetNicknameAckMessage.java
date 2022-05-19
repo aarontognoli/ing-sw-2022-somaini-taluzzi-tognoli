@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
-import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIDeckNameHandler;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIDeckNameHandler;
 
 public class SetNicknameAckMessage extends ServerLobbyMessage {
     final private boolean isUsed;
@@ -17,10 +17,10 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateCLI(CLIView cliLobbyView) {
-        if(getIsUsed()) {
-            cliLobbyView.setFrontEnd("This username is already in use.");
+        if (getIsUsed()) {
+            cliLobbyView.setFrontEnd("%s is already in use.".formatted(cliLobbyView.getMyUsername()));
         } else {
-            cliLobbyView.setFrontEnd("Good!");
+            cliLobbyView.setFrontEnd("Hello %s! Username accepted.".formatted(cliLobbyView.getMyUsername()));
             cliLobbyView.setCurrentQueryMessage("""
                     Choose a deck name:
                         'desert king',
