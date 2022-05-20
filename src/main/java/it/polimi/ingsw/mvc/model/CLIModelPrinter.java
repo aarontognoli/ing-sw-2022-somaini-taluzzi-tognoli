@@ -1,5 +1,6 @@
 package it.polimi.ingsw.mvc.model;
 
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
 import it.polimi.ingsw.cloud.Cloud;
@@ -149,8 +150,10 @@ public class CLIModelPrinter {
 
     static void printAssistantCard(Player player) {
         System.out.print("Current assistant card: ");
-        if(player.getCurrentAssistantCard() != null) {
-            System.out.print(player.getCurrentAssistantCard().getClass().getSimpleName());
+        AssistantCard card = player.getCurrentAssistantCard();
+        if(card != null) {
+            System.out.print(card + " -> turn order value: " + card.getTurnOrderValue() +
+                    "; max mother nature movements: " + card.getMaxMotherNatureMovementValue());
         }
         System.out.print("\n");
     }
