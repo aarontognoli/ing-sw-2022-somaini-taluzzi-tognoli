@@ -21,7 +21,7 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateCLI(CLIView cliLobbyView) {
-        if (!getIsDeckValid()) {
+        if (!isDeckValid()) {
             cliLobbyView.setFrontEnd("This deck is already in use.");
         } else {
             cliLobbyView.setFrontEnd("Perfect!");

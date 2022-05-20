@@ -1,7 +1,6 @@
 package it.polimi.ingsw.match;
 
 
-import it.polimi.ingsw.messages.ConnectionClosedMessage;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ErrorMessage;
@@ -29,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class NetworkArchitectureTest {
     @Test
-    void NetworkTest() throws InterruptedException, IOException {
+    void NetworkTest() throws IOException {
         Server server = runServerAsync();
         assertNotNull(server);
         ClientStub client1 = runClientAsync();
@@ -38,7 +37,7 @@ public class NetworkArchitectureTest {
         assertTrue(client2.isActive());
         client1.sendMessage(new SetNicknameMessage("Prova"));
       
-        assertEquals(ConnectionClosedMessage.class, client1.waitToRecieveMessage().getClass());
+        assertEquals(ErrorMessage.class, client1.waitToRecieveMessage().getClass());
 
         assertDoesNotThrow(server::closeServer);
 
