@@ -149,10 +149,6 @@ public class PublicModelTest {
         assertEquals(targetStudentColor, model.islands.get(0).getStudents().get(0).getColor());
     }
 
-    @Test
-    void updateIslandOwner() {
-        // TODO once the method is complete
-    }
 
 
     private static Model createModel(Map<String, DeckName> nicknamesAndDecks, GameMode gameMode) {

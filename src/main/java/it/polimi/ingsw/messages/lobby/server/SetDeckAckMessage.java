@@ -15,7 +15,7 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
         return isFirstPlayer;
     }
 
-    public boolean getIsDeckValid() {
+    public boolean isDeckValid() {
         return isDeckValid;
     }
 

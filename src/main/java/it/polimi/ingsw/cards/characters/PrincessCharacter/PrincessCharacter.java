@@ -54,7 +54,6 @@ public class PrincessCharacter extends CharacterCardWithStudents {
             // Bag empty, just remove the student from the card
             students.remove(studentIndex);
 
-            // TODO: At the end of the round check for winning player
         }
     }
 

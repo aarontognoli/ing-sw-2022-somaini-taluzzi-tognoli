@@ -61,7 +61,6 @@ public class WineCharacter extends CharacterCardWithStudents {
             // Bag empty, only remove the student without drawing a new one
             students.remove(targetIslandIndex);
 
-            // TODO: At the end of the round check for winner
         }
     }
 

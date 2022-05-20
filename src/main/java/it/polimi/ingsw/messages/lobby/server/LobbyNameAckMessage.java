@@ -10,6 +10,11 @@ public class LobbyNameAckMessage extends ServerLobbyMessage {
         this.isValid = isValid;
     }
 
+    //for testing
+    public boolean isValid() {
+        return isValid;
+    }
+
     @Override
     public void updateCLI(CLIView cliLobbyView) {
         if (isValid) {

@@ -78,7 +78,7 @@ public class Server {
             connection.setRemoteView(playerView);
             playerView.addSubscriber(controller);
 
-            connection.asyncSend(new GameStartMessage(model));
+            connection.send(new GameStartMessage(model));
         }
     }
 

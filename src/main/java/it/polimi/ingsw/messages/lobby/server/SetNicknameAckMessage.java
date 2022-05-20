@@ -11,7 +11,7 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
         this.isUsed = isUsed;
     }
 
-    public boolean getIsUsed() {
+    public boolean isUsed() {
         return isUsed;
     }
 

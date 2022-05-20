@@ -134,7 +134,6 @@ class PrivateModelTest {
 
     @Test
     void getInfluenceTwoPlayers() {
-        // TODO: Check 3 player, 4 players, and tie in both cases
         Model model = PublicModelTest.twoPlayersBasicSetup();
 
         Island targetIsland = model.islands.get(0);
