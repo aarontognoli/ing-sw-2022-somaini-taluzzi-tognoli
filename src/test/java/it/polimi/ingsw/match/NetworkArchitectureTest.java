@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class NetworkArchitectureTest {
     @Test
-    void NetworkTest() throws IOException {
+    void NetworkTest() {
         Server server = runServerAsync();
         assertNotNull(server);
         ClientStub client1 = runClientAsync();
@@ -41,8 +41,6 @@ public class NetworkArchitectureTest {
 
         assertDoesNotThrow(server::closeServer);
 
-        client1.close();
-        client2.close();
     }
 
     @Test
