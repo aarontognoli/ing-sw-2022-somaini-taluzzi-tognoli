@@ -1,7 +1,7 @@
-package it.polimi.ingsw.mvc.view.game;
+package it.polimi.ingsw.mvc.view;
 
 import it.polimi.ingsw.messages.ErrorMessage;
-import it.polimi.ingsw.messages.game.GameMessage;
+import it.polimi.ingsw.messages.game.ClientGameMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.server.SocketClientConnection;
@@ -13,7 +13,7 @@ import it.polimi.ingsw.server.SocketClientConnection;
  * (The controller has subscribed to the RemoveView, so it is the one that at the
  * end receives this messages)
  */
-public class RemoteView extends GameView {
+public class RemoteView extends ModelSubscriber {
 
     private final String username;
     private final SocketClientConnection connection;
@@ -26,7 +26,6 @@ public class RemoteView extends GameView {
     }
 
     public void sendErrorMessage(String error) {
-
         connection.asyncSend(new ErrorMessage(error));
     }
 
@@ -35,7 +34,7 @@ public class RemoteView extends GameView {
      * @implNote Updated username of the message before sending it to the ServerController,
      * so that it can know who did this move
      */
-    public void redirectMessageToController(GameMessage message) {
+    public void redirectMessageToController(ClientGameMessage message) {
         message.setUsername(username);
         message.setRemoteView(this);
         notifySubscribers(message);

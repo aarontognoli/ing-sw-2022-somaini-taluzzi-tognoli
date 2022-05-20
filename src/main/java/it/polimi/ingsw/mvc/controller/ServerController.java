@@ -4,12 +4,11 @@ import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.exceptions.WrongActionException;
-import it.polimi.ingsw.messages.Message;
-import it.polimi.ingsw.messages.game.GameMessage;
+import it.polimi.ingsw.messages.ClientMessage;
+import it.polimi.ingsw.messages.game.ClientGameMessage;
 import it.polimi.ingsw.mvc.PlayerActions;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
-import it.polimi.ingsw.player.Player;
 import it.polimi.ingsw.server.GameMessageConstants;
 
 /**
@@ -27,10 +26,10 @@ public class ServerController extends Controller implements PlayerActions {
     boolean motherNatureMoved;
     int studentsPlaced;
 
-    public ServerController(Model model) {
+    public ServerController(Model model, Notifier<Model> modelNotifier) {
         this.model = model;
         resetChecks();
-        modelNotifier = new Notifier<>();
+        this.modelNotifier = modelNotifier;
     }
 
     void resetChecks() {
@@ -52,9 +51,9 @@ public class ServerController extends Controller implements PlayerActions {
     }
 
     @Override
-    public void subscribeNotification(Message message) {
+    public void subscribeNotification(ClientMessage message) {
 
-        if (!(message instanceof GameMessage gameMsg)) {
+        if (!(message instanceof ClientGameMessage gameMsg)) {
             throw new RuntimeException("How did a wrong message get to the controller?");
         }
 

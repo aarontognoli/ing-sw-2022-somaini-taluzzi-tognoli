@@ -8,7 +8,7 @@ import it.polimi.ingsw.messages.game.*;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.model.PublicModelTest;
-import it.polimi.ingsw.mvc.view.game.RemoteView;
+import it.polimi.ingsw.mvc.view.RemoteView;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.server.GameMessageConstants;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class ServerControllerTest {
     Model model;
     Controller controller;
     ErrorMessage errorMessage;
-    GameMessage message;
+    ClientGameMessage message;
     RemoteView player0View;
     RemoteView player1View;
 
@@ -44,18 +44,18 @@ class ServerControllerTest {
     private void initialiseTwoPlayersExpertMode() {
         model = PublicModelTest.twoPlayersExpertMode();
         Notifier<Model> modelNotifier = new Notifier<>();
-        controller = new ServerController(model);
+        controller = new ServerController(model, modelNotifier);
         player0View = new RemoteViewStub(modelNotifier, "Player0");
         player1View = new RemoteViewStub(modelNotifier, "Player1");
     }
 
-    private void sendMessagePlayer0(GameMessage message) {
+    private void sendMessagePlayer0(ClientGameMessage message) {
         message.setUsername("Player0");
         message.setRemoteView(player0View);
         controller.subscribeNotification(message);
     }
 
-    private void sendMessagePlayer1(GameMessage message) {
+    private void sendMessagePlayer1(ClientGameMessage message) {
         message.setUsername("Player1");
         message.setRemoteView(player1View);
         controller.subscribeNotification(message);

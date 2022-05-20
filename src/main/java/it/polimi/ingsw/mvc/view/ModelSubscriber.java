@@ -1,15 +1,15 @@
-package it.polimi.ingsw.mvc.view.game;
+package it.polimi.ingsw.mvc.view;
 
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.View;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.notifier.Subscriber;
 
-public abstract class GameView extends View implements Subscriber<Model> {
+public abstract class ModelSubscriber extends View implements Subscriber<Model> {
 
     protected Model model;
 
-    public GameView(Notifier<Model> modelNotifier) {
+    public ModelSubscriber(Notifier<Model> modelNotifier) {
         modelNotifier.addSubscriber(this);
     }
     /**

@@ -5,8 +5,6 @@ import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.messages.Message;
-import it.polimi.ingsw.messages.game.GameMessage;
 
 import java.io.Serializable;
 import java.util.Objects;

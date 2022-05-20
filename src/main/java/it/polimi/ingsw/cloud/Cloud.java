@@ -11,7 +11,7 @@ public class Cloud implements Serializable {
     private List<Student> students;
 
     public Cloud(int studentsCount) {
-        students = new ArrayList<Student>(studentsCount);
+        students = new ArrayList<>(studentsCount);
     }
 
     public List<Student> getStudents() {
@@ -19,6 +19,10 @@ public class Cloud implements Serializable {
         List<Student> returnValue = students;
         students = null;
         return returnValue;
+    }
+
+    public List<Student> getStudentsWithoutEmptying() {
+        return students;
     }
 
     public void putStudents(List<Student> newStudents) {

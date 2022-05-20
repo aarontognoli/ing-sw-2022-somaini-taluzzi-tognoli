@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 
 public class GameStartMessage extends ServerLobbyMessage {
     final private Model firstModel;
@@ -15,10 +15,8 @@ public class GameStartMessage extends ServerLobbyMessage {
     }
 
     @Override
-    public void updateCLI(CLILobbyView cliLobbyView) {
-        cliLobbyView.setFirstModel(getFirstModel());
+    public void updateCLI(CLIView cliLobbyView) {
         cliLobbyView.setFrontEnd("");
-        cliLobbyView.setCurrentQueryMessage("");
-        cliLobbyView.stop();
+        cliLobbyView.setModel(firstModel);
     }
 }

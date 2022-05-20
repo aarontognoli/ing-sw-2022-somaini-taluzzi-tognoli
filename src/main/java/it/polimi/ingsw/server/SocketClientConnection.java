@@ -3,15 +3,16 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.exceptions.BadLobbyMessageException;
 import it.polimi.ingsw.exceptions.ObjectIsNotMessageException;
+import it.polimi.ingsw.messages.ConnectionClosedMessage;
 import it.polimi.ingsw.messages.ErrorMessage;
-import it.polimi.ingsw.messages.game.GameMessage;
+import it.polimi.ingsw.messages.game.ClientGameMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbyManagementMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.LobbySetupMessage;
 import it.polimi.ingsw.messages.lobby.server.*;
-import it.polimi.ingsw.mvc.view.game.RemoteView;
+import it.polimi.ingsw.mvc.view.RemoteView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -37,7 +38,7 @@ public class SocketClientConnection implements Runnable {
     }
 
     private void redirectToRemoteView(Object message) throws ObjectIsNotMessageException {
-        if (!(message instanceof GameMessage gameMsg)) {
+        if (!(message instanceof ClientGameMessage gameMsg)) {
             throw new ObjectIsNotMessageException();
         }
 
@@ -59,7 +60,7 @@ public class SocketClientConnection implements Runnable {
     }
 
     public synchronized void closeConnection() {
-        send("Connection closed!");
+        send(new ConnectionClosedMessage("Connection closed!"));
         try {
             socket.close();
         } catch (IOException e) {
@@ -249,7 +250,6 @@ public class SocketClientConnection implements Runnable {
             e.printStackTrace();
             send(new ErrorMessage(e.getMessage()));
             close(thisLobby);
-            return;
         }
     }
 

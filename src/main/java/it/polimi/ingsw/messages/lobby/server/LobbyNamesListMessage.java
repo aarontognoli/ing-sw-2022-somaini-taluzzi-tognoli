@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.server.Lobby;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
     }
 
     @Override
-    public void updateCLI(CLILobbyView cliLobbyView) {
+    public void updateCLI(CLIView cliLobbyView) {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (LobbyState lobbyState : lobbies) {

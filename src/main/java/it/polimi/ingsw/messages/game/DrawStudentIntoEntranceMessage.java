@@ -2,7 +2,7 @@ package it.polimi.ingsw.messages.game;
 
 import it.polimi.ingsw.mvc.controller.ServerController;
 
-public class DrawStudentIntoEntranceMessage extends GameMessage {
+public class DrawStudentIntoEntranceMessage extends ClientGameMessage {
     private final int cloudIndex;
 
     public DrawStudentIntoEntranceMessage(int cloudIndex) {

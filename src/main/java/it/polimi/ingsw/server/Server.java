@@ -4,7 +4,7 @@ import it.polimi.ingsw.messages.lobby.server.GameStartMessage;
 import it.polimi.ingsw.mvc.controller.Controller;
 import it.polimi.ingsw.mvc.controller.ServerController;
 import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.view.game.RemoteView;
+import it.polimi.ingsw.mvc.view.RemoteView;
 import it.polimi.ingsw.notifier.Notifier;
 
 import java.io.IOException;
@@ -66,7 +66,7 @@ public class Server {
         );
         Notifier<Model> modelNotifier = new Notifier<>();
 
-        Controller controller = new ServerController(model);
+        Controller controller = new ServerController(model, modelNotifier);
 
         List<String> keys = new ArrayList<>(currentLobby.waitingConnection.keySet());
 
@@ -76,9 +76,7 @@ public class Server {
 
             RemoteView playerView = new RemoteView(modelNotifier, key, connection);
             connection.setRemoteView(playerView);
-            modelNotifier.addSubscriber(playerView);
             playerView.addSubscriber(controller);
-
 
             connection.send(new GameStartMessage(model));
         }

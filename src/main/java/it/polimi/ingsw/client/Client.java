@@ -1,12 +1,9 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.mvc.controller.GameClientController;
-import it.polimi.ingsw.mvc.controller.LobbyClientController;
+import it.polimi.ingsw.mvc.controller.ClientController;
 import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.view.game.CLI.CLIGameView;
-import it.polimi.ingsw.mvc.view.game.ClientGameView;
-import it.polimi.ingsw.mvc.view.lobby.CLI.CLILobbyView;
-import it.polimi.ingsw.mvc.view.lobby.LobbyView;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.ClientView;
 import it.polimi.ingsw.notifier.Notifier;
 
 import java.io.IOException;
@@ -32,37 +29,18 @@ public class Client {
         ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
 
-        LobbyClientController lobbyClientController = new LobbyClientController(socketIn, socketOut);
-
-        LobbyView lobbyView;
-        if (isCLI) {
-            lobbyView = new CLILobbyView(lobbyClientController.getLobbyMessageNotifier());
-        } else {
-            throw new RuntimeException("GUI not implemented yet");
-        }
-
-        lobbyView.addSubscriber(lobbyClientController);
-
-        lobbyView.run();
-
         Notifier<Model> modelNotifier = new Notifier<>();
-        GameClientController gameClientController = new GameClientController(socketIn, socketOut, modelNotifier);
 
-        ClientGameView gameView;
+        ClientController clientController = new ClientController(socketIn, socketOut, modelNotifier);
+
+        ClientView clientView;
         if (isCLI) {
-            gameView = new CLIGameView(modelNotifier);
+            clientView = new CLIView(clientController.getServerMessageNotifier(), modelNotifier);
         } else {
             throw new RuntimeException("GUI not implemented yet");
         }
 
-        gameView.addSubscriber(gameClientController);
-
-        modelNotifier.notifySubscribers(lobbyView.getFirstModel());
-
-        gameView.run();
-
-        gameClientController.stopObjectRead();
-
-        socket.close();
+        clientView.addSubscriber(clientController);
+        clientView.run();
     }
 }

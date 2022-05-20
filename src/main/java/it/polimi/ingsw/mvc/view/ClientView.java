@@ -1,0 +1,60 @@
+package it.polimi.ingsw.mvc.view;
+
+import it.polimi.ingsw.messages.ServerMessage;
+import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.notifier.Notifier;
+import it.polimi.ingsw.notifier.Subscriber;
+
+public abstract class ClientView extends View implements Subscriber<ServerMessage> {
+    protected Model model;
+    protected String myUsername;
+
+    public ClientView(Notifier<ServerMessage> messageNotifier, Notifier<Model> modelNotifier) {
+        messageNotifier.addSubscriber(this);
+        new ModelSubscriber(modelNotifier);
+    }
+
+    public abstract void show();
+
+    protected abstract void showModel();
+
+    public abstract void run() throws InterruptedException;
+
+    /**
+     * Notification sent by the model every time it updates
+     *
+     * @param newMessage newValue of the model
+     */
+    @Override
+    public abstract void subscribeNotification(ServerMessage newMessage);
+
+    public String getMyUsername() {
+        return myUsername;
+    }
+
+    public void setMyUsername(String myUsername) {
+        this.myUsername = myUsername;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    class ModelSubscriber implements Subscriber<Model> {
+
+        ModelSubscriber(Notifier<Model> modelNotifier) {
+            modelNotifier.addSubscriber(this);
+        }
+
+        /**
+         * Notification sent by the model every time it updates
+         *
+         * @param newValue newValue of the model
+         */
+        @Override
+        public void subscribeNotification(Model newValue) {
+            model = newValue;
+            show();
+        }
+    }
+}
