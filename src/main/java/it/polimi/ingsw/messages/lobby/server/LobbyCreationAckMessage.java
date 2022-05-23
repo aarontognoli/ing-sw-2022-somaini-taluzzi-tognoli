@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.lobby.server;
 
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
@@ -40,6 +41,15 @@ public class LobbyCreationAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateGUI(GUIView guiLobbyView) {
-        //todo
+        if (!isNameValid) {
+            guiLobbyView.showError(new ErrorMessage("Invalid lobby name. Name already in use"));
+            return;
+        }
+
+        if (!areOptionsValid) {
+            guiLobbyView.showError(new ErrorMessage("Invalid game option"));
+            return;
+        }
+        guiLobbyView.setUsernameAndDeck();
     }
 }

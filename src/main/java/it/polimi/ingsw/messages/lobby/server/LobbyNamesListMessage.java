@@ -64,7 +64,6 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
             guiLobbyView.lobbyTableModel.addRow(data);
         }
         //updates table with new DATA
-        guiLobbyView.lobbyTableModel.addRow(new String[]{"TEST", "1/20", "TEST"});
         guiLobbyView.lobbyTableModel.fireTableDataChanged();
     }
 }

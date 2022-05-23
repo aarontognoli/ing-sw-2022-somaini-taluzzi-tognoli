@@ -1,7 +1,10 @@
 package it.polimi.ingsw.mvc.view.GUI;
 
+import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.ServerMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
+import it.polimi.ingsw.messages.lobby.client.lobbysetup.JoinLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.ClientView;
@@ -17,7 +20,6 @@ public class GUIView extends ClientView {
     public DefaultTableModel lobbyTableModel;
     //lobby window components
     JFrame lobby;
-    JLabel lobbyTitle;
     JPanel top = new JPanel(new FlowLayout());
     JPanel content = new JPanel();
     JPanel bottom = new JPanel(new FlowLayout());
@@ -51,6 +53,92 @@ public class GUIView extends ClientView {
 
     }
 
+    private void clearLobbyFrame() {
+        top.removeAll();
+        content.removeAll();
+        bottom.removeAll();
+    }
+
+    private void setupLobbyFrameComponents() {
+        clearLobbyFrame();
+        JLabel lobbyTitle = new JLabel("Choose a lobby");
+        top.add(lobbyTitle);
+        JButton reloadButton = new JButton("Reload");
+        reloadButton.addActionListener(new ReloadLobbies(this));
+        top.add(reloadButton);
+        lobby.add(top, BorderLayout.NORTH);
+
+        lobbyTableModel = (DefaultTableModel) lobbyTable.getModel();
+        lobbyTableModel.setColumnIdentifiers(new String[]{"Lobby Name", "Number of players", "Game Mode"});
+        content.setLayout(new FlowLayout());
+        content.add(new JScrollPane(lobbyTable), BorderLayout.CENTER);
+        lobby.add(content);
+        JButton createButton = new JButton("Create");
+        createButton.addActionListener(new OpenCreateLobbyFrame(this));
+        JButton joinButton = new JButton("Join");
+        joinButton.addActionListener(new JoinLobby(this));
+        bottom.add(createButton);
+        bottom.add(joinButton);
+        lobby.add(bottom, BorderLayout.SOUTH);
+        reloadLobbies();
+    }
+
+    private void createALobbyFrame() {
+        clearLobbyFrame();
+        JLabel lobbyTitle = new JLabel("Create a new Lobby");
+        content.setLayout(new BorderLayout());
+        JPanel labels = new JPanel();
+        labels.setLayout(new GridLayout(4, 1));
+        JPanel components = new JPanel();
+        components.setLayout(new GridLayout(4, 1));
+        JTextField username = new JTextField();
+        username.setMaximumSize(new Dimension(Integer.MAX_VALUE, username.getPreferredSize().height));
+        components.add(new JPanel().add(username));
+        labels.add(new JLabel("Lobby Name: ", SwingConstants.RIGHT));
+
+        JComboBox<Integer> playersNumber = new JComboBox<>(new Integer[]{2, 3, 4});
+        playersNumber.setMaximumSize(new Dimension(Integer.MAX_VALUE, playersNumber.getPreferredSize().height));
+        components.add(playersNumber);
+        labels.add(new JLabel("Players number", SwingConstants.RIGHT));
+
+        JRadioButton easy = new JRadioButton("Easy");
+        easy.setActionCommand(GameMode.EASY_MODE.toString());
+        easy.setSelected(true);
+
+        JRadioButton expert = new JRadioButton("Expert");
+        expert.setActionCommand(GameMode.EXPERT_MODE.toString());
+
+        ButtonGroup gameModeGroup = new ButtonGroup();
+        gameModeGroup.add(easy);
+        gameModeGroup.add(expert);
+
+        JPanel gameModePanel = new JPanel(new FlowLayout());
+        gameModePanel.add(easy);
+        gameModePanel.add(expert);
+        components.add(gameModePanel);
+        labels.add(new JLabel("GameMode", SwingConstants.RIGHT));
+
+        Integer[] motherNatureStartingValues = new Integer[12];
+        for (int i = 0; i < 12; i++) {
+            motherNatureStartingValues[i] = i + 1;
+        }
+        JComboBox<Integer> motherNature = new JComboBox<>(motherNatureStartingValues);
+        components.add(motherNature);
+        labels.add(new JLabel("Starting MotherNature Island", SwingConstants.RIGHT));
+
+        JButton back = new JButton("Go Back");
+        back.addActionListener(new OpenLobbyFrame(this));
+        JButton confirm = new JButton("Confirm");
+        confirm.addActionListener(new CreateLobby(this, username, playersNumber, gameModeGroup, motherNature));
+
+        top.add(lobbyTitle);
+        content.add(labels, BorderLayout.WEST);
+        content.add(components, BorderLayout.CENTER);
+        bottom.add(back);
+        bottom.add(confirm);
+
+    }
+
     @Override
     public void run() throws InterruptedException {
         //show
@@ -62,29 +150,11 @@ public class GUIView extends ClientView {
         lobby.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lobby.setLocationRelativeTo(null);
         lobbyTable = new JTable();
+        setupLobbyFrameComponents();
 
-        lobbyTitle = new JLabel("Choose a lobby");
-
-        top.setLayout(new FlowLayout());
-        top.add(lobbyTitle);
-        JButton reloadButton = new JButton("Reload");
-        reloadButton.addActionListener(new ReloadLobbies(this));
-        top.add(reloadButton);
-        lobby.add(top, BorderLayout.NORTH);
-
-        lobbyTableModel = (DefaultTableModel) lobbyTable.getModel();
-        lobbyTableModel.setColumnIdentifiers(new String[]{"Lobby Name", "Number of players", "Game Mode"});
-        content.add(new JScrollPane(lobbyTable), BorderLayout.CENTER);
-        lobby.add(content);
-        JButton createButton = new JButton("Create");
-        JButton joinButton = new JButton("Join");
-        bottom.add(createButton);
-        bottom.add(joinButton);
-        lobby.add(bottom);
         //todo set game components
         game = new JFrame("TODO");
 
-        reloadLobbies();
 
         show();
 
@@ -101,10 +171,45 @@ public class GUIView extends ClientView {
                 "Warning!", JOptionPane.ERROR_MESSAGE);
     }
 
+    public void setUsernameAndDeck() {
+        //todo
+        JOptionPane.showMessageDialog(null, "TODO, you joined/created the lobby succesfully",
+                "Warning!", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
     public void reloadLobbies() {
         notifySubscribers(new RequestLobbyNamesListMessage());
     }
 
+    public void showCreateLobbyFrame() {
+        createALobbyFrame();
+        show();
+    }
+
+    public void showLobbyFrame() {
+        setupLobbyFrameComponents();
+        show();
+    }
+
+    public void joinLobby() {
+        String lobbyName;
+        try {
+            lobbyName = (String) lobbyTableModel.getValueAt(lobbyTable.getSelectedRow(), 0);
+            //placeholder
+            notifySubscribers(new JoinLobbyMessage(lobbyName));
+        } catch (Exception e) {
+            showError(new ErrorMessage("Invalid lobby"));
+        }
+
+    }
+
+    public void createLobby(String lobbyName, int playersNumber, GameMode gamemode, int motherNatureIslandIndex) {
+        if (lobbyName.isEmpty())
+            showError(new ErrorMessage("You need to specify a lobby name"));
+        else
+            notifySubscribers(new CreateLobbyMessage(lobbyName, playersNumber, gamemode, motherNatureIslandIndex));
+    }
 
 }
 
@@ -119,6 +224,77 @@ class ReloadLobbies implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         gw.reloadLobbies();
+
+    }
+}
+
+class JoinLobby implements ActionListener {
+
+    GUIView gw;
+
+    public JoinLobby(GUIView guiView) {
+        this.gw = guiView;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        gw.joinLobby();
+
+    }
+}
+
+class OpenCreateLobbyFrame implements ActionListener {
+
+    GUIView gw;
+
+    public OpenCreateLobbyFrame(GUIView guiView) {
+        this.gw = guiView;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        gw.showCreateLobbyFrame();
+
+    }
+}
+
+class OpenLobbyFrame implements ActionListener {
+
+    GUIView gw;
+
+    public OpenLobbyFrame(GUIView guiView) {
+        this.gw = guiView;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        gw.showLobbyFrame();
+
+    }
+}
+
+class CreateLobby implements ActionListener {
+
+    GUIView gw;
+    JTextField lobbyName;
+    JComboBox<Integer> playersNumber;
+    ButtonGroup gamemode;
+    JComboBox<Integer> motherNature;
+
+    public CreateLobby(GUIView guiView, JTextField lobbyName, JComboBox<Integer> playersNumber, ButtonGroup gamemode, JComboBox<Integer> motherNature) {
+        this.gw = guiView;
+        this.lobbyName = lobbyName;
+        this.playersNumber = playersNumber;
+        this.gamemode = gamemode;
+        this.motherNature = motherNature;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        gw.createLobby(lobbyName.getText(),
+                Integer.parseInt(playersNumber.getSelectedItem().toString()),
+                GameMode.valueOf(gamemode.getSelection().getActionCommand()),
+                Integer.parseInt(motherNature.getSelectedItem().toString()) - 1);
 
     }
 }

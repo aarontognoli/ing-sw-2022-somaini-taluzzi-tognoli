@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.lobby.server;
 
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
@@ -29,6 +30,10 @@ public class LobbyNameAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateGUI(GUIView guiLobbyView) {
-        //todo
+        if (!isValid) {
+            guiLobbyView.showError(new ErrorMessage("Cannot join that lobby. Please try again: "));
+            return;
+        }
+        guiLobbyView.setUsernameAndDeck();
     }
 }
