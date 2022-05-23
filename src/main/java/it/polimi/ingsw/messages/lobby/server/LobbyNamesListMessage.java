@@ -1,7 +1,8 @@
 package it.polimi.ingsw.messages.lobby.server;
 
-import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
 import it.polimi.ingsw.server.Lobby;
 
 import java.util.ArrayList;
@@ -51,5 +52,19 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
                   1 <= mother_nature_island <= 12
                 """);
         cliLobbyView.setCliStringHandler(new CLILobbyNameHandler());
+    }
+
+    @Override
+    public void updateGUI(GUIView guiLobbyView) {
+        //removes all rows
+        guiLobbyView.lobbyTableModel.setRowCount(0);
+        String[] data;
+        for (LobbyState ls : lobbies) {
+            data = new String[]{ls.name(), ls.currentPlayersCount() + "/" + ls.maxPlayersCount(), "Dump"};
+            guiLobbyView.lobbyTableModel.addRow(data);
+        }
+        //updates table with new DATA
+        guiLobbyView.lobbyTableModel.addRow(new String[]{"TEST", "1/20", "TEST"});
+        guiLobbyView.lobbyTableModel.fireTableDataChanged();
     }
 }

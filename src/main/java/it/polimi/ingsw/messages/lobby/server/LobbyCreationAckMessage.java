@@ -1,7 +1,8 @@
 package it.polimi.ingsw.messages.lobby.server;
 
-import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIUsernameHandler;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
 
 public class LobbyCreationAckMessage extends ServerLobbyMessage {
     final private boolean isNameValid;
@@ -35,5 +36,10 @@ public class LobbyCreationAckMessage extends ServerLobbyMessage {
         cliLobbyView.setFrontEnd("Lobby created");
         cliLobbyView.setCurrentQueryMessage("Enter your username");
         cliLobbyView.setCliStringHandler(new CLIUsernameHandler());
+    }
+
+    @Override
+    public void updateGUI(GUIView guiLobbyView) {
+        //todo
     }
 }

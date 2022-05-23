@@ -4,6 +4,7 @@ import it.polimi.ingsw.mvc.controller.ClientController;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.ClientView;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
 import it.polimi.ingsw.notifier.Notifier;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class Client {
         if (isCLI) {
             clientView = new CLIView(clientController.getServerMessageNotifier(), modelNotifier);
         } else {
-            throw new RuntimeException("GUI not implemented yet");
+            clientView = new GUIView(clientController.getServerMessageNotifier(), modelNotifier);
         }
 
         clientView.addSubscriber(clientController);

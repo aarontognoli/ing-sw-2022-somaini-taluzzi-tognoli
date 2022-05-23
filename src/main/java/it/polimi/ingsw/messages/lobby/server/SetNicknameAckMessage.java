@@ -2,6 +2,7 @@ package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIDeckNameHandler;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
 
 public class SetNicknameAckMessage extends ServerLobbyMessage {
     final private boolean isUsed;
@@ -29,5 +30,10 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
                         'forest mage'.""");
             cliLobbyView.setCliStringHandler(new CLIDeckNameHandler());
         }
+    }
+
+    @Override
+    public void updateGUI(GUIView guiLobbyView) {
+        //todo
     }
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.messages.lobby.server;
 
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
 
 public class SetDeckAckMessage extends ServerLobbyMessage {
     private final boolean isDeckValid;
@@ -27,5 +28,10 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
             cliLobbyView.setFrontEnd("Perfect!");
             cliLobbyView.setCurrentQueryMessage("Now wait for other players to join the lobby!");
         }
+    }
+
+    @Override
+    public void updateGUI(GUIView guiLobbyView) {
+        //todo
     }
 }
