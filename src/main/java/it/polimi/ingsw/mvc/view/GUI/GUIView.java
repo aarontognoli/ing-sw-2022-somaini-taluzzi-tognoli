@@ -80,7 +80,7 @@ public class GUIView extends ClientView {
         JButton joinButton = new JButton("Join");
         bottom.add(createButton);
         bottom.add(joinButton);
-
+        lobby.add(bottom);
         //todo set game components
         game = new JFrame("TODO");
 
