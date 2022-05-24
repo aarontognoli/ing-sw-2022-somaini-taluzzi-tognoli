@@ -6,8 +6,9 @@ import java.io.IOException;
 
 public class ClientApp {
     public static void main(String[] args) {
-        //todo add choose which version
-        Client client = new Client("127.0.0.1", 12345, false);
+        boolean isCli = !(args.length >= 1 && (args[0].equals("gui") || args[0].equals("GUI")));
+
+        Client client = new Client("127.0.0.1", 12345, isCli);
         try {
             client.run();
         } catch (IOException | InterruptedException e) {
