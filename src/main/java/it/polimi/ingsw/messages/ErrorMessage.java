@@ -1,6 +1,7 @@
 package it.polimi.ingsw.messages;
 
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
 
 public class ErrorMessage extends ServerMessage {
     private final String errorMessageString;
@@ -16,5 +17,10 @@ public class ErrorMessage extends ServerMessage {
     @Override
     public void updateCLI(CLIView cliLobbyView) {
         cliLobbyView.setFrontEnd(getErrorMessageString());
+    }
+
+    @Override
+    public void updateGUI(GUIView guiLobbyView) {
+        guiLobbyView.showError(this);
     }
 }
