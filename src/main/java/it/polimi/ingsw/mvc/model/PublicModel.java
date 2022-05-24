@@ -288,4 +288,34 @@ public class PublicModel implements PlayerActions, Serializable {
     public int getTotalPlayerCount() {
         return fatherModel.totalPlayerCount;
     }
+
+    public void resetChecks() {
+        fatherModel.characterCardPlayed = false;
+        fatherModel.studentsPlaced = 0;
+        fatherModel.motherNatureMoved = false;
+    }
+
+    public boolean isCharacterCardPlayed() {
+        return fatherModel.characterCardPlayed;
+    }
+
+    public boolean isMotherNatureMoved() {
+        return fatherModel.motherNatureMoved;
+    }
+
+    public int getStudentsPlaced() {
+        return fatherModel.studentsPlaced;
+    }
+
+    public void setCharacterCardPlayed(boolean characterCardPlayed) {
+        fatherModel.characterCardPlayed = characterCardPlayed;
+    }
+
+    public void setMotherNatureMoved(boolean motherNatureMoved) {
+        fatherModel.motherNatureMoved = motherNatureMoved;
+    }
+
+    public void setStudentsPlaced(int studentsPlaced) {
+        fatherModel.studentsPlaced = studentsPlaced;
+    }
 }

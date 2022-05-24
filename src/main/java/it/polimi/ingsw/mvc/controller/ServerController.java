@@ -20,22 +20,9 @@ public class ServerController extends Controller implements PlayerActions {
     private final Model model;
     private final Notifier<Model> modelNotifier;
 
-    // Turn actions checks
-    // Move in dedicated class(?)
-    boolean characterCardPlayed;
-    boolean motherNatureMoved;
-    int studentsPlaced;
-
     public ServerController(Model model, Notifier<Model> modelNotifier) {
         this.model = model;
-        resetChecks();
         this.modelNotifier = modelNotifier;
-    }
-
-    void resetChecks() {
-        characterCardPlayed = false;
-        studentsPlaced = 0;
-        motherNatureMoved = false;
     }
 
     Boolean enoughStudentsPlaced() {
@@ -47,7 +34,7 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getTotalPlayerCount() == 3) {
             maxStudentsToMove = 4;
         }
-        return studentsPlaced >= maxStudentsToMove;
+        return model.publicModel.getStudentsPlaced() >= maxStudentsToMove;
     }
 
     @Override
@@ -97,12 +84,12 @@ public class ServerController extends Controller implements PlayerActions {
         if (!enoughStudentsPlaced()) {
             throw new WrongActionException(GameMessageConstants.notEnoughStudentsAlreadyPlaced);
         }
-        if (!motherNatureMoved) {
+        if (!model.publicModel.isMotherNatureMoved()) {
             throw new WrongActionException(GameMessageConstants.motherNatureNotMovedMessage);
         }
         model.publicModel.drawStudentsIntoEntrance(cloudIndex);
         model.publicModel.endTurn();
-        resetChecks();
+        model.publicModel.resetChecks();
     }
 
     @Override
@@ -115,7 +102,7 @@ public class ServerController extends Controller implements PlayerActions {
         }
         model.publicModel.moveMotherNature(steps);
         model.publicModel.updateIslandOwner(model.publicModel.getMotherNatureIsland());
-        motherNatureMoved = true;
+        model.publicModel.setMotherNatureMoved(true);
     }
 
     @Override
@@ -127,7 +114,7 @@ public class ServerController extends Controller implements PlayerActions {
             throw new WrongActionException(GameMessageConstants.maxStudentsAlreadyPlacedMessage);
         }
         model.publicModel.moveStudentToIsland(studentColor, islandIndex);
-        studentsPlaced++;
+        model.publicModel.setStudentsPlaced(model.publicModel.getStudentsPlaced() + 1);
     }
 
     @Override
@@ -139,7 +126,7 @@ public class ServerController extends Controller implements PlayerActions {
             throw new WrongActionException(GameMessageConstants.maxStudentsAlreadyPlacedMessage);
         }
         model.publicModel.moveStudentToDiningRoom(studentColor);
-        studentsPlaced++;
+        model.publicModel.setStudentsPlaced(model.publicModel.getStudentsPlaced() + 1);
     }
 
     @Override
@@ -147,11 +134,11 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(GameMessageConstants.wrongGamePhaseMessage);
         }
-        if (characterCardPlayed) {
+        if (model.publicModel.isCharacterCardPlayed()) {
             throw new WrongActionException(GameMessageConstants.characterCardAlreadyPlayedMessage);
         }
         model.publicModel.playCharacterCard(cardIndex, effectArgument);
-        characterCardPlayed = true;
+        model.publicModel.setCharacterCardPlayed(true);
     }
 
 }

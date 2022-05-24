@@ -60,10 +60,14 @@ public class Model implements Serializable {
     public final PublicModel publicModel;
     public final CharacterModel characterModel;
 
+    // Turn Actions order
+    boolean characterCardPlayed;
+    boolean motherNatureMoved;
+    int studentsPlaced;
+
     // Initialize game with starting rules
 
     public Model(int motherNatureStartingPosition, Map<String, DeckName> nicknamesAndDecks, GameMode gameMode) {
-
         // Models
         privateModel = new PrivateModel(this);
         publicModel = new PublicModel(this);
@@ -74,6 +78,8 @@ public class Model implements Serializable {
         clouds = new ArrayList<>();
 
         this.gameMode = gameMode;
+
+        publicModel.resetChecks();
 
         // Initialize islands
         islands = new ArrayList<>();
