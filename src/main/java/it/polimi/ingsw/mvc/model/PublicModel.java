@@ -295,6 +295,10 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.motherNatureMoved = false;
     }
 
+    public GameMode getGameMode() {
+        return fatherModel.gameMode;
+    }
+
     public boolean isCharacterCardPlayed() {
         return fatherModel.characterCardPlayed;
     }
@@ -307,6 +311,10 @@ public class PublicModel implements PlayerActions, Serializable {
         return fatherModel.studentsPlaced;
     }
 
+    public int getIslandCount() {
+        return fatherModel.islands.size();
+    }
+
     public void setCharacterCardPlayed(boolean characterCardPlayed) {
         fatherModel.characterCardPlayed = characterCardPlayed;
     }
@@ -317,5 +325,17 @@ public class PublicModel implements PlayerActions, Serializable {
 
     public void setStudentsPlaced(int studentsPlaced) {
         fatherModel.studentsPlaced = studentsPlaced;
+    }
+
+    public boolean enoughStudentsPlaced() {
+        int maxStudentsToMove = 3;
+        // if entrance is empty the player must keep playing
+        if (getCurrentPlayer().getBoard().getEntrance().isEmpty())
+            return true;
+
+        if (getTotalPlayerCount() == 3) {
+            maxStudentsToMove = 4;
+        }
+        return getStudentsPlaced() >= maxStudentsToMove;
     }
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.mvc.view.CLI;
 
+import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ServerMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
@@ -7,6 +9,8 @@ import it.polimi.ingsw.mvc.model.CLIModelPrinter;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIStringHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.ActionHandler.CLIMoveStudentHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLICharacterCardHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLIPlayAssistantHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
 import it.polimi.ingsw.mvc.view.ClientView;
@@ -36,6 +40,46 @@ public class CLIView extends ClientView {
         System.out.println(currentQueryMessage);
     }
 
+    private void planningPhase() {
+        currentQueryMessage = "Choose an assistant card from your deck, using a number from 1 to 10";
+        cliStringHandler = new CLIPlayAssistantHandler();
+    }
+
+    private void actionPhase() {
+        // Exception to the normal flow, we want to play a character card
+        if (cliStringHandler instanceof CLICharacterCardHandler) {
+            return;
+        }
+        String queryPrefix = model.publicModel.getGameMode().equals(GameMode.EASY_MODE) ? "" :
+                "Type 'character' to play a character card\n";
+
+        if (!model.publicModel.enoughStudentsPlaced()) {
+            currentQueryMessage = queryPrefix + """
+                        Move your students from your entrance. Type:
+                        
+                        <student_color> <place> <island_number>
+                        
+                        Where:
+                          student_color = yellow | blue | green | red | pink
+                          place = dining | island
+                          island_number = if place is 'island', this is the number of the chosen island
+                    """;
+            cliStringHandler = new CLIMoveStudentHandler();
+
+            return;
+        }
+
+        if (!model.publicModel.isMotherNatureMoved()) {
+            currentQueryMessage = queryPrefix + "Choose the number of steps you want mother nature to be moved";
+            // TODO: cliStringHandler = new CLIMoveMotherNature
+
+            return;
+        }
+
+        currentQueryMessage = queryPrefix + "Choose the cloud tile to take its students, type the cloud number";
+        // TODO: cliStringHandler = new CLIChooseCloudTile
+    }
+
     protected void showModel() {
         CLIModelPrinter.printModel(model);
 
@@ -46,11 +90,11 @@ public class CLIView extends ClientView {
             return;
         }
 
-        // TODO: Update currentQueryMessage considering the state of the model and your username
-        currentQueryMessage = "TODO";
-
-        // TODO: Update cliStringHandler considering the state of the model and your username
-        cliStringHandler = new CLIPlayAssistantHandler();
+        if (model.publicModel.getGamePhase().equals(GamePhase.PIANIFICATION)) {
+            planningPhase();
+        } else {
+            actionPhase();
+        }
     }
 
     public void setLobbyReloadMessagesAndHandler() {

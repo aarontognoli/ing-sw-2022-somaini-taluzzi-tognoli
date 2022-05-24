@@ -25,18 +25,6 @@ public class ServerController extends Controller implements PlayerActions {
         this.modelNotifier = modelNotifier;
     }
 
-    Boolean enoughStudentsPlaced() {
-        int maxStudentsToMove = 3;
-        // if entrance is empty the player must keep playing
-        if (model.publicModel.getCurrentPlayer().getBoard().getEntrance().isEmpty())
-            return true;
-
-        if (model.publicModel.getTotalPlayerCount() == 3) {
-            maxStudentsToMove = 4;
-        }
-        return model.publicModel.getStudentsPlaced() >= maxStudentsToMove;
-    }
-
     @Override
     public void subscribeNotification(ClientMessage message) {
 
@@ -81,7 +69,7 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(GameMessageConstants.wrongGamePhaseMessage);
         }
-        if (!enoughStudentsPlaced()) {
+        if (!model.publicModel.enoughStudentsPlaced()) {
             throw new WrongActionException(GameMessageConstants.notEnoughStudentsAlreadyPlaced);
         }
         if (!model.publicModel.isMotherNatureMoved()) {
@@ -97,7 +85,7 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(GameMessageConstants.wrongGamePhaseMessage);
         }
-        if (!enoughStudentsPlaced()) {
+        if (!model.publicModel.enoughStudentsPlaced()) {
             throw new WrongActionException(GameMessageConstants.notEnoughStudentsAlreadyPlaced);
         }
         model.publicModel.moveMotherNature(steps);
@@ -110,7 +98,7 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(GameMessageConstants.wrongGamePhaseMessage);
         }
-        if (enoughStudentsPlaced()) {
+        if (model.publicModel.enoughStudentsPlaced()) {
             throw new WrongActionException(GameMessageConstants.maxStudentsAlreadyPlacedMessage);
         }
         model.publicModel.moveStudentToIsland(studentColor, islandIndex);
@@ -122,7 +110,7 @@ public class ServerController extends Controller implements PlayerActions {
         if (model.publicModel.getGamePhase() != GamePhase.ACTION) {
             throw new WrongActionException(GameMessageConstants.wrongGamePhaseMessage);
         }
-        if (enoughStudentsPlaced()) {
+        if (model.publicModel.enoughStudentsPlaced()) {
             throw new WrongActionException(GameMessageConstants.maxStudentsAlreadyPlacedMessage);
         }
         model.publicModel.moveStudentToDiningRoom(studentColor);
