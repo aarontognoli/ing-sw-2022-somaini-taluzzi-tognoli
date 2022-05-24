@@ -47,7 +47,7 @@ public class PublicModel implements PlayerActions, Serializable {
 
     public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException, CloudEmptyException {
 
-        List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudents();
+        List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudentsAndRemove();
         if (studentsFromCloud == null)
             throw new CloudEmptyException();
         try {

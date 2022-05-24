@@ -25,10 +25,10 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
             cliLobbyView.setFrontEnd("Hello %s! Username accepted.".formatted(cliLobbyView.getMyUsername()));
             cliLobbyView.setCurrentQueryMessage("""
                     Choose a deck name:
-                        'desert king',
-                        'mountain sage',
-                        'cloud witch',
-                        'forest mage'.""");
+                        1. 'desert king',
+                        2. 'mountain sage',
+                        3. 'cloud witch',
+                        4. 'forest mage'.""");
             cliLobbyView.setCliStringHandler(new CLIDeckNameHandler());
         }
     }
