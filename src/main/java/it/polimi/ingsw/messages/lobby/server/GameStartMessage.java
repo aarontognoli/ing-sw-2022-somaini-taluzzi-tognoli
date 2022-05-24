@@ -23,6 +23,6 @@ public class GameStartMessage extends ServerLobbyMessage {
 
     @Override
     public void updateGUI(GUIView guiLobbyView) {
-        //todo
+        guiLobbyView.startGame();
     }
 }

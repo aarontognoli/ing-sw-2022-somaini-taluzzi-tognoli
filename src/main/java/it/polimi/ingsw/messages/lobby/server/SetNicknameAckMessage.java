@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.lobby.server;
 
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLIDeckNameHandler;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
@@ -34,6 +35,10 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateGUI(GUIView guiLobbyView) {
-        //todo
+        if (isUsed())
+            guiLobbyView.showError(new ErrorMessage("%s is already in use.".formatted(guiLobbyView.getMyUsername())));
+        else {
+            guiLobbyView.showSetDeckFrame();
+        }
     }
 }

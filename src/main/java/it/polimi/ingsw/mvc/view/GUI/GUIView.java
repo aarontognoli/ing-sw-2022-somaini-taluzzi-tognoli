@@ -1,8 +1,11 @@
 package it.polimi.ingsw.mvc.view.GUI;
 
+import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.ServerMessage;
+import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
+import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.JoinLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
@@ -67,9 +70,15 @@ public class GUIView extends ClientView {
         reloadButton.addActionListener(new ReloadLobbies(this));
         top.add(reloadButton);
         lobby.add(top, BorderLayout.NORTH);
-
-        lobbyTableModel = (DefaultTableModel) lobbyTable.getModel();
+        //Makes table cells not editable
+        lobbyTableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         lobbyTableModel.setColumnIdentifiers(new String[]{"Lobby Name", "Number of players", "Game Mode"});
+        lobbyTable = new JTable(lobbyTableModel);
         content.setLayout(new FlowLayout());
         content.add(new JScrollPane(lobbyTable), BorderLayout.CENTER);
         lobby.add(content);
@@ -91,9 +100,9 @@ public class GUIView extends ClientView {
         labels.setLayout(new GridLayout(4, 1));
         JPanel components = new JPanel();
         components.setLayout(new GridLayout(4, 1));
-        JTextField username = new JTextField();
-        username.setMaximumSize(new Dimension(Integer.MAX_VALUE, username.getPreferredSize().height));
-        components.add(new JPanel().add(username));
+        JTextField lobbbyName = new JTextField();
+        lobbbyName.setMaximumSize(new Dimension(Integer.MAX_VALUE, lobbbyName.getPreferredSize().height));
+        components.add(new JPanel().add(lobbbyName));
         labels.add(new JLabel("Lobby Name: ", SwingConstants.RIGHT));
 
         JComboBox<Integer> playersNumber = new JComboBox<>(new Integer[]{2, 3, 4});
@@ -129,7 +138,7 @@ public class GUIView extends ClientView {
         JButton back = new JButton("Go Back");
         back.addActionListener(new OpenLobbyFrame(this));
         JButton confirm = new JButton("Confirm");
-        confirm.addActionListener(new CreateLobby(this, username, playersNumber, gameModeGroup, motherNature));
+        confirm.addActionListener(new CreateLobby(this, lobbbyName, playersNumber, gameModeGroup, motherNature));
 
         top.add(lobbyTitle);
         content.add(labels, BorderLayout.WEST);
@@ -138,6 +147,55 @@ public class GUIView extends ClientView {
         bottom.add(confirm);
 
     }
+
+    private void setUsernameFrame() {
+        clearLobbyFrame();
+        JLabel lobbyTitle = new JLabel("Log into the game");
+        content.setLayout(new BorderLayout());
+        JPanel labels = new JPanel();
+        labels.setLayout(new GridLayout(4, 1));
+        JPanel components = new JPanel();
+        components.setLayout(new GridLayout(4, 1));
+        JTextField username = new JTextField();
+        username.setMaximumSize(new Dimension(Integer.MAX_VALUE, username.getPreferredSize().height));
+        components.add(new JPanel().add(username));
+        labels.add(new JLabel("Username: ", SwingConstants.RIGHT));
+
+
+        JButton confirm = new JButton("Confirm");
+        confirm.addActionListener(new SetUsername(this, username));
+
+        top.add(lobbyTitle);
+        content.add(labels, BorderLayout.WEST);
+        content.add(components, BorderLayout.CENTER);
+        bottom.add(confirm);
+
+    }
+
+    private void setDeckFrame() {
+        clearLobbyFrame();
+        JLabel lobbyTitle = new JLabel("Log into the game");
+        content.setLayout(new BorderLayout());
+        JPanel labels = new JPanel();
+        labels.setLayout(new GridLayout(4, 1));
+        JPanel components = new JPanel();
+        components.setLayout(new GridLayout(4, 1));
+        JComboBox<DeckName> deckName = new JComboBox<>(DeckName.values());
+        deckName.setMaximumSize(new Dimension(Integer.MAX_VALUE, deckName.getPreferredSize().height));
+        components.add(deckName);
+        labels.add(new JLabel("Deck name", SwingConstants.RIGHT));
+
+
+        JButton confirm = new JButton("Confirm");
+        confirm.addActionListener(new SetDeckName(this, deckName));
+
+        top.add(lobbyTitle);
+        content.add(labels, BorderLayout.WEST);
+        content.add(components, BorderLayout.CENTER);
+        bottom.add(confirm);
+
+    }
+
 
     @Override
     public void run() throws InterruptedException {
@@ -149,7 +207,7 @@ public class GUIView extends ClientView {
         lobby.setSize(800, 600);
         lobby.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lobby.setLocationRelativeTo(null);
-        lobbyTable = new JTable();
+
         setupLobbyFrameComponents();
 
         //todo set game components
@@ -171,10 +229,24 @@ public class GUIView extends ClientView {
                 "Warning!", JOptionPane.ERROR_MESSAGE);
     }
 
-    public void setUsernameAndDeck() {
-        //todo
-        JOptionPane.showMessageDialog(null, "TODO, you joined/created the lobby succesfully",
-                "Warning!", JOptionPane.INFORMATION_MESSAGE);
+    public void showInfo(String title, String infoMessage) {
+        JOptionPane.showMessageDialog(null, infoMessage,
+                title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void showSetUsernameFrame() {
+        setUsernameFrame();
+        show();
+    }
+
+    public void showSetDeckFrame() {
+        setDeckFrame();
+        show();
+    }
+
+    public void startGame() {
+        JOptionPane.showMessageDialog(null, "Start game",
+                "TODO!", JOptionPane.ERROR_MESSAGE);
     }
 
 
@@ -209,6 +281,20 @@ public class GUIView extends ClientView {
             showError(new ErrorMessage("You need to specify a lobby name"));
         else
             notifySubscribers(new CreateLobbyMessage(lobbyName, playersNumber, gamemode, motherNatureIslandIndex));
+    }
+
+    public void setUsername(String username) {
+        if (username.isEmpty())
+            showError(new ErrorMessage("You need to specify a username"));
+        else {
+            this.setMyUsername(username);
+            notifySubscribers(new SetNicknameMessage(username));
+
+        }
+    }
+
+    public void setDeckName(DeckName deckName) {
+        notifySubscribers(new SetDeckMessage(deckName));
     }
 
 }
@@ -295,6 +381,44 @@ class CreateLobby implements ActionListener {
                 Integer.parseInt(playersNumber.getSelectedItem().toString()),
                 GameMode.valueOf(gamemode.getSelection().getActionCommand()),
                 Integer.parseInt(motherNature.getSelectedItem().toString()) - 1);
+
+    }
+}
+
+class SetUsername implements ActionListener {
+
+    GUIView gw;
+    JTextField username;
+
+
+    public SetUsername(GUIView guiView, JTextField username) {
+        this.gw = guiView;
+        this.username = username;
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        gw.setUsername(username.getText());
+
+    }
+}
+
+class SetDeckName implements ActionListener {
+
+    GUIView gw;
+    JComboBox<DeckName> deckNameJComboBox;
+
+
+    public SetDeckName(GUIView guiView, JComboBox<DeckName> deckname) {
+        this.gw = guiView;
+        this.deckNameJComboBox = deckname;
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        gw.setDeckName((DeckName) deckNameJComboBox.getSelectedItem());
 
     }
 }

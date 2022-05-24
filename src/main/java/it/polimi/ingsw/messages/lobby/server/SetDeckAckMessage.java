@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.lobby.server;
 
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
 
@@ -32,6 +33,10 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
 
     @Override
     public void updateGUI(GUIView guiLobbyView) {
-        //todo
+        if (!isDeckValid()) {
+            guiLobbyView.showError(new ErrorMessage("This deck is already in use."));
+        } else {
+            guiLobbyView.showInfo("Perfect!", "Username and Deckname ok");
+        }
     }
 }
