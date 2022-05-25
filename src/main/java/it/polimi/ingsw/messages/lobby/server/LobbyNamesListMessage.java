@@ -3,6 +3,7 @@ package it.polimi.ingsw.messages.lobby.server;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.LobbyCLIStringHandler.CLILobbyNameHandler;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
+import it.polimi.ingsw.mvc.view.GUI.LobbyFrame;
 import it.polimi.ingsw.server.Lobby;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
             String lobbyName = entry.getKey();
             Lobby lobby = entry.getValue();
 
-            lobbies.add(new LobbyState(lobbyName, lobby.getCurrentPlayersCount(), lobby.getMaxPlayersCount()));
+            lobbies.add(new LobbyState(lobbyName, lobby.getCurrentPlayersCount(), lobby.getMaxPlayersCount(), lobby.getGameMode()));
         }
     }
 
@@ -57,13 +58,6 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
     @Override
     public void updateGUI(GUIView guiLobbyView) {
         //removes all rows
-        guiLobbyView.lobbyTableModel.setRowCount(0);
-        String[] data;
-        for (LobbyState ls : lobbies) {
-            data = new String[]{ls.name(), ls.currentPlayersCount() + "/" + ls.maxPlayersCount(), "Dump"};
-            guiLobbyView.lobbyTableModel.addRow(data);
-        }
-        //updates table with new DATA
-        guiLobbyView.lobbyTableModel.fireTableDataChanged();
+        LobbyFrame.lobbyFrame.reloadLobbies(lobbies);
     }
 }

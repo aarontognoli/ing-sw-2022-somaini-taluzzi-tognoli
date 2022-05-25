@@ -14,6 +14,7 @@ import it.polimi.ingsw.mvc.view.ClientView;
 import it.polimi.ingsw.notifier.Notifier;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,8 @@ import java.awt.event.ActionListener;
 public class GUIView extends ClientView {
     public DefaultTableModel lobbyTableModel;
     //lobby window components
+    public static GUIView thisGUI;
+
     JFrame lobby;
     JPanel top = new JPanel(new FlowLayout());
     JPanel content = new JPanel();
@@ -56,11 +59,7 @@ public class GUIView extends ClientView {
 
     }
 
-    private void clearLobbyFrame() {
-        top.removeAll();
-        content.removeAll();
-        bottom.removeAll();
-    }
+    public LobbyFrame app;
 
     private void setupLobbyFrameComponents() {
         clearLobbyFrame();
@@ -92,18 +91,31 @@ public class GUIView extends ClientView {
         reloadLobbies();
     }
 
+    public LobbyController lc;
+
+    private void clearLobbyFrame() {
+        top.removeAll();
+        top.repaint();
+        content.removeAll();
+        content.repaint();
+        bottom.removeAll();
+        bottom.repaint();
+
+    }
+
     private void createALobbyFrame() {
         clearLobbyFrame();
         JLabel lobbyTitle = new JLabel("Create a new Lobby");
         content.setLayout(new BorderLayout());
         JPanel labels = new JPanel();
-        labels.setLayout(new GridLayout(4, 1));
+        labels.setLayout(new GridLayout(4, 1, 10, 110));
         JPanel components = new JPanel();
-        components.setLayout(new GridLayout(4, 1));
-        JTextField lobbbyName = new JTextField();
-        lobbbyName.setMaximumSize(new Dimension(Integer.MAX_VALUE, lobbbyName.getPreferredSize().height));
-        components.add(new JPanel().add(lobbbyName));
+        components.setLayout(new GridLayout(4, 1, 10, 110));
+        JTextField lobbyName = new JTextField();
+        lobbyName.setMaximumSize(new Dimension(Integer.MAX_VALUE, lobbyName.getPreferredSize().height));
+        components.add(new JPanel().add(lobbyName));
         labels.add(new JLabel("Lobby Name: ", SwingConstants.RIGHT));
+
 
         JComboBox<Integer> playersNumber = new JComboBox<>(new Integer[]{2, 3, 4});
         playersNumber.setMaximumSize(new Dimension(Integer.MAX_VALUE, playersNumber.getPreferredSize().height));
@@ -135,11 +147,14 @@ public class GUIView extends ClientView {
         components.add(motherNature);
         labels.add(new JLabel("Starting MotherNature Island", SwingConstants.RIGHT));
 
+
         JButton back = new JButton("Go Back");
         back.addActionListener(new OpenLobbyFrame(this));
         JButton confirm = new JButton("Confirm");
-        confirm.addActionListener(new CreateLobby(this, lobbbyName, playersNumber, gameModeGroup, motherNature));
+        confirm.addActionListener(new CreateLobby(this, lobbyName, playersNumber, gameModeGroup, motherNature));
 
+        labels.setBorder(new EmptyBorder(10, 10, 10, 10));
+        components.setBorder(new EmptyBorder(10, 10, 10, 10));
         top.add(lobbyTitle);
         content.add(labels, BorderLayout.WEST);
         content.add(components, BorderLayout.CENTER);
@@ -153,17 +168,24 @@ public class GUIView extends ClientView {
         JLabel lobbyTitle = new JLabel("Log into the game");
         content.setLayout(new BorderLayout());
         JPanel labels = new JPanel();
-        labels.setLayout(new GridLayout(4, 1));
+        labels.setLayout(new GridLayout(5, 1, 10, 90));
         JPanel components = new JPanel();
-        components.setLayout(new GridLayout(4, 1));
+        components.setLayout(new GridLayout(5, 1, 10, 90));
         JTextField username = new JTextField();
         username.setMaximumSize(new Dimension(Integer.MAX_VALUE, username.getPreferredSize().height));
+        components.add(new JPanel());
+        components.add(new JPanel());
         components.add(new JPanel().add(username));
+        labels.add(new JPanel());
+        labels.add(new JPanel());
         labels.add(new JLabel("Username: ", SwingConstants.RIGHT));
 
 
         JButton confirm = new JButton("Confirm");
         confirm.addActionListener(new SetUsername(this, username));
+
+        labels.setBorder(new EmptyBorder(10, 10, 10, 10));
+        components.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         top.add(lobbyTitle);
         content.add(labels, BorderLayout.WEST);
@@ -177,17 +199,24 @@ public class GUIView extends ClientView {
         JLabel lobbyTitle = new JLabel("Log into the game");
         content.setLayout(new BorderLayout());
         JPanel labels = new JPanel();
-        labels.setLayout(new GridLayout(4, 1));
+        labels.setLayout(new GridLayout(5, 1, 10, 90));
         JPanel components = new JPanel();
-        components.setLayout(new GridLayout(4, 1));
+        components.setLayout(new GridLayout(5, 1, 10, 90));
         JComboBox<DeckName> deckName = new JComboBox<>(DeckName.values());
         deckName.setMaximumSize(new Dimension(Integer.MAX_VALUE, deckName.getPreferredSize().height));
+        components.add(new JPanel());
+        components.add(new JPanel());
         components.add(deckName);
+        labels.add(new JPanel());
+        labels.add(new JPanel());
         labels.add(new JLabel("Deck name", SwingConstants.RIGHT));
 
 
         JButton confirm = new JButton("Confirm");
         confirm.addActionListener(new SetDeckName(this, deckName));
+
+        labels.setBorder(new EmptyBorder(10, 10, 10, 10));
+        components.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         top.add(lobbyTitle);
         content.add(labels, BorderLayout.WEST);
@@ -196,10 +225,12 @@ public class GUIView extends ClientView {
 
     }
 
-
     @Override
     public void run() throws InterruptedException {
         //show
+        app = new LobbyFrame();
+        thisGUI = this;
+        app.open();
         lobby = new JFrame("Eriantys");
         lobby.setLayout(new BorderLayout());
 
