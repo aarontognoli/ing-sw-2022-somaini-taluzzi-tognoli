@@ -48,6 +48,7 @@ public class Model implements Serializable {
 
     // Character cards
     List<CharacterCard> currentGameCards;
+    CharacterCard lastPlayedCharacterCard;
 
     // Strategy field for Influence Calculation
     InfluenceCalculator influenceCalculator;

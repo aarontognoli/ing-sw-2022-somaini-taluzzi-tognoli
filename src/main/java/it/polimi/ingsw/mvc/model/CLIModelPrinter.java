@@ -165,6 +165,13 @@ public class CLIModelPrinter {
         }
     }
 
+    static void printCurrentCharacterCard(Model model) {
+        if(model.publicModel.isCharacterCardPlayed()) {
+            System.out.printf("\nCurrently played Character Card: %s\n",
+                    model.lastPlayedCharacterCard.getClass().getSimpleName());
+        }
+    }
+
     static void printDeck(Player player) {
         System.out.print("Deck: ");
         for(AssistantCard card : player.getDeck().getHand()) {
@@ -235,6 +242,7 @@ public class CLIModelPrinter {
 
         if (model.gameMode.equals(GameMode.EXPERT_MODE)) {
             printCharacterCards(model);
+            printCurrentCharacterCard(model);
         }
 
         System.out.print("\n");

@@ -189,6 +189,7 @@ public class PublicModel implements PlayerActions, Serializable {
         }
 
         targetCard.activateEffect(effectArgument);
+        fatherModel.lastPlayedCharacterCard = targetCard;
 
         try {
             // We decrement the count after the activation of the effect since we do not
