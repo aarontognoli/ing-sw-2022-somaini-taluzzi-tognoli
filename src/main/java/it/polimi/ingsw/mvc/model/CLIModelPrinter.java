@@ -90,7 +90,7 @@ public class CLIModelPrinter {
         System.out.println("Dining room:");
         for (List<Student> students : board.getDiningRoom()) {
             if (students.isEmpty()) {
-                break;
+                continue;
             }
             Color color = students.get(0).getColor();
             for (int i = 0; i < students.size(); i++) {
@@ -165,6 +165,16 @@ public class CLIModelPrinter {
         }
     }
 
+    static void printDeck(Player player) {
+        System.out.print("Deck: ");
+        for(AssistantCard card : player.getDeck().getHand()) {
+            if (card != null) {
+                System.out.print(card + " ");
+            }
+        }
+        System.out.print("\n");
+    }
+
     static void printAssistantCard(Player player) {
         System.out.print("Current assistant card: ");
         AssistantCard card = player.getCurrentAssistantCard();
@@ -188,6 +198,10 @@ public class CLIModelPrinter {
         System.out.printf("Teammate: %s\n", teammate.getNickname());
     }
 
+    static void printCoins(Board board) {
+        System.out.printf("Coins: %d\n", board.getCoinCount());
+    }
+
     public static void printModel(Model model) {
         for (int i = 0; i < model.players.size(); i++) {
             Player player = model.players.get(i);
@@ -202,10 +216,16 @@ public class CLIModelPrinter {
             if (model.totalPlayerCount == 4 && i % 2 == 0)
                 printTowers(board);
 
+            printDeck(player);
+
             printAssistantCard(player);
 
             if (model.totalPlayerCount == 4) {
                 printTeammate(i, model);
+            }
+
+            if (model.gameMode.equals(GameMode.EXPERT_MODE)) {
+                printCoins(board);
             }
         }
 
