@@ -1,10 +1,13 @@
 package it.polimi.ingsw.mvc.view;
 
+import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ServerMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.notifier.Subscriber;
+
+import java.util.List;
 
 public abstract class ClientView extends View implements Subscriber<ServerMessage> {
     protected Model model;
@@ -55,6 +58,10 @@ public abstract class ClientView extends View implements Subscriber<ServerMessag
 
     public int getCloudsCount() {
         return model.publicModel.getCloudsCount();
+    }
+
+    public List<CharacterCard> getCurrentGameCards() {
+        return model.publicModel.getCurrentGameCards();
     }
 
     class ModelSubscriber implements Subscriber<Model> {

@@ -324,6 +324,10 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.characterCardPlayed = characterCardPlayed;
     }
 
+    public List<CharacterCard> getCurrentGameCards() {
+        return fatherModel.currentGameCards;
+    }
+
     public void setMotherNatureMoved(boolean motherNatureMoved) {
         fatherModel.motherNatureMoved = motherNatureMoved;
     }

@@ -156,7 +156,15 @@ public class CLIView extends ClientView {
         this.currentQueryMessage = currentQueryMessage;
     }
 
+    public String getCurrentQueryMessage() {
+        return currentQueryMessage;
+    }
+
     public void setCliStringHandler(CLIStringHandler cliStringHandler) {
         this.cliStringHandler = cliStringHandler;
+    }
+
+    public CLIStringHandler getCliStringHandler() {
+        return cliStringHandler;
     }
 }
