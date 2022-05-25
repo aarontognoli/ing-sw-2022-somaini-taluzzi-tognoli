@@ -49,6 +49,14 @@ public abstract class ClientView extends View implements Subscriber<ServerMessag
         return model.publicModel.getGameMode();
     }
 
+    public int getCurrentPlayerMaxMotherNatureMovement() {
+        return model.publicModel.getCurrentPlayer().getMaxMotherNatureMovementValue();
+    }
+
+    public int getCloudsCount() {
+        return model.publicModel.getCloudsCount();
+    }
+
     class ModelSubscriber implements Subscriber<Model> {
 
         ModelSubscriber(Notifier<Model> modelNotifier) {

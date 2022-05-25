@@ -9,6 +9,8 @@ import it.polimi.ingsw.mvc.model.CLIModelPrinter;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIStringHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.ActionHandler.CLIChooseCloudTile;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.ActionHandler.CLIMoveMotherNature;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.ActionHandler.CLIMoveStudentHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLICharacterCardHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLIPlayAssistantHandler;
@@ -70,14 +72,15 @@ public class CLIView extends ClientView {
         }
 
         if (!model.publicModel.isMotherNatureMoved()) {
-            currentQueryMessage = queryPrefix + "Choose the number of steps you want mother nature to be moved";
-            // TODO: cliStringHandler = new CLIMoveMotherNature
-
+            currentQueryMessage = queryPrefix +
+                    "Choose the number of steps you want mother nature to be moved, the maximum is " +
+                    this.getCurrentPlayerMaxMotherNatureMovement();
+            cliStringHandler = new CLIMoveMotherNature();
             return;
         }
 
         currentQueryMessage = queryPrefix + "Choose the cloud tile to take its students, type the cloud number";
-        // TODO: cliStringHandler = new CLIChooseCloudTile
+        cliStringHandler = new CLIChooseCloudTile();
     }
 
     protected void showModel() {

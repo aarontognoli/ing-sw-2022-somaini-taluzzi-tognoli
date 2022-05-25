@@ -315,6 +315,10 @@ public class PublicModel implements PlayerActions, Serializable {
         return fatherModel.islands.size();
     }
 
+    public int getCloudsCount() {
+        return fatherModel.clouds.size();
+    }
+
     public void setCharacterCardPlayed(boolean characterCardPlayed) {
         fatherModel.characterCardPlayed = characterCardPlayed;
     }
