@@ -10,6 +10,7 @@ import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.game.PlayCharacterCardMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.ActionHandler.CLIMoveStudentHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIBardCharacterArgumentHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIJokerCharacterArgumentHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIWineCharacterArgumentHandler;
@@ -45,6 +46,7 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
                     Where:
                     <students_entrance> is the color (or the colors) of the students in your entrance you want to exchange.
                     <students_dining> is the color (or the colors) of the students in your dining room you want to exchange.
+                    color = yellow | blue | green | red | pink
                     
                     Type 'exit' if you have changed your mind.
                     """);
@@ -59,6 +61,7 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
                     Where:
                     <students_joker> is the color (or the colors) of the students in the joker card you want to exchange.
                     <students_entrance> is the color (or the colors) of the students in your entrance you want to exchange.
+                    color = yellow | blue | green | red | pink
                     
                     Type 'exit' if you have changed your mind.
                     """);
@@ -72,6 +75,7 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
                     
                     Where:
                     <chosen_student> is the color of the chosen student.
+                    color = yellow | blue | green | red | pink
                     <chosen_island> is the index of the chosen island.
                     
                     Type 'exit' if you have changed your mind.
@@ -97,17 +101,17 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
         }
     }
 
-    protected List<List<Color>> generateListsOfColors (String[] words) throws IllegalArgumentException{
+    protected List<List<Color>> generateListsOfColors (String[] words) throws ClientSideCheckException {
         List<List<Color>> listsOfColors = new ArrayList<>();
 
         List<Color> color1 = new ArrayList<>();
         List<Color> color2 = new ArrayList<>();
         int i = 0;
         for (; i < words.length / 2; i++) {
-            color1.add(Color.valueOf(words[i]));
+            color1.add(CLIMoveStudentHandler.parseColorString(words[i]));
         }
         for (; i < words.length; i++) {
-            color2.add(Color.valueOf(words[1]));
+            color2.add(CLIMoveStudentHandler.parseColorString(words[i]));
         }
         listsOfColors.add(color1);
         listsOfColors.add(color2);

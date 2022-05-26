@@ -12,7 +12,7 @@ public class CLIMoveStudentHandler extends CLIActionPhaseHandler {
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
         handleCharacterCardMessage(cliView, input);
 
-        String words[] = input.split(" ");
+        String[] words = input.split(" ");
 
         if (words.length < 2)
             throw new ClientSideCheckException("Invalid arguments count");
@@ -23,22 +23,15 @@ public class CLIMoveStudentHandler extends CLIActionPhaseHandler {
 
         colorName = colorName.toLowerCase();
 
-        Color studentColor = switch (colorName) {
-            case "yellow" -> Color.YELLOW_GNOMES;
-            case "red" -> Color.RED_DRAGONS;
-            case "green" -> Color.GREEN_FROGS;
-            case "blue" -> Color.BLUE_UNICORNS;
-            case "pink" -> Color.PINK_FAIRIES;
-            default -> throw new ClientSideCheckException("Invalid Color");
-        };
+        Color studentColor = parseColorString(colorName);
 
         switch (placeName) {
-            case "dining":
+            case "dining" -> {
                 if (words.length != 2)
                     throw new ClientSideCheckException("Invalid arguments count");
-
                 return new MoveStudentToDiningRoomMessage(studentColor);
-            case "island":
+            }
+            case "island" -> {
                 if (words.length != 3)
                     throw new ClientSideCheckException("Invalid arguments count");
                 try {
@@ -51,8 +44,19 @@ public class CLIMoveStudentHandler extends CLIActionPhaseHandler {
                 } catch (NumberFormatException e) {
                     throw new ClientSideCheckException("Invalid island number");
                 }
-            default:
-                throw new ClientSideCheckException("Invalid place name: " + placeName);
+            }
+            default -> throw new ClientSideCheckException("Invalid place name: " + placeName);
         }
+    }
+
+    public static Color parseColorString(String input) throws ClientSideCheckException {
+        return switch (input) {
+            case "yellow" -> Color.YELLOW_GNOMES;
+            case "red" -> Color.RED_DRAGONS;
+            case "green" -> Color.GREEN_FROGS;
+            case "blue" -> Color.BLUE_UNICORNS;
+            case "pink" -> Color.PINK_FAIRIES;
+            default -> throw new ClientSideCheckException("Invalid Color");
+        };
     }
 }
