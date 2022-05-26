@@ -11,6 +11,7 @@ import it.polimi.ingsw.messages.lobby.client.lobbysetup.JoinLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.ClientView;
+import it.polimi.ingsw.mvc.view.GUI.controllers.LobbyController;
 import it.polimi.ingsw.notifier.Notifier;
 
 import javax.swing.*;
@@ -231,7 +232,7 @@ public class GUIView extends ClientView {
         app = new LobbyFrame();
         thisGUI = this;
         app.open();
-        lobby = new JFrame("Eriantys");
+        /*lobby = new JFrame("Eriantys");
         lobby.setLayout(new BorderLayout());
 
         lobby.setResizable(false);
@@ -245,14 +246,14 @@ public class GUIView extends ClientView {
         game = new JFrame("TODO");
 
 
-        show();
+        show();*/
 
     }
 
     @Override
     public void subscribeNotification(ServerMessage newMessage) {
         newMessage.updateGUI(this);
-        show();
+
     }
 
     public void showError(ErrorMessage whichone) {
@@ -308,9 +309,6 @@ public class GUIView extends ClientView {
     }
 
     public void createLobby(String lobbyName, int playersNumber, GameMode gamemode, int motherNatureIslandIndex) {
-        if (lobbyName.isEmpty())
-            showError(new ErrorMessage("You need to specify a lobby name"));
-        else
             notifySubscribers(new CreateLobbyMessage(lobbyName, playersNumber, gamemode, motherNatureIslandIndex));
     }
 

@@ -1,10 +1,15 @@
 package it.polimi.ingsw.mvc.view.GUI;
 
+import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.lobby.server.LobbyState;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CreateLobbyController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.LobbyController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -48,6 +53,42 @@ public class LobbyFrame extends Application {
         });
 
 
+    }
+
+    public void loadCreateFrame() {
+        Stage createLobbyStage = new Stage();
+        createLobbyStage.setTitle("Eryantis");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/CreateLobbyView.fxml"));
+
+        try {
+            createLobbyStage.setScene(new Scene((AnchorPane) loader.load()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CreateLobbyController clc = loader.getController();
+        mainStage.hide();
+        createLobbyStage.showAndWait();
+        if (clc.getBack())
+            mainStage.show();
+        else
+            mainStage.close();
+    }
+
+    public void showError(String message) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+                alert.setTitle("Warning!");
+                alert.showAndWait();
+            }
+        });
+
+
+    }
+
+    public void showError(ErrorMessage em) {
+        showError(em.getErrorMessageString());
     }
 
     public record lobbyTable(String lobbyName, String players, String gameMode) {

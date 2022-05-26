@@ -1,6 +1,8 @@
-package it.polimi.ingsw.mvc.view.GUI;
+package it.polimi.ingsw.mvc.view.GUI.controllers;
 
 import it.polimi.ingsw.messages.lobby.server.LobbyState;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
+import it.polimi.ingsw.mvc.view.GUI.LobbyFrame;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -48,8 +50,18 @@ public class LobbyController implements Initializable {
     }
 
     @FXML
-    private void reloadButtonEvent(ActionEvent e) {
+    private void reloadButtonOnAction(ActionEvent e) {
         GUIView.thisGUI.reloadLobbies();
+    }
+
+    @FXML
+    private void createButtonOnAction(ActionEvent e) {
+        LobbyFrame.lobbyFrame.loadCreateFrame();
+    }
+
+    @FXML
+    private void joinButtonOnAction(ActionEvent e) {
+
     }
 
     @Override
