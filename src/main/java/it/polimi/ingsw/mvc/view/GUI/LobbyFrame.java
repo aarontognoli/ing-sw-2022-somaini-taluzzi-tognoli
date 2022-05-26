@@ -33,6 +33,7 @@ public class LobbyFrame extends Application {
         mainStage.setScene(new Scene((AnchorPane) loader.load()));
         lc = (LobbyController) loader.getController();
         lobbyFrame = this;
+        mainStage.setResizable(false);
         mainStage.show();
         GUIView.thisGUI.reloadLobbies();
     }
@@ -67,11 +68,13 @@ public class LobbyFrame extends Application {
         }
         CreateLobbyController clc = loader.getController();
         mainStage.hide();
+        createLobbyStage.setResizable(false);
         createLobbyStage.showAndWait();
         if (clc.getBack())
             mainStage.show();
         else
             mainStage.close();
+
     }
 
     public void showError(String message) {
@@ -91,7 +94,18 @@ public class LobbyFrame extends Application {
         showError(em.getErrorMessageString());
     }
 
-    public record lobbyTable(String lobbyName, String players, String gameMode) {
+    public void showInfo(String message) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+                alert.setTitle("Info!");
+                alert.showAndWait();
+            }
+        });
+    }
+
+    public record LobbyTable(String lobbyName, String players, String gameMode) {
         public String getLobbyName() {
             return lobbyName;
         }

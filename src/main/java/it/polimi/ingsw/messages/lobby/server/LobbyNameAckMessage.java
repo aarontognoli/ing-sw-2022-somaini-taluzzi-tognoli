@@ -34,6 +34,6 @@ public class LobbyNameAckMessage extends ServerLobbyMessage {
             guiLobbyView.showError(new ErrorMessage("Cannot join that lobby. Please try again: "));
             return;
         }
-        guiLobbyView.showSetUsernameFrame();
+        guiLobbyView.showInfo("Lobby Joined");
     }
 }

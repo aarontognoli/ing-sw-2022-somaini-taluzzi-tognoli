@@ -41,7 +41,7 @@ public class LobbyController implements Initializable {
         table.getItems().clear();
 
         for (LobbyState ls : lobbies) {
-            table.getItems().add(new LobbyFrame.lobbyTable(ls.name(), ls.currentPlayersCount() + "/" + ls.maxPlayersCount(), ls.gameMode().toString()));
+            table.getItems().add(new LobbyFrame.LobbyTable(ls.name(), ls.currentPlayersCount() + "/" + ls.maxPlayersCount(), ls.gameMode().toString()));
 
         }
 
@@ -61,7 +61,15 @@ public class LobbyController implements Initializable {
 
     @FXML
     private void joinButtonOnAction(ActionEvent e) {
+        String lobbyName;
+        try {
+            LobbyFrame.LobbyTable selected = (LobbyFrame.LobbyTable) table.getSelectionModel().getSelectedItem();
+            lobbyName = selected.getLobbyName();
+        } catch (Exception exc) {
+            lobbyName = null;
+        }
 
+        GUIView.thisGUI.joinLobby(lobbyName);
     }
 
     @Override
