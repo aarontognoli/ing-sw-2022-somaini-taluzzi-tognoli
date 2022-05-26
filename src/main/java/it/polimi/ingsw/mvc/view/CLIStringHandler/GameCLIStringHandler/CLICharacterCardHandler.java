@@ -9,6 +9,7 @@ import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.game.PlayCharacterCardMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIBardCharacterArgumentHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIJokerCharacterArgumentHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIWineCharacterArgumentHandler;
@@ -22,7 +23,8 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
     @Override
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
 
-        int cardIndex;
+        checkForExit(input, cliView);
+
         try {
             cardIndex = Integer.parseInt(input);
         } catch (NumberFormatException e) {
@@ -32,8 +34,8 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
             throw new ClientSideCheckException("Invalid Character Card number. Please chose one from 1 to 3");
         }
 
-        this.cardIndex = cardIndex - 1;
-        Class<? extends CharacterCard> characterClass = cliView.getCurrentGameCards().get(cardIndex - 1).getClass();
+        cardIndex = cardIndex - 1;
+        Class<? extends CharacterCard> characterClass = cliView.getCurrentGameCards().get(cardIndex).getClass();
         if (BardCharacter.class.equals(characterClass)) {
             cliView.setCurrentQueryMessage("""
                     Choose up to two students to exchange between your Entrance and your dining room.
@@ -43,6 +45,8 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
                     Where:
                     <students_entrance> is the color (or the colors) of the students in your entrance you want to exchange.
                     <students_dining> is the color (or the colors) of the students in your dining room you want to exchange.
+                    
+                    Type 'exit' if you have changed your mind.
                     """);
 
             cliView.setCliStringHandler(new CLIBardCharacterArgumentHandler());
@@ -55,6 +59,8 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
                     Where:
                     <students_joker> is the color (or the colors) of the students in the joker card you want to exchange.
                     <students_entrance> is the color (or the colors) of the students in your entrance you want to exchange.
+                    
+                    Type 'exit' if you have changed your mind.
                     """);
 
             cliView.setCliStringHandler(new CLIJokerCharacterArgumentHandler());
@@ -63,19 +69,32 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
                     Choose one student from the WineCharacter card and place it on an island of your choice.
                                             
                     Type: <chosen_student> <chosen_island>
+                    
+                    Where:
+                    <chosen_student> is the color of the chosen student.
+                    <chosen_island> is the index of the chosen island.
+                    
+                    Type 'exit' if you have changed your mind.
                     """);
 
             cliView.setCliStringHandler(new CLIWineCharacterArgumentHandler());
         } else {
             cliView.setFrontEnd(characterClass.getSimpleName() + " played.");
-            restoreCLIView();
+            restoreCLIView(cliView);
             return new PlayCharacterCardMessage(this.cardIndex, null);
         }
         throw new ClientSideCheckException("");
     }
 
-    protected void restoreCLIView() {
-        //TODO: restore cli view with the last handler and query before calling character
+    protected void restoreCLIView(CLIView cliView) {
+        cliView.setCliStringHandler(new CLIEmptyHandler());
+    }
+
+    protected void checkForExit(String input, CLIView cliView) throws ClientSideCheckException {
+        if(input.trim().equals("exit")) {
+            restoreCLIView(cliView);
+            throw new ClientSideCheckException("");
+        }
     }
 
     protected List<List<Color>> generateListsOfColors (String[] words) throws IllegalArgumentException{

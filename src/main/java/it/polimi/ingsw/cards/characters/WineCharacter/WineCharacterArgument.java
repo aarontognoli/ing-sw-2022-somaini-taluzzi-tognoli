@@ -2,7 +2,9 @@ package it.polimi.ingsw.cards.characters.WineCharacter;
 
 import it.polimi.ingsw.enums.Color;
 
-public class WineCharacterArgument {
+import java.io.Serializable;
+
+public class WineCharacterArgument implements Serializable {
     final private int targetIslandIndex;
     final private Color targetStudentColor;
 

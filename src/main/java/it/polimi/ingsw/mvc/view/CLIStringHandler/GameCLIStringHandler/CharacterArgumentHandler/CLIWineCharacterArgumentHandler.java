@@ -13,6 +13,9 @@ public class CLIWineCharacterArgumentHandler extends CLICharacterCardHandler {
 
     @Override
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
+
+        checkForExit(input, cliView);
+
         String[] words = input.split(" ");
 
         if (words.length != 2) {
@@ -22,7 +25,7 @@ public class CLIWineCharacterArgumentHandler extends CLICharacterCardHandler {
         int targetIslandIndex;
         Color targetStudentColor;
         try {
-            targetIslandIndex = Integer.parseInt(words[0]);
+            targetIslandIndex = Integer.parseInt(words[1]);
             if (targetIslandIndex < 1 || targetIslandIndex > 12)
                 throw new NumberFormatException();
         } catch (NumberFormatException e) {
@@ -30,11 +33,11 @@ public class CLIWineCharacterArgumentHandler extends CLICharacterCardHandler {
         }
 
         try {
-            targetStudentColor = Color.valueOf(words[1]);
+            targetStudentColor = Color.valueOf(words[0]);
         } catch (IllegalArgumentException e) {
             throw new ClientSideCheckException("Invalid color name.");
         }
-        restoreCLIView();
+        restoreCLIView(cliView);
         return new PlayCharacterCardMessage(cardIndex, new WineCharacterArgument(targetIslandIndex, targetStudentColor));
     }
 }

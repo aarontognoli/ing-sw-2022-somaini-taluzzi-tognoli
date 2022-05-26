@@ -15,7 +15,10 @@ public abstract class CLIActionPhaseHandler implements GameCLIStringHandler {
                     
                     '1' if you want to play the first displayed card;
                     '2' if you want to play the second one;
-                    '3' if you want to play the third one.""");
+                    '3' if you want to play the third one.
+                    
+                    Type 'exit' if you have changed your mind
+                    """);
             throw new ClientSideCheckException("");
         }
     }

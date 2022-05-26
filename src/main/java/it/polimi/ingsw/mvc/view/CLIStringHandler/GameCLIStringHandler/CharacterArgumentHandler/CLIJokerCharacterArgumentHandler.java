@@ -14,6 +14,9 @@ public class CLIJokerCharacterArgumentHandler extends CLICharacterCardHandler {
 
     @Override
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
+
+        checkForExit(input, cliView);
+
         String[] words = input.split(" ");
 
         if (words.length != 2 && words.length != 4 && words.length != 6) {
@@ -26,7 +29,7 @@ public class CLIJokerCharacterArgumentHandler extends CLICharacterCardHandler {
         } catch (IllegalArgumentException e) {
             throw new ClientSideCheckException("Invalid color name.");
         }
-        restoreCLIView();
+        restoreCLIView(cliView);
         return new PlayCharacterCardMessage(cardIndex, new JokerCharacterArgument(arguments.get(0), arguments.get(1)));
     }
 }
