@@ -40,6 +40,7 @@ public class CLIView extends ClientView {
         }
         System.out.println(frontEnd);
         System.out.println(currentQueryMessage);
+        frontEnd = "";
     }
 
     private void planningPhase() {
