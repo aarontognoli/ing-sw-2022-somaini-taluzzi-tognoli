@@ -9,6 +9,7 @@ import it.polimi.ingsw.mvc.view.GUI.controllers.LobbyController;
 import it.polimi.ingsw.mvc.view.GUI.controllers.UsernameAndDeckLobbyViewController;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -16,6 +17,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 import java.util.List;
 
@@ -154,6 +156,13 @@ public class LobbyFrame extends Application {
 
                 gvc = loader.getController();
                 gameStage.setResizable(false);
+                gameStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        Platform.exit();
+                        System.exit(0);
+                    }
+                });
                 gameStage.show();
                 userAndDeckController.closeView();
 
