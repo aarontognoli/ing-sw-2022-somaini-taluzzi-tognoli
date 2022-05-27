@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="665.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/18"
+            fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController">
+   <children>
+      <ImageView fx:id="testPicPane" fitHeight="673.0" fitWidth="746.0" layoutX="-2.0" layoutY="-5.0"
+                 pickOnBounds="true" preserveRatio="true"/>
+      <Pane fx:id="gamePane" disable="true" maxWidth="1.7976931348623157E308" prefHeight="665.0" prefWidth="745.0"
+            visible="false">
+         <children>
+            <Circle fill="DODGERBLUE" layoutX="373.0" layoutY="333.0" radius="100.0" stroke="BLACK"
+                    strokeType="INSIDE"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="141.0" layoutX="125.0" layoutY="14.0"
+                       stroke="BLACK" strokeType="INSIDE" width="495.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="141.0" layoutX="125.0" layoutY="494.0"
+                       stroke="BLACK" strokeType="INSIDE" width="495.0"/>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

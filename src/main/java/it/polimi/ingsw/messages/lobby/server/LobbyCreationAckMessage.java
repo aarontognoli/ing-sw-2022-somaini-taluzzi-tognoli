@@ -50,6 +50,6 @@ public class LobbyCreationAckMessage extends ServerLobbyMessage {
             guiLobbyView.showError(new ErrorMessage("Invalid game option"));
             return;
         }
-        guiLobbyView.showError(new ErrorMessage("Lobby Created"));
+        guiLobbyView.showSetUsernameAndDeckFrame();
     }
 }

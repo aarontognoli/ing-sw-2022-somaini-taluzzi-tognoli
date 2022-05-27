@@ -36,7 +36,7 @@ public class SetDeckAckMessage extends ServerLobbyMessage {
         if (!isDeckValid()) {
             guiLobbyView.showError(new ErrorMessage("This deck is already in use."));
         } else {
-            guiLobbyView.showInfo("Perfect!", "Username and Deckname ok");
+            guiLobbyView.startGame();
         }
     }
 }

@@ -2,7 +2,6 @@ package it.polimi.ingsw.mvc.view.GUI.controllers;
 
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
-import it.polimi.ingsw.mvc.view.GUI.LobbyFrame;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -48,6 +47,11 @@ public class CreateLobbyController implements Initializable {
         return back;
     }
 
+    public void closeAndContinue() {
+        back = false;
+        ((Stage) confirmCreation.getScene().getWindow()).close();
+    }
+
     @FXML
     private void goBackButtonOnAction(ActionEvent e) {
         ((Stage) goBack.getScene().getWindow()).close();
@@ -55,10 +59,8 @@ public class CreateLobbyController implements Initializable {
 
     @FXML
     private void confirmCreationButtonOnAction(ActionEvent e) {
-        if (lobbyName.getText().equals("")) {
-            LobbyFrame.lobbyFrame.showError("Insert a lobby name");
-        } else {
-            GameMode gm;
+
+        GameMode gm;
             int playersNumber;
             int motherNatureStartingIsland;
 
@@ -68,6 +70,6 @@ public class CreateLobbyController implements Initializable {
             playersNumber = (int) this.playersNumber.getSelectionModel().getSelectedItem();
             motherNatureStartingIsland = (int) this.motherNatureStartingPosition.getSelectionModel().getSelectedItem() - 1;
             GUIView.thisGUI.createLobby(lobbyName.getText(), playersNumber, gm, motherNatureStartingIsland);
-        }
+
     }
 }

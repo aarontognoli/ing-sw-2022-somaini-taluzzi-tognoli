@@ -56,7 +56,7 @@ public class LobbyController implements Initializable {
 
     @FXML
     private void createButtonOnAction(ActionEvent e) {
-        LobbyFrame.lobbyFrame.loadCreateFrame();
+        GUIView.thisGUI.loadCreateFrame();
     }
 
     @FXML

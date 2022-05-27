@@ -13,22 +13,10 @@ import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.ClientView;
 import it.polimi.ingsw.notifier.Notifier;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-
 public class GUIView extends ClientView {
-    public DefaultTableModel lobbyTableModel;
     //lobby window components
     public static GUIView thisGUI;
 
-    JFrame lobby;
-    JPanel top = new JPanel(new FlowLayout());
-    JPanel content = new JPanel();
-    JPanel bottom = new JPanel(new FlowLayout());
-    JTable lobbyTable;
-    //game window components
-    JFrame game;
 
     public GUIView(Notifier<ServerMessage> messageNotifier, Notifier<Model> modelNotifier) {
         super(messageNotifier, modelNotifier);
@@ -37,12 +25,12 @@ public class GUIView extends ClientView {
 
     @Override
     public void show() {
-
+        showModel();
     }
 
     @Override
     protected void showModel() {
-
+        LobbyFrame.lobbyFrame.updateModel(model);
     }
 
     public void showError(ErrorMessage em) {
@@ -74,15 +62,10 @@ public class GUIView extends ClientView {
     }
 
 
-    public void showInfo(String title, String infoMessage) {
-        JOptionPane.showMessageDialog(null, infoMessage,
-                title, JOptionPane.INFORMATION_MESSAGE);
-    }
 
 
     public void startGame() {
-        JOptionPane.showMessageDialog(null, "Start game",
-                "TODO!", JOptionPane.ERROR_MESSAGE);
+        LobbyFrame.lobbyFrame.showGameView();
     }
 
 
@@ -93,7 +76,7 @@ public class GUIView extends ClientView {
 
     public void joinLobby(String lobbyName) {
         if (lobbyName == null)
-            LobbyFrame.lobbyFrame.showError(new ErrorMessage("Invalid lobby"));
+            showError(new ErrorMessage("Invalid lobby"));
         else
             notifySubscribers(new JoinLobbyMessage(lobbyName));
 
@@ -101,12 +84,15 @@ public class GUIView extends ClientView {
     }
 
     public void createLobby(String lobbyName, int playersNumber, GameMode gamemode, int motherNatureIslandIndex) {
-        notifySubscribers(new CreateLobbyMessage(lobbyName, playersNumber, gamemode, motherNatureIslandIndex));
+        if (lobbyName.isEmpty())
+            showError(new ErrorMessage("Insert a lobby name."));
+        else
+            notifySubscribers(new CreateLobbyMessage(lobbyName, playersNumber, gamemode, motherNatureIslandIndex));
     }
 
     public void setUsername(String username) {
         if (username.isEmpty())
-            LobbyFrame.lobbyFrame.showError(new ErrorMessage("You need to specify a username"));
+            showError(new ErrorMessage("You need to specify a username"));
         else {
             this.setMyUsername(username);
             notifySubscribers(new SetNicknameMessage(username));
@@ -118,6 +104,17 @@ public class GUIView extends ClientView {
         notifySubscribers(new SetDeckMessage(deckName));
     }
 
+    public void showSetUsernameAndDeckFrame() {
+        LobbyFrame.lobbyFrame.loadUsernameAndDeckFrame();
+    }
+
+    public void enableSetDeckPane() {
+        LobbyFrame.lobbyFrame.unlockDeckPane();
+    }
+
+    public void loadCreateFrame() {
+        LobbyFrame.lobbyFrame.loadCreateFrame();
+    }
 }
 
 
