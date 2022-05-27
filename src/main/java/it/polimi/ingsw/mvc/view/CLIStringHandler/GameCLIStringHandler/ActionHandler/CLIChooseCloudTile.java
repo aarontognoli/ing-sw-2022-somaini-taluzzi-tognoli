@@ -8,6 +8,8 @@ import it.polimi.ingsw.mvc.view.CLI.CLIView;
 public class CLIChooseCloudTile extends CLIActionPhaseHandler {
     @Override
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
+        handleCharacterCardMessage(cliView, input);
+
         int cloudIndex;
 
         try {

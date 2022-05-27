@@ -13,10 +13,10 @@ public class FlagCharacter extends CharacterCard {
 
     @Override
     public void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (!(arguments instanceof Island)) {
+        if (!(arguments instanceof Integer targetIndex)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 
-        model.publicModel.updateIslandOwner((Island) arguments);
+        model.publicModel.updateIslandOwner(model.publicModel.getIslands().get(targetIndex));
     }
 }

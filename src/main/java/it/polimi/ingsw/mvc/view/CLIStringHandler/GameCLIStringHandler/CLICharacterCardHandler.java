@@ -2,7 +2,12 @@ package it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler;
 
 import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cards.characters.FlagCharacter.FlagCharacter;
+import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
 import it.polimi.ingsw.cards.characters.JokerCharacter.JokerCharacter;
+import it.polimi.ingsw.cards.characters.MushroomCharacter.MushroomCharacter;
+import it.polimi.ingsw.cards.characters.PipeCharacter.PipeCharacter;
+import it.polimi.ingsw.cards.characters.PrincessCharacter.PrincessCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
@@ -11,9 +16,7 @@ import it.polimi.ingsw.messages.game.PlayCharacterCardMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.ActionHandler.CLIMoveStudentHandler;
-import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIBardCharacterArgumentHandler;
-import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIJokerCharacterArgumentHandler;
-import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIWineCharacterArgumentHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,8 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
         }
 
         cardIndex = cardIndex - 1;
+
+        // TODO map
         Class<? extends CharacterCard> characterClass = cliView.getCurrentGameCards().get(cardIndex).getClass();
         if (BardCharacter.class.equals(characterClass)) {
             cliView.setCurrentQueryMessage("""
@@ -82,6 +87,64 @@ public class CLICharacterCardHandler implements GameCLIStringHandler {
                     """);
 
             cliView.setCliStringHandler(new CLIWineCharacterArgumentHandler());
+        } else if (FlagCharacter.class.equals(characterClass)) {
+            cliView.setCurrentQueryMessage("""
+                    Choose an island which will be resolved as if Mother Nature has ended her movement there.
+                                            
+                    Type: <chosen_island>
+                    
+                    Where:
+                    <chosen_island> is the index of the chosen island.
+                    
+                    Type 'exit' if you have changed your mind.
+                    """);
+
+            cliView.setCliStringHandler(new CLIFlagCharacterArgumentHandler());
+        } else if (HerbalistCharacter.class.equals(characterClass)) {
+            //TODO
+        } else if (MushroomCharacter.class.equals(characterClass)) {
+            cliView.setCurrentQueryMessage("""
+                    Choose a color of student.
+                    During the influence calculation this turn, that color add no influence.
+                                            
+                    Type: <color>
+                    
+                    Where:
+                    <color> = yellow | blue | green | red | pink
+                    
+                    Type 'exit' if you have changed your mind.
+                    """);
+
+            cliView.setCliStringHandler(new CLIColorCharacterArgumentHandler());
+        } else if (PipeCharacter.class.equals(characterClass)) {
+            cliView.setCurrentQueryMessage("""
+                    Choose a color of student.
+                    Every player including yourself must return 3 students of this color from their dining room to the bag.
+                    If any player has fewer than 3 students of that color, return as many students they have.
+                                            
+                    Type: <color>
+                                        
+                    Where:
+                    <color> = yellow | blue | green | red | pink
+                                        
+                    Type 'exit' if you have changed your mind.
+                    """);
+
+            cliView.setCliStringHandler(new CLIColorCharacterArgumentHandler());
+        } else if (PrincessCharacter.class.equals(characterClass)) {
+            cliView.setCurrentQueryMessage("""
+                    Choose a student from this card and place it in your dining room.
+                                            
+                    Type: <chosen_student>
+                    
+                    Where:
+                    <chosen_student> is the color of the chosen student.
+                    color = yellow | blue | green | red | pink
+                                        
+                    Type 'exit' if you have changed your mind.
+                    """);
+
+            cliView.setCliStringHandler(new CLIColorCharacterArgumentHandler());
         } else {
             cliView.setFrontEnd(characterClass.getSimpleName() + " played.");
             restoreCLIView(cliView);

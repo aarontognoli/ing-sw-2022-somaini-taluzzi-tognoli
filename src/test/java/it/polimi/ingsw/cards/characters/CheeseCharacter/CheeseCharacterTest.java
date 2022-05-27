@@ -79,7 +79,7 @@ class CheeseCharacterTest extends AllCharacterTest {
         try {
             // 4
             model.publicModel.getCurrentPlayer().getBoard().rewardCoin();
-            playCard(model.publicModel.getCurrentPlayer().getNickname());
+            playCard(null);
         } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;
         }

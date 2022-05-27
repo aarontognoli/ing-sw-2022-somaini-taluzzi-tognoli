@@ -278,6 +278,10 @@ public class PublicModel implements PlayerActions, Serializable {
         return fatherModel.currentPlayer;
     }
 
+    public List<Player> getPlayers() {
+        return fatherModel.players;
+    }
+
     public Player getWinner() {
         return fatherModel.winner;
     }
@@ -346,5 +350,9 @@ public class PublicModel implements PlayerActions, Serializable {
             maxStudentsToMove = 4;
         }
         return getStudentsPlaced() >= maxStudentsToMove;
+    }
+
+    public List<Island> getIslands() {
+        return fatherModel.islands;
     }
 }

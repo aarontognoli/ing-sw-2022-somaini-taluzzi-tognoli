@@ -8,6 +8,8 @@ import it.polimi.ingsw.mvc.view.CLI.CLIView;
 public class CLIMoveMotherNature extends CLIActionPhaseHandler {
     @Override
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
+        handleCharacterCardMessage(cliView, input);
+        
         int steps;
 
         try {
