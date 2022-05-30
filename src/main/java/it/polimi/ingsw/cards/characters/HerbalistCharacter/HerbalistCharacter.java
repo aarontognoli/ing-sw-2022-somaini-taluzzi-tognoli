@@ -24,14 +24,22 @@ public class HerbalistCharacter extends CharacterCard {
 
     @Override
     protected void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (!(arguments instanceof Island)) {
+        if (!(arguments instanceof Integer islandIndex)) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
         if (entryTilesInIslandCount == 4) {
             throw new CCArgumentException("There are no more No Entry tiles to use");
         }
+
+        Island targetIsland;
         try {
-            ((Island) arguments).putNoEntryTile();
+            targetIsland = model.publicModel.getIslands().get(islandIndex);
+        } catch (IndexOutOfBoundsException e) {
+            throw new CCArgumentException("Invalid Island number");
+        }
+
+        try {
+            targetIsland.putNoEntryTile();
             entryTilesInIslandCount++;
         } catch (Exception e) {
             throw new CCArgumentException(e.getMessage());
