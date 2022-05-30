@@ -30,6 +30,7 @@ public class ClientController extends Controller {
 
         asyncReadObject();
     }
+
     public void asyncReadObject() {
         new Thread(() -> {
             while(true) {
@@ -37,14 +38,15 @@ public class ClientController extends Controller {
                     Object o = socketIn.readObject();
                     handleObjectFromNetwork(o);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // for debug e.printStackTrace();
                     break;
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(); //for debug
                 }
             }
         }).start();
     }
+
     public void asyncSendObject(Object obj) {
         new Thread(() -> {
             synchronized (socketOut) {
@@ -53,7 +55,7 @@ public class ClientController extends Controller {
                     socketOut.writeObject(obj);
                     socketOut.flush();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(); //for debug
                 }
             }
         }).start();

@@ -60,7 +60,7 @@ public class SocketClientConnection implements Runnable {
     }
 
     public synchronized void closeConnection() {
-        send(new ConnectionClosedMessage("Connection closed!"));
+        send(new ConnectionClosedMessage("Connection closed server side!"));
         try {
             socket.close();
         } catch (IOException e) {
@@ -70,13 +70,15 @@ public class SocketClientConnection implements Runnable {
     }
 
     private void close(Lobby whichLobby) {
-        closeConnection();
-        System.out.println("A player disconnected... End of the game");
         if (whichLobby != null) {
+            String lobbyName = server.getNameFromLobby(whichLobby);
             server.closePlayersConnections(whichLobby);
-            server.lobbyMap.remove(server.getNameFromLobby(whichLobby), whichLobby);
+            if (lobbyName != null) {
+                System.out.println("Game ended in lobby: " + lobbyName);
+            }
+        } else {
+            closeConnection();
         }
-        System.out.println("Game ended");
     }
 
     public void asyncSend(Object message) {
@@ -246,9 +248,12 @@ public class SocketClientConnection implements Runnable {
                 redirectToRemoteView(objectFromNetwork);
 
             }
-        } catch (IOException | ClassNotFoundException | ObjectIsNotMessageException | BadLobbyMessageException e) {
-            e.printStackTrace();
+        } catch (ObjectIsNotMessageException | BadLobbyMessageException e) {
             send(new ErrorMessage(e.getMessage()));
+            System.err.println(e.getMessage()); //for debug
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println(e.getMessage()); // for debug
+        } finally {
             close(thisLobby);
         }
     }

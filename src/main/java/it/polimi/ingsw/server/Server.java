@@ -89,7 +89,7 @@ public class Server {
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
                 executor.submit(socketConnection);
             } catch (IOException e) {
-                System.out.println("Connection Error!");
+                System.err.println("Connection Error!");
             }
         }
     }
