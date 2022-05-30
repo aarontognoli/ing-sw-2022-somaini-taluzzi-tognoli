@@ -1,6 +1,5 @@
 package it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler;
 
-import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.game.PlayCharacterCardMessage;
@@ -9,15 +8,24 @@ import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLICharact
 
 public class CLIFlagCharacterArgumentHandler extends CLICharacterCardHandler {
 
+    public CLIFlagCharacterArgumentHandler(int initialCardIndex) {
+        super(initialCardIndex);
+    }
+
     @Override
-    public ClientMessage generateMessageFromInput (CLIView cliView, String input) throws ClientSideCheckException {
+    public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
         int targetIslandIndex;
+
         try {
-            targetIslandIndex = Integer.parseInt(input.strip());
-            if (targetIslandIndex < 1 || targetIslandIndex > 12)
-                throw new NumberFormatException();
+            targetIslandIndex = Integer.parseInt(input.strip()) - 1;
         } catch (NumberFormatException e) {
             throw new ClientSideCheckException("Invalid island index.");
+        }
+
+        int islandCount = cliView.getIslandCountFromModel();
+
+        if (targetIslandIndex < 0 || targetIslandIndex >= islandCount) {
+            throw new ClientSideCheckException("Invalid Island index.");
         }
 
         return new PlayCharacterCardMessage(cardIndex, targetIslandIndex);

@@ -10,8 +10,12 @@ import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLICharact
 
 public class CLIColorCharacterArgumentHandler extends CLICharacterCardHandler {
 
+    public CLIColorCharacterArgumentHandler(int initialCardIndex) {
+        super(initialCardIndex);
+    }
+
     @Override
-    public ClientMessage generateMessageFromInput (CLIView cliView, String input) throws ClientSideCheckException {
+    public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
 
         Color targetColor = CLIMoveStudentHandler.parseColorString(input.strip());
 

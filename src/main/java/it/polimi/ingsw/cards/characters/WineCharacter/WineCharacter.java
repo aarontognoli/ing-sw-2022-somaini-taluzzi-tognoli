@@ -4,7 +4,11 @@ import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.ClientSideCheckException;
+import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIWineCharacterArgumentHandler;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 
@@ -17,6 +21,25 @@ public class WineCharacter extends CharacterCardWithStudents {
 
     public WineCharacter(Model model) {
         super(model, 1, INITIAL_STUDENT_SIZE);
+    }
+
+    @Override
+    public ClientMessage CLIClientSideActivate(CLIView cliView, int cardIndex) throws ClientSideCheckException {
+        cliView.setCurrentQueryMessage("""
+                Choose one student from the WineCharacter card and place it on an island of your choice.
+                                        
+                Type: <chosen_student> <chosen_island>
+                                    
+                Where:
+                <chosen_student> is the color of the chosen student.
+                color = yellow | blue | green | red | pink
+                <chosen_island> is the index of the chosen island.
+                                    
+                Type 'exit' if you have changed your mind.
+                """);
+
+        cliView.setCliStringHandler(new CLIWineCharacterArgumentHandler(cardIndex));
+        throw new ClientSideCheckException();
     }
 
     @Override

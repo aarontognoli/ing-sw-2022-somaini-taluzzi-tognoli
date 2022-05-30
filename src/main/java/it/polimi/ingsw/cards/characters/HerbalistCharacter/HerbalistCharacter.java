@@ -2,7 +2,10 @@ package it.polimi.ingsw.cards.characters.HerbalistCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.exceptions.ClientSideCheckException;
+import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.places.Island;
 
 public class HerbalistCharacter extends CharacterCard {
@@ -20,6 +23,11 @@ public class HerbalistCharacter extends CharacterCard {
             );
         }
         entryTilesInIslandCount--;
+    }
+
+    @Override
+    public ClientMessage CLIClientSideActivate(CLIView cliView, int cardIndex) throws ClientSideCheckException {
+        throw new RuntimeException("Not implemented yet :)");
     }
 
     @Override

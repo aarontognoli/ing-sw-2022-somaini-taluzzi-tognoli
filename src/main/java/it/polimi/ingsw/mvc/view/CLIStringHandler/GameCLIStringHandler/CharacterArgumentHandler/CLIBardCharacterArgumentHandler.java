@@ -12,6 +12,10 @@ import java.util.List;
 
 public class CLIBardCharacterArgumentHandler extends CLICharacterCardHandler {
 
+    public CLIBardCharacterArgumentHandler(int initialCardIndex) {
+        super(initialCardIndex);
+    }
+
     @Override
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
 
@@ -23,12 +27,7 @@ public class CLIBardCharacterArgumentHandler extends CLICharacterCardHandler {
             throw new ClientSideCheckException("Invalid number of arguments.");
         }
 
-        List<List<Color>> arguments;
-        try {
-            arguments = generateListsOfColors(words);
-        } catch (IllegalArgumentException e) {
-            throw new ClientSideCheckException("Invalid color name.");
-        }
+        List<List<Color>> arguments = generateListsOfColors(words);
         restoreCLIView(cliView);
         return new PlayCharacterCardMessage(cardIndex, new BardCharacterArgument(arguments.get(0), arguments.get(1)));
     }
