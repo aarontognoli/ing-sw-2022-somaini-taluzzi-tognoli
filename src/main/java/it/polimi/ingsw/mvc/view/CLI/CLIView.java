@@ -36,7 +36,19 @@ public class CLIView extends ClientView {
 
     public void show() {
         if (model != null) {
-            showModel();
+            if (model.publicModel.getWinner() != null) {
+                String winner = model.publicModel.getWinner().getNickname();
+                if (winner.equals(myUsername)) {
+                    setFrontEnd("YOU WIN!");
+                } else {
+                    setFrontEnd("GAME OVER! The winner is " + winner);
+                }
+
+                setCurrentQueryMessage("");
+                setCliStringHandler(new CLIEmptyHandler());
+            } else {
+                showModel();
+            }
         }
         System.out.println(frontEnd);
         System.out.println(currentQueryMessage);
