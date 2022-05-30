@@ -6,14 +6,17 @@ import it.polimi.ingsw.messages.game.PlayCharacterCardMessage;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CLICharacterCardHandler;
 
-public class CLIFlagCharacterArgumentHandler extends CLICharacterCardHandler {
+public class CLIIslandCharacterArgumentHandler extends CLICharacterCardHandler {
 
-    public CLIFlagCharacterArgumentHandler(int initialCardIndex) {
+    public CLIIslandCharacterArgumentHandler(int initialCardIndex) {
         super(initialCardIndex);
     }
 
     @Override
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
+
+        checkForExit(input, cliView);
+
         int targetIslandIndex;
 
         try {
@@ -28,6 +31,7 @@ public class CLIFlagCharacterArgumentHandler extends CLICharacterCardHandler {
             throw new ClientSideCheckException("Invalid Island index.");
         }
 
+        restoreCLIView(cliView);
         return new PlayCharacterCardMessage(cardIndex, targetIslandIndex);
     }
 }

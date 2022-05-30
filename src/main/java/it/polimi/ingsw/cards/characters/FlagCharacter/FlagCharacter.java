@@ -6,7 +6,7 @@ import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
-import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIFlagCharacterArgumentHandler;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIIslandCharacterArgumentHandler;
 
 public class FlagCharacter extends CharacterCard {
 
@@ -27,7 +27,7 @@ public class FlagCharacter extends CharacterCard {
                 Type 'exit' if you have changed your mind.
                 """);
 
-        cliView.setCliStringHandler(new CLIFlagCharacterArgumentHandler(cardIndex));
+        cliView.setCliStringHandler(new CLIIslandCharacterArgumentHandler(cardIndex));
         throw new ClientSideCheckException();
     }
 

@@ -17,8 +17,11 @@ public class CLIColorCharacterArgumentHandler extends CLICharacterCardHandler {
     @Override
     public ClientMessage generateMessageFromInput(CLIView cliView, String input) throws ClientSideCheckException {
 
+        checkForExit(input, cliView);
+
         Color targetColor = CLIMoveStudentHandler.parseColorString(input.strip());
 
+        restoreCLIView(cliView);
         return new PlayCharacterCardMessage(cardIndex, targetColor);
     }
 }
