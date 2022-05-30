@@ -25,12 +25,12 @@ public class LobbyCreationAckMessage extends ServerLobbyMessage {
     @Override
     public void updateCLI(CLIView cliLobbyView) {
         if (!isNameValid) {
-            cliLobbyView.setFrontEnd("Invalid lobby name. Name already in use");
+            cliLobbyView.setErrorFrontEnd("Invalid lobby name. Name already in use");
             return;
         }
 
         if (!areOptionsValid) {
-            cliLobbyView.setFrontEnd("Invalid game option");
+            cliLobbyView.setErrorFrontEnd("Invalid game option");
             return;
         }
 

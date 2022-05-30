@@ -20,7 +20,7 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
     @Override
     public void updateCLI(CLIView cliLobbyView) {
         if (isUsed()) {
-            cliLobbyView.setFrontEnd("%s is already in use.".formatted(cliLobbyView.getMyUsername()));
+            cliLobbyView.setErrorFrontEnd("%s is already in use.".formatted(cliLobbyView.getMyUsername()));
         } else {
             cliLobbyView.setFrontEnd("Hello %s! Username accepted.".formatted(cliLobbyView.getMyUsername()));
             cliLobbyView.setCurrentQueryMessage("""

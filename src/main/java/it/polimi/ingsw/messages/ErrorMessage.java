@@ -16,7 +16,7 @@ public class ErrorMessage extends ServerMessage {
 
     @Override
     public void updateCLI(CLIView cliLobbyView) {
-        cliLobbyView.setFrontEnd(getErrorMessageString());
+        cliLobbyView.setErrorFrontEnd(errorMessageString);
     }
 
     @Override

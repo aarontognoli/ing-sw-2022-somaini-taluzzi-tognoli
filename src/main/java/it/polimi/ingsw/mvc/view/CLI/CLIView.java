@@ -140,7 +140,7 @@ public class CLIView extends ClientView {
                 try {
                     notifySubscribers(cliStringHandler.generateMessageFromInput(this, newLine));
                 } catch (ClientSideCheckException e) {
-                    frontEnd = e.getMessage();
+                    setErrorFrontEnd(e.getMessage());
                     show();
                 }
             }
@@ -153,12 +153,12 @@ public class CLIView extends ClientView {
         this.frontEnd = frontEnd;
     }
 
-    public void setCurrentQueryMessage(String currentQueryMessage) {
-        this.currentQueryMessage = currentQueryMessage;
+    public void setErrorFrontEnd(String errorMessage) {
+        this.frontEnd = CLIModelPrinter.ANSI_RED + errorMessage + CLIModelPrinter.ANSI_RESET;
     }
 
-    public String getCurrentQueryMessage() {
-        return currentQueryMessage;
+    public void setCurrentQueryMessage(String currentQueryMessage) {
+        this.currentQueryMessage = currentQueryMessage;
     }
 
     public void setCliStringHandler(CLIStringHandler cliStringHandler) {
