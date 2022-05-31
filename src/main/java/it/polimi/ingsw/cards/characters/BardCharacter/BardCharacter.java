@@ -119,5 +119,13 @@ public class BardCharacter extends CharacterCard {
         }
 
         entrance.addAll(studentsFromDining);
+
+        // After we moved students to the dining room, we need to update the professors
+        // This does not apply for students moved to the entrance, since the rules
+        // Say to update the profs position only when a student is placed in the dining
+        // but not on the entrance
+        for (Color color : studColorEntrance) {
+            model.characterModel.updateProfessorPosition(color);
+        }
     }
 }

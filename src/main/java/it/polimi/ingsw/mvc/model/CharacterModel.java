@@ -55,4 +55,8 @@ public class CharacterModel implements Serializable {
     public Island getIsland(int index) throws IndexOutOfBoundsException {
         return fatherModel.islands.get(index);
     }
+
+    public void updateProfessorPosition(Color color) {
+        fatherModel.privateModel.updateProfessorPosition(color);
+    }
 }
