@@ -21,6 +21,8 @@ public class ClientController extends Controller {
     protected final Notifier<ServerMessage> serverMessageNotifier;
     final private Notifier<Model> modelNotifier;
 
+    private boolean isActive = true;
+
     public ClientController(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Notifier<Model> modelNotifier) {
         socketOut = objectOutputStream;
         socketIn = objectInputStream;
@@ -33,7 +35,7 @@ public class ClientController extends Controller {
 
     public void asyncReadObject() {
         new Thread(() -> {
-            while(true) {
+            while (isActive) {
                 try {
                     Object o = socketIn.readObject();
                     handleObjectFromNetwork(o);
@@ -43,6 +45,11 @@ public class ClientController extends Controller {
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace(); //for debug
                 }
+            }
+            try {
+                socketIn.close();
+                socketOut.close();
+            } catch (IOException e) {
             }
         }).start();
     }
@@ -65,6 +72,9 @@ public class ClientController extends Controller {
         if (obj instanceof ServerMessage message) {
             serverMessageNotifier.notifySubscribers(message);
         } else if (obj instanceof Model newModel) {
+            if (newModel.publicModel.getWinner() != null) {
+                isActive = false;
+            }
             modelNotifier.notifySubscribers(newModel);
         }
     }

@@ -15,5 +15,6 @@ public class ConnectionClosedMessage extends ErrorMessage {
         cliLobbyView.setCurrentQueryMessage("");
         cliLobbyView.setCliStringHandler(new CLIEmptyHandler("Connection closed! The game ended."));
         cliLobbyView.setModel(null);
+        cliLobbyView.setActive(false);
     }
 }

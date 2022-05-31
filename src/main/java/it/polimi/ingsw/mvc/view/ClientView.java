@@ -10,12 +10,28 @@ import it.polimi.ingsw.notifier.Subscriber;
 import java.util.List;
 
 public abstract class ClientView extends View implements Subscriber<ServerMessage> {
+    final protected Object isActiveLock;
     protected Model model;
     protected String myUsername;
+    private boolean isActive = true;
 
     public ClientView(Notifier<ServerMessage> messageNotifier, Notifier<Model> modelNotifier) {
         messageNotifier.addSubscriber(this);
         new ModelSubscriber(modelNotifier);
+
+        isActiveLock = new Object();
+    }
+
+    public boolean getIsActive() {
+        synchronized (isActiveLock) {
+            return isActive;
+        }
+    }
+
+    public void setActive(Boolean active) {
+        synchronized (isActiveLock) {
+            isActive = active;
+        }
     }
 
     public abstract void show();
@@ -78,6 +94,9 @@ public abstract class ClientView extends View implements Subscriber<ServerMessag
         @Override
         public void subscribeNotification(Model newValue) {
             model = newValue;
+            if (model.publicModel.getWinner() != null) {
+                setActive(false);
+            }
             show();
         }
     }
