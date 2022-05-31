@@ -33,10 +33,13 @@ public class LobbyNamesListMessage extends ServerLobbyMessage {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (LobbyState lobbyState : lobbies) {
-            stringBuilder.append("%s - %d/%d\n".formatted(
-                    lobbyState.name(),
-                    lobbyState.currentPlayersCount(),
-                    lobbyState.maxPlayersCount()));
+            stringBuilder.append("%s - %d/%d - %s\n".formatted(
+                            lobbyState.name(),
+                            lobbyState.currentPlayersCount(),
+                            lobbyState.maxPlayersCount(),
+                            lobbyState.gameMode().toString()
+                    )
+            );
         }
 
         cliLobbyView.setFrontEnd(stringBuilder.toString());
