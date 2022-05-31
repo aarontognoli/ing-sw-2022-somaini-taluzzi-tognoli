@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="286.0" prefWidth="323.0" xmlns="http://javafx.com/javafx/18"
+            fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.CreateLobbyController">
+    <children>
+        <ComboBox fx:id="playersNumber" layoutX="110.0" layoutY="89.0" prefHeight="26.0" prefWidth="187.0"/>
+        <TextField fx:id="lobbyName" layoutX="110.0" layoutY="53.0" prefHeight="26.0" prefWidth="187.0"/>
+        <RadioButton accessibleText="EASY_MODE" layoutX="37.0" layoutY="146.0" mnemonicParsing="false" selected="true"
+                     text="Easy">
+            <toggleGroup>
+                <ToggleGroup fx:id="gamemode"/>
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton accessibleText="EXPERT_MODE" layoutX="241.0" layoutY="146.0" mnemonicParsing="false" text="Expert"
+                     toggleGroup="$gamemode"/>
+        <Label layoutX="14.0" layoutY="58.0" text="Lobby Name"/>
+        <Label layoutX="109.0" layoutY="14.0" text="Create a new Lobby"/>
+        <Label layoutX="130.0" layoutY="128.0" text="Gamemode"/>
+        <Label layoutX="14.0" layoutY="94.0" text="Players number"/>
+        <Label layoutX="14.0" layoutY="183.0" text="Mother Nature"/>
+        <Label layoutX="14.0" layoutY="201.0" text="Starting Island"/>
+        <ComboBox fx:id="motherNatureStartingPosition" layoutX="110.0" layoutY="187.0" prefHeight="26.0"
+                  prefWidth="187.0"/>
+        <Button fx:id="goBack" layoutX="70.0" layoutY="247.0" mnemonicParsing="false" onAction="#goBackButtonOnAction"
+                text="Go Back"/>
+        <Button fx:id="confirmCreation" layoutX="211.0" layoutY="247.0" mnemonicParsing="false"
+                onAction="#confirmCreationButtonOnAction" text="Confirm"/>
+    </children>
+</AnchorPane>

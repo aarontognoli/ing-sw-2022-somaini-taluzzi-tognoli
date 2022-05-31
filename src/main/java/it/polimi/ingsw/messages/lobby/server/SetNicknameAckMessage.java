@@ -38,7 +38,7 @@ public class SetNicknameAckMessage extends ServerLobbyMessage {
         if (isUsed())
             guiLobbyView.showError(new ErrorMessage("%s is already in use.".formatted(guiLobbyView.getMyUsername())));
         else {
-            guiLobbyView.showSetDeckFrame();
+            guiLobbyView.enableSetDeckPane();
         }
     }
 }

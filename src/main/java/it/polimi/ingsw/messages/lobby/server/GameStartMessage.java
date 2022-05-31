@@ -23,6 +23,7 @@ public class GameStartMessage extends ServerLobbyMessage {
 
     @Override
     public void updateGUI(GUIView guiLobbyView) {
-        guiLobbyView.startGame();
+        guiLobbyView.setModel(firstModel);
+        guiLobbyView.show();
     }
 }

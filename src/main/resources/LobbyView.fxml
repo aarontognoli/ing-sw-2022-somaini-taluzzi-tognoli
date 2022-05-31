@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="329.0" xmlns="http://javafx.com/javafx/18"
+            fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.LobbyController">
+    <Button fx:id="joinButton" layoutX="277.0" layoutY="359.0" mnemonicParsing="false" onAction="#joinButtonOnAction"
+            text="Join"/>
+    <Button fx:id="createButton" layoutX="223.0" layoutY="359.0" mnemonicParsing="false"
+            onAction="#createButtonOnAction" text="Create"/>
+    <TableView fx:id="table" layoutX="28.0" layoutY="32.0" prefHeight="319.0" prefWidth="272.0">
+        <columns>
+            <TableColumn fx:id="nameColumn" editable="false" prefWidth="109.5999755859375" sortable="false"
+                         text="LobbyName"/>
+            <TableColumn fx:id="playersColumn" editable="false" prefWidth="56.0" sortable="false" text="Players"/>
+            <TableColumn fx:id="gamemodeColumn" editable="false" prefWidth="105.5999755859375" sortable="false"
+                         text="Game Mode"/>
+        </columns>
+    </TableView>
+    <Label contentDisplay="CENTER" layoutX="105.0" layoutY="14.0" text="Create or Join a Lobby" textAlignment="CENTER"/>
+    <Button fx:id="reloadButton" layoutX="14.0" layoutY="359.0" mnemonicParsing="false" onAction="#reloadButtonOnAction"
+            text="Reload"/>
+</AnchorPane>
