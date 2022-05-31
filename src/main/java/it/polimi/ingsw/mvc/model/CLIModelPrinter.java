@@ -5,19 +5,18 @@ import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.TowerColor;
-import it.polimi.ingsw.exceptions.NoTowerException;
-import it.polimi.ingsw.pawn.Professor;
+import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
+import it.polimi.ingsw.player.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CLIModelPrinter {
 
@@ -29,6 +28,7 @@ public class CLIModelPrinter {
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_PINK = "\u001B[35m";
     public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_OUR_TOWER = "\u001b[36m";
 
     private static String getAnsiColor(Color color) {
         String ANSI_COLOR = ANSI_RESET;
@@ -43,18 +43,18 @@ public class CLIModelPrinter {
     }
 
     static void printStudent(Color color) {
-        System.out.print(getAnsiColor(color) + "*" + ANSI_RESET + " ");
+        System.out.print(getAnsiColor(color) + "♟" + ANSI_RESET + " ");
     }
 
     static void printProfessor(Color color) {
-        System.out.print(getAnsiColor(color) + "P" + ANSI_RESET + " ");
+        System.out.print(getAnsiColor(color) + "♟" + ANSI_RESET + " ");
     }
 
     static void printTower(TowerColor color) {
         String towerColor = switch (color) {
-            case BLACK -> "B";
-            case GREY -> "G";
-            case WHITE -> "W";
+            case BLACK -> "♜";
+            case GREY -> ANSI_OUR_TOWER + "♜" + ANSI_RESET;
+            case WHITE -> "♖";
         };
         System.out.print(towerColor + " ");
     }
@@ -77,6 +77,71 @@ public class CLIModelPrinter {
         }
     }
 
+    private static void printBoardEdge() {
+        System.out.println("+-----+---------------------+---+-----+");
+    }
+
+    private static void printStudEntrance(Board board, int index) {
+        try {
+            printStudent(board.getEntrance().get(index).getColor());
+        } catch (IndexOutOfBoundsException e) {
+            System.out.print("  ");
+        }
+    }
+
+    private static void printTowerBoard(Board board, int index) {
+        try {
+            printTower(board.getTowers().get(index).getColor());
+        } catch (IndexOutOfBoundsException e) {
+            System.out.print("  ");
+        }
+    }
+
+    private static void printBoardLine(Model model, Board board, int lineNum) {
+        System.out.print("| ");
+
+        int entranceStudIndex = lineNum * 2;
+
+        printStudEntrance(board, entranceStudIndex);
+        printStudEntrance(board, entranceStudIndex + 1);
+
+        System.out.print("| ");
+
+        Color diningColor = Color.values()[lineNum];
+        int numStud = board.getDiningRoom().get(lineNum).size();
+        for (int i = 0; i < numStud; i++) {
+            printStudent(diningColor);
+        }
+        for (int i = numStud; i < Board.DINING_ROOM_MAX_STUDENT_COUNT; i++) {
+            System.out.print("  ");
+        }
+
+        System.out.print("| ");
+
+        if (board.equals(model.professors.get(lineNum).getPosition())) {
+            printProfessor(diningColor);
+        } else {
+            System.out.print("  ");
+        }
+
+        System.out.print("| ");
+
+        printTowerBoard(board, entranceStudIndex);
+        printTowerBoard(board, entranceStudIndex + 1);
+
+        System.out.println("|");
+    }
+
+    private static void printBoard(Model model, Board board) {
+        printBoardEdge();
+
+        for (int i = 0; i < Color.values().length; i++) {
+            printBoardLine(model, board, i);
+        }
+
+        printBoardEdge();
+    }
+
     static void printEntrance(Board board) {
         System.out.print("Entrance: ");
         if (board.getEntrance().isEmpty()) {
@@ -86,51 +151,16 @@ public class CLIModelPrinter {
         System.out.print("\n");
     }
 
-    static void printDiningRoom(Board board, Model model) {
-        System.out.println("Dining room:");
-        for (List<Student> students : board.getDiningRoom()) {
-            if (students.isEmpty()) {
-                continue;
-            }
-            Color color = students.get(0).getColor();
-            for (int i = 0; i < students.size(); i++) {
-                printStudent(color);
-            }
-            for (Professor professor : model.professors) {
-                if (professor.getColor().equals(color) && professor.getPosition() != null) {
-                    if (professor.getPosition().equals(board)) {
-                        printProfessor(color);
-                    }
-                }
-            }
-            System.out.print("\n");
-        }
-    }
-
-    static void printTowers(Board board) {
-        System.out.print("Towers: ");
-        TowerColor towerColor;
-        try {
-            towerColor = board.getTowerColor();
-        } catch (NoTowerException e) {
-            throw new RuntimeException("Impossible to have towers and no tower color");
-        }
-        for (int i = 0; i < board.getTowers().size(); i++) {
-            printTower(towerColor);
-        }
-        System.out.print("\n");
-    }
-
     static void printIslands(Model model) {
         System.out.println("\nIslands:");
         int i = 1;
         for (Island island : model.islands) {
             System.out.printf("Island %d: ", i++);
             if (island.hasNoEntryTile()) {
-                System.out.print("X ");
+                System.out.print("∅ ");
             }
             if (island.equals(model.motherNature.getPosition())) {
-                System.out.print("M ");
+                System.out.print("♛ ");
             }
             for (Tower tower : island.getTowers()) {
                 printTower(tower.getColor());
@@ -166,7 +196,7 @@ public class CLIModelPrinter {
     }
 
     static void printCurrentCharacterCard(Model model) {
-        if(model.publicModel.isCharacterCardPlayed()) {
+        if (model.publicModel.isCharacterCardPlayed()) {
             System.out.printf("\nCurrently played Character Card: %s\n",
                     model.lastPlayedCharacterCard.getClass().getSimpleName());
         }
@@ -174,7 +204,7 @@ public class CLIModelPrinter {
 
     static void printDeck(Player player) {
         System.out.print("Deck: ");
-        for(AssistantCard card : player.getDeck().getHand()) {
+        for (AssistantCard card : player.getDeck().getHand()) {
             if (card != null) {
                 System.out.print(card + " ");
             }
@@ -206,7 +236,13 @@ public class CLIModelPrinter {
     }
 
     static void printCoins(Board board) {
-        System.out.printf("Coins: %d\n", board.getCoinCount());
+
+        System.out.print("Coins:");
+        for (int i = 0; i < board.getCoinCount(); i++) {
+            System.out.print(" \uD83E\uDE99");
+        }
+        System.out.print("\n");
+
     }
 
     public static void printModel(Model model) {
@@ -216,12 +252,7 @@ public class CLIModelPrinter {
             Board board = player.getBoard();
             System.out.println("\n" + player.getNickname() + " Board");
 
-            printEntrance(board);
-
-            printDiningRoom(board, model);
-
-            if (model.totalPlayerCount == 4 && i % 2 == 0)
-                printTowers(board);
+            printBoard(model, board);
 
             printDeck(player);
 
@@ -246,5 +277,28 @@ public class CLIModelPrinter {
         }
 
         System.out.print("\n");
+    }
+
+    public static void main(String[] args) {
+        Map<String, DeckName> decks = new LinkedHashMap<>();
+        decks.put("Player0", DeckName.CLOUD_WITCH);
+        decks.put("Player1", DeckName.DESERT_KING);
+        decks.put("Player2", DeckName.FOREST_MAGE);
+
+        Model model = new Model(0, decks, GameMode.EXPERT_MODE);
+
+        try {
+            model.publicModel.moveStudentToDiningRoom(model.publicModel.getCurrentPlayer().getBoard().getEntrance().get(0).getColor());
+        } catch (DiningRoomFullException | NotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            model.islands.get(0).putNoEntryTile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        printModel(model);
     }
 }
