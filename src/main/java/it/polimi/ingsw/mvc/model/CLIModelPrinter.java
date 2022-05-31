@@ -45,18 +45,18 @@ public class CLIModelPrinter {
     }
 
     static void printStudent(Color color) {
-        System.out.print(getAnsiColor(color) + "♟" + ANSI_RESET + " ");
+        System.out.print(getAnsiColor(color) + "*" + ANSI_RESET + " ");
     }
 
     static void printProfessor(Color color) {
-        System.out.print(getAnsiColor(color) + "♟" + ANSI_RESET + " ");
+        System.out.print(getAnsiColor(color) + "*" + ANSI_RESET + " ");
     }
 
     static void printTower(TowerColor color) {
         String towerColor = switch (color) {
-            case BLACK -> "♜";
-            case GREY -> ANSI_OUR_TOWER + "♜" + ANSI_RESET;
-            case WHITE -> "♖";
+            case BLACK -> "B";
+            case GREY -> "G";
+            case WHITE -> "W";
         };
         System.out.print(towerColor + " ");
     }
@@ -208,8 +208,8 @@ public class CLIModelPrinter {
         for (int j = 0; j < model.publicModel.getIslandCount(); j++) {
             Island thisIsland = model.publicModel.getIslands().get(j);
 
-            String motherNature = model.motherNature.getPosition().equals(thisIsland) ? "♛" : " ";
-            String noEntryTile = thisIsland.hasNoEntryTile() ? "∅" : " ";
+            String motherNature = model.motherNature.getPosition().equals(thisIsland) ? "M" : " ";
+            String noEntryTile = thisIsland.hasNoEntryTile() ? "X" : " ";
             System.out.printf(" | %s %s |", motherNature, noEntryTile);
         }
         System.out.print("\n");
