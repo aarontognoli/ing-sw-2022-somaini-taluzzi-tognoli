@@ -196,6 +196,51 @@ public class LobbyFrame extends Application {
         });
     }
 
+    public void win() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gvc.win();
+            }
+        });
+    }
+
+    public void showWinner(String winner) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gvc.showWinner(winner);
+            }
+        });
+    }
+
+    public void waitForTurn(String currentPlayerNickname) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gvc.waitForTurn(currentPlayerNickname);
+            }
+        });
+    }
+
+    public void planningPhase() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gvc.planningPhase();
+            }
+        });
+    }
+
+    public void actionPhase() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gvc.actionPhase();
+            }
+        });
+    }
+
     public record LobbyTable(String lobbyName, String players, String gameMode) {
         public String getLobbyName() {
             return lobbyName;

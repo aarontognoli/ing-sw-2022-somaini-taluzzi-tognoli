@@ -2,6 +2,7 @@ package it.polimi.ingsw.mvc.view.GUI;
 
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.ServerMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
@@ -25,12 +26,36 @@ public class GUIView extends ClientView {
 
     @Override
     public void show() {
-        showModel();
+        if (model != null) {
+            if (model.publicModel.getWinner() != null) {
+                String winner = model.publicModel.getWinner().getNickname();
+                if (winner.equals(myUsername)) {
+                    LobbyFrame.lobbyFrame.win();
+                } else {
+                    LobbyFrame.lobbyFrame.showWinner(winner);
+                }
+            } else {
+                showModel();
+            }
+        }
     }
 
     @Override
     protected void showModel() {
         LobbyFrame.lobbyFrame.updateModel(model);
+
+
+        String currentPlayerNickname = model.publicModel.getCurrentPlayer().getNickname();
+        if (!currentPlayerNickname.equals(this.myUsername)) {
+            LobbyFrame.lobbyFrame.waitForTurn(currentPlayerNickname);
+            return;
+        }
+
+        if (model.publicModel.getGamePhase().equals(GamePhase.PIANIFICATION)) {
+            LobbyFrame.lobbyFrame.planningPhase();
+        } else {
+            LobbyFrame.lobbyFrame.actionPhase();
+        }
     }
 
     public void showError(ErrorMessage em) {

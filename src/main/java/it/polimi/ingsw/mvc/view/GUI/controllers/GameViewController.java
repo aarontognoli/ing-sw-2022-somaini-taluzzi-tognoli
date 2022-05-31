@@ -30,4 +30,24 @@ public class GameViewController implements Initializable {
 
         //todo
     }
+
+    public void win() {
+        //todo
+    }
+
+    public void showWinner(String winner) {
+        //todo
+    }
+
+    public void waitForTurn(String currentPlayerNickname) {
+        //todo
+    }
+
+    public void planningPhase() {
+        //todo
+    }
+
+    public void actionPhase() {
+        //todo
+    }
 }
