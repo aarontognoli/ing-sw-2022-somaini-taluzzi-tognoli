@@ -3,8 +3,12 @@ package it.polimi.ingsw.cards.characters.JokerCharacter;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIJokerCharacterArgumentHandler;
 import it.polimi.ingsw.pawn.Student;
 
 import java.util.ArrayList;
@@ -61,6 +65,26 @@ public class JokerCharacter extends CharacterCardWithStudents {
 
             listWithNull.set(nullIndex, s);
         }
+    }
+
+    @Override
+    public ClientMessage CLIClientSideActivate(CLIView cliView, int cardIndex) throws ClientSideCheckException {
+        cliView.setCurrentQueryMessage("""
+                Choose up to three students to exchange between the JokerCharacter card and your entrance.
+                                        
+                Type: <students_joker> <students_entrance>
+                                        
+                Where:
+                <students_joker> is the color (or the colors) of the students in the joker card you want to exchange.
+                <students_entrance> is the color (or the colors) of the students in your entrance you want to exchange.
+                color = yellow | blue | green | red | pink
+                                    
+                Type 'exit' if you have changed your mind.
+                """);
+
+        cliView.setCliStringHandler(new CLIJokerCharacterArgumentHandler(cardIndex));
+
+        throw new ClientSideCheckException();
     }
 
     @Override

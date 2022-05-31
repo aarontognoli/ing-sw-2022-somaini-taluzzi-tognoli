@@ -2,9 +2,11 @@ package it.polimi.ingsw.cards.characters.JokerCharacter;
 
 import it.polimi.ingsw.enums.Color;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
-public class JokerCharacterArgument {
+public class JokerCharacterArgument implements Serializable {
 
     final private List<Color> colorRemoveJoker;
     final private List<Color> colorRemoveBoard;

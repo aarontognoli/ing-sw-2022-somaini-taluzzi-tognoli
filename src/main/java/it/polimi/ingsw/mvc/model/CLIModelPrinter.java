@@ -15,22 +15,24 @@ import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CLIModelPrinter {
 
     // Declaring ANSI_RESET so that we can reset the color
-    static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
-    static final String ANSI_GREEN = "\u001B[32m";
-    static final String ANSI_RED = "\u001B[31m";
-    static final String ANSI_YELLOW = "\u001B[33m";
-    static final String ANSI_PINK = "\u001B[35m";
-    static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_PINK = "\u001B[35m";
+    public static final String ANSI_BLUE = "\u001B[34m";
 
     private static String getAnsiColor(Color color) {
         String ANSI_COLOR = ANSI_RESET;
-        switch(color) {
+        switch (color) {
             case GREEN_FROGS -> ANSI_COLOR = ANSI_GREEN;
             case RED_DRAGONS -> ANSI_COLOR = ANSI_RED;
             case YELLOW_GNOMES -> ANSI_COLOR = ANSI_YELLOW;
@@ -57,14 +59,30 @@ public class CLIModelPrinter {
         System.out.print(towerColor + " ");
     }
 
+    static void printListStudent(List<Student> students) {
+        List<Integer> amountsPerColor = new ArrayList<>(
+                Collections.nCopies(Color.values().length, 0));
+
+        for (Student student : students) {
+            int index = student.getColor().ordinal();
+            amountsPerColor.set(index, amountsPerColor.get(index) + 1);
+        }
+
+        for (int i = 0; i < Color.values().length; i++) {
+            int amountPerColor = amountsPerColor.get(i);
+
+            for (int j = 0; j < amountPerColor; j++) {
+                printStudent(Color.values()[i]);
+            }
+        }
+    }
+
     static void printEntrance(Board board) {
         System.out.print("Entrance: ");
         if (board.getEntrance().isEmpty()) {
             return;
         }
-        for (Student student : board.getEntrance()) {
-            printStudent(student.getColor());
-        }
+        printListStudent(board.getEntrance());
         System.out.print("\n");
     }
 
@@ -72,10 +90,10 @@ public class CLIModelPrinter {
         System.out.println("Dining room:");
         for (List<Student> students : board.getDiningRoom()) {
             if (students.isEmpty()) {
-                break;
+                continue;
             }
             Color color = students.get(0).getColor();
-            for (Student ignored : students) {
+            for (int i = 0; i < students.size(); i++) {
                 printStudent(color);
             }
             for (Professor professor : model.professors) {
@@ -91,12 +109,14 @@ public class CLIModelPrinter {
 
     static void printTowers(Board board) {
         System.out.print("Towers: ");
-        for (Tower ignored : board.getTowers()) {
-            try {
-                printTower(board.getTowerColor());
-            } catch (NoTowerException e) {
-                throw new RuntimeException("Impossible to have towers and no tower color");
-            }
+        TowerColor towerColor;
+        try {
+            towerColor = board.getTowerColor();
+        } catch (NoTowerException e) {
+            throw new RuntimeException("Impossible to have towers and no tower color");
+        }
+        for (int i = 0; i < board.getTowers().size(); i++) {
+            printTower(towerColor);
         }
         System.out.print("\n");
     }
@@ -105,16 +125,17 @@ public class CLIModelPrinter {
         System.out.println("\nIslands:");
         int i = 1;
         for (Island island : model.islands) {
-            System.out.print("Island " + i++ + ": ");
-            if (island.equals(model.motherNature.getPosition())) {
+            System.out.printf("Island %d: ", i++);
+            if (island.hasNoEntryTile()) {
                 System.out.print("X ");
+            }
+            if (island.equals(model.motherNature.getPosition())) {
+                System.out.print("M ");
             }
             for (Tower tower : island.getTowers()) {
                 printTower(tower.getColor());
             }
-            for (Student student : island.getStudents()) {
-                printStudent(student.getColor());
-            }
+            printListStudent(island.getStudents());
             System.out.print("\n");
         }
     }
@@ -128,9 +149,7 @@ public class CLIModelPrinter {
                 System.out.print("\n");
                 continue;
             }
-            for (Student student : cloud.getStudentsWithoutEmptying()) {
-                printStudent(student.getColor());
-            }
+            printListStudent(cloud.getStudentsWithoutEmptying());
             System.out.print("\n");
         }
     }
@@ -140,43 +159,59 @@ public class CLIModelPrinter {
         for (CharacterCard characterCard : model.currentGameCards) {
             System.out.print(characterCard.getClass().getSimpleName() + ": cost " + characterCard.getCoinCost() + " ");
             if (characterCard instanceof CharacterCardWithStudents characterCardWithStudents) {
-                for (Student student : characterCardWithStudents.getStudents()) {
-                    printStudent(student.getColor());
-                }
+                printListStudent(characterCardWithStudents.getStudents());
             }
             System.out.print("\n");
         }
     }
 
-    static void printAssistantCard(Player player) {
-        System.out.print("Current assistant card: ");
-        AssistantCard card = player.getCurrentAssistantCard();
-        if(card != null) {
-            System.out.print(card + " -> turn order value: " + card.getTurnOrderValue() +
-                    "; max mother nature movements: " + card.getMaxMotherNatureMovementValue());
+    static void printCurrentCharacterCard(Model model) {
+        if(model.publicModel.isCharacterCardPlayed()) {
+            System.out.printf("\nCurrently played Character Card: %s\n",
+                    model.lastPlayedCharacterCard.getClass().getSimpleName());
+        }
+    }
+
+    static void printDeck(Player player) {
+        System.out.print("Deck: ");
+        for(AssistantCard card : player.getDeck().getHand()) {
+            if (card != null) {
+                System.out.print(card + " ");
+            }
         }
         System.out.print("\n");
     }
 
-    static void printTeammate(Player player, Model model) {
-        System.out.print("Teammate: ");
-        Player teammate;
-        for (int i = 0; i < 4; i++) {
-            if (player.getNickname().equals(model.players.get(i).getNickname())) {
-                teammate = switch (i) {
-                    case 0 -> model.players.get(1);
-                    case 1 -> model.players.get(0);
-                    case 2 -> model.players.get(3);
-                    case 3 -> model.players.get(2);
-                    default -> throw new RuntimeException("Impossible state");
-                };
-                System.out.print(teammate.getNickname() + "\n");
-            }
+    static void printAssistantCard(Player player) {
+        System.out.print("Current assistant card: ");
+        AssistantCard card = player.getCurrentAssistantCard();
+        if (card != null) {
+            System.out.printf("%s -> turn order value: %d; max mother nature movements: %d", card, card.getTurnOrderValue(), card.getMaxMotherNatureMovementValue());
         }
+        System.out.print("\n");
+    }
+
+    static void printTeammate(int playerIndex, Model model) {
+        Player teammate;
+
+        teammate = switch (playerIndex) {
+            case 0 -> model.players.get(1);
+            case 1 -> model.players.get(0);
+            case 2 -> model.players.get(3);
+            case 3 -> model.players.get(2);
+            default -> throw new RuntimeException("Impossible state");
+        };
+
+        System.out.printf("Teammate: %s\n", teammate.getNickname());
+    }
+
+    static void printCoins(Board board) {
+        System.out.printf("Coins: %d\n", board.getCoinCount());
     }
 
     public static void printModel(Model model) {
-        for (Player player : model.players) {
+        for (int i = 0; i < model.players.size(); i++) {
+            Player player = model.players.get(i);
 
             Board board = player.getBoard();
             System.out.println("\n" + player.getNickname() + " Board");
@@ -185,12 +220,19 @@ public class CLIModelPrinter {
 
             printDiningRoom(board, model);
 
-            printTowers(board);
+            if (model.totalPlayerCount == 4 && i % 2 == 0)
+                printTowers(board);
+
+            printDeck(player);
 
             printAssistantCard(player);
 
             if (model.totalPlayerCount == 4) {
-                printTeammate(player, model);
+                printTeammate(i, model);
+            }
+
+            if (model.gameMode.equals(GameMode.EXPERT_MODE)) {
+                printCoins(board);
             }
         }
 
@@ -198,8 +240,9 @@ public class CLIModelPrinter {
 
         printClouds(model);
 
-        if(model.gameMode.equals(GameMode.EXPERT_MODE)) {
+        if (model.gameMode.equals(GameMode.EXPERT_MODE)) {
             printCharacterCards(model);
+            printCurrentCharacterCard(model);
         }
 
         System.out.print("\n");

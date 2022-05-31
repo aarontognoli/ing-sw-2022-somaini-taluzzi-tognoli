@@ -13,11 +13,11 @@ public class KnightCharacter extends CharacterCard {
 
     @Override
     protected void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (!(arguments instanceof Integer)) {
+        if (arguments != null) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 
-        int targetPlayerIndex = (int) arguments;
+        int targetPlayerIndex = model.publicModel.getPlayers().indexOf(model.publicModel.getCurrentPlayer());
 
         model.characterModel.updateInfluenceCalculator(new InfluenceCalculatorKnight(model, targetPlayerIndex));
     }

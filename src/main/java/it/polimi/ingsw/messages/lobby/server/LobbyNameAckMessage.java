@@ -24,7 +24,7 @@ public class LobbyNameAckMessage extends ServerLobbyMessage {
             cliLobbyView.setCurrentQueryMessage("Enter your username");
             cliLobbyView.setCliStringHandler(new CLIUsernameHandler());
         } else {
-            cliLobbyView.setFrontEnd("Cannot join that lobby. Please try again: ");
+            cliLobbyView.setErrorFrontEnd("Cannot join that lobby. Please try again: ");
         }
     }
 

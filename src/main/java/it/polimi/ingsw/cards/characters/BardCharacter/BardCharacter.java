@@ -3,8 +3,12 @@ package it.polimi.ingsw.cards.characters.BardCharacter;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.CLI.CLIView;
+import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIBardCharacterArgumentHandler;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.DiningRoomFullException;
@@ -38,6 +42,26 @@ public class BardCharacter extends CharacterCard {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public ClientMessage CLIClientSideActivate(CLIView cliView, int cardIndex) throws ClientSideCheckException {
+        cliView.setCurrentQueryMessage("""
+                Choose up to two students to exchange between your Entrance and your dining room.
+                                        
+                Type: <students_entrance> <students_dining>
+                                        
+                Where:
+                <students_entrance> is the color (or the colors) of the students in your entrance you want to exchange.
+                <students_dining> is the color (or the colors) of the students in your dining room you want to exchange.
+                color = yellow | blue | green | red | pink
+                                    
+                Type 'exit' if you have changed your mind.
+                """);
+
+        cliView.setCliStringHandler(new CLIBardCharacterArgumentHandler(cardIndex));
+
+        throw new ClientSideCheckException();
     }
 
     @Override
@@ -95,5 +119,13 @@ public class BardCharacter extends CharacterCard {
         }
 
         entrance.addAll(studentsFromDining);
+
+        // After we moved students to the dining room, we need to update the professors
+        // This does not apply for students moved to the entrance, since the rules
+        // Say to update the profs position only when a student is placed in the dining
+        // but not on the entrance
+        for (Color color : studColorEntrance) {
+            model.characterModel.updateProfessorPosition(color);
+        }
     }
 }
