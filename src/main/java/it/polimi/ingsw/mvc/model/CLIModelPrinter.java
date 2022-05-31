@@ -8,7 +8,9 @@ import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.exceptions.TowerDifferentColorException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.places.Island;
@@ -142,32 +144,78 @@ public class CLIModelPrinter {
         printBoardEdge();
     }
 
-    static void printEntrance(Board board) {
-        System.out.print("Entrance: ");
-        if (board.getEntrance().isEmpty()) {
-            return;
+    private static final int ISLAND_WIDTH = 5;
+
+    private static void printIslandsHeader(Model model) {
+        int islandCount = model.publicModel.getIslandCount();
+
+        for (int i = 0; i < islandCount; i++) {
+            System.out.print(" +");
+            for (int j = 0; j < ISLAND_WIDTH; j++) {
+                System.out.print("-");
+            }
+            System.out.print("+");
         }
-        printListStudent(board.getEntrance());
+
         System.out.print("\n");
     }
 
     static void printIslands(Model model) {
+
         System.out.println("\nIslands:");
-        int i = 1;
-        for (Island island : model.islands) {
-            System.out.printf("Island %d: ", i++);
-            if (island.hasNoEntryTile()) {
-                System.out.print("∅ ");
+
+        System.out.print(" ");
+        for (int j = 0; j < model.publicModel.getIslandCount(); j++) {
+            System.out.printf("  %02d", j + 1);
+            for (int i = 0; i < ISLAND_WIDTH - 1; i++) {
+                System.out.print(" ");
             }
-            if (island.equals(model.motherNature.getPosition())) {
-                System.out.print("♛ ");
+        }
+
+        System.out.print("\n");
+
+        printIslandsHeader(model);
+        for (int i = 0; i < Color.values().length; i++) {
+            for (int j = 0; j < model.publicModel.getIslandCount(); j++) {
+                Island thisIsland = model.publicModel.getIslands().get(j);
+                System.out.print(" | ");
+                printStudent(Color.values()[i]);
+                int studThisColor = 0;
+                Color thisColor = Color.values()[i];
+                for (Student s : thisIsland.getStudents()) {
+                    if (s.getColor().equals(thisColor)) {
+                        studThisColor++;
+                    }
+                }
+                System.out.printf("%d |", studThisColor);
             }
-            for (Tower tower : island.getTowers()) {
-                printTower(tower.getColor());
-            }
-            printListStudent(island.getStudents());
             System.out.print("\n");
         }
+        for (int j = 0; j < model.publicModel.getIslandCount(); j++) {
+            System.out.print(" | ");
+            Island thisIsland = model.publicModel.getIslands().get(j);
+            try {
+                printTower(thisIsland.getTowerColor());
+                System.out.printf("%d ", thisIsland.getTowers().size());
+            } catch (NoTowerException e) {
+                System.out.print("    ");
+            }
+            System.out.print("|");
+        }
+        System.out.print("\n");
+
+
+        for (int j = 0; j < model.publicModel.getIslandCount(); j++) {
+            Island thisIsland = model.publicModel.getIslands().get(j);
+
+            String motherNature = model.motherNature.getPosition().equals(thisIsland) ? "♛" : " ";
+            String noEntryTile = thisIsland.hasNoEntryTile() ? "∅" : " ";
+            System.out.printf(" | %s %s |", motherNature, noEntryTile);
+        }
+        System.out.print("\n");
+
+
+        printIslandsHeader(model);
     }
 
     static void printClouds(Model model) {
@@ -187,8 +235,14 @@ public class CLIModelPrinter {
     static void printCharacterCards(Model model) {
         System.out.println("\nCharacter Cards: ");
         for (CharacterCard characterCard : model.currentGameCards) {
-            System.out.print(characterCard.getClass().getSimpleName() + ": cost " + characterCard.getCoinCost() + " ");
+            System.out.print(characterCard.getClass().getSimpleName());
+            System.out.print(" Cost:" + ANSI_YELLOW);
+            for (int i = 0; i < characterCard.getCoinCost(); i++) {
+                System.out.print(" $");
+            }
+            System.out.print(ANSI_RESET);
             if (characterCard instanceof CharacterCardWithStudents characterCardWithStudents) {
+                System.out.print(" - Students: ");
                 printListStudent(characterCardWithStudents.getStudents());
             }
             System.out.print("\n");
@@ -237,11 +291,11 @@ public class CLIModelPrinter {
 
     static void printCoins(Board board) {
 
-        System.out.print("Coins:");
+        System.out.print("Coins:" + ANSI_YELLOW);
         for (int i = 0; i < board.getCoinCount(); i++) {
-            System.out.print(" \uD83E\uDE99");
+            System.out.print(" $");
         }
-        System.out.print("\n");
+        System.out.print(ANSI_RESET + "\n");
 
     }
 
@@ -295,7 +349,18 @@ public class CLIModelPrinter {
 
         try {
             model.islands.get(0).putNoEntryTile();
+            model.islands.get(2).putNoEntryTile();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            model.islands.get(0).addTower(new Tower(TowerColor.BLACK));
+            model.islands.get(0).addTower(new Tower(TowerColor.BLACK));
+            model.islands.get(1).addTower(new Tower(TowerColor.WHITE));
+            model.islands.get(2).addTower(new Tower(TowerColor.GREY));
+            model.islands.get(2).addTower(new Tower(TowerColor.GREY));
+        } catch (TowerDifferentColorException e) {
             e.printStackTrace();
         }
 
