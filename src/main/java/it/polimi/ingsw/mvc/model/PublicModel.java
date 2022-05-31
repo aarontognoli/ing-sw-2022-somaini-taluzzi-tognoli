@@ -153,8 +153,6 @@ public class PublicModel implements PlayerActions, Serializable {
      *                                 entrance
      */
     public void moveStudentToDiningRoom(Color studentColor) throws DiningRoomFullException, NotFoundException {
-        fatherModel.winner = fatherModel.players.get(0);
-
         Student selectedStudent = fatherModel.privateModel.removeStudentFromEntrance(studentColor,
                 fatherModel.currentPlayer.getBoard());
 
