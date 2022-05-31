@@ -2,9 +2,10 @@ package it.polimi.ingsw.cards.characters.BardCharacter;
 
 import it.polimi.ingsw.enums.Color;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BardCharacterArgument {
+public class BardCharacterArgument implements Serializable {
     private List<Color> studentsColorToExchangeEntrance;
     private List<Color> studentsColorToExchangeDiningRoom;
 

@@ -77,7 +77,7 @@ public class KnightCharacterTest extends AllCharacterTest {
         try {
             p0Board.rewardCoin();
             p0Board.rewardCoin();
-            playCard((int) 0);//redundant cast but it's to test int and Integer istanceof
+            playCard(null);
             assertEquals(1, p0Board.getCoinCount());
         } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;
@@ -119,7 +119,7 @@ public class KnightCharacterTest extends AllCharacterTest {
             p0Board.rewardCoin();
             p0Board.rewardCoin();
             assertEquals(3, p0Board.getCoinCount());
-            playCard((Integer) 0);//redundant cast but it's to test int and Integer istanceof
+            playCard(null);
             assertEquals(0, p0Board.getCoinCount());
         } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;

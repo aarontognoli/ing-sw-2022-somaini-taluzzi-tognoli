@@ -13,11 +13,11 @@ public class CheeseCharacter extends CharacterCard {
 
     @Override
     protected void internalActivateEffect(Object arguments) throws CCArgumentException {
-        if (!(arguments instanceof String)) {
+        if (arguments != null) {
             throw new CCArgumentException(CCArgumentException.INVALID_CLASS_MESSAGE);
         }
 
-        String targetPlayerName = (String) arguments;
+        String targetPlayerName = model.publicModel.getCurrentPlayer().getNickname();
 
         model.characterModel.updateProfessorMoverRule(new ProfessorMoverRuleCheese(targetPlayerName));
     }

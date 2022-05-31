@@ -45,7 +45,7 @@ class HerbalistCharacterTest extends AllCharacterTest {
 
         for (int i = 0; i < 4; i++) {
             int finalI = i;
-            assertDoesNotThrow(() -> playCard(islands.get(finalI)));
+            assertDoesNotThrow(() -> playCard(finalI));
         }
 
         assertThrows(CCArgumentException.class, () -> playCard(islands.get(4)));
@@ -60,7 +60,7 @@ class HerbalistCharacterTest extends AllCharacterTest {
             currentPlayerBoard.rewardCoin();
         }
 
-        assertDoesNotThrow(() -> playCard(targetIsland));
+        assertDoesNotThrow(() -> playCard(0));
         assertTrue(targetIsland.hasNoEntryTile());
 
         assertThrows(CCArgumentException.class, () -> playCard(targetIsland));
@@ -131,7 +131,7 @@ class HerbalistCharacterTest extends AllCharacterTest {
         try {
             // 5
             secondPlayerBoard.rewardCoin();
-            playCard(islandZero);
+            playCard(0);
         } catch (InsufficientCoinException | CCArgumentException e) {
             assert false;
         }

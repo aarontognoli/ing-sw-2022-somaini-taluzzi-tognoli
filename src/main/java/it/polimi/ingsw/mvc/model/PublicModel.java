@@ -47,7 +47,7 @@ public class PublicModel implements PlayerActions, Serializable {
 
     public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException, CloudEmptyException {
 
-        List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudents();
+        List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudentsAndRemove();
         if (studentsFromCloud == null)
             throw new CloudEmptyException();
         try {
@@ -189,6 +189,7 @@ public class PublicModel implements PlayerActions, Serializable {
         }
 
         targetCard.activateEffect(effectArgument);
+        fatherModel.lastPlayedCharacterCard = targetCard;
 
         try {
             // We decrement the count after the activation of the effect since we do not
@@ -277,6 +278,10 @@ public class PublicModel implements PlayerActions, Serializable {
         return fatherModel.currentPlayer;
     }
 
+    public List<Player> getPlayers() {
+        return fatherModel.players;
+    }
+
     public Player getWinner() {
         return fatherModel.winner;
     }
@@ -287,5 +292,67 @@ public class PublicModel implements PlayerActions, Serializable {
 
     public int getTotalPlayerCount() {
         return fatherModel.totalPlayerCount;
+    }
+
+    public void resetChecks() {
+        fatherModel.characterCardPlayed = false;
+        fatherModel.studentsPlaced = 0;
+        fatherModel.motherNatureMoved = false;
+    }
+
+    public GameMode getGameMode() {
+        return fatherModel.gameMode;
+    }
+
+    public boolean isCharacterCardPlayed() {
+        return fatherModel.characterCardPlayed;
+    }
+
+    public boolean isMotherNatureMoved() {
+        return fatherModel.motherNatureMoved;
+    }
+
+    public int getStudentsPlaced() {
+        return fatherModel.studentsPlaced;
+    }
+
+    public int getIslandCount() {
+        return fatherModel.islands.size();
+    }
+
+    public int getCloudsCount() {
+        return fatherModel.clouds.size();
+    }
+
+    public void setCharacterCardPlayed(boolean characterCardPlayed) {
+        fatherModel.characterCardPlayed = characterCardPlayed;
+    }
+
+    public List<CharacterCard> getCurrentGameCards() {
+        return fatherModel.currentGameCards;
+    }
+
+    public void setMotherNatureMoved(boolean motherNatureMoved) {
+        fatherModel.motherNatureMoved = motherNatureMoved;
+    }
+
+    public void setStudentsPlaced(int studentsPlaced) {
+        fatherModel.studentsPlaced = studentsPlaced;
+    }
+
+    public boolean enoughStudentsPlaced() {
+        int maxStudentsToMove = 3;
+        // if entrance is empty the player must keep playing
+        if (getCurrentPlayer().getBoard().getEntrance().isEmpty())
+            return true;
+
+        if (getTotalPlayerCount() == 3) {
+            maxStudentsToMove = 4;
+        }
+        return getStudentsPlaced() >= maxStudentsToMove;
+    }
+
+    public List<Island> getIslands() {
+        return fatherModel.islands;
     }
 }
