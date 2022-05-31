@@ -1,6 +1,7 @@
 package it.polimi.ingsw.player;
 
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import it.polimi.ingsw.exceptions.EntranceFullException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.exceptions.NoTowerException;

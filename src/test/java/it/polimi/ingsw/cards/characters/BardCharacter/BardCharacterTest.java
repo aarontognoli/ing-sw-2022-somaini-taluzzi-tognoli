@@ -7,7 +7,7 @@ import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.mvc.model.PrivateModel;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.player.DiningRoomFullException;
+import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

@@ -11,7 +11,7 @@ import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIBardCharacterArgumentHandler;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.player.DiningRoomFullException;
+import it.polimi.ingsw.exceptions.DiningRoomFullException;
 
 import java.util.ArrayList;
 import java.util.List;

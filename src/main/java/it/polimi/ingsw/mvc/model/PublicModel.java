@@ -13,7 +13,7 @@ import it.polimi.ingsw.mvc.PlayerActions;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.player.DiningRoomFullException;
+import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
 import java.io.Serializable;

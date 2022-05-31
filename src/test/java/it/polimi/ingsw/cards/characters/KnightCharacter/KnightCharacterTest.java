@@ -7,14 +7,12 @@ import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
-import it.polimi.ingsw.mvc.model.DefaultInfluenceCalculatorRules;
 import it.polimi.ingsw.mvc.model.InfluenceCalculator_2_3;
-import it.polimi.ingsw.mvc.model.InfluenceCalculator_4;
 import it.polimi.ingsw.mvc.model.PublicModelTest;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.player.DiningRoomFullException;
+import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
