@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="123.0" prefWidth="151.0"
+            xmlns="http://javafx.com/javafx/18">
+   <children>
+      <ImageView fx:id="pic" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@imgs/Misc/island_1.png"/>
+         </image>
+      </ImageView>
+      <ImageView fx:id="motherNature" fitHeight="53.0" fitWidth="33.0" layoutX="33.0" layoutY="14.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@imgs/Misc/motherNature.png"/>
+         </image>
+      </ImageView>
+      <ImageView fx:id="RED_DRAGONS" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@imgs/Students/RED_DRAGONS.png"/>
+         </image>
+      </ImageView>
+      <ImageView fx:id="GREEN_FROGS" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@imgs/Students/GREEN_FROGS.png"/>
+         </image>
+      </ImageView>
+      <ImageView fx:id="PINK_FAIRIES" fitHeight="52.0" fitWidth="33.0" layoutX="79.0" layoutY="87.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+         </image>
+      </ImageView>
+      <ImageView fx:id="YELLOW_GNOMES" fitHeight="29.0" fitWidth="33.0" layoutX="57.0" layoutY="59.0"
+                 pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+         </image>
+      </ImageView>
+      <ImageView fx:id="BLUE_UNICORNS" fitHeight="67.0" fitWidth="33.0" layoutX="38.0" layoutY="87.0"
+                 pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+         </image>
+      </ImageView>
+      <ImageView fx:id="tower" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@imgs/Towers/BLACK.png"/>
+         </image>
+      </ImageView>
+      <ImageView fx:id="noEntry" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@imgs/Misc/noEntry.png"/>
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

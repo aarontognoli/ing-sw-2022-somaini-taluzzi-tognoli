@@ -1,25 +1,807 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Rectangle?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="665.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/18"
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="800.0" maxWidth="1500.0" prefHeight="800.0"
+            prefWidth="1900.0" xmlns="http://javafx.com/javafx/18"
             fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController">
    <children>
       <ImageView fx:id="testPicPane" fitHeight="673.0" fitWidth="746.0" layoutX="-2.0" layoutY="-5.0"
                  pickOnBounds="true" preserveRatio="true"/>
-      <Pane fx:id="gamePane" disable="true" maxWidth="1.7976931348623157E308" prefHeight="665.0" prefWidth="745.0"
-            visible="false">
+      <AnchorPane fx:id="gamePane" layoutX="10.0" layoutY="10.0" prefHeight="665.0" prefWidth="1500.0"
+                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
          <children>
-            <Circle fill="DODGERBLUE" layoutX="373.0" layoutY="333.0" radius="100.0" stroke="BLACK"
-                    strokeType="INSIDE"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="141.0" layoutX="125.0" layoutY="14.0"
-                       stroke="BLACK" strokeType="INSIDE" width="495.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="141.0" layoutX="125.0" layoutY="494.0"
-                       stroke="BLACK" strokeType="INSIDE" width="495.0"/>
+            <Pane fx:id="AssistantCards" layoutX="-19.0" layoutY="558.0" prefHeight="200.0" prefWidth="1260.0"
+                  visible="false" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="-19.0"
+                  AnchorPane.rightAnchor="259.0" AnchorPane.topAnchor="558.0">
+               <children>
+                  <ImageView fx:id="CARD_1" accessibleText="CARD_1" fitHeight="150.0" fitWidth="200.0" layoutX="20.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_1.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_2" accessibleText="CARD_2" fitHeight="150.0" fitWidth="200.0" layoutX="140.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_2.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_3" accessibleText="CARD_3" fitHeight="150.0" fitWidth="200.0" layoutX="262.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_3.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_4" accessibleText="CARD_4" fitHeight="150.0" fitWidth="200.0" layoutX="384.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_4.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_5" accessibleText="CARD_5" fitHeight="150.0" fitWidth="200.0" layoutX="506.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_5.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_6" accessibleText="CARD_6" fitHeight="150.0" fitWidth="200.0" layoutX="628.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_6.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_7" accessibleText="CARD_7" fitHeight="150.0" fitWidth="200.0" layoutX="750.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_7.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_8" accessibleText="CARD_8" fitHeight="150.0" fitWidth="200.0" layoutX="872.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_8.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_9" accessibleText="CARD_9" fitHeight="150.0" fitWidth="200.0" layoutX="994.0"
+                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_9.png"/>
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CARD_10" accessibleText="CARD_10" fitHeight="150.0" fitWidth="200.0"
+                             layoutX="1116.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imgs/AssistantCards/CARD_10.png"/>
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <ImageView fitHeight="174.0" fitWidth="452.0" layoutX="27.0" layoutY="607.0" preserveRatio="true">
+               <image>
+                  <Image url="@imgs/Misc/room.png"/>
+               </image>
+            </ImageView>
+            <ImageView fitHeight="174.0" fitWidth="452.0" layoutX="39.0" layoutY="32.0" preserveRatio="true">
+               <image>
+                  <Image url="@imgs/Misc/room.png"/>
+               </image>
+            </ImageView>
+            <ImageView fitHeight="174.0" fitWidth="452.0" layoutX="39.0" layoutY="418.0" preserveRatio="true">
+               <image>
+                  <Image url="@imgs/Misc/room.png"/>
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+            <Pane fx:id="islands" layoutX="658.0" layoutY="14.0" prefHeight="776.0" prefWidth="827.0">
+               <children>
+                  <AnchorPane layoutX="186.0" layoutY="24.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature" fitHeight="53.0" fitWidth="33.0" layoutX="33.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES" fitHeight="52.0" fitWidth="33.0" layoutX="79.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES" fitHeight="29.0" fitWidth="33.0" layoutX="57.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS" fitHeight="67.0" fitWidth="33.0" layoutX="38.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="348.0" layoutY="24.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic1" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature1" fitHeight="53.0" fitWidth="33.0" layoutX="33.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS1" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS1" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES1" fitHeight="52.0" fitWidth="33.0" layoutX="79.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES1" fitHeight="29.0" fitWidth="33.0" layoutX="57.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS1" fitHeight="67.0" fitWidth="33.0" layoutX="38.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower1" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry1" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="510.0" layoutY="24.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic2" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature2" fitHeight="53.0" fitWidth="33.0" layoutX="33.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS2" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS2" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES2" fitHeight="52.0" fitWidth="33.0" layoutX="79.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES2" fitHeight="29.0" fitWidth="33.0" layoutX="57.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS2" fitHeight="67.0" fitWidth="33.0" layoutX="38.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower2" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry2" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="660.0" layoutY="134.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic3" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature3" fitHeight="53.0" fitWidth="33.0" layoutX="33.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS3" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS3" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES3" fitHeight="52.0" fitWidth="33.0" layoutX="79.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES3" fitHeight="29.0" fitWidth="33.0" layoutX="57.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS3" fitHeight="67.0" fitWidth="33.0" layoutX="38.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower3" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry3" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="660.0" layoutY="264.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic11" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature11" fitHeight="53.0" fitWidth="33.0" layoutX="33.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS11" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS11" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES11" fitHeight="52.0" fitWidth="33.0" layoutX="79.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES11" fitHeight="29.0" fitWidth="33.0" layoutX="57.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS11" fitHeight="67.0" fitWidth="33.0" layoutX="38.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower11" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry11" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="660.0" layoutY="412.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic13" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature13" fitHeight="53.0" fitWidth="33.0" layoutX="33.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS13" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS13" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES13" fitHeight="52.0" fitWidth="33.0" layoutX="79.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES13" fitHeight="29.0" fitWidth="33.0" layoutX="57.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS13" fitHeight="67.0" fitWidth="33.0" layoutX="38.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower13" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry13" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="510.0" layoutY="491.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic14" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature14" fitHeight="53.0" fitWidth="33.0" layoutX="33.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS14" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS14" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES14" fitHeight="52.0" fitWidth="33.0" layoutX="79.0" layoutY="87.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES14" fitHeight="29.0" fitWidth="33.0" layoutX="57.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS14" fitHeight="67.0" fitWidth="33.0" layoutX="38.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower14" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry14" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="359.0" layoutY="491.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic141" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature141" fitHeight="53.0" fitWidth="33.0" layoutX="33.0"
+                                   layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS141" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS141" fitHeight="38.0" fitWidth="33.0" layoutX="96.0" layoutY="59.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES141" fitHeight="52.0" fitWidth="33.0" layoutX="79.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES141" fitHeight="29.0" fitWidth="33.0" layoutX="57.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS141" fitHeight="67.0" fitWidth="33.0" layoutX="38.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower141" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry141" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="197.0" layoutY="491.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic1411" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature1411" fitHeight="53.0" fitWidth="33.0" layoutX="33.0"
+                                   layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS1411" fitHeight="80.0" fitWidth="33.0" layoutX="17.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS1411" fitHeight="38.0" fitWidth="33.0" layoutX="96.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES1411" fitHeight="52.0" fitWidth="33.0" layoutX="79.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES1411" fitHeight="29.0" fitWidth="33.0" layoutX="57.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS1411" fitHeight="67.0" fitWidth="33.0" layoutX="38.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower1411" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry1411" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="35.0" layoutY="412.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic1412" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature1412" fitHeight="53.0" fitWidth="33.0" layoutX="33.0"
+                                   layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS1412" fitHeight="80.0" fitWidth="33.0" layoutX="17.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS1412" fitHeight="38.0" fitWidth="33.0" layoutX="96.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES1412" fitHeight="52.0" fitWidth="33.0" layoutX="79.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES1412" fitHeight="29.0" fitWidth="33.0" layoutX="57.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS1412" fitHeight="67.0" fitWidth="33.0" layoutX="38.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower1412" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry1412" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="35.0" layoutY="264.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic14121" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature14121" fitHeight="53.0" fitWidth="33.0" layoutX="33.0"
+                                   layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS14121" fitHeight="80.0" fitWidth="33.0" layoutX="17.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS14121" fitHeight="38.0" fitWidth="33.0" layoutX="96.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES14121" fitHeight="52.0" fitWidth="33.0" layoutX="79.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES14121" fitHeight="29.0" fitWidth="33.0" layoutX="57.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS14121" fitHeight="67.0" fitWidth="33.0" layoutX="38.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower14121" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry14121" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="35.0" layoutY="122.0" prefHeight="123.0" prefWidth="151.0">
+                     <children>
+                        <ImageView fx:id="pic141211" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/island_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="motherNature141211" fitHeight="53.0" fitWidth="33.0" layoutX="33.0"
+                                   layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/motherNature.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="RED_DRAGONS141211" fitHeight="80.0" fitWidth="33.0" layoutX="17.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="GREEN_FROGS141211" fitHeight="38.0" fitWidth="33.0" layoutX="96.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/GREEN_FROGS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="PINK_FAIRIES141211" fitHeight="52.0" fitWidth="33.0" layoutX="79.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/PINK_FAIRIES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="YELLOW_GNOMES141211" fitHeight="29.0" fitWidth="33.0" layoutX="57.0"
+                                   layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/YELLOW_GNOMES.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="BLUE_UNICORNS141211" fitHeight="67.0" fitWidth="33.0" layoutX="38.0"
+                                   layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Students/BLUE_UNICORNS.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="tower141211" fitHeight="45.0" fitWidth="27.0" layoutX="80.0" layoutY="14.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Towers/BLACK.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="noEntry141211" fitHeight="52.0" fitWidth="56.0" layoutX="46.0" layoutY="4.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/noEntry.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </Pane>
+            <ImageView fitHeight="174.0" fitWidth="452.0" layoutX="39.0" layoutY="226.0" preserveRatio="true">
+               <image>
+                  <Image url="@imgs/Misc/room.png"/>
+               </image>
+            </ImageView>
          </children>
-      </Pane>
+      </AnchorPane>
    </children>
 </AnchorPane>
