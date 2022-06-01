@@ -78,21 +78,6 @@
                   </ImageView>
                </children>
             </Pane>
-            <ImageView fitHeight="174.0" fitWidth="452.0" layoutX="27.0" layoutY="607.0" preserveRatio="true">
-               <image>
-                  <Image url="@imgs/Misc/room.png"/>
-               </image>
-            </ImageView>
-            <ImageView fitHeight="174.0" fitWidth="452.0" layoutX="39.0" layoutY="32.0" preserveRatio="true">
-               <image>
-                  <Image url="@imgs/Misc/room.png"/>
-               </image>
-            </ImageView>
-            <ImageView fitHeight="174.0" fitWidth="452.0" layoutX="39.0" layoutY="418.0" preserveRatio="true">
-               <image>
-                  <Image url="@imgs/Misc/room.png"/>
-               </image>
-            </ImageView>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
@@ -796,11 +781,8 @@
                   </AnchorPane>
                </children>
             </Pane>
-            <ImageView fitHeight="174.0" fitWidth="452.0" layoutX="39.0" layoutY="226.0" preserveRatio="true">
-               <image>
-                  <Image url="@imgs/Misc/room.png"/>
-               </image>
-            </ImageView>
+            <Pane fx:id="boards" prefHeight="800.0" prefWidth="669.0" AnchorPane.bottomAnchor="0.0"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"/>
          </children>
       </AnchorPane>
    </children>

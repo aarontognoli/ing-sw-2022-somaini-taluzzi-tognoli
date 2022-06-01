@@ -44,6 +44,13 @@ public class LobbyFrame extends Application {
         lc = (LobbyController) loader.getController();
         lobbyFrame = this;
         mainStage.setResizable(false);
+        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
         mainStage.show();
         GUIView.thisGUI.reloadLobbies();
     }
@@ -112,7 +119,15 @@ public class LobbyFrame extends Application {
                 userAndDeckStage.initStyle(StageStyle.UNDECORATED);
                 userAndDeckStage.setResizable(false);
                 userAndDeckStage.show();
-                mainStage.close();
+                userAndDeckStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        Platform.exit();
+                        System.exit(0);
+                    }
+                });
+
+                mainStage.hide();
 
             }
         });
@@ -164,7 +179,7 @@ public class LobbyFrame extends Application {
                     }
                 });
                 gameStage.show();
-                userAndDeckController.closeView();
+                userAndDeckController.hideView();
 
             }
         });

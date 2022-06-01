@@ -52,7 +52,7 @@ public class UsernameAndDeckLobbyViewController implements Initializable {
         deckPane.setDisable(false);
     }
 
-    public void closeView() {
-        ((Stage) deckButton.getScene().getWindow()).close();
+    public void hideView() {
+        ((Stage) deckButton.getScene().getWindow()).hide();
     }
 }

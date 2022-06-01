@@ -10,6 +10,7 @@ import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.mvc.PlayerActions;
+import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
@@ -26,6 +27,10 @@ public class PublicModel implements PlayerActions, Serializable {
 
     PublicModel(Model fatherModel) {
         this.fatherModel = fatherModel;
+    }
+
+    public List<Professor> getProfessors() {
+        return new ArrayList<>(fatherModel.professors);
     }
 
     public void playAssistant(AssistantCard assistantCard) throws NotFoundException, AssistantCardAlreadyPlayedException {

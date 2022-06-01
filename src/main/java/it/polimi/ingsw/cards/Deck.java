@@ -33,6 +33,10 @@ public class Deck implements Serializable {
         return new ArrayList<>(cards);
     }
 
+    public DeckName getDeckName() {
+        return deckName;
+    }
+
     public boolean isEmpty() {
         return cards.isEmpty();
     }
