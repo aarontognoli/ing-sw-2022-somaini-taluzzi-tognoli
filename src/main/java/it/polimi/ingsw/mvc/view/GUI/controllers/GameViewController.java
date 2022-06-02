@@ -1,7 +1,9 @@
 package it.polimi.ingsw.mvc.view.GUI.controllers;
 
+import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Professor;
+import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Player;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -17,12 +19,17 @@ public class GameViewController implements Initializable {
     public Pane gamePane;
     public ImageView testPicPane;
     public Pane boards;
-
+    private static final int ISLAND_RADIUS = 270;
+    public Pane AssistantCards;
+    public Pane islands;
     List<BoardController> boardControllerList;
+    List<IslandController> islandControllerList;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         testPicPane.setImage(new Image("/imgs/test/waiting.png"));
         boardControllerList = new ArrayList<>();
+        islandControllerList = new ArrayList<>();
 
     }
 
@@ -47,6 +54,18 @@ public class GameViewController implements Initializable {
                 thisController.setLayoutY((i + 1) * border + i * boardHeight);
             }
         }
+        double halfPane = islands.getHeight() / 2;
+        IslandController thisController;
+        islands.getChildren().clear();
+        for (int i = 0; i < model.publicModel.getIslandCount(); i++) {
+            thisController = new IslandController();
+            islands.getChildren().add(thisController);
+            islandControllerList.add(thisController);
+            thisController.setLayoutY(halfPane + ISLAND_RADIUS * Math.sin(Math.toRadians((double) i * 360 / model.publicModel.getIslandCount() - 90)));
+            thisController.setLayoutX(halfPane + ISLAND_RADIUS * Math.cos(Math.toRadians((double) i * 360 / model.publicModel.getIslandCount() - 90)));
+            thisController.setPic(i);
+        }
+
 
         updateModel(model);
     }
@@ -57,7 +76,11 @@ public class GameViewController implements Initializable {
         for (int i = 0; i < model.publicModel.getTotalPlayerCount(); i++) {
             updateBoard(boardControllerList.get(i), model.publicModel.getPlayers().get(i), model.publicModel.getCurrentPlayer(), model.publicModel.getProfessors());
         }
-        //todo
+
+        for (int i = 0; i < model.publicModel.getIslandCount(); i++) {
+            updateIsland(islandControllerList.get(i), model.publicModel.getIslands().get(i), model.publicModel.getMotherNatureIsland());
+        }
+
     }
 
     private void updateBoard(BoardController bc, Player p, Player current, List<Professor> professors) {
@@ -71,6 +94,18 @@ public class GameViewController implements Initializable {
         bc.update(p.getBoard());
         bc.updateProfessors(professors, p.getBoard());
         bc.playAssistantCard(p.getCurrentAssistantCard());
+    }
+
+    private void updateIsland(IslandController ic, Island i, Island motherNatureIsland) {
+        ic.setStudents(i.getStudents());
+        ic.setNoEntryTile(i.hasNoEntryTile());
+        try {
+            ic.setTower(i.getTowerColor(), i.getTowers().size());
+        } catch (NoTowerException e) {
+            ic.setTower(null, i.getTowers().size());
+        }
+        ic.setMotherNature(motherNatureIsland.equals(i));
+
     }
 
     public void win() {
