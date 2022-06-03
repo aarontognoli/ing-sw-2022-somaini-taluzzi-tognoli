@@ -1,19 +1,24 @@
 package it.polimi.ingsw.mvc.view.GUI.controllers;
 
+import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Player;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class GameViewController implements Initializable {
     public Pane gamePane;
@@ -22,14 +27,36 @@ public class GameViewController implements Initializable {
     private static final int ISLAND_RADIUS = 270;
     public Pane AssistantCards;
     public Pane islands;
+    public Pane CharacterCardInfo;
+    public ImageView CardPic;
+    public Label Description;
+    public Pane CharacterCards;
+    public Pane Content;
+    public Text Cost;
+    public Pane PlayCardButton;
     List<BoardController> boardControllerList;
     List<IslandController> islandControllerList;
+    Map<String, String> characterCardsNameDescription;
+    List<CharacterCard> characterCards;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         testPicPane.setImage(new Image("/imgs/test/waiting.png"));
         boardControllerList = new ArrayList<>();
         islandControllerList = new ArrayList<>();
+        characterCardsNameDescription = new HashMap<>();
+        characterCards = new ArrayList<>();
+        String line;
+
+        try (Scanner scanner = new Scanner(new File("./src/main/resources/utils/CharacterCardsDescriptions.csv"));) {
+            while (scanner.hasNextLine()) {
+                line = scanner.nextLine();
+                characterCardsNameDescription.put(line.split(";")[0], line.split(";")[1]);
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -38,6 +65,7 @@ public class GameViewController implements Initializable {
         testPicPane.setVisible(false);
         gamePane.setDisable(false);
         gamePane.setVisible(true);
+        characterCards = model.publicModel.getCurrentCharacterCards();
         if (boards.getChildren().size() == 0) {
             BoardController thisController;
             for (double i = 0; i < model.publicModel.getTotalPlayerCount(); i++) {
@@ -53,10 +81,16 @@ public class GameViewController implements Initializable {
                 double border = (boards.getHeight() - boardHeight * model.publicModel.getTotalPlayerCount()) / (model.publicModel.getTotalPlayerCount() + 1);
                 thisController.setLayoutY((i + 1) * border + i * boardHeight);
             }
+
+            for (int i = 0; i < characterCards.size(); i++) {
+                ((ImageView) CharacterCards.getChildren().get(i)).setImage(new Image("/imgs/CharacterCards/" + characterCards.get(i).getClass().getSimpleName() + ".jpg"));
+                CharacterCards.getChildren().get(i).setAccessibleText(String.valueOf(i));
+            }
         }
         double halfPane = islands.getHeight() / 2;
         IslandController thisController;
         islands.getChildren().clear();
+        islandControllerList.clear();
         for (int i = 0; i < model.publicModel.getIslandCount(); i++) {
             thisController = new IslandController();
             islands.getChildren().add(thisController);
@@ -126,5 +160,32 @@ public class GameViewController implements Initializable {
 
     public void actionPhase() {
         //todo
+    }
+
+    @FXML
+    public void closeCharacterCardInfo(MouseEvent mouseEvent) {
+        CharacterCardInfo.setVisible(false);
+        CharacterCardInfo.setDisable(true);
+    }
+
+
+    public void openInfo(MouseEvent mouseEvent) {
+        int cardId = Integer.parseInt(((ImageView) mouseEvent.getSource()).getAccessibleText());
+        CharacterCard thisCard = characterCards.get(cardId);
+        String cardName = thisCard.getClass().getSimpleName();
+        Description.setText(characterCardsNameDescription.get(cardName));
+        CardPic.setImage(new Image("/imgs/CharacterCards/" + cardName + ".jpg"));
+        Cost.setText(String.valueOf(thisCard.getCoinCost()));
+        //todo Set Content if card needs students or other things
+        CharacterCardInfo.setVisible(true);
+        CharacterCardInfo.setDisable(false);
+    }
+
+    public void shineBack(MouseEvent mouseEvent) {
+        ((ImageView) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, yellow, 50, 0, 0, 0);");
+    }
+
+    public void notShineBack(MouseEvent mouseEvent) {
+        ((ImageView) mouseEvent.getSource()).setStyle("");
     }
 }

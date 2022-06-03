@@ -1,6 +1,9 @@
 package it.polimi.ingsw.mvc.view.GUI;
 
 import it.polimi.ingsw.ServerApp;
+import it.polimi.ingsw.cards.assistant.AssistantCard;
+import it.polimi.ingsw.exceptions.AssistantCardAlreadyPlayedException;
+import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.mvc.controller.ClientController;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
@@ -10,12 +13,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static it.polimi.ingsw.mvc.model.PublicModelTest.fourPlayersExpertMode;
+import static it.polimi.ingsw.mvc.model.PublicModelTest.twoPlayersExpertMode;
 
 public class TestModel {
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws InterruptedException, IOException, AssistantCardAlreadyPlayedException, NotFoundException {
         LobbyFrame test = new LobbyFrame();
-        Model model = fourPlayersExpertMode();
+        Model model = twoPlayersExpertMode();
         new Thread(() -> ServerApp.main(new String[]{})).start();
 
         Socket socket = null;
@@ -47,5 +50,18 @@ public class TestModel {
         LobbyFrame.lobbyFrame.loadUsernameAndDeckFrame();
         LobbyFrame.lobbyFrame.showGameView();
         LobbyFrame.lobbyFrame.updateModel(model);
+        Thread.sleep(1000);
+        model.publicModel.playAssistant(AssistantCard.CARD_1);
+        model.publicModel.endTurn();
+        LobbyFrame.lobbyFrame.updateModel(model);
+        Thread.sleep(1000);
+        model.publicModel.playAssistant(AssistantCard.CARD_2);
+        model.publicModel.endTurn();
+        LobbyFrame.lobbyFrame.updateModel(model);
+        Thread.sleep(1000);
+
+        Thread.sleep(1000);
+        Thread.sleep(1000);
+
     }
 }

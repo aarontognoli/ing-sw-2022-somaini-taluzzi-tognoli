@@ -29,6 +29,10 @@ public class PublicModel implements PlayerActions, Serializable {
         this.fatherModel = fatherModel;
     }
 
+    public List<CharacterCard> getCurrentCharacterCards() {
+        return new ArrayList<>(fatherModel.currentGameCards);
+    }
+
     public List<Professor> getProfessors() {
         return new ArrayList<>(fatherModel.professors);
     }
