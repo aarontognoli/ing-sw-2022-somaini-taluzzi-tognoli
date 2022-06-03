@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
@@ -20,7 +21,10 @@
             <Pane fx:id="islands" layoutX="658.0" layoutY="14.0" prefHeight="776.0" prefWidth="827.0"/>
             <Pane fx:id="boards" prefHeight="800.0" prefWidth="669.0" AnchorPane.bottomAnchor="0.0"
                   AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-            <Pane fx:id="CharacterCards" layoutX="650.0" layoutY="100.0" prefHeight="490.0" prefWidth="98.0">
+            <Pane fx:id="Clouds" layoutX="1071.0" layoutY="352.0" prefHeight="1.0" prefWidth="1.0"
+                  style="-fx-background-color: yellow;"/>
+            <Pane fx:id="CharacterCards" disable="true" layoutX="650.0" layoutY="100.0" prefHeight="490.0"
+                  prefWidth="98.0" visible="false">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#openInfo" onMouseEntered="#shineBack"
                              onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
@@ -181,6 +185,26 @@
                   </Pane>
                </children>
             </Pane>
+            <ImageView fitHeight="121.0" fitWidth="317.0" layoutX="963.0" layoutY="168.0" pickOnBounds="true">
+               <image>
+                  <Image url="@imgs/Misc/textCloud.png"/>
+               </image>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN">
+                     <color>
+                        <Color opacity="0.826747715473175"/>
+                     </color>
+                  </DropShadow>
+               </effect>
+            </ImageView>
+            <Label fx:id="Prompt" alignment="TOP_LEFT" layoutX="1009.0" layoutY="194.0" prefHeight="64.0"
+                   prefWidth="219.0"
+                   text="Wow ma che bella nuvoletta, perchè non sposti quei bellissimi studenti? bla bla bla bla"
+                   wrapText="true">
+               <font>
+                  <Font size="15.0"/>
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

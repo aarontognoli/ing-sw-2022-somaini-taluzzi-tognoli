@@ -56,6 +56,7 @@ public class IslandController extends Pane implements Initializable {
 
     private Map<Color, Text> colorCountMap;
     private Map<Color, ImageView> colorImageViewMap;
+    private int index;
 
     public IslandController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
@@ -89,9 +90,9 @@ public class IslandController extends Pane implements Initializable {
         colorImageViewMap.put(Color.YELLOW_GNOMES, YELLOW_GNOMES);
     }
 
-    public void setPic(int i) {
+    public void setPicAndIndex(int index) {
         Image image;
-        switch (i % 3) {
+        switch (index % 3) {
             case 0 -> {
                 image = new Image("/imgs/Misc/island_1.png");
             }
@@ -104,6 +105,7 @@ public class IslandController extends Pane implements Initializable {
             }
         }
         pic.setImage(image);
+        this.index = index;
     }
 
     public void setStudents(List<Student> islandStudents) {
@@ -156,5 +158,8 @@ public class IslandController extends Pane implements Initializable {
         info.setDisable(true);
     }
 
+    public int getIndex() {
+        return index;
+    }
 
 }

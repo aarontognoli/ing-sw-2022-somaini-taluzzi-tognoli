@@ -1,6 +1,7 @@
 package it.polimi.ingsw.mvc.view.GUI.controllers;
 
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Professor;
@@ -25,6 +26,7 @@ public class GameViewController implements Initializable {
     public ImageView testPicPane;
     public Pane boards;
     private static final int ISLAND_RADIUS = 270;
+    private static final int CLOUD_RADIUS = 100;
     public Pane AssistantCards;
     public Pane islands;
     public Pane CharacterCardInfo;
@@ -34,10 +36,13 @@ public class GameViewController implements Initializable {
     public Pane Content;
     public Text Cost;
     public Pane PlayCardButton;
+    public Pane Clouds;
+    public Label Prompt;
     List<BoardController> boardControllerList;
     List<IslandController> islandControllerList;
     Map<String, String> characterCardsNameDescription;
     List<CharacterCard> characterCards;
+    List<CloudController> cloudControllerList;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -46,6 +51,7 @@ public class GameViewController implements Initializable {
         islandControllerList = new ArrayList<>();
         characterCardsNameDescription = new HashMap<>();
         characterCards = new ArrayList<>();
+        cloudControllerList = new ArrayList<>();
         String line;
 
         try (Scanner scanner = new Scanner(new File("./src/main/resources/utils/CharacterCardsDescriptions.csv"));) {
@@ -65,7 +71,9 @@ public class GameViewController implements Initializable {
         testPicPane.setVisible(false);
         gamePane.setDisable(false);
         gamePane.setVisible(true);
-        characterCards = model.publicModel.getCurrentCharacterCards();
+        if (model.publicModel.getGameMode().equals(GameMode.EXPERT_MODE)) {
+            characterCards = model.publicModel.getCurrentCharacterCards();
+        }
         if (boards.getChildren().size() == 0) {
             BoardController thisController;
             for (double i = 0; i < model.publicModel.getTotalPlayerCount(); i++) {
@@ -81,13 +89,39 @@ public class GameViewController implements Initializable {
                 double border = (boards.getHeight() - boardHeight * model.publicModel.getTotalPlayerCount()) / (model.publicModel.getTotalPlayerCount() + 1);
                 thisController.setLayoutY((i + 1) * border + i * boardHeight);
             }
-
-            for (int i = 0; i < characterCards.size(); i++) {
-                ((ImageView) CharacterCards.getChildren().get(i)).setImage(new Image("/imgs/CharacterCards/" + characterCards.get(i).getClass().getSimpleName() + ".jpg"));
-                CharacterCards.getChildren().get(i).setAccessibleText(String.valueOf(i));
+            if (model.publicModel.getGameMode().equals(GameMode.EXPERT_MODE)) {
+                CharacterCards.setVisible(true);
+                CharacterCards.setDisable(false);
+                for (int i = 0; i < characterCards.size(); i++) {
+                    ((ImageView) CharacterCards.getChildren().get(i)).setImage(new Image("/imgs/CharacterCards/" + characterCards.get(i).getClass().getSimpleName() + ".jpg"));
+                    CharacterCards.getChildren().get(i).setAccessibleText(String.valueOf(i));
+                }
             }
+
+
+        }
+        if (Clouds.getChildren().size() == 0) {
+            CloudController thisController;
+            int totalPlayers = model.publicModel.getTotalPlayerCount();
+            int toDivide = totalPlayers + 1;
+            int offset = 0;
+            if (totalPlayers == 4)
+                offset = 19;
+            else if (totalPlayers == 2)
+                offset = -30;
+
+            for (int i = 0; i < model.publicModel.getCloudsCount(); i++) {
+                thisController = new CloudController();
+                thisController.setup(totalPlayers, i);
+                cloudControllerList.add(thisController);
+                Clouds.getChildren().add(thisController);
+                thisController.setLayoutY(CLOUD_RADIUS * Math.sin(Math.toRadians(-(double) (i + 2) * 360 / toDivide - offset)) - 25);
+                thisController.setLayoutX(CLOUD_RADIUS * Math.cos(Math.toRadians(-(double) (i + 2) * 360 / toDivide - offset)));
+            }
+
         }
         double halfPane = islands.getHeight() / 2;
+        double islandHeight;
         IslandController thisController;
         islands.getChildren().clear();
         islandControllerList.clear();
@@ -95,10 +129,12 @@ public class GameViewController implements Initializable {
             thisController = new IslandController();
             islands.getChildren().add(thisController);
             islandControllerList.add(thisController);
-            thisController.setLayoutY(halfPane + ISLAND_RADIUS * Math.sin(Math.toRadians((double) i * 360 / model.publicModel.getIslandCount() - 90)));
+            islandHeight = thisController.getChildren().get(0).boundsInLocalProperty().get().getHeight();
+            thisController.setLayoutY(halfPane - islandHeight + ISLAND_RADIUS * Math.sin(Math.toRadians((double) i * 360 / model.publicModel.getIslandCount() - 90)));
             thisController.setLayoutX(halfPane + ISLAND_RADIUS * Math.cos(Math.toRadians((double) i * 360 / model.publicModel.getIslandCount() - 90)));
-            thisController.setPic(i);
+            thisController.setPicAndIndex(i);
         }
+
 
 
         updateModel(model);
@@ -114,7 +150,9 @@ public class GameViewController implements Initializable {
         for (int i = 0; i < model.publicModel.getIslandCount(); i++) {
             updateIsland(islandControllerList.get(i), model.publicModel.getIslands().get(i), model.publicModel.getMotherNatureIsland());
         }
-
+        for (int i = 0; i < model.publicModel.getCloudsCount(); i++) {
+            cloudControllerList.get(i).updateStudents(model.publicModel.getClouds().get(i).getStudentsWithoutEmptying());
+        }
     }
 
     private void updateBoard(BoardController bc, Player p, Player current, List<Professor> professors) {

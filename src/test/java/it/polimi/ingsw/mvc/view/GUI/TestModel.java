@@ -13,12 +13,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static it.polimi.ingsw.mvc.model.PublicModelTest.twoPlayersExpertMode;
+import static it.polimi.ingsw.mvc.model.PublicModelTest.fourPlayersExpertMode;
 
 public class TestModel {
     public static void main(String[] args) throws InterruptedException, IOException, AssistantCardAlreadyPlayedException, NotFoundException {
         LobbyFrame test = new LobbyFrame();
-        Model model = twoPlayersExpertMode();
+        Model model = fourPlayersExpertMode();
         new Thread(() -> ServerApp.main(new String[]{})).start();
 
         Socket socket = null;

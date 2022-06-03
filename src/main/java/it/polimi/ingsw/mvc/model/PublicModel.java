@@ -4,6 +4,7 @@ import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.GamePhase;
@@ -27,6 +28,10 @@ public class PublicModel implements PlayerActions, Serializable {
 
     PublicModel(Model fatherModel) {
         this.fatherModel = fatherModel;
+    }
+
+    public List<Cloud> getClouds() {
+        return new ArrayList<>(fatherModel.clouds);
     }
 
     public List<CharacterCard> getCurrentCharacterCards() {
