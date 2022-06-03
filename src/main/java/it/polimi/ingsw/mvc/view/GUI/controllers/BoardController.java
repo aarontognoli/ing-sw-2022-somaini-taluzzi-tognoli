@@ -134,7 +134,7 @@ public class BoardController extends Pane implements Initializable {
 
     public void updateIsPlaying(boolean isPlaying) {
         if (isPlaying) {
-            BACK.setStyle("-fx-background-color:yellow;-fx-background-radius: 10;");
+            BACK.setStyle("-fx-background-color:yellow;-fx-background-radius: 10;-fx-effect: dropshadow(three-pass-box, yellow, 50, 0, 0, 0);");
             NOW_PLAYING.setVisible(true);
         } else {
             BACK.setStyle("");
