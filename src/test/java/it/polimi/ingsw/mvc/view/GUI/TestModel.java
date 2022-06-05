@@ -40,7 +40,7 @@ public class TestModel {
 
 
         GUIView.thisGUI = new GUIView(clientController.getServerMessageNotifier(), modelNotifier);
-
+        GUIView.thisGUI.setUsername("Player1");
         new Thread(() -> test.open()).start();
 
         while (LobbyFrame.lobbyFrame == null) {
@@ -49,19 +49,22 @@ public class TestModel {
         LobbyFrame.lobbyFrame.loadCreateFrame();
         LobbyFrame.lobbyFrame.loadUsernameAndDeckFrame();
         LobbyFrame.lobbyFrame.showGameView();
-        LobbyFrame.lobbyFrame.updateModel(model);
+        update(model);
         Thread.sleep(1000);
         model.publicModel.playAssistant(AssistantCard.CARD_1);
         model.publicModel.endTurn();
-        LobbyFrame.lobbyFrame.updateModel(model);
-        Thread.sleep(1000);
-        model.publicModel.playAssistant(AssistantCard.CARD_2);
+        update(model);
+
+       /* model.publicModel.playAssistant(AssistantCard.CARD_2);
         model.publicModel.endTurn();
-        LobbyFrame.lobbyFrame.updateModel(model);
+        update(model);*/
         Thread.sleep(1000);
 
-        Thread.sleep(1000);
-        Thread.sleep(1000);
 
+    }
+
+    private static void update(Model model) {
+        GUIView.thisGUI.setModel(model);
+        GUIView.thisGUI.show();
     }
 }

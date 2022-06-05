@@ -48,72 +48,117 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="AssistantCards" layoutX="200.0" layoutY="558.0" prefHeight="200.0" prefWidth="1260.0"
-                  visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0"
-                  AnchorPane.rightAnchor="120.0">
+            <Pane fx:id="AssistantCardsOuter" layoutX="200.0" layoutY="576.0" onMouseEntered="#makeAssistantsNormal"
+                  onMouseExited="#makeAssistantsSmall" prefHeight="200.0" prefWidth="1260.0"
+                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
                <children>
-                  <ImageView fx:id="CARD_1" accessibleText="CARD_1" fitHeight="150.0" fitWidth="200.0" layoutX="20.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_1.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_2" accessibleText="CARD_2" fitHeight="150.0" fitWidth="200.0" layoutX="140.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_2.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_3" accessibleText="CARD_3" fitHeight="150.0" fitWidth="200.0" layoutX="262.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_3.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_4" accessibleText="CARD_4" fitHeight="150.0" fitWidth="200.0" layoutX="384.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_4.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_5" accessibleText="CARD_5" fitHeight="150.0" fitWidth="200.0" layoutX="506.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_5.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_6" accessibleText="CARD_6" fitHeight="150.0" fitWidth="200.0" layoutX="628.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_6.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_7" accessibleText="CARD_7" fitHeight="150.0" fitWidth="200.0" layoutX="750.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_7.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_8" accessibleText="CARD_8" fitHeight="150.0" fitWidth="200.0" layoutX="872.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_8.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_9" accessibleText="CARD_9" fitHeight="150.0" fitWidth="200.0" layoutX="994.0"
-                             layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_9.png"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="CARD_10" accessibleText="CARD_10" fitHeight="150.0" fitWidth="200.0"
-                             layoutX="1116.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/AssistantCards/CARD_10.png"/>
-                     </image>
-                  </ImageView>
+                  <Pane fx:id="AssistantCards" prefHeight="200.0" prefWidth="1260.0" scaleX="0.7" scaleY="0.7"
+                        translateX="310.0" translateY="30.0">
+                     <children>
+                        <ImageView fx:id="CARD_1" accessibleText="CARD_1" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="20.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_1.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_2" accessibleText="CARD_2" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="140.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_2.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_3" accessibleText="CARD_3" disable="true" fitHeight="150.0"
+                                   fitWidth="200.0" layoutX="262.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_3.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_4" accessibleText="CARD_4" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="384.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_4.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_5" accessibleText="CARD_5" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="506.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_5.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_6" accessibleText="CARD_6" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="628.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_6.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_7" accessibleText="CARD_7" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="750.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_7.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_8" accessibleText="CARD_8" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="872.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_8.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_9" accessibleText="CARD_9" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="994.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_9.png"/>
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_10" accessibleText="CARD_10" fitHeight="150.0" fitWidth="200.0"
+                                   layoutX="1116.0" layoutY="25.0" onMouseClicked="#playAssistant"
+                                   onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
+                                   preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_10.png"/>
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
                </children>
             </Pane>
+            <ImageView fitHeight="121.0" fitWidth="317.0" layoutX="963.0" layoutY="168.0" pickOnBounds="true">
+               <image>
+                  <Image url="@imgs/Misc/textCloud.png"/>
+               </image>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN">
+                     <color>
+                        <Color opacity="0.826747715473175"/>
+                     </color>
+                  </DropShadow>
+               </effect>
+            </ImageView>
+            <Label fx:id="Prompt" alignment="TOP_LEFT" layoutX="1009.0" layoutY="194.0" prefHeight="64.0"
+                   prefWidth="219.0"
+                   text="Wow ma che bella nuvoletta, perchè non sposti quei bellissimi studenti? bla bla bla bla"
+                   wrapText="true">
+               <font>
+                  <Font size="15.0"/>
+               </font>
+            </Label>
             <Pane fx:id="CharacterCardInfo" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false"
                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                   AnchorPane.topAnchor="0.0">
@@ -185,26 +230,6 @@
                   </Pane>
                </children>
             </Pane>
-            <ImageView fitHeight="121.0" fitWidth="317.0" layoutX="963.0" layoutY="168.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imgs/Misc/textCloud.png"/>
-               </image>
-               <effect>
-                  <DropShadow blurType="GAUSSIAN">
-                     <color>
-                        <Color opacity="0.826747715473175"/>
-                     </color>
-                  </DropShadow>
-               </effect>
-            </ImageView>
-            <Label fx:id="Prompt" alignment="TOP_LEFT" layoutX="1009.0" layoutY="194.0" prefHeight="64.0"
-                   prefWidth="219.0"
-                   text="Wow ma che bella nuvoletta, perchè non sposti quei bellissimi studenti? bla bla bla bla"
-                   wrapText="true">
-               <font>
-                  <Font size="15.0"/>
-               </font>
-            </Label>
          </children>
       </AnchorPane>
    </children>

@@ -5,6 +5,7 @@ import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.ServerMessage;
+import it.polimi.ingsw.messages.game.ClientGameMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
@@ -52,9 +53,9 @@ public class GUIView extends ClientView {
         }
 
         if (model.publicModel.getGamePhase().equals(GamePhase.PIANIFICATION)) {
-            LobbyFrame.lobbyFrame.planningPhase();
+            LobbyFrame.lobbyFrame.planningPhase(model.publicModel.getCurrentPlayer().getDeck());
         } else {
-            LobbyFrame.lobbyFrame.actionPhase();
+            LobbyFrame.lobbyFrame.actionPhase(model.publicModel.getCurrentPlayer().getBoard(), model.publicModel.getGameMode(), model.publicModel.isCharacterCardPlayed(), model.publicModel.enoughStudentsPlaced(), model.publicModel.isMotherNatureMoved());
         }
     }
 
@@ -139,6 +140,15 @@ public class GUIView extends ClientView {
 
     public void loadCreateFrame() {
         LobbyFrame.lobbyFrame.loadCreateFrame();
+    }
+
+    public void sendMessage(ClientGameMessage message) {
+        try {
+            notifySubscribers(message);
+        } catch (Exception e) {
+            showError(new ErrorMessage(e.getMessage()));
+
+        }
     }
 }
 

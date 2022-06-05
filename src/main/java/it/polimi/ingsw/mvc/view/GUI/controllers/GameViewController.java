@@ -1,14 +1,21 @@
 package it.polimi.ingsw.mvc.view.GUI.controllers;
 
+import it.polimi.ingsw.cards.Deck;
+import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.NoTowerException;
+import it.polimi.ingsw.messages.game.PlayAssistantMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
+import it.polimi.ingsw.mvc.view.GUI.TextOutputConstants;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.places.Island;
+import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.Player;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,11 +45,13 @@ public class GameViewController implements Initializable {
     public Pane PlayCardButton;
     public Pane Clouds;
     public Label Prompt;
+    public Pane AssistantCardsOuter;
     List<BoardController> boardControllerList;
     List<IslandController> islandControllerList;
     Map<String, String> characterCardsNameDescription;
     List<CharacterCard> characterCards;
     List<CloudController> cloudControllerList;
+    List<Node> interactableParts;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -52,8 +61,12 @@ public class GameViewController implements Initializable {
         characterCardsNameDescription = new HashMap<>();
         characterCards = new ArrayList<>();
         cloudControllerList = new ArrayList<>();
+        interactableParts = new ArrayList<>();
         String line;
 
+
+        interactableParts.add(AssistantCardsOuter);
+        interactableParts.add(PlayCardButton);
         try (Scanner scanner = new Scanner(new File("./src/main/resources/utils/CharacterCardsDescriptions.csv"));) {
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
@@ -135,9 +148,8 @@ public class GameViewController implements Initializable {
             thisController.setPicAndIndex(i);
         }
 
-
-
         updateModel(model);
+
     }
 
     private void updateModel(Model model) {
@@ -152,6 +164,14 @@ public class GameViewController implements Initializable {
         }
         for (int i = 0; i < model.publicModel.getCloudsCount(); i++) {
             cloudControllerList.get(i).updateStudents(model.publicModel.getClouds().get(i).getStudentsWithoutEmptying());
+        }
+    }
+
+
+    private void disableInteractableParts() {
+        for (Node n : interactableParts) {
+            n.setDisable(true);
+            n.setVisible(false);
         }
     }
 
@@ -188,16 +208,31 @@ public class GameViewController implements Initializable {
         //todo
     }
 
-    public void waitForTurn(String currentPlayerNickname) {
-        //todo
+    public void planningPhase(Deck thisDeck) {
+        disableInteractableParts();
+        Prompt.setText(TextOutputConstants.planningPhase());
+
+        thisDeck.getHand().remove(0);
+        for (AssistantCard ac : AssistantCard.values()) {
+            if (thisDeck.getHand().contains(ac)) {
+                ((ImageView) AssistantCards.getChildren().get(ac.ordinal())).setImage(new Image("/imgs/AssistantCards/" + ac + ".png"));
+                AssistantCards.getChildren().get(ac.ordinal()).setDisable(false);
+
+            } else {
+                ((ImageView) AssistantCards.getChildren().get(ac.ordinal())).setImage(new Image("/imgs/Decks/" + thisDeck.getDeckName() + ".png"));
+                AssistantCards.getChildren().get(ac.ordinal()).setDisable(true);
+            }
+            AssistantCards.getChildren().get(ac.ordinal()).setVisible(true);
+        }
+        AssistantCardsOuter.setVisible(true);
+        AssistantCardsOuter.setDisable(false);
     }
 
-    public void planningPhase() {
-        //todo
-    }
-
-    public void actionPhase() {
-        //todo
+    public void actionPhase(Board board, GameMode gm, boolean alreadyPlayedCharacterCard, boolean enoughStudentsMoved, boolean motherNatureMoved) {
+        disableInteractableParts();
+        Prompt.setText(TextOutputConstants.actionPhase(gm, alreadyPlayedCharacterCard, enoughStudentsMoved, motherNatureMoved));
+        PlayCardButton.setDisable(false);
+        PlayCardButton.setVisible(true);
     }
 
     @FXML
@@ -225,5 +260,32 @@ public class GameViewController implements Initializable {
 
     public void notShineBack(MouseEvent mouseEvent) {
         ((ImageView) mouseEvent.getSource()).setStyle("");
+    }
+
+    public void makeAssistantsNormal(MouseEvent mouseEvent) {
+        AssistantCards.setTranslateX(0);
+        AssistantCards.setTranslateY(0);
+        AssistantCards.setScaleX(1);
+        AssistantCards.setScaleY(1);
+    }
+
+    public void makeAssistantsSmall(MouseEvent mouseEvent) {
+        AssistantCards.setTranslateX(310);
+        AssistantCards.setTranslateY(30);
+        AssistantCards.setScaleX(0.7);
+        AssistantCards.setScaleY(0.7);
+    }
+
+    public void waitForTurn(String currentPlayerNickname) {
+        disableInteractableParts();
+        Prompt.setText(TextOutputConstants.notMyTurn(currentPlayerNickname));
+
+    }
+
+
+    public void playAssistant(MouseEvent mouseEvent) {
+        ImageView selected = (ImageView) mouseEvent.getSource();
+        int index = AssistantCards.getChildren().indexOf(selected);
+        GUIView.thisGUI.sendMessage(new PlayAssistantMessage(AssistantCard.values()[index]));
     }
 }

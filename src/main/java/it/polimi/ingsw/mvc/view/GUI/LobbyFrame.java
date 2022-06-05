@@ -1,5 +1,7 @@
 package it.polimi.ingsw.mvc.view.GUI;
 
+import it.polimi.ingsw.cards.Deck;
+import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.lobby.server.LobbyState;
 import it.polimi.ingsw.mvc.model.Model;
@@ -7,6 +9,7 @@ import it.polimi.ingsw.mvc.view.GUI.controllers.CreateLobbyController;
 import it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController;
 import it.polimi.ingsw.mvc.view.GUI.controllers.LobbyController;
 import it.polimi.ingsw.mvc.view.GUI.controllers.UsernameAndDeckLobbyViewController;
+import it.polimi.ingsw.player.Board;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -238,20 +241,20 @@ public class LobbyFrame extends Application {
         });
     }
 
-    public void planningPhase() {
+    public void planningPhase(Deck playerDeck) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                gvc.planningPhase();
+                gvc.planningPhase(playerDeck);
             }
         });
     }
 
-    public void actionPhase() {
+    public void actionPhase(Board board, GameMode gm, boolean alreadyPlayedCharacterCard, boolean enoughStudentsMoved, boolean motherNatureMoved) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                gvc.actionPhase();
+                gvc.actionPhase(board, gm, alreadyPlayedCharacterCard, enoughStudentsMoved, motherNatureMoved);
             }
         });
     }
