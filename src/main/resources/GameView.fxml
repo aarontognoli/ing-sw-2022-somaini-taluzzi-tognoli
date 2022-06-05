@@ -12,8 +12,6 @@
             prefWidth="1900.0" xmlns="http://javafx.com/javafx/18"
             fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController">
    <children>
-      <ImageView fx:id="testPicPane" fitHeight="673.0" fitWidth="746.0" layoutX="-2.0" layoutY="-5.0"
-                 pickOnBounds="true" preserveRatio="true"/>
       <AnchorPane fx:id="gamePane" layoutX="10.0" layoutY="10.0" prefHeight="665.0" prefWidth="1500.0"
                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                   AnchorPane.topAnchor="0.0">
@@ -48,9 +46,10 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="AssistantCardsOuter" layoutX="200.0" layoutY="576.0" onMouseEntered="#makeAssistantsNormal"
-                  onMouseExited="#makeAssistantsSmall" prefHeight="200.0" prefWidth="1260.0"
-                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
+            <Pane fx:id="AssistantCardsOuter" disable="true" layoutX="200.0" layoutY="576.0"
+                  onMouseEntered="#makeAssistantsNormal" onMouseExited="#makeAssistantsSmall" prefHeight="200.0"
+                  prefWidth="1260.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0"
+                  AnchorPane.rightAnchor="120.0">
                <children>
                   <Pane fx:id="AssistantCards" prefHeight="200.0" prefWidth="1260.0" scaleX="0.7" scaleY="0.7"
                         translateX="310.0" translateY="30.0">
@@ -232,5 +231,8 @@
             </Pane>
          </children>
       </AnchorPane>
+      <ImageView fx:id="testPicPane" fitHeight="800.0" fitWidth="1524.0" layoutX="-2.0" layoutY="-5.0"
+                 pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
    </children>
 </AnchorPane>

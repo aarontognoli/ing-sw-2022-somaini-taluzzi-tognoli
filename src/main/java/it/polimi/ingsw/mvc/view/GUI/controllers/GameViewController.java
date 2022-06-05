@@ -284,8 +284,13 @@ public class GameViewController implements Initializable {
 
 
     public void playAssistant(MouseEvent mouseEvent) {
-        ImageView selected = (ImageView) mouseEvent.getSource();
-        int index = AssistantCards.getChildren().indexOf(selected);
-        GUIView.thisGUI.sendMessage(new PlayAssistantMessage(AssistantCard.values()[index]));
+        if (mouseEvent.getClickCount() == 1) {
+            Prompt.setText("Entered");
+            ImageView selected = (ImageView) mouseEvent.getSource();
+            int index = AssistantCards.getChildren().indexOf(selected);
+            GUIView.thisGUI.sendMessage(new PlayAssistantMessage(AssistantCard.values()[index]));
+            return;
+        }
+        Prompt.setText("Not Entered");
     }
 }

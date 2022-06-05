@@ -150,6 +150,10 @@ public class GUIView extends ClientView {
 
         }
     }
+
+    public void closeApp(String s) {
+        LobbyFrame.lobbyFrame.closedFromServer(s);
+    }
 }
 
 

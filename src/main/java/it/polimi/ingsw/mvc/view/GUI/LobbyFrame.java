@@ -50,8 +50,7 @@ public class LobbyFrame extends Application {
         mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                Platform.exit();
-                System.exit(0);
+                closeApp();
             }
         });
         mainStage.show();
@@ -125,8 +124,7 @@ public class LobbyFrame extends Application {
                 userAndDeckStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent windowEvent) {
-                        Platform.exit();
-                        System.exit(0);
+                        closeApp();
                     }
                 });
 
@@ -177,8 +175,7 @@ public class LobbyFrame extends Application {
                 gameStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent windowEvent) {
-                        Platform.exit();
-                        System.exit(0);
+                        closeApp();
                     }
                 });
                 gameStage.show();
@@ -255,6 +252,29 @@ public class LobbyFrame extends Application {
             @Override
             public void run() {
                 gvc.actionPhase(board, gm, alreadyPlayedCharacterCard, enoughStudentsMoved, motherNatureMoved);
+            }
+        });
+    }
+
+    public void closeApp() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+
+    }
+
+    public void closedFromServer(String s) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.ERROR, s, ButtonType.OK);
+                alert.setTitle("Warning!");
+                alert.showAndWait();
+                closeApp();
             }
         });
     }
