@@ -3,6 +3,7 @@ package it.polimi.ingsw.mvc.controller;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.ServerMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
 import it.polimi.ingsw.notifier.Notifier;
 
 import java.io.IOException;
@@ -56,6 +57,9 @@ public class ClientController extends Controller {
                     socketOut.flush();
                 } catch (IOException e) {
                     e.printStackTrace(); //for debug
+                    if (GUIView.thisGUI != null) {
+                        GUIView.thisGUI.closeApp("Connection lost from server.");
+                    }
                 }
             }
         }).start();
