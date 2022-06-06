@@ -13,12 +13,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static it.polimi.ingsw.mvc.model.PublicModelTest.fourPlayersExpertMode;
+import static it.polimi.ingsw.mvc.model.PublicModelTest.twoPlayersBasicSetup;
 
 public class TestModel {
     public static void main(String[] args) throws InterruptedException, IOException, AssistantCardAlreadyPlayedException, NotFoundException {
         LobbyFrame test = new LobbyFrame();
-        Model model = fourPlayersExpertMode();
+        Model model = twoPlayersBasicSetup();
         new Thread(() -> ServerApp.main(new String[]{})).start();
 
         Socket socket = null;
@@ -40,7 +40,7 @@ public class TestModel {
 
 
         GUIView.thisGUI = new GUIView(clientController.getServerMessageNotifier(), modelNotifier);
-        GUIView.thisGUI.setUsername("Player1");
+        GUIView.thisGUI.setUsername("Player0");
         new Thread(() -> test.open()).start();
 
         while (LobbyFrame.lobbyFrame == null) {
@@ -55,9 +55,9 @@ public class TestModel {
         model.publicModel.endTurn();
         update(model);
 
-       /* model.publicModel.playAssistant(AssistantCard.CARD_2);
+        model.publicModel.playAssistant(AssistantCard.CARD_2);
         model.publicModel.endTurn();
-        update(model);*/
+        update(model);
         Thread.sleep(1000);
 
 

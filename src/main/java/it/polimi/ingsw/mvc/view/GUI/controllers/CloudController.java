@@ -19,6 +19,7 @@ public class CloudController extends Pane implements Initializable {
 
     private Pane studentsParent;
     private int index;
+    private int size;
 
     public CloudController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
@@ -54,7 +55,11 @@ public class CloudController extends Pane implements Initializable {
     public void updateStudents(List<Student> cloudStudents) {
         String thisColor;
         int i;
-        for (i = 0; i < cloudStudents.size(); i++) {
+        size = 0;
+        if (cloudStudents != null) {
+            size = cloudStudents.size();
+        }
+        for (i = 0; i < size; i++) {
             thisColor = cloudStudents.get(i).getColor().toString();
             ((ImageView) studentsParent.getChildren().get(i)).setImage(new Image("/imgs/Students/" + thisColor + ".png"));
         }
@@ -65,5 +70,9 @@ public class CloudController extends Pane implements Initializable {
 
     public int getIndex() {
         return index;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

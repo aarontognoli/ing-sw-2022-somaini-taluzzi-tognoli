@@ -154,6 +154,15 @@ public class GUIView extends ClientView {
     public void closeApp(String s) {
         LobbyFrame.lobbyFrame.closedFromServer(s);
     }
+
+    public int getMotherNatureMaxMovement() {
+        return model.publicModel.getCurrentPlayer().getMaxMotherNatureMovementValue();
+    }
+
+    public int getMotherNatureIslandIndex() {
+        return model.publicModel.getIslands().indexOf(model.publicModel.getMotherNatureIsland());
+    }
+
 }
 
 

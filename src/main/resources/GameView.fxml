@@ -51,8 +51,7 @@
                   prefWidth="1260.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0"
                   AnchorPane.rightAnchor="120.0">
                <children>
-                  <Pane fx:id="AssistantCards" prefHeight="200.0" prefWidth="1260.0" scaleX="0.7" scaleY="0.7"
-                        translateX="310.0" translateY="30.0">
+                  <Pane fx:id="AssistantCards" prefHeight="200.0" prefWidth="1260.0">
                      <children>
                         <ImageView fx:id="CARD_1" accessibleText="CARD_1" fitHeight="150.0" fitWidth="200.0"
                                    layoutX="20.0" layoutY="25.0" onMouseClicked="#playAssistant"
@@ -229,10 +228,100 @@
                   </Pane>
                </children>
             </Pane>
+            <Pane fx:id="ActionOuter" disable="true" layoutX="210.0" layoutY="586.0" prefHeight="200.0"
+                  prefWidth="711.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0"
+                  AnchorPane.rightAnchor="693.0">
+               <children>
+                  <Pane fx:id="ActionInner" layoutY="-1.0" prefHeight="200.0" prefWidth="710.0" scaleX="0.7"
+                        scaleY="0.7"
+                        style="-fx-background-color: #bdc8d1cc; -fx-effect: dropshadow(gaussian, rgb(200,200,200), 100, 0, 0, 0);"
+                        translateX="310.0" translateY="30.0">
+                     <children>
+                        <Pane fx:id="ActionStudents" prefHeight="200.0" prefWidth="440.0">
+                           <children>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="14.0" layoutY="14.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="90.0" layoutY="86.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="90.0" layoutY="14.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="166.0" layoutY="86.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="166.0" layoutY="14.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="242.0" layoutY="86.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="242.0" layoutY="14.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="318.0" layoutY="86.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="318.0" layoutY="14.0"
+                                         onDragDetected="#startDrag" onMouseEntered="#shineBack"
+                                         onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#5be5ec" height="90.0" layoutX="507.0"
+                                   layoutY="31.0" stroke="BLACK" strokeType="INSIDE" width="173.0"/>
+                        <Label alignment="CENTER" layoutX="507.0" layoutY="34.0"
+                               onDragDropped="#placeStudentInDiningRoom" onDragEntered="#dragEntered"
+                               onDragExited="#dragExited" onDragOver="#acceptDrag" prefHeight="83.0" prefWidth="173.0"
+                               text="Insert Into Dining Room" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font size="23.0"/>
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
-      <ImageView fx:id="testPicPane" fitHeight="800.0" fitWidth="1524.0" layoutX="-2.0" layoutY="-5.0"
-                 pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+      <ImageView fx:id="testPicPane" disable="true" fitHeight="800.0" fitWidth="1524.0" layoutX="-2.0" layoutY="-5.0"
+                 pickOnBounds="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
    </children>
 </AnchorPane>
