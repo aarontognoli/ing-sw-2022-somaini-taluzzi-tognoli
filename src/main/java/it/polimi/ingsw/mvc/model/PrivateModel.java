@@ -16,7 +16,6 @@ import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.pawn.Tower;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
 import java.io.Serializable;
@@ -368,6 +367,11 @@ public class PrivateModel implements Serializable {
     void updateProfessorPosition(Color professColor) {
         int maxStudentOfColor = -1;
         Board maxBoard = null;
+        if (fatherModel.professors.get(professColor.ordinal()).getPosition() != null) {
+            maxStudentOfColor = fatherModel.professors.get(professColor.ordinal()).getPosition().getDiningRoom().get(professColor.ordinal()).size();
+            maxBoard = fatherModel.professors.get(professColor.ordinal()).getPosition();
+        }
+
 
         for (Player player : fatherModel.players) {
             Board currentBoard = player.getBoard();
