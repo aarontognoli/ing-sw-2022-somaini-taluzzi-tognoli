@@ -37,11 +37,12 @@ public class CLIView extends ClientView {
     public void show() {
         if (model != null) {
             if (model.publicModel.getWinner() != null) {
+                setActive(false);
                 String winner = model.publicModel.getWinner().getNickname();
                 if (winner.equals(myUsername)) {
-                    setFrontEnd("YOU WIN!");
+                    setErrorFrontEnd("YOU WIN!");
                 } else {
-                    setFrontEnd("GAME OVER! The winner is " + winner);
+                    setErrorFrontEnd("GAME OVER! The winner is " + winner);
                 }
 
                 setCurrentQueryMessage("");
@@ -141,7 +142,7 @@ public class CLIView extends ClientView {
         Thread readInputThread = new Thread(() -> {
             final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
-            while (true) {
+            while (getIsActive()) {
                 String newLine;
                 try {
                     newLine = stdin.readLine().trim().replaceAll(" +", " ");

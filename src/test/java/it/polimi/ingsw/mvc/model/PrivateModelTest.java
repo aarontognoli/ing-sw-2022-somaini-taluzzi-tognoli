@@ -10,7 +10,7 @@ import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.player.DiningRoomFullException;
+import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 import org.junit.jupiter.api.Test;
 
