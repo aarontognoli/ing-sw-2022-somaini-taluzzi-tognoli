@@ -2,8 +2,10 @@ package it.polimi.ingsw.cards.characters.BardCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
+import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
@@ -11,7 +13,6 @@ import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIBardCharacterArgumentHandler;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.exceptions.DiningRoomFullException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class BardCharacter extends CharacterCard {
 
     public BardCharacter(Model model) {
         super(model, 1);
+        super.argumentType = CharacterCardsEffectArguments.BARD;
     }
 
 

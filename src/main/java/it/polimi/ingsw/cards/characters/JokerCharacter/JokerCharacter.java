@@ -2,6 +2,7 @@ package it.polimi.ingsw.cards.characters.JokerCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
+import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.exceptions.NotFoundException;
@@ -32,6 +33,7 @@ public class JokerCharacter extends CharacterCardWithStudents {
 
     public JokerCharacter(Model model) {
         super(model, 1, INITIAL_STUDENT_SIZE);
+        super.argumentType = CharacterCardsEffectArguments.JOKER;
     }
 
     /**

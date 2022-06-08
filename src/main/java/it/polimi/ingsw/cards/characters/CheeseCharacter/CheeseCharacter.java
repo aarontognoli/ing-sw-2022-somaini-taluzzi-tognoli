@@ -2,6 +2,7 @@ package it.polimi.ingsw.cards.characters.CheeseCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.model.ProfessorMoverRuleCheese;
 
@@ -9,6 +10,7 @@ public class CheeseCharacter extends CharacterCard {
 
     public CheeseCharacter(Model fatherModel) {
         super(fatherModel, 2);
+        super.argumentType = CharacterCardsEffectArguments.NONE;
     }
 
     @Override

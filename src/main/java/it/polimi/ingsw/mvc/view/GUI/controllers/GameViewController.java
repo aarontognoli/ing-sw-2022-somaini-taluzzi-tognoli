@@ -3,6 +3,7 @@ package it.polimi.ingsw.mvc.view.GUI.controllers;
 import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.NoTowerException;
@@ -10,6 +11,8 @@ import it.polimi.ingsw.messages.game.*;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
 import it.polimi.ingsw.mvc.view.GUI.TextOutputConstants;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoFactory;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
@@ -23,7 +26,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -40,12 +42,9 @@ public class GameViewController implements Initializable {
     public Pane AssistantCards;
     public Pane islands;
     public Pane CharacterCardInfo;
-    public ImageView CardPic;
-    public Label Description;
+
     public Pane CharacterCards;
-    public Pane Content;
-    public Text Cost;
-    public Pane PlayCardButton;
+
     public Pane Clouds;
     public Label Prompt;
     public Pane AssistantCardsOuter;
@@ -55,10 +54,11 @@ public class GameViewController implements Initializable {
     List<BoardController> boardControllerList;
     List<IslandController> islandControllerList;
     Map<String, String> characterCardsNameDescription;
-    List<CharacterCard> characterCards;
+    List<CharacterCardsController> characterCardsControllerList;
     List<CloudController> cloudControllerList;
     List<Node> interactableParts;
     List<Student> entranceBackup;
+    CardInfoController cardInfoController;
 
     private Stage stage;
 
@@ -78,15 +78,15 @@ public class GameViewController implements Initializable {
         boardControllerList = new ArrayList<>();
         islandControllerList = new ArrayList<>();
         characterCardsNameDescription = new HashMap<>();
-        characterCards = new ArrayList<>();
+        characterCardsControllerList = new ArrayList<>();
         cloudControllerList = new ArrayList<>();
         interactableParts = new ArrayList<>();
         entranceBackup = new ArrayList<>();
+        cardInfoController = CardInfoFactory.createController(CharacterCardsEffectArguments.NONE);
         String line;
 
 
         interactableParts.add(AssistantCardsOuter);
-        interactableParts.add(PlayCardButton);
         interactableParts.add(ActionOuter);
         try (Scanner scanner = new Scanner(new File("./src/main/resources/utils/CharacterCardsDescriptions.csv"));) {
             while (scanner.hasNextLine()) {
@@ -97,6 +97,7 @@ public class GameViewController implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        CharacterCardInfo.getChildren().add(cardInfoController);
 
     }
 
@@ -105,6 +106,7 @@ public class GameViewController implements Initializable {
         testPicPane.setVisible(false);
         gamePane.setDisable(false);
         gamePane.setVisible(true);
+        List<CharacterCard> characterCards = new ArrayList<>();
         if (model.publicModel.getGameMode().equals(GameMode.EXPERT_MODE)) {
             characterCards = model.publicModel.getCurrentCharacterCards();
         }
@@ -124,11 +126,17 @@ public class GameViewController implements Initializable {
                 thisController.setLayoutY((i + 1) * border + i * boardHeight);
             }
             if (model.publicModel.getGameMode().equals(GameMode.EXPERT_MODE)) {
+                CharacterCardsController thisCCController;
                 CharacterCards.setVisible(true);
                 CharacterCards.setDisable(false);
+                CharacterCards.getChildren().clear();
                 for (int i = 0; i < characterCards.size(); i++) {
-                    ((ImageView) CharacterCards.getChildren().get(i)).setImage(new Image("/imgs/CharacterCards/" + characterCards.get(i).getClass().getSimpleName() + ".jpg"));
-                    CharacterCards.getChildren().get(i).setAccessibleText(String.valueOf(i));
+                    thisCCController = new CharacterCardsController();
+                    thisCCController.setup(characterCards.get(i), this, i);
+                    thisCCController.setDescription(characterCardsNameDescription.get(thisCCController.getName()));
+                    CharacterCards.getChildren().add(thisCCController);
+                    characterCardsControllerList.add(thisCCController);
+                    thisCCController.setLayoutY(i * 170);
                 }
             }
 
@@ -205,6 +213,7 @@ public class GameViewController implements Initializable {
             n.setDisable(true);
             n.setVisible(false);
         }
+        cardInfoController.disablePlayButton();
     }
 
     private void removeCloudHandlers(Node n) {
@@ -263,8 +272,8 @@ public class GameViewController implements Initializable {
         disableInteractableParts();
         Prompt.setText(TextOutputConstants.actionPhase(gm, alreadyPlayedCharacterCard, enoughStudentsMoved, motherNatureMoved));
         if (!alreadyPlayedCharacterCard) {
-            PlayCardButton.setDisable(false);
-            PlayCardButton.setVisible(true);
+            cardInfoController.enablePlayButton();
+
         }
         if (!enoughStudentsMoved) {
             int i;
@@ -333,16 +342,12 @@ public class GameViewController implements Initializable {
     }
 
 
-    public void openInfo(MouseEvent mouseEvent) {
-        int cardId = Integer.parseInt(((ImageView) mouseEvent.getSource()).getAccessibleText());
-        CharacterCard thisCard = characterCards.get(cardId);
-        String cardName = thisCard.getClass().getSimpleName();
-        Description.setText(characterCardsNameDescription.get(cardName));
-        CardPic.setImage(new Image("/imgs/CharacterCards/" + cardName + ".jpg"));
-        Cost.setText(String.valueOf(thisCard.getCoinCost()));
-        //todo Set Content if card needs students or other things
-        CharacterCardInfo.setVisible(true);
-        CharacterCardInfo.setDisable(false);
+    private void openInfo(String cardName, String description, int coinCost, CharacterCardsEffectArguments argumentType, int index) {
+        cardInfoController = CardInfoFactory.createController(argumentType);
+        CharacterCardInfo.getChildren().clear();
+        cardInfoController.setup(cardName, description, coinCost, index);
+        CharacterCardInfo.getChildren().add(cardInfoController);
+        cardInfoController.show();
     }
 
     public void shineBack(MouseEvent mouseEvent) {
@@ -356,7 +361,7 @@ public class GameViewController implements Initializable {
     }
 
     public void notShineBack(MouseEvent mouseEvent) {
-        ((ImageView) mouseEvent.getSource()).setStyle("");
+        ((Node) mouseEvent.getSource()).setStyle("");
     }
 
     public void greenBack(MouseEvent mouseEvent) {
@@ -479,5 +484,10 @@ public class GameViewController implements Initializable {
     public void selectCloud(MouseEvent mouseEvent) {
         int index = Clouds.getChildren().indexOf(mouseEvent.getSource());
         GUIView.thisGUI.sendMessage(new DrawStudentIntoEntranceMessage(index));
+    }
+
+    public void openInfo(MouseEvent mouseEvent) {
+        CharacterCardsController caller = (CharacterCardsController) mouseEvent.getSource();
+        openInfo(caller.getName(), caller.getDescription(), caller.getCoinCost(), caller.getArgumentType(), caller.getIndex());
     }
 }

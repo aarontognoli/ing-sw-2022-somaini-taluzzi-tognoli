@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/18">
+   <AnchorPane prefHeight="150.0" prefWidth="98.0">
+
+   </AnchorPane>
+   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" fx:id="Pic">
+      <image>
+         <Image url="@imgs/CharacterCards/BardCharacter.jpg"/>
+      </image>
+   </ImageView>
+</fx:root>

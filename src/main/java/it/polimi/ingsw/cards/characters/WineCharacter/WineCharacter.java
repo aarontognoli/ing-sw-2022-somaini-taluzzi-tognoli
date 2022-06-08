@@ -3,6 +3,7 @@ package it.polimi.ingsw.cards.characters.WineCharacter;
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
+import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
@@ -21,6 +22,7 @@ public class WineCharacter extends CharacterCardWithStudents {
 
     public WineCharacter(Model model) {
         super(model, 1, INITIAL_STUDENT_SIZE);
+        super.argumentType = CharacterCardsEffectArguments.WINE;
     }
 
     @Override

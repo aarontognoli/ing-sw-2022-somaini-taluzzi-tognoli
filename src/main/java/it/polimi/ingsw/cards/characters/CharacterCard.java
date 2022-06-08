@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cards.characters;
 
+import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.game.PlayCharacterCardMessage;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 abstract public class CharacterCard implements Serializable {
     protected final Model model;
     private int coinCost;
+    protected CharacterCardsEffectArguments argumentType;
 
     public CharacterCard(Model model, int coinCost) {
         this.model = model;
@@ -20,6 +22,10 @@ abstract public class CharacterCard implements Serializable {
 
     public int getCoinCost() {
         return coinCost;
+    }
+
+    public CharacterCardsEffectArguments getArgumentType() {
+        return argumentType;
     }
 
     /**

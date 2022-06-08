@@ -2,6 +2,7 @@ package it.polimi.ingsw.cards.characters.PipeCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterA
 public class PipeCharacter extends CharacterCard {
     public PipeCharacter(Model model) {
         super(model, 3);
+        super.argumentType = CharacterCardsEffectArguments.COLOR;
     }
 
     @Override

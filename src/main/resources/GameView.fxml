@@ -4,10 +4,8 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="800.0" maxWidth="1500.0" prefHeight="800.0"
             prefWidth="1900.0" xmlns="http://javafx.com/javafx/18"
             fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController">
@@ -22,30 +20,7 @@
             <Pane fx:id="Clouds" layoutX="1071.0" layoutY="352.0" prefHeight="1.0" prefWidth="1.0"
                   style="-fx-background-color: yellow;"/>
             <Pane fx:id="CharacterCards" disable="true" layoutX="650.0" layoutY="100.0" prefHeight="490.0"
-                  prefWidth="98.0" visible="false">
-               <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#openInfo" onMouseEntered="#shineBack"
-                             onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/CharacterCards/BardCharacter.jpg"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutY="170.0" onMouseClicked="#openInfo"
-                             onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
-                             preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/CharacterCards/BardCharacter.jpg"/>
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutY="340.0" onMouseClicked="#openInfo"
-                             onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true"
-                             preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/CharacterCards/BardCharacter.jpg"/>
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
+                  prefWidth="98.0" visible="false"/>
             <Pane fx:id="AssistantCardsOuter" disable="true" layoutX="200.0" layoutY="576.0"
                   onMouseEntered="#makeAssistantsNormal" onMouseExited="#makeAssistantsSmall" prefHeight="200.0"
                   prefWidth="1260.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0"
@@ -159,77 +134,9 @@
             </Label>
             <Pane fx:id="CharacterCardInfo" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false"
                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                  AnchorPane.topAnchor="0.0">
-               <children>
-                  <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#bdc8d1" height="479.0" layoutX="412.0"
-                             layoutY="116.0" opacity="0.75" stroke="BLACK" strokeType="INSIDE" width="642.0"/>
-                  <ImageView fx:id="CardPic" fitHeight="417.0" fitWidth="229.0" layoutX="443.0" layoutY="143.0"
-                             pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/CharacterCards/BardCharacter.jpg"/>
-                     </image>
-                  </ImageView>
-                  <Label fx:id="Description" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="700.0" layoutY="146.0"
-                         prefHeight="175.0" prefWidth="307.0"
-                         text="Choose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag. If any player has fewer than 3 Students of that type, return as many Students as they have."
-                         textAlignment="JUSTIFY" wrapText="true">
-                     <font>
-                        <Font size="17.0"/>
-                     </font>
-                  </Label>
-                  <Circle layoutX="1024.0" layoutY="147.0" onMouseClicked="#closeCharacterCardInfo" radius="13.0"
-                          stroke="BLACK" strokeType="INSIDE">
-                     <fill>
-                        <RadialGradient centerX="0.5" centerY="0.5113636435884418" cycleMethod="REFLECT" radius="0.5">
-                           <stops>
-                              <Stop>
-                                 <color>
-                                    <Color red="1.0"/>
-                                 </color>
-                              </Stop>
-                              <Stop offset="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0"/>
-                                 </color>
-                              </Stop>
-                           </stops>
-                        </RadialGradient>
-                     </fill>
-                  </Circle>
-                  <Pane fx:id="Content" layoutX="704.0" layoutY="324.0" prefHeight="166.0" prefWidth="309.0"/>
-                  <ImageView fitHeight="87.0" fitWidth="62.0" layoutX="454.0" layoutY="509.0" pickOnBounds="true"
-                             preserveRatio="true">
-                     <image>
-                        <Image url="@imgs/Misc/coin.png"/>
-                     </image>
-                  </ImageView>
-                  <Label layoutX="529.0" layoutY="523.0" text="X">
-                     <font>
-                        <Font size="22.0"/>
-                     </font>
-                  </Label>
-                  <Text fx:id="Cost" layoutX="562.0" layoutY="554.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                     <font>
-                        <Font size="36.0"/>
-                     </font>
-                  </Text>
-                  <Pane fx:id="PlayCardButton" accessibleRole="BUTTON" layoutX="754.0" layoutY="507.0" prefHeight="65.0"
-                        prefWidth="200.0">
-                     <children>
-                        <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#5be5ec" height="65.0" stroke="BLACK"
-                                   strokeType="INSIDE" width="200.0"/>
-                        <Text layoutX="29.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Play Card"
-                              textAlignment="CENTER">
-                           <font>
-                              <Font size="33.0"/>
-                           </font>
-                        </Text>
-                     </children>
-                  </Pane>
-               </children>
-            </Pane>
+                  AnchorPane.topAnchor="0.0"/>
             <Pane fx:id="ActionOuter" disable="true" layoutX="210.0" layoutY="586.0" prefHeight="200.0"
-                  prefWidth="711.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0"
+                  prefWidth="711.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0"
                   AnchorPane.rightAnchor="693.0">
                <children>
                   <Pane fx:id="ActionInner" layoutY="-1.0" prefHeight="200.0" prefWidth="710.0" scaleX="0.7"
