@@ -2,7 +2,6 @@ package it.polimi.ingsw.cards.characters.JokerCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
-import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.exceptions.NotFoundException;
@@ -10,6 +9,8 @@ import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIJokerCharacterArgumentHandler;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoJoker;
 import it.polimi.ingsw.pawn.Student;
 
 import java.util.ArrayList;
@@ -33,7 +34,11 @@ public class JokerCharacter extends CharacterCardWithStudents {
 
     public JokerCharacter(Model model) {
         super(model, 1, INITIAL_STUDENT_SIZE);
-        super.argumentType = CharacterCardsEffectArguments.JOKER;
+    }
+
+    @Override
+    public CardInfoController getCharacterCardInfoController() {
+        return new CardInfoJoker();
     }
 
     /**

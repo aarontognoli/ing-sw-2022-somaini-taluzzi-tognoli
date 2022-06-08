@@ -1,6 +1,7 @@
 package it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo;
 
 import it.polimi.ingsw.mvc.view.GUI.LobbyFrame;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
 public class CardInfoColor extends CardInfoController {
@@ -12,6 +13,6 @@ public class CardInfoColor extends CardInfoController {
 
     @Override
     public void showArguments() {
-        return;
+        super.Arguments.getChildren().add(new Label("Select color and show colors"));
     }
 }

@@ -2,7 +2,6 @@ package it.polimi.ingsw.cards.characters.KnightCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.mvc.model.InfluenceCalculatorKnight;
 import it.polimi.ingsw.mvc.model.Model;
 
@@ -10,7 +9,6 @@ public class KnightCharacter extends CharacterCard {
 
     public KnightCharacter(Model model) {
         super(model, 2);
-        super.argumentType = CharacterCardsEffectArguments.NONE;
     }
 
     @Override

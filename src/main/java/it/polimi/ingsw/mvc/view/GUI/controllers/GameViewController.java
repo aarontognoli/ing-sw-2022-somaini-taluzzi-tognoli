@@ -3,7 +3,6 @@ package it.polimi.ingsw.mvc.view.GUI.controllers;
 import it.polimi.ingsw.cards.Deck;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.exceptions.NoTowerException;
@@ -12,7 +11,7 @@ import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
 import it.polimi.ingsw.mvc.view.GUI.TextOutputConstants;
 import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
-import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoFactory;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoNone;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
@@ -82,7 +81,7 @@ public class GameViewController implements Initializable {
         cloudControllerList = new ArrayList<>();
         interactableParts = new ArrayList<>();
         entranceBackup = new ArrayList<>();
-        cardInfoController = CardInfoFactory.createController(CharacterCardsEffectArguments.NONE);
+        cardInfoController = new CardInfoNone();
         String line;
 
 
@@ -342,8 +341,8 @@ public class GameViewController implements Initializable {
     }
 
 
-    private void openInfo(String cardName, String description, int coinCost, CharacterCardsEffectArguments argumentType, int index) {
-        cardInfoController = CardInfoFactory.createController(argumentType);
+    private void openInfo(String cardName, String description, int coinCost, CardInfoController cic, int index) {
+        cardInfoController = cic;
         CharacterCardInfo.getChildren().clear();
         cardInfoController.setup(cardName, description, coinCost, index);
         CharacterCardInfo.getChildren().add(cardInfoController);
@@ -488,6 +487,6 @@ public class GameViewController implements Initializable {
 
     public void openInfo(MouseEvent mouseEvent) {
         CharacterCardsController caller = (CharacterCardsController) mouseEvent.getSource();
-        openInfo(caller.getName(), caller.getDescription(), caller.getCoinCost(), caller.getArgumentType(), caller.getIndex());
+        openInfo(caller.getName(), caller.getDescription(), caller.getCoinCost(), caller.getCardInfoController(), caller.getIndex());
     }
 }

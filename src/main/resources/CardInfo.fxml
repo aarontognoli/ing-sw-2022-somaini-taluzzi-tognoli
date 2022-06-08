@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
@@ -46,7 +46,8 @@
             </RadialGradient>
          </fill>
       </Circle>
-      <Pane fx:id="Content" layoutX="714.0" layoutY="334.0" prefHeight="166.0" prefWidth="309.0"/>
+      <Pane fx:id="Content" layoutX="710.0" layoutY="327.0" prefHeight="65.0" prefWidth="307.0"/>
+      <Pane fx:id="Arguments" layoutX="710.0" layoutY="398.0" prefHeight="93.0" prefWidth="307.0"/>
       <ImageView fitHeight="87.0" fitWidth="62.0" layoutX="464.0" layoutY="519.0" pickOnBounds="true"
                  preserveRatio="true">
          <image>

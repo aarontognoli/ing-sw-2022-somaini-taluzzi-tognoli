@@ -2,12 +2,13 @@ package it.polimi.ingsw.cards.characters.HerbalistCharacter;
 
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIIslandCharacterArgumentHandler;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoNoEntry;
 import it.polimi.ingsw.places.Island;
 
 public class HerbalistCharacter extends CharacterCard {
@@ -16,7 +17,11 @@ public class HerbalistCharacter extends CharacterCard {
     public HerbalistCharacter(Model model) {
         super(model, 2);
         entryTilesInIslandCount = 0;
-        super.argumentType = CharacterCardsEffectArguments.ISLAND;
+    }
+
+    @Override
+    public CardInfoController getCharacterCardInfoController() {
+        return new CardInfoNoEntry();
     }
 
     public void moveEntryTileBackToCard() {

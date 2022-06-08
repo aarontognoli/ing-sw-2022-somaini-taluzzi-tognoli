@@ -3,13 +3,14 @@ package it.polimi.ingsw.cards.characters.WineCharacter;
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
-import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIWineCharacterArgumentHandler;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoWine;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 
@@ -22,7 +23,11 @@ public class WineCharacter extends CharacterCardWithStudents {
 
     public WineCharacter(Model model) {
         super(model, 1, INITIAL_STUDENT_SIZE);
-        super.argumentType = CharacterCardsEffectArguments.WINE;
+    }
+
+    @Override
+    public CardInfoController getCharacterCardInfoController() {
+        return new CardInfoWine();
     }
 
     @Override

@@ -17,6 +17,7 @@ public abstract class CardInfoController extends Pane implements Initializable {
     public ImageView CardPic;
     public Label Description;
     public Pane Content;
+    public Pane Arguments;
     public Text Cost;
     public Pane PlayCardButton;
     int index;
@@ -44,6 +45,7 @@ public abstract class CardInfoController extends Pane implements Initializable {
         CardPic.setImage(new Image("/imgs/CharacterCards/" + name + ".jpg"));
         Cost.setText(String.valueOf(cost));
         showArguments();
+        showContent();
         PlayCardButton.setOnMouseClicked(this::playCard);
     }
 
@@ -70,4 +72,9 @@ public abstract class CardInfoController extends Pane implements Initializable {
     public abstract void playCard(MouseEvent event);
 
     public abstract void showArguments();
+
+    public void showContent() {
+        Content.setVisible(false);
+        Content.setDisable(true);
+    }
 }

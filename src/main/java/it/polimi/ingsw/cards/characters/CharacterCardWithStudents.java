@@ -2,6 +2,8 @@ package it.polimi.ingsw.cards.characters;
 
 import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoHasStudents;
 import it.polimi.ingsw.pawn.Student;
 
 import java.util.ArrayList;
@@ -26,7 +28,13 @@ public abstract class CharacterCardWithStudents extends CharacterCard {
         }
     }
 
+    @Override
+    public CardInfoController getCharacterCardInfoController() {
+        return new CardInfoHasStudents();
+    }
+
     public List<Student> getStudents() {
         return new ArrayList<>(students);
     }
+
 }

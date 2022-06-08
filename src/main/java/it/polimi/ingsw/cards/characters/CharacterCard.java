@@ -1,19 +1,20 @@
 package it.polimi.ingsw.cards.characters;
 
-import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
 import it.polimi.ingsw.exceptions.ClientSideCheckException;
 import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.messages.game.PlayCharacterCardMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoNone;
 
 import java.io.Serializable;
 
 abstract public class CharacterCard implements Serializable {
     protected final Model model;
     private int coinCost;
-    protected CharacterCardsEffectArguments argumentType;
+
 
     public CharacterCard(Model model, int coinCost) {
         this.model = model;
@@ -24,9 +25,6 @@ abstract public class CharacterCard implements Serializable {
         return coinCost;
     }
 
-    public CharacterCardsEffectArguments getArgumentType() {
-        return argumentType;
-    }
 
     /**
      * @param arguments argument for this card
@@ -46,5 +44,10 @@ abstract public class CharacterCard implements Serializable {
         return new PlayCharacterCardMessage(cardIndex, null);
     }
 
+    public CardInfoController getCharacterCardInfoController() {
+        return new CardInfoNone();
+    }
+
     protected abstract void internalActivateEffect(Object arguments) throws CCArgumentException;
+
 }

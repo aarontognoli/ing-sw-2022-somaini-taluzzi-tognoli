@@ -1,7 +1,7 @@
 package it.polimi.ingsw.mvc.view.GUI.controllers;
 
 import it.polimi.ingsw.cards.characters.CharacterCard;
-import it.polimi.ingsw.enums.CharacterCardsEffectArguments;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -54,8 +54,8 @@ public class CharacterCardsController extends Pane implements Initializable {
         return thisCC.getCoinCost();
     }
 
-    public CharacterCardsEffectArguments getArgumentType() {
-        return thisCC.getArgumentType();
+    public CardInfoController getCardInfoController() {
+        return thisCC.getCharacterCardInfoController();
     }
 
     public void setup(CharacterCard cc, GameViewController gvc, int index) {
