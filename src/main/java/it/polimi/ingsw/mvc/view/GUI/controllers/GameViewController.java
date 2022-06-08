@@ -350,6 +350,11 @@ public class GameViewController implements Initializable {
 
     }
 
+    public void shineBackEntranceStudent(MouseEvent mouseEvent) {
+        shineBack(mouseEvent);
+        ((Node) mouseEvent.getSource()).toBack();
+    }
+
     public void notShineBack(MouseEvent mouseEvent) {
         ((ImageView) mouseEvent.getSource()).setStyle("");
     }
