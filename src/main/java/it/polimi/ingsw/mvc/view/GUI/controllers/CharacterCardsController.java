@@ -17,6 +17,8 @@ public class CharacterCardsController extends Pane implements Initializable {
     int index;
     @FXML
     private ImageView Pic;
+    @FXML
+    private ImageView Played;
     private GameViewController gvc;
     private CharacterCard thisCC;
     private String description;
@@ -71,5 +73,13 @@ public class CharacterCardsController extends Pane implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    }
+
+    public void setPlayed() {
+        Played.setVisible(true);
+    }
+
+    public void setNotPlayed() {
+        Played.setVisible(false);
     }
 }

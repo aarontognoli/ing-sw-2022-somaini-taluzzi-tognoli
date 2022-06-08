@@ -58,6 +58,7 @@ public class GameViewController implements Initializable {
     List<Node> interactableParts;
     List<Student> entranceBackup;
     CardInfoController cardInfoController;
+    boolean canPlayCharacterCard;
 
     private Stage stage;
 
@@ -82,6 +83,7 @@ public class GameViewController implements Initializable {
         interactableParts = new ArrayList<>();
         entranceBackup = new ArrayList<>();
         cardInfoController = new CardInfoNone();
+        canPlayCharacterCard = false;
         String line;
 
 
@@ -195,13 +197,21 @@ public class GameViewController implements Initializable {
         for (int i = 0; i < model.publicModel.getCloudsCount(); i++) {
             cloudControllerList.get(i).updateStudents(model.publicModel.getClouds().get(i).getStudentsWithoutEmptying());
         }
+
+        for (int i = 0; i < characterCardsControllerList.size(); i++) {
+            if (i == model.publicModel.getPlayedCharacterCardIndex()) {
+                characterCardsControllerList.get(i).setPlayed();
+            } else
+                characterCardsControllerList.get(i).setNotPlayed();
+        }
+
     }
 
 
     private void disableInteractableParts() {
 
         for (Node n : islands.getChildren()) {
-            //removeIslandHandlers(n);
+            removeIslandHandlers(n);
             n.setStyle("");
         }
         for (Node n : Clouds.getChildren()) {
@@ -212,7 +222,7 @@ public class GameViewController implements Initializable {
             n.setDisable(true);
             n.setVisible(false);
         }
-        cardInfoController.disablePlayButton();
+        canPlayCharacterCard = false;
     }
 
     private void removeCloudHandlers(Node n) {
@@ -265,14 +275,14 @@ public class GameViewController implements Initializable {
         }
         AssistantCardsOuter.setVisible(true);
         AssistantCardsOuter.setDisable(false);
+
     }
 
     public void actionPhase(Board board, GameMode gm, boolean alreadyPlayedCharacterCard, boolean enoughStudentsMoved, boolean motherNatureMoved) {
         disableInteractableParts();
         Prompt.setText(TextOutputConstants.actionPhase(gm, alreadyPlayedCharacterCard, enoughStudentsMoved, motherNatureMoved));
         if (!alreadyPlayedCharacterCard) {
-            cardInfoController.enablePlayButton();
-
+            canPlayCharacterCard = true;
         }
         if (!enoughStudentsMoved) {
             int i;
@@ -344,7 +354,7 @@ public class GameViewController implements Initializable {
     private void openInfo(String cardName, String description, int coinCost, CardInfoController cic, int index) {
         cardInfoController = cic;
         CharacterCardInfo.getChildren().clear();
-        cardInfoController.setup(cardName, description, coinCost, index);
+        cardInfoController.setup(cardName, description, coinCost, index, canPlayCharacterCard);
         CharacterCardInfo.getChildren().add(cardInfoController);
         cardInfoController.show();
     }

@@ -15,7 +15,6 @@ import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
 import java.io.Serializable;
@@ -312,6 +311,7 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.characterCardPlayed = false;
         fatherModel.studentsPlaced = 0;
         fatherModel.motherNatureMoved = false;
+        fatherModel.lastPlayedCharacterCardIndex = -1;
     }
 
     public GameMode getGameMode() {
@@ -320,6 +320,10 @@ public class PublicModel implements PlayerActions, Serializable {
 
     public boolean isCharacterCardPlayed() {
         return fatherModel.characterCardPlayed;
+    }
+
+    public int getPlayedCharacterCardIndex() {
+        return fatherModel.lastPlayedCharacterCardIndex;
     }
 
     public boolean isMotherNatureMoved() {
@@ -340,6 +344,10 @@ public class PublicModel implements PlayerActions, Serializable {
 
     public void setCharacterCardPlayed(boolean characterCardPlayed) {
         fatherModel.characterCardPlayed = characterCardPlayed;
+    }
+
+    public void setCharacterCardPlayedIndex(int index) {
+        fatherModel.lastPlayedCharacterCardIndex = index;
     }
 
     public List<CharacterCard> getCurrentGameCards() {

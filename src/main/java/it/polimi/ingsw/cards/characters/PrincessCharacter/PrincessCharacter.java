@@ -10,8 +10,8 @@ import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIColorCharacterArgumentHandler;
-import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoColor;
 import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoPrincess;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.player.Board;
 
@@ -29,7 +29,7 @@ public class PrincessCharacter extends CharacterCardWithStudents {
 
     @Override
     public CardInfoController getCharacterCardInfoController() {
-        return new CardInfoColor();
+        return new CardInfoPrincess();
     }
 
     @Override

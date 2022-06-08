@@ -2,7 +2,10 @@ package it.polimi.ingsw.mvc.view.GUI;
 
 import it.polimi.ingsw.ServerApp;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
+import it.polimi.ingsw.cards.characters.CCArgumentException;
+import it.polimi.ingsw.cards.characters.KnightCharacter.KnightCharacter;
 import it.polimi.ingsw.exceptions.AssistantCardAlreadyPlayedException;
+import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.exceptions.NotFoundException;
 import it.polimi.ingsw.mvc.controller.ClientController;
 import it.polimi.ingsw.mvc.model.Model;
@@ -13,12 +16,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static it.polimi.ingsw.mvc.model.PublicModelTest.twoPlayersExpertMode;
+import static it.polimi.ingsw.mvc.model.PublicModelTest.*;
 
 public class TestModel {
-    public static void main(String[] args) throws InterruptedException, IOException, AssistantCardAlreadyPlayedException, NotFoundException {
+    public static void main(String[] args) throws InterruptedException, IOException, AssistantCardAlreadyPlayedException, NotFoundException, InsufficientCoinException, CCArgumentException {
         LobbyFrame test = new LobbyFrame();
         Model model = twoPlayersExpertMode();
+        setFirstCharCard(model, new KnightCharacter(model));
         new Thread(() -> ServerApp.main(new String[]{})).start();
 
         Socket socket = null;
@@ -41,6 +45,7 @@ public class TestModel {
 
         GUIView.thisGUI = new GUIView(clientController.getServerMessageNotifier(), modelNotifier);
         GUIView.thisGUI.setUsername("Player0");
+
         new Thread(() -> test.open()).start();
 
         while (LobbyFrame.lobbyFrame == null) {
@@ -57,6 +62,10 @@ public class TestModel {
 
         model.publicModel.playAssistant(AssistantCard.CARD_2);
         model.publicModel.endTurn();
+        giveCoinToCurrentPlayer(model);
+        model.publicModel.playCharacterCard(0, null);
+        model.publicModel.setCharacterCardPlayedIndex(1);
+        model.publicModel.setCharacterCardPlayed(true);
         update(model);
         Thread.sleep(1000);
 

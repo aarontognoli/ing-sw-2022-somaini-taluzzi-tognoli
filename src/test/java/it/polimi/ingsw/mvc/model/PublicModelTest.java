@@ -269,6 +269,14 @@ public class PublicModelTest {
         return model.privateModel.getProfessorOwner(color);
     }
 
+    public static void setFirstCharCard(Model m, CharacterCard c) {
+        m.currentGameCards.set(0, c);
+    }
+
+    public static void giveCoinToCurrentPlayer(Model m) {
+        m.privateModel.rewardCoin();
+    }
+
     public static CharacterCard getCharCard(Model model) {
         return model.currentGameCards.get(0);
     }
