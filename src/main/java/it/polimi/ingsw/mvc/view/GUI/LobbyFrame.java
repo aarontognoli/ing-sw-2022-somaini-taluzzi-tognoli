@@ -5,10 +5,7 @@ import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.lobby.server.LobbyState;
 import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.view.GUI.controllers.CreateLobbyController;
-import it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController;
-import it.polimi.ingsw.mvc.view.GUI.controllers.LobbyController;
-import it.polimi.ingsw.mvc.view.GUI.controllers.UsernameAndDeckLobbyViewController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.*;
 import it.polimi.ingsw.player.Board;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -171,6 +168,7 @@ public class LobbyFrame extends Application {
                 }
 
                 gvc = loader.getController();
+                gvc.setStage(gameStage);
                 gameStage.setResizable(false);
                 gameStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
@@ -215,7 +213,25 @@ public class LobbyFrame extends Application {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                gvc.win();
+
+                Stage winStage = new Stage();
+                EndingController ec;
+                winStage.setTitle("Eryantis");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/EndingView.fxml"));
+
+                try {
+                    winStage.setScene(new Scene((AnchorPane) loader.load()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                ec = loader.getController();
+
+                winStage.setResizable(false);
+                ec.win();
+                winStage.show();
+                gvc.getStage().hide();
+
             }
         });
     }
@@ -224,7 +240,23 @@ public class LobbyFrame extends Application {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                gvc.showWinner(winner);
+                Stage winStage = new Stage();
+                EndingController ec;
+                winStage.setTitle("Eryantis");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/EndingView.fxml"));
+
+                try {
+                    winStage.setScene(new Scene((AnchorPane) loader.load()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                ec = loader.getController();
+
+                winStage.setResizable(false);
+                ec.loose(winner);
+                winStage.show();
+                gvc.getStage().hide();
             }
         });
     }

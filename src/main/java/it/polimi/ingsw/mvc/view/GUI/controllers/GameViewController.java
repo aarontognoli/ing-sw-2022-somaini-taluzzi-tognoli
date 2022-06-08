@@ -24,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,9 +60,19 @@ public class GameViewController implements Initializable {
     List<Node> interactableParts;
     List<Student> entranceBackup;
 
+    private Stage stage;
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        testPicPane.setImage(new Image("/imgs/test/waiting.png"));
+        testPicPane.setImage(new Image("/imgs/Misc/waiting.png"));
         testPicPane.setVisible(true);
         testPicPane.setDisable(false);
         boardControllerList = new ArrayList<>();
@@ -230,13 +241,7 @@ public class GameViewController implements Initializable {
 
     }
 
-    public void win() {
-        //todo
-    }
 
-    public void showWinner(String winner) {
-        //todo
-    }
 
     public void planningPhase(Deck thisDeck) {
         disableInteractableParts();
