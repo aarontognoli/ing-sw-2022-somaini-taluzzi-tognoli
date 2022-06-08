@@ -134,24 +134,25 @@ public class GameViewController implements Initializable {
 
 
         }
-
-        CloudController thisCloudController;
-        int totalPlayers = model.publicModel.getTotalPlayerCount();
-        int toDivide = totalPlayers + 1;
-        int offset = 0;
-        if (totalPlayers == 4)
-            offset = 19;
-        else if (totalPlayers == 2)
-            offset = -30;
-        cloudControllerList.clear();
-        Clouds.getChildren().clear();
-        for (int i = 0; i < model.publicModel.getCloudsCount(); i++) {
-            thisCloudController = new CloudController();
-            thisCloudController.setup(totalPlayers, i);
-            cloudControllerList.add(thisCloudController);
-            Clouds.getChildren().add(thisCloudController);
-            thisCloudController.setLayoutY(CLOUD_RADIUS * Math.sin(Math.toRadians(-(double) (i + 2) * 360 / toDivide - offset)) - 25);
-            thisCloudController.setLayoutX(CLOUD_RADIUS * Math.cos(Math.toRadians(-(double) (i + 2) * 360 / toDivide - offset)));
+        if (cloudControllerList.isEmpty()) {
+            CloudController thisCloudController;
+            int totalPlayers = model.publicModel.getTotalPlayerCount();
+            int toDivide = totalPlayers + 1;
+            int offset = 0;
+            if (totalPlayers == 4)
+                offset = 19;
+            else if (totalPlayers == 2)
+                offset = -30;
+            cloudControllerList.clear();
+            Clouds.getChildren().clear();
+            for (int i = 0; i < model.publicModel.getCloudsCount(); i++) {
+                thisCloudController = new CloudController();
+                thisCloudController.setup(totalPlayers, i);
+                cloudControllerList.add(thisCloudController);
+                Clouds.getChildren().add(thisCloudController);
+                thisCloudController.setLayoutY(CLOUD_RADIUS * Math.sin(Math.toRadians(-(double) (i + 2) * 360 / toDivide - offset)) - 25);
+                thisCloudController.setLayoutX(CLOUD_RADIUS * Math.cos(Math.toRadians(-(double) (i + 2) * 360 / toDivide - offset)));
+            }
         }
 
 
@@ -191,29 +192,25 @@ public class GameViewController implements Initializable {
 
 
     private void disableInteractableParts() {
-        for (Node n : interactableParts) {
-            n.setDisable(true);
-            n.setVisible(false);
-        }
+
         for (Node n : islands.getChildren()) {
-            removeIslandHandlers(n);
+            //removeIslandHandlers(n);
             n.setStyle("");
         }
         for (Node n : Clouds.getChildren()) {
             removeCloudHandlers(n);
             n.setStyle("");
         }
+        for (Node n : interactableParts) {
+            n.setDisable(true);
+            n.setVisible(false);
+        }
     }
 
     private void removeCloudHandlers(Node n) {
-        if (n.getOnMouseEntered() != null)
-            n.removeEventHandler(MouseEvent.MOUSE_ENTERED, n.getOnMouseEntered());
-        if (n.getOnMouseExited() != null)
-            n.removeEventHandler(MouseEvent.MOUSE_EXITED, n.getOnMouseExited());
-        if (n.getOnMouseClicked() != null)
-            n.removeEventHandler(MouseEvent.MOUSE_CLICKED, n.getOnMouseClicked());
-
-
+        n.setOnMouseEntered(null);
+        n.setOnMouseExited(null);
+        n.setOnMouseClicked(null);
     }
 
     private void updateBoard(BoardController bc, Player p, Player current, List<Professor> professors) {
@@ -240,7 +237,6 @@ public class GameViewController implements Initializable {
         ic.setMotherNature(motherNatureIsland.equals(i));
 
     }
-
 
 
     public void planningPhase(Deck thisDeck) {
@@ -285,10 +281,12 @@ public class GameViewController implements Initializable {
             }
             entranceBackup = board.getEntrance();
             for (Node n : islands.getChildren()) {
-                n.addEventHandler(DragEvent.DRAG_ENTERED, this::dragEntered);
-                n.addEventHandler(DragEvent.DRAG_EXITED, this::dragExited);
-                n.addEventHandler(DragEvent.DRAG_DROPPED, this::placeStudentInIsland);
-                n.addEventHandler(DragEvent.DRAG_OVER, this::acceptDrag);
+
+                n.setOnDragEntered(this::dragEntered);
+                n.setOnDragExited(this::dragExited);
+                n.setOnDragOver(this::acceptDrag);
+                n.setOnDragDropped(this::placeStudentInIsland);
+
             }
 
             ActionOuter.setDisable(false);
@@ -301,7 +299,7 @@ public class GameViewController implements Initializable {
             for (int i = 0; i < mnMaxMov; i++) {
                 index = (mnIndex + i + 1) % islandsCount;
                 islands.getChildren().get(index).setStyle("-fx-effect: dropshadow(three-pass-box, green, 50, 0, 0, 0);");
-                islands.getChildren().get(index).addEventHandler(MouseEvent.MOUSE_CLICKED, this::moveMotherNature);
+                islands.getChildren().get(index).setOnMouseClicked(this::moveMotherNature);
             }
 
         } else {
@@ -309,9 +307,10 @@ public class GameViewController implements Initializable {
                 int index = Clouds.getChildren().indexOf(n);
                 if (cloudControllerList.get(index).getSize() != 0) {
                     n.setStyle("-fx-effect: dropshadow(three-pass-box, green, 50, 0, 0, 0);");
-                    n.addEventHandler(MouseEvent.MOUSE_CLICKED, this::selectCloud);
-                    n.addEventHandler(MouseEvent.MOUSE_ENTERED, this::shineBack);
-                    n.addEventHandler(MouseEvent.MOUSE_EXITED, this::greenBack);
+                    n.setOnMouseEntered(this::shineBack);
+                    n.setOnMouseExited(this::greenBack);
+                    n.setOnMouseClicked(this::selectCloud);
+
                 }
             }
 
@@ -320,16 +319,11 @@ public class GameViewController implements Initializable {
     }
 
     private void removeIslandHandlers(Node n) {
-        if (n.getOnDragEntered() != null)
-            n.removeEventHandler(DragEvent.DRAG_ENTERED, n.getOnDragEntered());
-        if (n.getOnDragExited() != null)
-            n.removeEventHandler(DragEvent.DRAG_EXITED, n.getOnDragExited());
-        if (n.getOnDragOver() != null)
-            n.removeEventHandler(DragEvent.DRAG_OVER, n.getOnDragOver());
-        if (n.getOnDragDropped() != null)
-            n.removeEventHandler(DragEvent.DRAG_DROPPED, n.getOnDragDropped());
-        if (n.getOnMouseClicked() != null)
-            n.removeEventHandler(MouseEvent.MOUSE_CLICKED, n.getOnMouseClicked());
+        n.setOnMouseClicked(null);
+        n.setOnDragEntered(null);
+        n.setOnDragExited(null);
+        n.setOnDragOver(null);
+        n.setOnDragDropped(null);
     }
 
     @FXML
