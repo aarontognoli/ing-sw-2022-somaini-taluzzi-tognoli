@@ -14,6 +14,10 @@ import it.polimi.ingsw.places.Island;
 public class HerbalistCharacter extends CharacterCard {
     int entryTilesInIslandCount;
 
+    public int getEntryTilesInCard() {
+        return 4 - entryTilesInIslandCount;
+    }
+
     public HerbalistCharacter(Model model) {
         super(model, 2);
         entryTilesInIslandCount = 0;

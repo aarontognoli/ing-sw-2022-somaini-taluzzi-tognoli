@@ -20,6 +20,11 @@ public class CharacterCardsController extends Pane implements Initializable {
     @FXML
     private ImageView Played;
     private GameViewController gvc;
+
+    public CharacterCard getThisCC() {
+        return thisCC;
+    }
+
     private CharacterCard thisCC;
     private String description;
 

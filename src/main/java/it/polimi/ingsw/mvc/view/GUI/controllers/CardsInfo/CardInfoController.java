@@ -1,5 +1,6 @@
 package it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo;
 
+import it.polimi.ingsw.cards.characters.CharacterCard;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -21,6 +22,7 @@ public abstract class CardInfoController extends Pane implements Initializable {
     public Text Cost;
     public Pane PlayCardButton;
     int index;
+    CharacterCard thisCc;
 
     public CardInfoController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
@@ -39,8 +41,9 @@ public abstract class CardInfoController extends Pane implements Initializable {
 
     }
 
-    public void setup(String name, String description, int cost, int index, boolean canPlayCharacterCard) {
+    public void setup(String name, String description, int cost, int index, boolean canPlayCharacterCard, CharacterCard cc) {
         this.index = index;
+        thisCc = cc;
         Description.setText(description);
         CardPic.setImage(new Image("/imgs/CharacterCards/" + name + ".jpg"));
         Cost.setText(String.valueOf(cost));
@@ -51,6 +54,7 @@ public abstract class CardInfoController extends Pane implements Initializable {
             enablePlayButton();
         else
             disablePlayButton();
+
     }
 
     public void closeOnClick(MouseEvent event) {

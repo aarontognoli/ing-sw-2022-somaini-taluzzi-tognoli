@@ -351,10 +351,10 @@ public class GameViewController implements Initializable {
     }
 
 
-    private void openInfo(String cardName, String description, int coinCost, CardInfoController cic, int index) {
+    private void openInfo(String cardName, String description, int coinCost, CardInfoController cic, int index, CharacterCard cc) {
         cardInfoController = cic;
         CharacterCardInfo.getChildren().clear();
-        cardInfoController.setup(cardName, description, coinCost, index, canPlayCharacterCard);
+        cardInfoController.setup(cardName, description, coinCost, index, canPlayCharacterCard, cc);
         CharacterCardInfo.getChildren().add(cardInfoController);
         cardInfoController.show();
     }
@@ -497,6 +497,6 @@ public class GameViewController implements Initializable {
 
     public void openInfo(MouseEvent mouseEvent) {
         CharacterCardsController caller = (CharacterCardsController) mouseEvent.getSource();
-        openInfo(caller.getName(), caller.getDescription(), caller.getCoinCost(), caller.getCardInfoController(), caller.getIndex());
+        openInfo(caller.getName(), caller.getDescription(), caller.getCoinCost(), caller.getCardInfoController(), caller.getIndex(), caller.getThisCC());
     }
 }
