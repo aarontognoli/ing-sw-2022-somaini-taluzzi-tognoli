@@ -14,7 +14,7 @@ import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
 
 public class MushroomCharacter extends CharacterCard {
     public MushroomCharacter(Model model) {
-        super(model, 2);
+        super(model, 3);
     }
 
     @Override
