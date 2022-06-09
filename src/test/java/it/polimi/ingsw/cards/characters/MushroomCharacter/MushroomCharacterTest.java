@@ -4,6 +4,7 @@ import it.polimi.ingsw.cards.characters.AllCharacterTest;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.TowerColor;
+import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.exceptions.NoTowerException;
 import it.polimi.ingsw.exceptions.NotFoundException;
@@ -11,7 +12,6 @@ import it.polimi.ingsw.mvc.model.PublicModelTest;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -74,6 +74,7 @@ public class MushroomCharacterTest extends AllCharacterTest {
         PublicModelTest.incrementCurrentPlayer(model);
         try {
             p0Board.rewardCoin();
+            p0Board.rewardCoin();
             playCard(Color.BLUE_UNICORNS);
             assertEquals(0, p0Board.getCoinCount());
         } catch (InsufficientCoinException | CCArgumentException e) {
@@ -86,6 +87,7 @@ public class MushroomCharacterTest extends AllCharacterTest {
 
         //use card on color yellow
         try {
+            p0Board.rewardCoin();
             p0Board.rewardCoin();
             p0Board.rewardCoin();
             p0Board.rewardCoin();
