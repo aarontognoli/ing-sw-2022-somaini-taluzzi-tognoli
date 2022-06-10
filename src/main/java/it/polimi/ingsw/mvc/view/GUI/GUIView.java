@@ -14,6 +14,10 @@ import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMes
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.ClientView;
 import it.polimi.ingsw.notifier.Notifier;
+import it.polimi.ingsw.pawn.Student;
+import it.polimi.ingsw.player.Player;
+
+import java.util.List;
 
 public class GUIView extends ClientView {
     //lobby window components
@@ -161,6 +165,15 @@ public class GUIView extends ClientView {
 
     public int getMotherNatureIslandIndex() {
         return model.publicModel.getIslands().indexOf(model.publicModel.getMotherNatureIsland());
+    }
+
+    public List<Student> getThisPlayerEntrance() {
+        for (Player p : model.publicModel.getPlayers()) {
+            if (p.getNickname().equals(getMyUsername())) {
+                return p.getBoard().getEntrance();
+            }
+        }
+        throw new RuntimeException("Impossible state of game");
     }
 
 }

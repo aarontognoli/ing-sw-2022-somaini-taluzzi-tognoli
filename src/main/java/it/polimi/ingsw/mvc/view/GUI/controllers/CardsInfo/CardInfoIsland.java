@@ -37,8 +37,7 @@ public class CardInfoIsland extends CardInfoController {
         for (int i = 0; i < GUIView.thisGUI.getIslandCountFromModel(); i++) {
             it = new IslandToken(i, false);
             super.Arguments.getChildren().add(it);
-            it.setOnMouseEntered(CardInfoController::shineBack);
-            it.setOnMouseExited(CardInfoController::notShineBack);
+
             it.setOnMouseClicked(this::onIslandSelected);
             it.setLayoutY(20 + (i / 6) * 50);
             it.setLayoutX(50 * (i % 6));

@@ -5,32 +5,30 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 
-public class CardColorsToken extends Token {
+public class StudentToken extends Token {
 
     Color c;
 
-    public CardColorsToken(Color c) {
-
-        //this.setBackground(Background.fill(javafx.scene.paint.Color.RED));
-        pic = new ImageView(new Image("/imgs/Professors/" + c.toString() + ".png"));
+    public StudentToken(Color c) {
+        pic = new ImageView(new Image("/imgs/Students/" + c.toString() + ".png"));
         selected = false;
         this.c = c;
+        pic.setFitHeight(30);
         this.getChildren().add(pic);
         circle = new Circle();
         this.getChildren().add(circle);
         circle.setFill(null);
         circle.setStroke(javafx.scene.paint.Color.GREEN);
         circle.setStrokeWidth(5);
-        circle.setCenterX(27.5);
-        circle.setCenterY(24);
-        circle.setRadius(24);
+        circle.setCenterX(pic.getFitHeight() / 2 - 10);
+        circle.setCenterY(pic.getFitHeight() / 2);
+        circle.setRadius(pic.getFitHeight() / 2);
         circle.setVisible(false);
-    }
+        pic.setPreserveRatio(true);
 
+    }
 
     public Color getColor() {
         return c;
     }
 }
-
-

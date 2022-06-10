@@ -18,7 +18,7 @@ public class CardInfoColor extends CardInfoController {
     public void playCard(MouseEvent event) {
         Color selected = null;
         for (CardColorsToken cc : colorSelection) {
-            if (cc.getSelected()) {
+            if (cc.isSelected()) {
                 selected = cc.getColor();
                 break;
             }
@@ -41,8 +41,6 @@ public class CardInfoColor extends CardInfoController {
             colorSelection.add(element);
             super.Arguments.getChildren().add(element);
             element.setOnMouseClicked(this::onColorSelected);
-            element.setOnMouseEntered(CardInfoController::shineBack);
-            element.setOnMouseExited(CardInfoController::notShineBack);
             element.setLayoutY(20);
             element.setLayoutX(60 * i);
             i++;

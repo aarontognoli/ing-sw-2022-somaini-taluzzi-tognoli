@@ -2,8 +2,8 @@ package it.polimi.ingsw.mvc.view.GUI;
 
 import it.polimi.ingsw.ServerApp;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
+import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
-import it.polimi.ingsw.cards.characters.KnightCharacter.KnightCharacter;
 import it.polimi.ingsw.exceptions.AssistantCardAlreadyPlayedException;
 import it.polimi.ingsw.exceptions.InsufficientCoinException;
 import it.polimi.ingsw.exceptions.NotFoundException;
@@ -21,8 +21,8 @@ import static it.polimi.ingsw.mvc.model.PublicModelTest.*;
 public class TestModel {
     public static void main(String[] args) throws InterruptedException, IOException, AssistantCardAlreadyPlayedException, NotFoundException, InsufficientCoinException, CCArgumentException {
         LobbyFrame test = new LobbyFrame();
-        Model model = twoPlayersExpertMode();
-        setFirstCharCard(model, new KnightCharacter(model));
+        Model model = threePlayersExpertMode();
+        setFirstCharCard(model, new BardCharacter(model));
         new Thread(() -> ServerApp.main(new String[]{})).start();
 
         Socket socket = null;
@@ -63,9 +63,13 @@ public class TestModel {
         model.publicModel.playAssistant(AssistantCard.CARD_2);
         model.publicModel.endTurn();
         giveCoinToCurrentPlayer(model);
-        model.publicModel.playCharacterCard(0, null);
-        model.publicModel.setCharacterCardPlayedIndex(1);
-        model.publicModel.setCharacterCardPlayed(true);
+        model.publicModel.playAssistant(AssistantCard.CARD_3);
+        model.publicModel.endTurn();
+        giveCoinToCurrentPlayer(model);
+        /*model.publicModel.playAssistant(AssistantCard.CARD_4);
+        model.publicModel.endTurn();
+        giveCoinToCurrentPlayer(model);*/
+
         update(model);
         Thread.sleep(1000);
 

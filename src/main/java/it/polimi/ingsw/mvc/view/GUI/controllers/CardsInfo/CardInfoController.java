@@ -3,7 +3,6 @@ package it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -90,14 +89,5 @@ public abstract class CardInfoController extends Pane implements Initializable {
         Content.setDisable(true);
     }
 
-    static void shineBack(MouseEvent mouseEvent) {
-        ((Node) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, yellow, 20, 0, 0, 0);");
-        ((Node) mouseEvent.getSource()).toBack();
 
-    }
-
-    static void notShineBack(MouseEvent mouseEvent) {
-        ((Node) mouseEvent.getSource()).setStyle("");
-
-    }
 }
