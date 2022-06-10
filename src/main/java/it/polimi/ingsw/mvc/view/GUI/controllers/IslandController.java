@@ -53,6 +53,8 @@ public class IslandController extends Pane implements Initializable {
     private Text BLUE_COUNT;
     @FXML
     private Text towerCount;
+    @FXML
+    private Text Index;
 
     private Map<Color, Text> colorCountMap;
     private Map<Color, ImageView> colorImageViewMap;
@@ -106,6 +108,7 @@ public class IslandController extends Pane implements Initializable {
         }
         pic.setImage(image);
         this.index = index;
+        Index.setText(String.valueOf(index + 1));
     }
 
     public void setStudents(List<Student> islandStudents) {
