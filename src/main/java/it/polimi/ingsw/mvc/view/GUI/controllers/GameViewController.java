@@ -444,7 +444,7 @@ public class GameViewController implements Initializable {
         Dragboard db = dragEvent.getDragboard();
         boolean success = false;
         if (db.hasString()) {
-            Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Dining Room");
+            //Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Dining Room");
             GUIView.thisGUI.sendMessage(new MoveStudentToDiningRoomMessage(Color.valueOf(db.getString())));
             success = true;
         }
@@ -459,7 +459,7 @@ public class GameViewController implements Initializable {
         boolean success = false;
         int index = islands.getChildren().indexOf(dragEvent.getSource());
         if (db.hasString()) {
-            Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Island number " + index);
+            //Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Island number " + index);
             GUIView.thisGUI.sendMessage(new MoveStudentToIslandMessage(Color.valueOf(db.getString()), index));
             success = true;
         }
