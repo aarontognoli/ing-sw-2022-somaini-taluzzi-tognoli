@@ -13,7 +13,6 @@ import it.polimi.ingsw.mvc.view.GUI.TextOutputConstants;
 import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
 import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoNone;
 import it.polimi.ingsw.pawn.Professor;
-import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
 import it.polimi.ingsw.player.Player;
@@ -56,7 +55,7 @@ public class GameViewController implements Initializable {
     List<CharacterCardsController> characterCardsControllerList;
     List<CloudController> cloudControllerList;
     List<Node> interactableParts;
-    List<Student> entranceBackup;
+
     CardInfoController cardInfoController;
     boolean canPlayCharacterCard;
 
@@ -81,7 +80,7 @@ public class GameViewController implements Initializable {
         characterCardsControllerList = new ArrayList<>();
         cloudControllerList = new ArrayList<>();
         interactableParts = new ArrayList<>();
-        entranceBackup = new ArrayList<>();
+
         cardInfoController = new CardInfoNone();
         canPlayCharacterCard = false;
         String line;
@@ -290,6 +289,7 @@ public class GameViewController implements Initializable {
             for (i = 0; i < board.getEntrance().size(); i++) {
                 thisColor = board.getEntrance().get(i).getColor();
                 ((ImageView) ActionStudents.getChildren().get(i)).setImage(new Image("/imgs/Students/" + thisColor.toString() + ".png"));
+                ActionStudents.getChildren().get(i).getProperties().put("color", thisColor);
                 ActionStudents.getChildren().get(i).setVisible(true);
                 ActionStudents.getChildren().get(i).setDisable(false);
             }
@@ -297,7 +297,7 @@ public class GameViewController implements Initializable {
                 ActionStudents.getChildren().get(i).setVisible(false);
                 ActionStudents.getChildren().get(i).setDisable(true);
             }
-            entranceBackup = board.getEntrance();
+
             for (Node n : islands.getChildren()) {
 
                 n.setOnDragEntered(this::dragEntered);
@@ -412,9 +412,8 @@ public class GameViewController implements Initializable {
     public void startDrag(MouseEvent mouseEvent) {
         ImageView selected = (ImageView) mouseEvent.getSource();
         Dragboard db = selected.startDragAndDrop(TransferMode.COPY);
-        int index = ActionStudents.getChildren().indexOf(selected);
         ClipboardContent color = new ClipboardContent();
-        color.putString(entranceBackup.get(index).getColor().toString());
+        color.putString(selected.getProperties().get("color").toString());
         db.setContent(color);
         db.setDragView(selected.getImage());
         mouseEvent.consume();
@@ -445,7 +444,7 @@ public class GameViewController implements Initializable {
         Dragboard db = dragEvent.getDragboard();
         boolean success = false;
         if (db.hasString()) {
-            //Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Dining Room");
+            Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Dining Room");
             GUIView.thisGUI.sendMessage(new MoveStudentToDiningRoomMessage(Color.valueOf(db.getString())));
             success = true;
         }
@@ -460,7 +459,7 @@ public class GameViewController implements Initializable {
         boolean success = false;
         int index = islands.getChildren().indexOf(dragEvent.getSource());
         if (db.hasString()) {
-            //Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Island number "+index);
+            Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Island number " + index);
             GUIView.thisGUI.sendMessage(new MoveStudentToIslandMessage(Color.valueOf(db.getString()), index));
             success = true;
         }
