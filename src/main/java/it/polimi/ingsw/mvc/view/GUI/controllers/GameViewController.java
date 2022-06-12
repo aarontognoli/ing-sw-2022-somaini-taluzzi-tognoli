@@ -125,22 +125,22 @@ public class GameViewController implements Initializable {
                 double border = (boards.getHeight() - boardHeight * model.publicModel.getTotalPlayerCount()) / (model.publicModel.getTotalPlayerCount() + 1);
                 thisController.setLayoutY((i + 1) * border + i * boardHeight);
             }
-            if (model.publicModel.getGameMode().equals(GameMode.EXPERT_MODE)) {
-                CharacterCardsController thisCCController;
-                CharacterCards.setVisible(true);
-                CharacterCards.setDisable(false);
-                CharacterCards.getChildren().clear();
-                for (int i = 0; i < characterCards.size(); i++) {
-                    thisCCController = new CharacterCardsController();
-                    thisCCController.setup(characterCards.get(i), this, i);
-                    thisCCController.setDescription(characterCardsNameDescription.get(thisCCController.getName()));
-                    CharacterCards.getChildren().add(thisCCController);
-                    characterCardsControllerList.add(thisCCController);
-                    thisCCController.setLayoutY(i * 170);
-                }
+
+
+        }
+        if (model.publicModel.getGameMode().equals(GameMode.EXPERT_MODE)) {
+            CharacterCardsController thisCCController;
+            CharacterCards.setVisible(true);
+            CharacterCards.setDisable(false);
+            CharacterCards.getChildren().clear();
+            for (int i = 0; i < characterCards.size(); i++) {
+                thisCCController = new CharacterCardsController();
+                thisCCController.setup(characterCards.get(i), this, i);
+                thisCCController.setDescription(characterCardsNameDescription.get(thisCCController.getName()));
+                CharacterCards.getChildren().add(thisCCController);
+                characterCardsControllerList.add(thisCCController);
+                thisCCController.setLayoutY(i * 170);
             }
-
-
         }
         if (cloudControllerList.isEmpty()) {
             CloudController thisCloudController;

@@ -328,4 +328,8 @@ public class PublicModelTest {
         }
         assertEquals(3, model.currentPlayer.getBoard().getEntrance().size());
     }
+
+    public static void setWinner(Player p, Model model) {
+        model.winner = p;
+    }
 }

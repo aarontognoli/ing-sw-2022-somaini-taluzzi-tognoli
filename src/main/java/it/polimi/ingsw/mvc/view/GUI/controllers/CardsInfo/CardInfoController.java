@@ -58,6 +58,10 @@ public abstract class CardInfoController extends Pane implements Initializable {
     }
 
     public void closeOnClick(MouseEvent event) {
+        close();
+    }
+
+    public void close() {
         this.getParent().setVisible(false);
         this.getParent().setDisable(true);
     }

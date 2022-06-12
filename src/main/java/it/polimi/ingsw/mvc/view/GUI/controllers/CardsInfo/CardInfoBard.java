@@ -61,6 +61,7 @@ public class CardInfoBard extends CardInfoController {
 
         BardCharacterArgument bca = new BardCharacterArgument(selectedStudents, selectedDiningRooms);
         GUIView.thisGUI.sendMessage(new PlayCharacterCardMessage(index, bca));
+        close();
     }
 
     @Override

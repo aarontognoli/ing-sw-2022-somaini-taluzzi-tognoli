@@ -44,6 +44,7 @@ public class CardInfoWine extends CardInfoController {
 
         WineCharacterArgument wca = new WineCharacterArgument(selectedIsland.getIndex(), selectedStudent.getColor());
         GUIView.thisGUI.sendMessage(new PlayCharacterCardMessage(index, wca));
+        close();
 
     }
 

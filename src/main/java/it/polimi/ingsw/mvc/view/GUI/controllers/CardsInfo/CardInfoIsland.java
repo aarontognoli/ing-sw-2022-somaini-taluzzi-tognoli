@@ -24,9 +24,10 @@ public class CardInfoIsland extends CardInfoController {
                 break;
             }
         }
-        if (selected != null)
+        if (selected != null) {
             GUIView.thisGUI.sendMessage(new PlayCharacterCardMessage(index, selected.getIndex()));
-        else
+            close();
+        } else
             LobbyFrame.lobbyFrame.showInfo("Select a Color.");
     }
 

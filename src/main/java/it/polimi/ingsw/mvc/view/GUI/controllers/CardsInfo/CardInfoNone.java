@@ -8,7 +8,7 @@ public class CardInfoNone extends CardInfoController {
     @Override
     public void playCard(MouseEvent event) {
         GUIView.thisGUI.sendMessage(new PlayCharacterCardMessage(index, null));
-
+        close();
     }
 
     @Override

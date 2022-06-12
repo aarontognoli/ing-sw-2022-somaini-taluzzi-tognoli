@@ -51,6 +51,7 @@ public class CardInfoJoker extends CardInfoController {
 
         JokerCharacterArgument jca = new JokerCharacterArgument(cardSelected, entranceSelected);
         GUIView.thisGUI.sendMessage(new PlayCharacterCardMessage(index, jca));
+        close();
     }
 
     @Override

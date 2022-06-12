@@ -224,7 +224,13 @@ public class LobbyFrame extends Application {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                winStage.getScene().getRoot().requestFocus();
+                winStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        closeApp();
+                    }
+                });
                 ec = loader.getController();
 
                 winStage.setResizable(false);
@@ -250,7 +256,13 @@ public class LobbyFrame extends Application {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                winStage.getScene().getRoot().requestFocus();
+                winStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        closeApp();
+                    }
+                });
                 ec = loader.getController();
 
                 winStage.setResizable(false);

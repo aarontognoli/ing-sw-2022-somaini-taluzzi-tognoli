@@ -62,6 +62,7 @@ public class CloudController extends Pane implements Initializable {
         for (i = 0; i < size; i++) {
             thisColor = cloudStudents.get(i).getColor().toString();
             ((ImageView) studentsParent.getChildren().get(i)).setImage(new Image("/imgs/Students/" + thisColor + ".png"));
+            studentsParent.getChildren().get(i).setVisible(true);
         }
         for (; i < studentsParent.getChildren().size(); i++) {
             studentsParent.getChildren().get(i).setVisible(false);

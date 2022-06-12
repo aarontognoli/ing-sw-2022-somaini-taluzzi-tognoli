@@ -55,7 +55,7 @@ public class CharacterCardsController extends Pane implements Initializable {
     public String getName() {
         return thisCC.getClass().getSimpleName();
     }
-//todo Object effect handler
+
 
     public int getCoinCost() {
         return thisCC.getCoinCost();
