@@ -128,6 +128,7 @@ public class GameViewController implements Initializable {
 
 
         }
+        characterCardsControllerList.clear();
         if (model.publicModel.getGameMode().equals(GameMode.EXPERT_MODE)) {
             CharacterCardsController thisCCController;
             CharacterCards.setVisible(true);
@@ -285,17 +286,24 @@ public class GameViewController implements Initializable {
         }
         if (!enoughStudentsMoved) {
             int i;
+            ImageView thisImageView;
             Color thisColor;
+            ActionStudents.getChildren().clear();
             for (i = 0; i < board.getEntrance().size(); i++) {
                 thisColor = board.getEntrance().get(i).getColor();
-                ((ImageView) ActionStudents.getChildren().get(i)).setImage(new Image("/imgs/Students/" + thisColor.toString() + ".png"));
-                ActionStudents.getChildren().get(i).getProperties().put("color", thisColor);
-                ActionStudents.getChildren().get(i).setVisible(true);
-                ActionStudents.getChildren().get(i).setDisable(false);
-            }
-            for (; i < ActionStudents.getChildren().size(); i++) {
-                ActionStudents.getChildren().get(i).setVisible(false);
-                ActionStudents.getChildren().get(i).setDisable(true);
+                thisImageView = new ImageView(new Image("/imgs/Students/" + thisColor.toString() + ".png"));
+                thisImageView.setLayoutX(58 + (i + 1) / 2 * 94);
+                thisImageView.setLayoutY(27 + i % 2 * 79);
+                thisImageView.getProperties().put("color", thisColor);
+                thisImageView.setPreserveRatio(true);
+                thisImageView.setFitWidth(76);
+                thisImageView.setVisible(true);
+                thisImageView.setDisable(false);
+                thisImageView.setOnDragDetected(this::startDrag);
+                thisImageView.setOnMouseEntered(this::shineBackEntranceStudent);
+                thisImageView.setOnMouseExited(this::notShineBack);
+
+                ActionStudents.getChildren().add(thisImageView);
             }
 
             for (Node n : islands.getChildren()) {

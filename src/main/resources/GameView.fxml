@@ -10,6 +10,12 @@
             prefWidth="1900.0" xmlns="http://javafx.com/javafx/18"
             fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController">
    <children>
+      <ImageView fitHeight="800.0" fitWidth="1524.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0"
+                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@imgs/Misc/backGround.png"/>
+         </image>
+      </ImageView>
       <AnchorPane fx:id="gamePane" layoutX="10.0" layoutY="10.0" prefHeight="665.0" prefWidth="1500.0"
                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                   AnchorPane.topAnchor="0.0">
@@ -157,7 +163,7 @@
                         </ImageView>
                         <Pane fx:id="ActionStudents" prefHeight="200.0" prefWidth="553.0">
                            <children>
-                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="58.0" layoutY="27.0"
+                              <ImageView fitHeight="103.0" fitWidth="76.0" layoutX="58.0" layoutY="27.0"
                                          onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent"
                                          onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
                                  <image>
