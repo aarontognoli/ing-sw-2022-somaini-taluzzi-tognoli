@@ -2,8 +2,8 @@ package it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo;
 
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacter;
 import it.polimi.ingsw.cards.characters.WineCharacter.WineCharacterArgument;
+import it.polimi.ingsw.messages.game.PlayCharacterCardMessage;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
-import it.polimi.ingsw.mvc.view.GUI.LobbyFrame;
 import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.selectableTokens.IslandToken;
 import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.selectableTokens.StudentToken;
 import it.polimi.ingsw.pawn.Student;
@@ -43,7 +43,7 @@ public class CardInfoWine extends CardInfoController {
         }
 
         WineCharacterArgument wca = new WineCharacterArgument(selectedIsland.getIndex(), selectedStudent.getColor());
-        LobbyFrame.lobbyFrame.showInfo("Played card " + wca.getTargetIslandIndex() + " " + wca.getTargetStudentColor());
+        GUIView.thisGUI.sendMessage(new PlayCharacterCardMessage(index, wca));
 
     }
 
