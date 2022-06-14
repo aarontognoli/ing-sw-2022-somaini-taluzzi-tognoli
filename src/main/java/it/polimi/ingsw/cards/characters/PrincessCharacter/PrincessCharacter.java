@@ -72,6 +72,7 @@ public class PrincessCharacter extends CharacterCardWithStudents {
 
         try {
             currentPlayerBoard.addStudentsToDiningRoom(students.get(studentIndex));
+            model.characterModel.updateProfessorPosition(targetColor);
         } catch (DiningRoomFullException e) {
             throw new CCArgumentException(DINING_ROOM_FULL);
         }

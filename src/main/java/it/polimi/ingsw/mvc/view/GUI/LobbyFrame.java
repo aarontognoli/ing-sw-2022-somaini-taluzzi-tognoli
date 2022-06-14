@@ -158,7 +158,7 @@ public class LobbyFrame extends Application {
             public void run() {
 
                 Stage gameStage = new Stage();
-                gameStage.setTitle("Eryantis");
+                gameStage.setTitle("Eryantis - " + GUIView.thisGUI.getMyUsername());
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameView.fxml"));
 
                 try {
