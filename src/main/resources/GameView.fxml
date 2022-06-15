@@ -142,13 +142,10 @@
                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                   AnchorPane.topAnchor="0.0"/>
             <Pane fx:id="ActionOuter" disable="true" layoutX="210.0" layoutY="586.0" prefHeight="200.0"
-                  prefWidth="711.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0"
-                  AnchorPane.rightAnchor="693.0">
+                  prefWidth="711.0" scaleX="0.7" scaleY="0.7" translateX="370.0" translateY="30.0" visible="false"
+                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="693.0">
                <children>
-                  <Pane fx:id="ActionInner" layoutX="60.0" layoutY="-1.0" prefHeight="200.0" prefWidth="710.0"
-                        scaleX="0.7" scaleY="0.7"
-                        style="-fx-effect: dropshadow(gaussian, rgb(200,200,200), 100, 0, 0, 0);" translateX="310.0"
-                        translateY="30.0">
+                  <Pane fx:id="ActionInner" prefHeight="200.0" prefWidth="710.0">
                      <children>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="558.0" layoutY="21.0" pickOnBounds="true"
                                    preserveRatio="true">
@@ -229,7 +226,7 @@
                            </children>
                         </Pane>
                         <Label alignment="CENTER" layoutX="555.0" layoutY="23.0"
-                               onDragDropped="#placeStudentInDiningRoom" onDragEntered="#dragEntered"
+                               onDragDropped="#placeStudentInDiningRoom" onDragEntered="#dragEnteredLabel"
                                onDragExited="#dragExited" onDragOver="#acceptDrag" prefHeight="150.0" prefWidth="157.0"
                                text="Insert Into Dining Room" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                            <font>

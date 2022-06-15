@@ -261,21 +261,38 @@ public class GameViewController implements Initializable {
         disableInteractableParts();
         Prompt.setText(TextOutputConstants.planningPhase());
 
-        thisDeck.getHand().remove(0);
+        AssistantCards.getChildren().clear();
+        ImageView thisAssistantCard;
+
         for (AssistantCard ac : AssistantCard.values()) {
+
             if (thisDeck.getHand().contains(ac)) {
-                ((ImageView) AssistantCards.getChildren().get(ac.ordinal())).setImage(new Image("/imgs/AssistantCards/" + ac + ".png"));
-                AssistantCards.getChildren().get(ac.ordinal()).setDisable(false);
+                thisAssistantCard = new ImageView(new Image("/imgs/AssistantCards/" + ac + ".png"));
+                thisAssistantCard.setDisable(false);
 
             } else {
-                ((ImageView) AssistantCards.getChildren().get(ac.ordinal())).setImage(new Image("/imgs/Decks/" + thisDeck.getDeckName() + ".png"));
-                AssistantCards.getChildren().get(ac.ordinal()).setDisable(true);
+                thisAssistantCard = new ImageView(new Image("/imgs/Decks/" + thisDeck.getDeckName() + ".png"));
+                thisAssistantCard.setDisable(true);
             }
-            AssistantCards.getChildren().get(ac.ordinal()).setVisible(true);
+            AssistantCards.getChildren().add(thisAssistantCard);
+            thisAssistantCard.setPreserveRatio(true);
+            thisAssistantCard.setFitHeight(150);
+
+            thisAssistantCard.setVisible(true);
+            thisAssistantCard.setLayoutY(25);
+            thisAssistantCard.setLayoutX(20 + 120 * ac.ordinal());
+            thisAssistantCard.setOnMouseEntered(this::shineBackEntranceStudent);
+            thisAssistantCard.setOnMouseExited(this::notShineBack);
+            thisAssistantCard.setOnMouseClicked(this::playAssistant);
+            thisAssistantCard.getProperties().put("ACValue", ac);
         }
+
         AssistantCardsOuter.setVisible(true);
         AssistantCardsOuter.setDisable(false);
-
+        AssistantCards.setTranslateX(310);
+        AssistantCards.setTranslateY(30);
+        AssistantCards.setScaleX(0.7);
+        AssistantCards.setScaleY(0.7);
     }
 
     public void actionPhase(Board board, GameMode gm, boolean alreadyPlayedCharacterCard, boolean enoughStudentsMoved, boolean motherNatureMoved) {
@@ -307,7 +324,6 @@ public class GameViewController implements Initializable {
             }
 
             for (Node n : islands.getChildren()) {
-
                 n.setOnDragEntered(this::dragEntered);
                 n.setOnDragExited(this::dragExited);
                 n.setOnDragOver(this::acceptDrag);
@@ -325,6 +341,7 @@ public class GameViewController implements Initializable {
             for (int i = 0; i < mnMaxMov; i++) {
                 index = (mnIndex + i + 1) % islandsCount;
                 islands.getChildren().get(index).setStyle("-fx-effect: dropshadow(three-pass-box, green, 50, 0, 0, 0);");
+
                 islands.getChildren().get(index).setOnMouseClicked(this::moveMotherNature);
             }
 
@@ -369,7 +386,6 @@ public class GameViewController implements Initializable {
 
     public void shineBack(MouseEvent mouseEvent) {
         ((Node) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, yellow, 50, 0, 0, 0);");
-
     }
 
     public void shineBackEntranceStudent(MouseEvent mouseEvent) {
@@ -410,8 +426,8 @@ public class GameViewController implements Initializable {
         if (mouseEvent.getClickCount() == 1) {
 
             ImageView selected = (ImageView) mouseEvent.getSource();
-            int index = AssistantCards.getChildren().indexOf(selected);
-            GUIView.thisGUI.sendMessage(new PlayAssistantMessage(AssistantCard.values()[index]));
+            //Prompt.setText("Played "+selected.getProperties().get("ACValue").toString());
+            GUIView.thisGUI.sendMessage(new PlayAssistantMessage((AssistantCard) selected.getProperties().get("ACValue")));
             return;
         }
 
@@ -428,6 +444,19 @@ public class GameViewController implements Initializable {
     }
 
     public void dragEntered(DragEvent dragEvent) {
+        if (dragEvent.getGestureSource() != dragEvent.getSource() &&
+                dragEvent.getDragboard().hasString()) {
+
+            ((Node) dragEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, yellow, 50, 0, 0, 0);");
+
+            ((Node) dragEvent.getSource()).toBack();
+
+
+        }
+        dragEvent.consume();
+    }
+
+    public void dragEnteredLabel(DragEvent dragEvent) {
         if (dragEvent.getGestureSource() != dragEvent.getSource() &&
                 dragEvent.getDragboard().hasString()) {
 
@@ -465,7 +494,7 @@ public class GameViewController implements Initializable {
     public void placeStudentInIsland(DragEvent dragEvent) {
         Dragboard db = dragEvent.getDragboard();
         boolean success = false;
-        int index = islands.getChildren().indexOf(dragEvent.getSource());
+        int index = ((IslandController) dragEvent.getSource()).getIndex();
         if (db.hasString()) {
             //Prompt.setText(Color.valueOf(db.getString()) + " Student placed in Island number " + index);
             GUIView.thisGUI.sendMessage(new MoveStudentToIslandMessage(Color.valueOf(db.getString()), index));
@@ -490,7 +519,7 @@ public class GameViewController implements Initializable {
     }
 
     public void moveMotherNature(MouseEvent mouseEvent) {
-        int index = islands.getChildren().indexOf(mouseEvent.getSource());
+        int index = ((IslandController) mouseEvent.getSource()).getIndex();
         int mnIndex = GUIView.thisGUI.getMotherNatureIslandIndex();
         int islandsCount = GUIView.thisGUI.getIslandCountFromModel();
         int steps = Math.floorMod(index - mnIndex, islandsCount);

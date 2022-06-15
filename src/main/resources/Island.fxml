@@ -5,11 +5,12 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.*?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" onMouseEntered="#showInfo" onMouseExited="#hideInfo"
-         type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/18">
-    <AnchorPane prefHeight="123.0" prefWidth="151.0">
+<fx:root xmlns:fx="http://javafx.com/fxml/1" pickOnBounds="false" type="javafx.scene.layout.Pane"
+         xmlns="http://javafx.com/javafx/18">
+    <AnchorPane prefHeight="123.0" prefWidth="151.0" onMouseEntered="#showInfo" onMouseExited="#hideInfo">
         <children>
-            <ImageView fx:id="pic" fitHeight="123.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="pic" fitHeight="123.0" fitWidth="151.0" mouseTransparent="true" pickOnBounds="true"
+                       preserveRatio="true">
                 <image>
                     <Image url="@imgs/Misc/island_1.png"/>
                 </image>
@@ -76,7 +77,7 @@
             </Text>
         </children>
     </AnchorPane>
-    <AnchorPane fx:id="info" prefHeight="123.0" prefWidth="151.0">
+    <AnchorPane fx:id="info" mouseTransparent="true" prefHeight="123.0" prefWidth="151.0">
         <children>
             <Polygon fill="#468041" layoutX="71.0" layoutY="52.0" opacity="0.61"
                      points="34.99999237060547, 71.00000762939453, 69.39997863769531, 5.600002288818359, 34.99999237060547, -51.99999237060547, -37.00000762939453, -51.99999237060547, -71.00000762939453, 5.600002288818359, -40.600013732910156, 71.00001525878906"
