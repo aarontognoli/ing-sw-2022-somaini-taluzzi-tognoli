@@ -3,76 +3,49 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.*?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="800.0" prefWidth="1524.0" type="javafx.scene.layout.Pane"
-         xmlns="http://javafx.com/javafx/18">
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root prefHeight="800.0" prefWidth="1524.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#bdc8d1" height="479.0" layoutX="422.0" layoutY="126.0"
-                 opacity="0.75" stroke="BLACK" strokeType="INSIDE" width="642.0"/>
-      <ImageView fx:id="CardPic" fitHeight="417.0" fitWidth="229.0" layoutX="453.0" layoutY="153.0" pickOnBounds="true"
-                 preserveRatio="true">
+      <Rectangle arcHeight="26.0" arcWidth="26.0" fill="#f7f7f7" height="479.0" layoutX="422.0" layoutY="126.0" stroke="BLACK" strokeType="INSIDE" width="642.0" />
+      <ImageView fx:id="CardPic" fitHeight="417.0" fitWidth="229.0" layoutX="453.0" layoutY="153.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@imgs/CharacterCards/BardCharacter.jpg"/>
+            <Image url="@imgs/CharacterCards/BardCharacter.jpg" />
          </image>
       </ImageView>
-      <Label fx:id="Description" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="710.0" layoutY="156.0"
-             prefHeight="175.0" prefWidth="307.0"
-             text="Choose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag. If any player has fewer than 3 Students of that type, return as many Students as they have."
-             textAlignment="JUSTIFY" wrapText="true">
+      <Label fx:id="Description" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="710.0" layoutY="156.0" prefHeight="175.0" prefWidth="307.0" text="Choose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag. If any player has fewer than 3 Students of that type, return as many Students as they have." textAlignment="JUSTIFY" wrapText="true">
          <font>
-            <Font size="17.0"/>
+            <Font size="17.0" />
          </font>
       </Label>
-      <Circle layoutX="1034.0" layoutY="157.0" onMouseClicked="#closeOnClick" radius="13.0" stroke="BLACK"
-              strokeType="INSIDE">
-         <fill>
-            <RadialGradient centerX="0.5" centerY="0.5113636435884418" cycleMethod="REFLECT" radius="0.5">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="1.0"/>
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0"/>
-                     </color>
-                  </Stop>
-               </stops>
-            </RadialGradient>
-         </fill>
-      </Circle>
-      <Pane fx:id="Content" layoutX="710.0" layoutY="327.0" prefHeight="65.0" prefWidth="307.0"/>
-      <Pane fx:id="Arguments" layoutX="710.0" layoutY="398.0" prefHeight="93.0" prefWidth="307.0"/>
-      <ImageView fitHeight="87.0" fitWidth="62.0" layoutX="464.0" layoutY="519.0" pickOnBounds="true"
-                 preserveRatio="true">
+      <Circle fill="RED" layoutX="1044.0" layoutY="146.0" onMouseClicked="#closeOnClick" radius="13.0" stroke="#330000" strokeType="INSIDE" />
+      <Pane fx:id="Content" layoutX="710.0" layoutY="327.0" prefHeight="65.0" prefWidth="307.0" />
+      <Pane fx:id="Arguments" layoutX="710.0" layoutY="398.0" prefHeight="93.0" prefWidth="307.0" />
+      <ImageView fitHeight="87.0" fitWidth="62.0" layoutX="464.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@imgs/Misc/coin.png"/>
+            <Image url="@imgs/Misc/coin.png" />
          </image>
       </ImageView>
       <Label layoutX="539.0" layoutY="533.0" text="X">
          <font>
-            <Font size="22.0"/>
+            <Font size="22.0" />
          </font>
       </Label>
       <Text fx:id="Cost" layoutX="572.0" layoutY="564.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
          <font>
-            <Font size="36.0"/>
+            <Font size="36.0" />
          </font>
       </Text>
-      <Pane fx:id="PlayCardButton" accessibleRole="BUTTON" layoutX="764.0" layoutY="517.0" prefHeight="65.0"
-            prefWidth="200.0">
+      <Pane fx:id="PlayCardButton" accessibleRole="BUTTON" layoutX="764.0" layoutY="517.0" prefHeight="65.0" prefWidth="200.0">
          <children>
-            <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#5be5ec" height="65.0" stroke="BLACK"
-                       strokeType="INSIDE" width="200.0"/>
-            <Text layoutX="29.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Play Card"
-                  textAlignment="CENTER">
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#039be5" height="65.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Text fill="WHITE" layoutX="29.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Play Card" textAlignment="CENTER">
                <font>
-                  <Font size="33.0"/>
+                  <Font size="33.0" />
                </font>
             </Text>
          </children>

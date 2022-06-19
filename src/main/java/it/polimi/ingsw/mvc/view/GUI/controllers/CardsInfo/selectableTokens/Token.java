@@ -18,7 +18,7 @@ public class Token extends StackPane {
     }
 
     static void shineBack(MouseEvent mouseEvent) {
-        ((Node) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, yellow, 20, 0, 0, 0);");
+        ((Node) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #1E6C93, 20, 0, 0, 0);");
         ((Node) mouseEvent.getSource()).toBack();
 
     }

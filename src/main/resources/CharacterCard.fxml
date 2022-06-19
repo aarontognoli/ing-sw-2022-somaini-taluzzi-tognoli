@@ -5,22 +5,22 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/18">
-   <AnchorPane prefHeight="150.0" prefWidth="98.0">
+
+<fx:root type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <AnchorPane prefWidth="98.0">
 
    </AnchorPane>
-   <ImageView fx:id="Pic" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+   <ImageView fx:id="Pic" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
       <image>
-         <Image url="@imgs/CharacterCards/BardCharacter.jpg"/>
+         <Image url="@imgs/CharacterCards/BardCharacter.jpg" />
       </image>
    </ImageView>
-   <ImageView fx:id="Played" disable="true" fitHeight="125.0" fitWidth="126.0" layoutX="-20.0" layoutY="16.0"
-              pickOnBounds="true" preserveRatio="true">
+   <ImageView fx:id="Played" disable="true" fitWidth="98.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
       <image>
-         <Image url="@imgs/CharacterCards/CardPlayed.png"/>
+         <Image url="@imgs/CharacterCards/CardPlayed.png" />
       </image>
       <effect>
-         <DropShadow radius="12.925" spread="0.3" width="32.7"/>
+         <DropShadow radius="12.925" spread="0.3" width="32.7" />
       </effect>
    </ImageView>
 </fx:root>

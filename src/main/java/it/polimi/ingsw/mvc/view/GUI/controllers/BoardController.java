@@ -134,10 +134,10 @@ public class BoardController extends Pane implements Initializable {
 
     public void updateIsPlaying(boolean isPlaying) {
         if (isPlaying) {
-            BACK.setStyle("-fx-background-color:yellow;-fx-background-radius: 10;-fx-effect: dropshadow(three-pass-box, yellow, 50, 0, 0, 0);");
+            BACK.setStyle("-fx-background-color: #1E6C93;-fx-background-radius: 10;-fx-effect: dropshadow(three-pass-box, #E6F3EA, 50, 0, 0, 0);-fx-border-color: #000000;-fx-border-radius: 10;");
             NOW_PLAYING.setVisible(true);
         } else {
-            BACK.setStyle("");
+            BACK.setStyle("-fx-background-color: #55B5C5;-fx-background-radius: 10;-fx-border-color: #000000;-fx-border-radius: 10;");
             NOW_PLAYING.setVisible(false);
         }
     }

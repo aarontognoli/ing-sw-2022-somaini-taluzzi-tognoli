@@ -9,11 +9,11 @@ public class CardInfoPrincess extends CardInfoColor {
     @Override
     public void showContent() {
         PrincessCharacter pc = (PrincessCharacter) thisCc;
-        super.Content.getChildren().add(new Label("Students in thi card:"));
+        super.Content.getChildren().add(new Label("Students in this card:"));
         for (int i = 0; i < pc.getStudents().size(); i++) {
             ImageView student = new ImageView(new Image("/imgs/Students/" + pc.getStudents().get(i).getColor() + ".png"));
             super.Content.getChildren().add(student);
-            ;
+
             student.setLayoutX(60 * i);
             student.setLayoutY(20);
         }
