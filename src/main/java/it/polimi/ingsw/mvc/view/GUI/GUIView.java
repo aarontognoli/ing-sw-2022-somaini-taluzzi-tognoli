@@ -56,7 +56,7 @@ public class GUIView extends ClientView {
             return;
         }
 
-        if (model.publicModel.getGamePhase().equals(GamePhase.PIANIFICATION)) {
+        if (model.publicModel.getGamePhase().equals(GamePhase.PLANNING)) {
             LobbyFrame.lobbyFrame.planningPhase(model.publicModel.getCurrentPlayer().getDeck());
         } else {
             LobbyFrame.lobbyFrame.actionPhase(model.publicModel.getCurrentPlayer().getBoard(), model.publicModel.getGameMode(), model.publicModel.isCharacterCardPlayed(), model.publicModel.enoughStudentsPlaced(), model.publicModel.isMotherNatureMoved());
