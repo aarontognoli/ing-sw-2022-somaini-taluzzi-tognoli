@@ -14,13 +14,13 @@ public class TextOutputConstants {
     public static String actionPhase(GameMode gm, boolean alreadyPlayedCharacterCard, boolean enoughStudentsMoved, boolean motherNatureMoved) {
         String returnString;
         if (!enoughStudentsMoved)
-            returnString = "Drag a student to place it on an island or in the dining room.";
+            returnString = "Drag a student to place it on an island or in the dining room. ";
         else if (!motherNatureMoved)
-            returnString = "Click on an island to move MotherNature";
+            returnString = "Click on an island to move MotherNature. ";
         else
-            returnString = "Click on a cloud to get Students";
+            returnString = "Click on a cloud to get Students. ";
         if (gm.equals(GameMode.EXPERT_MODE) && !alreadyPlayedCharacterCard)
-            returnString += "Click on a character card to play it";
+            returnString += "Click on a character card to play it.";
         return returnString;
     }
 
