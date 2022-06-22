@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="800.0" maxWidth="1500.0" prefHeight="800.0"
+            prefWidth="1900.0" xmlns="http://javafx.com/javafx/18"
+            fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.EndingController" onKeyTyped="#closeType">
+    <children>
+        <ImageView fx:id="youWon" disable="true" fitHeight="801.0" fitWidth="1501.0" pickOnBounds="true" visible="false"
+                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                   AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="@imgs/Misc/youWon.png"/>
+            </image>
+        </ImageView>
+        <Pane fx:id="youLost" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <ImageView fitHeight="800.0" fitWidth="1500.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imgs/Misc/youLost.png"/>
+                    </image>
+                </ImageView>
+                <Label fx:id="whoWon" alignment="CENTER" layoutX="134.0" layoutY="405.0" prefHeight="239.0"
+                       prefWidth="499.0" text="Player">
+                    <font>
+                        <Font name="Monotype Corsiva" size="50.0"/>
+                    </font>
+                </Label>
+            </children>
+        </Pane>
+        <Pane onMouseClicked="#closeClick" prefHeight="200.0" prefWidth="200.0"
+              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0"/>
+    </children>
+</AnchorPane>

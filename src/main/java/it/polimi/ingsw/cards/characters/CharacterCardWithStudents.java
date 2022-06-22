@@ -26,7 +26,9 @@ public abstract class CharacterCardWithStudents extends CharacterCard {
         }
     }
 
+
     public List<Student> getStudents() {
         return new ArrayList<>(students);
     }
+
 }

@@ -4,16 +4,17 @@ import it.polimi.ingsw.bag.BagEmptyException;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
+import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.mvc.PlayerActions;
+import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
 import it.polimi.ingsw.player.Board;
-import it.polimi.ingsw.exceptions.DiningRoomFullException;
 import it.polimi.ingsw.player.Player;
 
 import java.io.Serializable;
@@ -26,6 +27,18 @@ public class PublicModel implements PlayerActions, Serializable {
 
     PublicModel(Model fatherModel) {
         this.fatherModel = fatherModel;
+    }
+
+    public List<Cloud> getClouds() {
+        return new ArrayList<>(fatherModel.clouds);
+    }
+
+    public List<CharacterCard> getCurrentCharacterCards() {
+        return new ArrayList<>(fatherModel.currentGameCards);
+    }
+
+    public List<Professor> getProfessors() {
+        return new ArrayList<>(fatherModel.professors);
     }
 
     public void playAssistant(AssistantCard assistantCard) throws NotFoundException, AssistantCardAlreadyPlayedException {
@@ -298,6 +311,7 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.characterCardPlayed = false;
         fatherModel.studentsPlaced = 0;
         fatherModel.motherNatureMoved = false;
+        fatherModel.lastPlayedCharacterCardIndex = -1;
     }
 
     public GameMode getGameMode() {
@@ -306,6 +320,10 @@ public class PublicModel implements PlayerActions, Serializable {
 
     public boolean isCharacterCardPlayed() {
         return fatherModel.characterCardPlayed;
+    }
+
+    public int getPlayedCharacterCardIndex() {
+        return fatherModel.lastPlayedCharacterCardIndex;
     }
 
     public boolean isMotherNatureMoved() {
@@ -326,6 +344,10 @@ public class PublicModel implements PlayerActions, Serializable {
 
     public void setCharacterCardPlayed(boolean characterCardPlayed) {
         fatherModel.characterCardPlayed = characterCardPlayed;
+    }
+
+    public void setCharacterCardPlayedIndex(int index) {
+        fatherModel.lastPlayedCharacterCardIndex = index;
     }
 
     public List<CharacterCard> getCurrentGameCards() {

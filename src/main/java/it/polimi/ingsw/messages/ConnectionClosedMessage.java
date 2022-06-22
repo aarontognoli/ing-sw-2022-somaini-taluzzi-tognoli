@@ -2,6 +2,7 @@ package it.polimi.ingsw.messages;
 
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
+import it.polimi.ingsw.mvc.view.GUI.GUIView;
 
 public class ConnectionClosedMessage extends ErrorMessage {
 
@@ -16,5 +17,11 @@ public class ConnectionClosedMessage extends ErrorMessage {
         cliLobbyView.setCliStringHandler(new CLIEmptyHandler("Connection closed! The game ended."));
         cliLobbyView.setModel(null);
         cliLobbyView.setActive(false);
+    }
+
+    @Override
+    public void updateGUI(GUIView guiLobbyView) {
+
+        guiLobbyView.closeApp("Connection closed! The game ended.");
     }
 }

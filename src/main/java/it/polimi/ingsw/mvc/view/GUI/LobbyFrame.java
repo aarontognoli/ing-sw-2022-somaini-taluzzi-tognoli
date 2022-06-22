@@ -1,12 +1,12 @@
 package it.polimi.ingsw.mvc.view.GUI;
 
+import it.polimi.ingsw.cards.Deck;
+import it.polimi.ingsw.enums.GameMode;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.lobby.server.LobbyState;
 import it.polimi.ingsw.mvc.model.Model;
-import it.polimi.ingsw.mvc.view.GUI.controllers.CreateLobbyController;
-import it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController;
-import it.polimi.ingsw.mvc.view.GUI.controllers.LobbyController;
-import it.polimi.ingsw.mvc.view.GUI.controllers.UsernameAndDeckLobbyViewController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.*;
+import it.polimi.ingsw.player.Board;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -29,6 +30,7 @@ public class LobbyFrame extends Application {
     private CreateLobbyController clc;
     private UsernameAndDeckLobbyViewController userAndDeckController;
     private GameViewController gvc;
+    private Image icon;
 
 
     private Stage mainStage;
@@ -38,12 +40,19 @@ public class LobbyFrame extends Application {
     public void start(Stage stage) throws Exception {
         stage.setTitle("Eryantis");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/LobbyView.fxml"));
-
+        icon = new Image("/imgs/Misc/icon.png");
         mainStage = stage;
         mainStage.setScene(new Scene((AnchorPane) loader.load()));
         lc = (LobbyController) loader.getController();
+        stage.getIcons().add(icon);
         lobbyFrame = this;
         mainStage.setResizable(false);
+        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                closeApp();
+            }
+        });
         mainStage.show();
         GUIView.thisGUI.reloadLobbies();
     }
@@ -73,7 +82,7 @@ public class LobbyFrame extends Application {
                 Stage createLobbyStage = new Stage();
                 createLobbyStage.setTitle("Eryantis");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/CreateLobbyView.fxml"));
-
+                createLobbyStage.getIcons().add(icon);
                 try {
                     createLobbyStage.setScene(new Scene((AnchorPane) loader.load()));
                 } catch (Exception e) {
@@ -98,6 +107,7 @@ public class LobbyFrame extends Application {
                 if (clc != null)
                     clc.closeAndContinue();
                 Stage userAndDeckStage = new Stage();
+                userAndDeckStage.getIcons().add(icon);
                 userAndDeckStage.setTitle("Eryantis");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/UsernameAndDeckLobbyView.fxml"));
 
@@ -112,7 +122,14 @@ public class LobbyFrame extends Application {
                 userAndDeckStage.initStyle(StageStyle.UNDECORATED);
                 userAndDeckStage.setResizable(false);
                 userAndDeckStage.show();
-                mainStage.close();
+                userAndDeckStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        closeApp();
+                    }
+                });
+
+                mainStage.hide();
 
             }
         });
@@ -124,6 +141,8 @@ public class LobbyFrame extends Application {
             public void run() {
                 Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
                 alert.setTitle("Warning!");
+                alert.setHeaderText("Error:");
+                alert.initStyle(StageStyle.UTILITY);
                 alert.showAndWait();
             }
         });
@@ -145,7 +164,8 @@ public class LobbyFrame extends Application {
             public void run() {
 
                 Stage gameStage = new Stage();
-                gameStage.setTitle("Eryantis");
+                gameStage.getIcons().add(icon);
+                gameStage.setTitle("Eryantis - " + GUIView.thisGUI.getMyUsername());
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameView.fxml"));
 
                 try {
@@ -155,16 +175,16 @@ public class LobbyFrame extends Application {
                 }
 
                 gvc = loader.getController();
+                gvc.setStage(gameStage);
                 gameStage.setResizable(false);
                 gameStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent windowEvent) {
-                        Platform.exit();
-                        System.exit(0);
+                        closeApp();
                     }
                 });
                 gameStage.show();
-                userAndDeckController.closeView();
+                userAndDeckController.hideView();
 
             }
         });
@@ -182,6 +202,8 @@ public class LobbyFrame extends Application {
             public void run() {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
                 alert.setTitle("Info!");
+                alert.setHeaderText("Info:");
+                alert.initStyle(StageStyle.UTILITY);
                 alert.showAndWait();
             }
         });
@@ -192,6 +214,124 @@ public class LobbyFrame extends Application {
             @Override
             public void run() {
                 gvc.showModel(model);
+            }
+        });
+    }
+
+    public void win() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                Stage winStage = new Stage();
+                winStage.getIcons().add(icon);
+                EndingController ec;
+                winStage.setTitle("Eryantis");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/EndingView.fxml"));
+
+                try {
+                    winStage.setScene(new Scene((AnchorPane) loader.load()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                winStage.getScene().getRoot().requestFocus();
+                winStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        closeApp();
+                    }
+                });
+                ec = loader.getController();
+
+                winStage.setResizable(false);
+                ec.win();
+                winStage.show();
+                gvc.getStage().hide();
+
+            }
+        });
+    }
+
+    public void showWinner(String winner) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Stage winStage = new Stage();
+                winStage.getIcons().add(icon);
+                EndingController ec;
+                winStage.setTitle("Eryantis");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/EndingView.fxml"));
+
+                try {
+                    winStage.setScene(new Scene((AnchorPane) loader.load()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                winStage.getScene().getRoot().requestFocus();
+                winStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        closeApp();
+                    }
+                });
+                ec = loader.getController();
+
+                winStage.setResizable(false);
+                ec.loose(winner);
+                winStage.show();
+                gvc.getStage().hide();
+            }
+        });
+    }
+
+    public void waitForTurn(String currentPlayerNickname) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gvc.waitForTurn(currentPlayerNickname);
+            }
+        });
+    }
+
+    public void planningPhase(Deck playerDeck) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gvc.planningPhase(playerDeck);
+            }
+        });
+    }
+
+    public void actionPhase(Board board, GameMode gm, boolean alreadyPlayedCharacterCard, boolean enoughStudentsMoved, boolean motherNatureMoved) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gvc.actionPhase(board, gm, alreadyPlayedCharacterCard, enoughStudentsMoved, motherNatureMoved);
+            }
+        });
+    }
+
+    public void closeApp() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+
+    }
+
+    public void closedFromServer(String s) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.ERROR, s, ButtonType.OK);
+                alert.setTitle("Warning!");
+                alert.setHeaderText("Error:");
+                alert.initStyle(StageStyle.UTILITY);
+                alert.showAndWait();
+                closeApp();
             }
         });
     }

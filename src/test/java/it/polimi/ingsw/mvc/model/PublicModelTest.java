@@ -269,6 +269,14 @@ public class PublicModelTest {
         return model.privateModel.getProfessorOwner(color);
     }
 
+    public static void setFirstCharCard(Model m, CharacterCard c) {
+        m.currentGameCards.set(0, c);
+    }
+
+    public static void giveCoinToCurrentPlayer(Model m) {
+        m.privateModel.rewardCoin();
+    }
+
     public static CharacterCard getCharCard(Model model) {
         return model.currentGameCards.get(0);
     }
@@ -319,5 +327,14 @@ public class PublicModelTest {
             assert false;
         }
         assertEquals(3, model.currentPlayer.getBoard().getEntrance().size());
+    }
+
+    public static void setWinner(Player p, Model model) {
+        model.winner = p;
+    }
+
+    public static void goToCloudGUIPhase(Model model) {
+        model.studentsPlaced = 3;
+        model.motherNatureMoved = true;
     }
 }

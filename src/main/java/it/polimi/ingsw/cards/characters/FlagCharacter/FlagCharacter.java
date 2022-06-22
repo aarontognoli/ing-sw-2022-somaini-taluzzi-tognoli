@@ -7,11 +7,18 @@ import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIIslandCharacterArgumentHandler;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoIsland;
 
 public class FlagCharacter extends CharacterCard {
 
     public FlagCharacter(Model model) {
         super(model, 3);
+    }
+
+    @Override
+    public CardInfoController getCharacterCardInfoController() {
+        return new CardInfoIsland();
     }
 
     @Override

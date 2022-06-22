@@ -11,6 +11,7 @@ public class CentaurCharacter extends CharacterCard {
         super(model, 3);
     }
 
+
     @Override
     protected void internalActivateEffect(Object arguments) throws CCArgumentException {
         if (arguments != null) {

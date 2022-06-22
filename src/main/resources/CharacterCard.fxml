@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<fx:root type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <AnchorPane prefWidth="98.0">
+
+   </AnchorPane>
+   <ImageView fx:id="Pic" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imgs/CharacterCards/BardCharacter.jpg" />
+      </image>
+   </ImageView>
+   <ImageView fx:id="Played" disable="true" fitWidth="98.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imgs/CharacterCards/CardPlayed.png" />
+      </image>
+      <effect>
+         <DropShadow radius="12.925" spread="0.3" width="32.7" />
+      </effect>
+   </ImageView>
+</fx:root>

@@ -9,10 +9,17 @@ import it.polimi.ingsw.mvc.model.InfluenceCalculatorMushroom;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIColorCharacterArgumentHandler;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoColor;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
 
 public class MushroomCharacter extends CharacterCard {
     public MushroomCharacter(Model model) {
-        super(model, 2);
+        super(model, 3);
+    }
+
+    @Override
+    public CardInfoController getCharacterCardInfoController() {
+        return new CardInfoColor();
     }
 
     @Override
