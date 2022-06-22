@@ -1,7 +1,7 @@
 package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.bag.Bag;
-import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cloud.Cloud;
 import it.polimi.ingsw.enums.*;
@@ -151,7 +151,7 @@ public class Model implements Serializable {
         }
 
         currentPlayer = players.get(0);
-        gamePhase = GamePhase.PIANIFICATION;
+        gamePhase = GamePhase.PLANNING;
         winner = null;
         try {
             privateModel.prepareMatch(motherNatureStartingPosition);

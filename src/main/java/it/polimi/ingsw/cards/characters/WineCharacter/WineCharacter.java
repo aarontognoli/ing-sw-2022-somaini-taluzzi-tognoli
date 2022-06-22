@@ -1,6 +1,6 @@
 package it.polimi.ingsw.cards.characters.WineCharacter;
 
-import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCardWithStudents;
 import it.polimi.ingsw.enums.Color;

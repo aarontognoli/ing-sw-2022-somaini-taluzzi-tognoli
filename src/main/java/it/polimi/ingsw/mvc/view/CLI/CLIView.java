@@ -107,7 +107,7 @@ public class CLIView extends ClientView {
             return;
         }
 
-        if (model.publicModel.getGamePhase().equals(GamePhase.PIANIFICATION)) {
+        if (model.publicModel.getGamePhase().equals(GamePhase.PLANNING)) {
             planningPhase();
         } else {
             actionPhase();

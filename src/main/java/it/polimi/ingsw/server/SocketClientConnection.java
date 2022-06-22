@@ -37,6 +37,13 @@ public class SocketClientConnection implements Runnable {
         this.server = server;
     }
 
+    /**
+     * Redirects the client message to remote view, which redirects it to the server
+     * controller
+     *
+     * @param message message received from the client
+     * @throws ObjectIsNotMessageException parameter is not a client message
+     */
     private void redirectToRemoteView(Object message) throws ObjectIsNotMessageException {
         if (!(message instanceof ClientGameMessage gameMsg)) {
             throw new ObjectIsNotMessageException();
@@ -49,6 +56,11 @@ public class SocketClientConnection implements Runnable {
         return active;
     }
 
+    /**
+     * Sends an object to the client through an object output stream
+     *
+     * @param message object to send
+     */
     public synchronized void send(Object message) {
         try {
             socketOut.reset();
@@ -59,6 +71,10 @@ public class SocketClientConnection implements Runnable {
         }
     }
 
+    /**
+     * Sends a message to client asserting that the connection is closed,
+     * then closes the socket
+     */
     public synchronized void closeConnection() {
         send(new ConnectionClosedMessage("Connection closed server side!"));
         try {
@@ -69,6 +85,11 @@ public class SocketClientConnection implements Runnable {
         active = false;
     }
 
+    /**
+     * Closes the connection of all the players of a lobby
+     *
+     * @param whichLobby target lobby
+     */
     private void close(Lobby whichLobby) {
         if (whichLobby != null) {
             String lobbyName = server.getNameFromLobby(whichLobby);
@@ -81,6 +102,12 @@ public class SocketClientConnection implements Runnable {
         }
     }
 
+    /**
+     * Sends an object asynchronously to the client through the Object Output Stream
+     * For this purpose it creates a dedicated thread
+     *
+     * @param message object to send
+     */
     public void asyncSend(Object message) {
         new Thread(() -> send(message)).start();
     }
@@ -104,6 +131,13 @@ public class SocketClientConnection implements Runnable {
     }
 
 
+    /**
+     * @param newUsername nickname chosen by the player
+     * @param whichLobby target lobby
+     * @return record where the first value is a boolean indicating if the
+     *         nickname is in use and the second value is a boolean
+     *         indicating if the player is the first in the target lobby
+     */
     private UsernameInUse tryAddUsername(String newUsername, Lobby whichLobby) throws IOException {
         synchronized (whichLobby.nicknamesAndDecks) {
             // If this is not the first player to enter the lobby, wait for the game options
@@ -122,6 +156,13 @@ public class SocketClientConnection implements Runnable {
         }
     }
 
+    /**
+     *
+     * @param username nickname of the player
+     * @param deckName deck name chosen by the player
+     * @param whichLobby target lobby
+     * @return true if the deck name is already in use, otherwise false
+     */
     private boolean tryAddDeckAndCheckIsUsed(String username, DeckName deckName, Lobby whichLobby) {
         synchronized (whichLobby.nicknamesAndDecks) {
             for (DeckName d : whichLobby.nicknamesAndDecks.values()) {
@@ -137,6 +178,10 @@ public class SocketClientConnection implements Runnable {
         }
     }
 
+    /**
+     * @param createLobbyMessage message containing the game options
+     * @return true if the game options are valid, otherwise false
+     */
     private boolean checkValidGameOptions(CreateLobbyMessage createLobbyMessage) {
         return createLobbyMessage.getPlayerCount() > 1 &&
                 createLobbyMessage.getPlayerCount() <= 4 &&
@@ -144,10 +189,17 @@ public class SocketClientConnection implements Runnable {
                 createLobbyMessage.getMotherNatureIslandIndex() < 12;
     }
 
+    /**
+     * @return message containing all the lobbies names
+     */
     public ServerLobbyMessage generateLobbyNamesList() {
         return new LobbyNamesListMessage(server.lobbyMap);
     }
 
+    /**
+     * @param message message containing the information to create a lobby
+     * @return lobby creation ack message
+     */
     public ServerLobbyMessage createNewLobby(CreateLobbyMessage message) {
         boolean areOptionsValid = false;
         synchronized (server.lobbyMap) {
@@ -165,6 +217,10 @@ public class SocketClientConnection implements Runnable {
         }
     }
 
+    /**
+     * @param lobbyName target lobby name
+     * @return lobby name ack message
+     */
     public ServerLobbyMessage joinExistingLobby(String lobbyName) {
         int currentPlayers, maxPlayers;
         for (String s : server.lobbyMap.keySet()) {
@@ -181,6 +237,9 @@ public class SocketClientConnection implements Runnable {
         return new LobbyNameAckMessage(false);
     }
 
+    /**
+     * Communicates with the client who wants to create or join a lobby
+     */
     private LobbySetupMessage createJoinLobby() throws IOException, ClassNotFoundException, BadLobbyMessageException {
         Object objectFromNetwork;
         do {
@@ -196,6 +255,12 @@ public class SocketClientConnection implements Runnable {
         return (LobbySetupMessage) objectFromNetwork;
     }
 
+    /**
+     * Assigns the player username and deck name to the target lobby
+     *
+     * @param thisLobby target lobby
+     * @return nickname of the player
+     */
     private String assignUsernameAndDeck(Lobby thisLobby)
             throws BadLobbyMessageException, IOException, ClassNotFoundException {
         String username;

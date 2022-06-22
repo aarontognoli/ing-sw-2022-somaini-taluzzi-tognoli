@@ -15,6 +15,9 @@ public class MotherNature implements Serializable {
         return position;
     }
 
+    /**
+     * @param destination island where we want to move mother nature
+     */
     public void move(Island destination) {
         this.position = destination;
     }

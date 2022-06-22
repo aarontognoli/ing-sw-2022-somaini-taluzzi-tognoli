@@ -1,7 +1,7 @@
 package it.polimi.ingsw.mvc.model;
 
 import it.polimi.ingsw.bag.Bag;
-import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
 import it.polimi.ingsw.cards.characters.CharacterFactory;
 import it.polimi.ingsw.cards.characters.HerbalistCharacter.HerbalistCharacter;
@@ -39,6 +39,13 @@ public class PrivateModel implements Serializable {
         this.fatherModel = fatherModel;
     }
 
+    /**
+     * Compares the assistant cards of two players to determine which player
+     * should play first than the other
+     *
+     * @param a first player
+     * @param b second player
+     */
     public int compareAssistantCardOrder(Player a, Player b) {
         int aTurnOrder = a.getCurrentAssistantCard().getTurnOrderValue();
         int bTurnOrder = b.getCurrentAssistantCard().getTurnOrderValue();
@@ -51,6 +58,12 @@ public class PrivateModel implements Serializable {
         return aTurnOrder < bTurnOrder ? -1 : +1;
     }
 
+    /**
+     * Prepares the match
+     *
+     * @param motherNatureIslandIndex index of the island where we want to put mother
+     *                                nature at the beginning of the match
+     */
     void prepareMatch(int motherNatureIslandIndex) throws BagEmptyException {
         fatherModel.bag = new Bag(2);
 
@@ -98,18 +111,36 @@ public class PrivateModel implements Serializable {
         fillClouds();
     }
 
+    /**
+     * @param c color of the professor for which we want to determine the owner
+     * @return board where the professor is positioned
+     */
     Board getProfessorOwner(Color c) {
         return fatherModel.professors.get(c.ordinal()).getPosition();
     }
 
+    /**
+     * @param student student we want to move
+     * @param island island where we want to move the student
+     */
     void addStudentToIsland(Student student, Island island) {
         island.getStudents().add(student);
     }
 
+    /**
+     * @param student student we want to move
+     * @param player board which contains the dining room where we want to move
+     *               the student
+     */
     void addStudentToDiningRoom(Student student, Board player) throws DiningRoomFullException {
         player.addStudentsToDiningRoom(student);
     }
 
+    /**
+     * Fills the clouds with new students from the bag
+     *
+     * @throws BagEmptyException bag is empty
+     */
     void fillClouds() throws BagEmptyException {
         int studentsToDraw;
         List<Student> studentsToAdd;
@@ -126,10 +157,19 @@ public class PrivateModel implements Serializable {
         }
     }
 
+    /**
+     * @return student drawn from the bag
+     * @throws BagEmptyException bag is empty
+     */
     Student drawStudentFromBag() throws BagEmptyException {
         return fatherModel.bag.draw();
     }
 
+    /**
+     * @return Herbalist character card from the current match cards
+     * @throws NotFoundException there is no Herbalist character card in the
+     *                           current match cards
+     */
     HerbalistCharacter findHerbalist() throws NotFoundException {
         for (CharacterCard card : fatherModel.currentGameCards) {
             if (card.getClass() == HerbalistCharacter.class) {
@@ -140,6 +180,10 @@ public class PrivateModel implements Serializable {
         throw new NotFoundException("Herbalist not found in character cards");
     }
 
+    /**
+     * @param island island where we want to calculate the influence
+     * @return board of the player who is determined to be the owner of the island
+     */
     Board getInfluence(Island island) {
         if (island.hasNoEntryTile()) {
             island.removeNoEntryTile();
@@ -155,6 +199,12 @@ public class PrivateModel implements Serializable {
         }
     }
 
+    /**
+     * Removes all towers from an island and returns them to their corresponding
+     * board
+     *
+     * @param island where we want to remove all towers present on it
+     */
     void removeAllTowers(Island island) {
 
         List<Tower> towers;
@@ -232,7 +282,12 @@ public class PrivateModel implements Serializable {
                 .collect(Collectors.toList());
     }
 
-    // the method will be called in the right moments
+    /**
+     * Checks if there is a player who won the game
+     * This method will be called in specific moments of the match
+     *
+     * @return player who won the game (can be null)
+     */
     Player checkVictoryConditions() {
 
         Player winner = checkFinishedTowers();
@@ -262,6 +317,10 @@ public class PrivateModel implements Serializable {
     }
 
     // support methods for more readable code
+
+    /**
+     * @return player who built the most towers on islands, null if there is a tie
+     */
     private Player checkTowersForVictory() {
         int minTowersCount = Integer.MAX_VALUE;
         int playerWinningIndex = -1;
@@ -288,6 +347,9 @@ public class PrivateModel implements Serializable {
         return fatherModel.players.get(playerWinningIndex);
     }
 
+    /**
+     * @return player who controls the most professors
+     */
     private Player checkProfessorsForVictory() {
         // 5 professors, tie only for 3 players. The player whose index is lesser wins,
         // in case of tie.
@@ -331,6 +393,10 @@ public class PrivateModel implements Serializable {
         return winner;
     }
 
+    /**
+     * @param board board for which we want to determine the player
+     * @return player who owns the board
+     */
     Player getPlayerFromBoard(Board board) throws BoardNotInGameException {
         for (Player p : fatherModel.players) {
             if (p.getBoard().equals(board)) {
@@ -340,6 +406,13 @@ public class PrivateModel implements Serializable {
         throw new BoardNotInGameException("Board not existing");
     }
 
+    /**
+     * @param c color of the student we want to remove from the entrance
+     * @param playerBoard board which contains the entrance from which we want to
+     *                    remove a student
+     * @return student removed from the entrance
+     * @throws NotFoundException student of that color in that entrance not found
+     */
     Student removeStudentFromEntrance(Color c, Board playerBoard) throws NotFoundException {
         List<Student> entrance = playerBoard.getEntrance();
         for (int i = 0; i < entrance.size(); i++) {
@@ -352,11 +425,16 @@ public class PrivateModel implements Serializable {
         throw new NotFoundException("Student not found");
     }
 
+    /**
+     * Reward a new coin to the current player
+     */
     void rewardCoin() {
-        // Reward a new coin to the current player
         fatherModel.currentPlayer.getBoard().rewardCoin();
     }
 
+    /**
+     * @param islandIndex index of the island where we want to place mother nature
+     */
     void placeMotherNature(int islandIndex) {
         if (fatherModel.motherNature != null) {
             throw new RuntimeException("Mother Nature already chosen");
@@ -364,6 +442,10 @@ public class PrivateModel implements Serializable {
         fatherModel.motherNature = new MotherNature(fatherModel.islands.get(islandIndex));
     }
 
+    /**
+     * @param professColor color of the professor for which we want to update
+     *                     the position
+     */
     void updateProfessorPosition(Color professColor) {
         int maxStudentOfColor = -1;
         Board maxBoard = null;
@@ -404,6 +486,9 @@ public class PrivateModel implements Serializable {
         fatherModel.professors.get(professColor.ordinal()).move(maxBoard);
     }
 
+    /**
+     * Sets the next current player
+     */
     void incrementCurrentPlayer() {
         int currentPlayerIndex = fatherModel.players.indexOf(fatherModel.currentPlayer);
 
@@ -411,6 +496,9 @@ public class PrivateModel implements Serializable {
         fatherModel.currentPlayer = fatherModel.players.get(nextPlayerIndex);
     }
 
+    /**
+     * Sets the next action the current player will have to perform
+     */
     void incrementCurrentPlayerAction() {
         fatherModel.currentPlayer = fatherModel.actionPlayerOrder.pop();
     }

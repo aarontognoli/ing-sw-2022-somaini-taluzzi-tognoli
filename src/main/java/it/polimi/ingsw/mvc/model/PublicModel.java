@@ -1,6 +1,6 @@
 package it.polimi.ingsw.mvc.model;
 
-import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
@@ -41,6 +41,13 @@ public class PublicModel implements PlayerActions, Serializable {
         return new ArrayList<>(fatherModel.professors);
     }
 
+    /**
+     * @throws AssistantCardAlreadyPlayedException current player has already played
+     *                                             an assistant card, or there is more
+     *                                             than one card in the deck and the card
+     *                                             was already played by someone else
+     * @throws NotFoundException assistantCard not found in deck
+     */
     public void playAssistant(AssistantCard assistantCard) throws NotFoundException, AssistantCardAlreadyPlayedException {
         if (fatherModel.currentPlayer.getCurrentAssistantCard() != null) {
             throw new AssistantCardAlreadyPlayedException();
@@ -58,6 +65,10 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.currentPlayer.setCurrentAssistantCard(assistantCard);
     }
 
+    /**
+     * @throws EntranceFullException entrance is full
+     * @throws CloudEmptyException cloud is empty
+     */
     public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException, CloudEmptyException {
 
         List<Student> studentsFromCloud = fatherModel.clouds.get(cloudIndex).getStudentsAndRemove();
@@ -71,10 +82,12 @@ public class PublicModel implements PlayerActions, Serializable {
         }
     }
 
-    //player Turn
+    /**
+     * Ends the turn of a player and assigns the next player, only if necessary
+     */
     public void endTurn() {
         switch (fatherModel.gamePhase) {
-            case PIANIFICATION -> {
+            case PLANNING -> {
                 boolean everyonePlayedAnAssistantCard = true;
                 for (Player p : fatherModel.players) {
                     if (p.getCurrentAssistantCard() == null) {
@@ -105,8 +118,10 @@ public class PublicModel implements PlayerActions, Serializable {
         }
     }
 
-    //all players played their turn
-
+    /**
+     * If all players played their turn, checks if there is a winner and
+     * ends the round; if there is no winner, starts another round
+     */
     void endRound() {
 
         Player winner = fatherModel.privateModel.checkVictoryConditions();
@@ -120,16 +135,24 @@ public class PublicModel implements PlayerActions, Serializable {
 
         try {
             fatherModel.privateModel.fillClouds();
-        } catch (BagEmptyException e) {
+        } catch (BagEmptyException ignored) {
         }
-        fatherModel.gamePhase = GamePhase.PIANIFICATION;
+        fatherModel.gamePhase = GamePhase.PLANNING;
         fatherModel.currentPlayer = fatherModel.firstPlayer;
     }
 
+    /**
+     * @return island where mother nature is placed
+     */
     public Island getMotherNatureIsland() {
         return fatherModel.motherNature.getPosition();
     }
 
+    /**
+     * @throws TooMuchStepsException the value of steps is greater than the maximum
+     *                               mother nature movement value of the current
+     *                               assistant card of the current player
+     */
     public void moveMotherNature(int steps) throws TooMuchStepsException {
         int maxSteps = getCurrentPlayer().getMaxMotherNatureMovementValue();
 
@@ -146,9 +169,6 @@ public class PublicModel implements PlayerActions, Serializable {
     }
 
     /**
-     * @param studentColor color of the student we need to mode from entrance to
-     *                     island
-     * @param islandIndex  index of the target island
      * @throws NotFoundException student of this color not found in the entrance
      */
     public void moveStudentToIsland(Color studentColor, int islandIndex) throws NotFoundException {
@@ -158,8 +178,6 @@ public class PublicModel implements PlayerActions, Serializable {
     }
 
     /**
-     * @param studentColor color of the student we need to mode from entrance to
-     *                     dining room
      * @throws DiningRoomFullException dining room of the corresponding color is
      *                                 full
      * @throws NotFoundException       student of this color not found in the
@@ -186,6 +204,10 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.privateModel.updateProfessorPosition(studentColor);
     }
 
+    /**
+     * @throws InsufficientCoinException the player has not enough coins to play the card
+     * @throws CCArgumentException there is something not right in the argument of the card
+     */
     public void playCharacterCard(int cardIndex, Object effectArgument)
             throws InsufficientCoinException, CCArgumentException {
         // (Expert only) Current player plays a character card
@@ -215,7 +237,9 @@ public class PublicModel implements PlayerActions, Serializable {
         }
     }
 
-    // Update island owner based on influence
+    /**
+     * @param island island where we want to update the owner based on influence
+     */
     public void updateIslandOwner(Island island) {
         Board playerOwnerBoard = fatherModel.privateModel.getInfluence(island);
 
@@ -287,26 +311,44 @@ public class PublicModel implements PlayerActions, Serializable {
         }
     }
 
+    /**
+     * @return current player
+     */
     public Player getCurrentPlayer() {
         return fatherModel.currentPlayer;
     }
 
+    /**
+     * @return list of all players
+     */
     public List<Player> getPlayers() {
         return fatherModel.players;
     }
 
+    /**
+     * @return player who won the game, can be null
+     */
     public Player getWinner() {
         return fatherModel.winner;
     }
 
+    /**
+     * @return current game phase (planning or action)
+     */
     public GamePhase getGamePhase() {
         return fatherModel.gamePhase;
     }
 
+    /**
+     * @return number of players
+     */
     public int getTotalPlayerCount() {
         return fatherModel.totalPlayerCount;
     }
 
+    /**
+     * Resets the parameters needed to check if we can end a player turn
+     */
     public void resetChecks() {
         fatherModel.characterCardPlayed = false;
         fatherModel.studentsPlaced = 0;
@@ -314,10 +356,17 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.lastPlayedCharacterCardIndex = -1;
     }
 
+    /**
+     * @return game mode (easy or expert)
+     */
     public GameMode getGameMode() {
         return fatherModel.gameMode;
     }
 
+    /**
+     * @return true if a character card is being played in the current turn,
+     *         otherwise false
+     */
     public boolean isCharacterCardPlayed() {
         return fatherModel.characterCardPlayed;
     }
@@ -326,22 +375,39 @@ public class PublicModel implements PlayerActions, Serializable {
         return fatherModel.lastPlayedCharacterCardIndex;
     }
 
+    /**
+     * @return true if mother nature has been moved in the current turn,
+     *         otherwise false
+     */
     public boolean isMotherNatureMoved() {
         return fatherModel.motherNatureMoved;
     }
 
+    /**
+     * @return number of students moved in the current turn
+     */
     public int getStudentsPlaced() {
         return fatherModel.studentsPlaced;
     }
 
+    /**
+     * @return number of islands
+     */
     public int getIslandCount() {
         return fatherModel.islands.size();
     }
 
+    /**
+     * @return number of clouds
+     */
     public int getCloudsCount() {
         return fatherModel.clouds.size();
     }
 
+    /**
+     * @param characterCardPlayed boolean value that indicates if a character card
+     *                            has been played
+     */
     public void setCharacterCardPlayed(boolean characterCardPlayed) {
         fatherModel.characterCardPlayed = characterCardPlayed;
     }
@@ -350,18 +416,32 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.lastPlayedCharacterCardIndex = index;
     }
 
+    /**
+     * @return list of character cards of the match
+     */
     public List<CharacterCard> getCurrentGameCards() {
         return fatherModel.currentGameCards;
     }
 
+    /**
+     * @param motherNatureMoved boolean value that indicates if mother nature
+     *                          has been moved
+     */
     public void setMotherNatureMoved(boolean motherNatureMoved) {
         fatherModel.motherNatureMoved = motherNatureMoved;
     }
 
+    /**
+     * @param studentsPlaced number of students placed in the current turn
+     */
     public void setStudentsPlaced(int studentsPlaced) {
         fatherModel.studentsPlaced = studentsPlaced;
     }
 
+    /**
+     * @return true if there are enough students placed to end the turn,
+     *         otherwise false
+     */
     public boolean enoughStudentsPlaced() {
         int maxStudentsToMove = 3;
         // if entrance is empty the player must keep playing
@@ -374,6 +454,9 @@ public class PublicModel implements PlayerActions, Serializable {
         return getStudentsPlaced() >= maxStudentsToMove;
     }
 
+    /**
+     * @return list of islands
+     */
     public List<Island> getIslands() {
         return fatherModel.islands;
     }

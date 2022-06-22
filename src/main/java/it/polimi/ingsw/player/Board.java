@@ -38,6 +38,10 @@ public class Board implements Serializable {
             towers.add(new Tower(towerColor));
     }
 
+    /**
+     * @return tower removed from the board
+     * @throws NoTowerException there are no towers on the board
+     */
     public Tower removeTower() throws NoTowerException {
         if (towers.size() > 0) {
             return towers.remove(towers.size() - 1);
@@ -45,6 +49,10 @@ public class Board implements Serializable {
             throw new NoTowerException("No towers, end the game");
     }
 
+    /**
+     * @param newStudents list of students to add to the entrance
+     * @throws EntranceFullException entrance is full
+     */
     public void addStudentsToEntrance(List<Student> newStudents) throws EntranceFullException {
         if (entrance.size() + newStudents.size() > 9) {
             throw new EntranceFullException();
@@ -52,6 +60,10 @@ public class Board implements Serializable {
         entrance.addAll(newStudents);
     }
 
+    /**
+     * @param newStudent student to add to the dining room
+     * @throws DiningRoomFullException dining room is full
+     */
     public void addStudentsToDiningRoom(Student newStudent) throws DiningRoomFullException {
         List<Student> targetDiningRoom = diningRoom.get(newStudent.getColor().ordinal());
 
@@ -78,10 +90,18 @@ public class Board implements Serializable {
         return coinCount;
     }
 
+    /**
+     * Increments the coin number
+     */
     public void rewardCoin() {
         coinCount++;
     }
 
+    /**
+     * @param amount number of coins we want to use
+     * @throws InsufficientCoinException the amount of coins we want to use
+     *                                   is greater than coins we currently have
+     */
     public void useCoins(int amount) throws InsufficientCoinException {
         if (amount > coinCount) {
             throw new InsufficientCoinException(coinCount, amount);

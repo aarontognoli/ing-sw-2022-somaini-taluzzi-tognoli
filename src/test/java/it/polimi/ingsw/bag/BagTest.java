@@ -1,6 +1,7 @@
 package it.polimi.ingsw.bag;
 
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.pawn.Student;
 import org.junit.jupiter.api.Test;
 

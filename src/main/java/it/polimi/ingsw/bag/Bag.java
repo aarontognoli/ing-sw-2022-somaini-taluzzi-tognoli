@@ -1,6 +1,7 @@
 package it.polimi.ingsw.bag;
 
 import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.pawn.Student;
 
 import java.io.Serializable;
@@ -32,6 +33,10 @@ public class Bag implements Serializable {
         Collections.shuffle(students);
     }
 
+    /**
+     * @return student drawn from the bag
+     * @throws BagEmptyException bag is empty
+     */
     public Student draw() throws BagEmptyException {
         if (isEmpty())
             throw new BagEmptyException();
@@ -53,6 +58,9 @@ public class Bag implements Serializable {
         Collections.shuffle(students);
     }
 
+    /**
+     * @return true if the bag is empty, otherwise false
+     */
     public boolean isEmpty() {
         return students.size() == 0;
     }
