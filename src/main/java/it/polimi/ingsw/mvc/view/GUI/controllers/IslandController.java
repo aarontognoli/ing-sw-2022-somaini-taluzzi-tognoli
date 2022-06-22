@@ -62,7 +62,7 @@ public class IslandController extends Pane implements Initializable {
 
     public IslandController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-                "/island.fxml"));
+                "/Island.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         try {

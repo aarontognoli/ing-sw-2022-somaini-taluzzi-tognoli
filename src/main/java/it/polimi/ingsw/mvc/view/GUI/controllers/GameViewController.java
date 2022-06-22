@@ -26,8 +26,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
 
@@ -88,13 +86,13 @@ public class GameViewController implements Initializable {
 
         interactableParts.add(AssistantCardsOuter);
         interactableParts.add(ActionOuter);
-        try (Scanner scanner = new Scanner(new File("./src/main/resources/utils/CharacterCardsDescriptions.csv"));) {
+        try (Scanner scanner = new Scanner(Objects.requireNonNull(this.getClass().getResourceAsStream("/utils/CharacterCardsDescriptions.csv")))) {
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
                 characterCardsNameDescription.put(line.split(";")[0], line.split(";")[1]);
 
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         CharacterCardInfo.getChildren().add(cardInfoController);
