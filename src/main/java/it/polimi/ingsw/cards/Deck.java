@@ -20,6 +20,10 @@ public class Deck implements Serializable {
     }
 
 
+    /**
+     * @param card assistant card we want to play
+     * @throws NotFoundException assistant card not found in deck
+     */
     public void playAssistantCard(AssistantCard card) throws NotFoundException {
         if (cards.contains(card)) {
             cards.remove(card);
@@ -29,10 +33,16 @@ public class Deck implements Serializable {
         throw new NotFoundException("Card not in Deck");
     }
 
+    /**
+     * @return list of assistant cards in deck
+     */
     public ArrayList<AssistantCard> getHand() {
         return new ArrayList<>(cards);
     }
 
+    /**
+     * @return true if there are no assistant cards in deck, otherwise false
+     */
     public boolean isEmpty() {
         return cards.isEmpty();
     }

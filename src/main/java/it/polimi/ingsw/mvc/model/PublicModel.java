@@ -29,7 +29,6 @@ public class PublicModel implements PlayerActions, Serializable {
     }
 
     /**
-     * @param assistantCard the assistant card we want to play
      * @throws AssistantCardAlreadyPlayedException current player has already played
      *                                             an assistant card, or there is more
      *                                             than one card in the deck and the card
@@ -54,7 +53,6 @@ public class PublicModel implements PlayerActions, Serializable {
     }
 
     /**
-     * @param cloudIndex  index of the target cloud
      * @throws EntranceFullException entrance is full
      * @throws CloudEmptyException cloud is empty
      */
@@ -138,7 +136,6 @@ public class PublicModel implements PlayerActions, Serializable {
     }
 
     /**
-     * @param steps number of steps we want mother nature to do
      * @throws TooMuchStepsException the value of steps is greater than the maximum
      *                               mother nature movement value of the current
      *                               assistant card of the current player
@@ -159,9 +156,6 @@ public class PublicModel implements PlayerActions, Serializable {
     }
 
     /**
-     * @param studentColor color of the student we need to move from entrance to
-     *                     island
-     * @param islandIndex  index of the target island
      * @throws NotFoundException student of this color not found in the entrance
      */
     public void moveStudentToIsland(Color studentColor, int islandIndex) throws NotFoundException {
@@ -171,8 +165,6 @@ public class PublicModel implements PlayerActions, Serializable {
     }
 
     /**
-     * @param studentColor color of the student we need to mode from entrance to
-     *                     dining room
      * @throws DiningRoomFullException dining room of the corresponding color is
      *                                 full
      * @throws NotFoundException       student of this color not found in the
@@ -199,6 +191,10 @@ public class PublicModel implements PlayerActions, Serializable {
         fatherModel.privateModel.updateProfessorPosition(studentColor);
     }
 
+    /**
+     * @throws InsufficientCoinException the player has not enough coins to play the card
+     * @throws CCArgumentException there is something not right in the argument of the card
+     */
     public void playCharacterCard(int cardIndex, Object effectArgument)
             throws InsufficientCoinException, CCArgumentException {
         // (Expert only) Current player plays a character card

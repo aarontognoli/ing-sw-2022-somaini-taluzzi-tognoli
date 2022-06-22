@@ -14,17 +14,27 @@ public class Cloud implements Serializable {
         students = new ArrayList<>(studentsCount);
     }
 
+    /**
+     * @return list of students on the cloud
+     * It also removes them from the cloud
+     */
     public List<Student> getStudentsAndRemove() {
-        // remove the students from the cloud and return them
         List<Student> returnValue = students;
         students = null;
         return returnValue;
     }
 
+    /**
+     * @return list of students on the cloud
+     * It does not remove them from the cloud
+     */
     public List<Student> getStudentsWithoutEmptying() {
         return students;
     }
 
+    /**
+     * @param newStudents list of students to put on (empty) cloud
+     */
     public void putStudents(List<Student> newStudents) {
         students = newStudents;
     }
