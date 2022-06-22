@@ -1,25 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="665.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/18"
-            fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController">
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="800.0" maxWidth="1500.0" prefHeight="800.0" prefWidth="1900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.mvc.view.GUI.controllers.GameViewController">
    <children>
-      <ImageView fx:id="testPicPane" fitHeight="673.0" fitWidth="746.0" layoutX="-2.0" layoutY="-5.0"
-                 pickOnBounds="true" preserveRatio="true"/>
-      <Pane fx:id="gamePane" disable="true" maxWidth="1.7976931348623157E308" prefHeight="665.0" prefWidth="745.0"
-            visible="false">
+      <ImageView fitHeight="800.0" fitWidth="1524.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@imgs/Misc/background.jpg" />
+         </image>
+      </ImageView>
+      <AnchorPane fx:id="gamePane" layoutX="10.0" layoutY="10.0" prefHeight="665.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Circle fill="DODGERBLUE" layoutX="373.0" layoutY="333.0" radius="100.0" stroke="BLACK"
-                    strokeType="INSIDE"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="141.0" layoutX="125.0" layoutY="14.0"
-                       stroke="BLACK" strokeType="INSIDE" width="495.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="141.0" layoutX="125.0" layoutY="494.0"
-                       stroke="BLACK" strokeType="INSIDE" width="495.0"/>
+            <Pane fx:id="islands" layoutX="658.0" layoutY="14.0" prefHeight="776.0" prefWidth="827.0" />
+            <Pane fx:id="boards" prefHeight="800.0" prefWidth="669.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Pane fx:id="Clouds" layoutX="1071.0" layoutY="352.0" prefHeight="1.0" prefWidth="1.0" style="-fx-background-color: yellow;" />
+            <Pane fx:id="CharacterCards" disable="true" layoutX="650.0" layoutY="100.0" prefHeight="490.0" prefWidth="98.0" visible="false" />
+            <Pane fx:id="AssistantCardsOuter" disable="true" layoutX="200.0" layoutY="576.0" onMouseEntered="#makeAssistantsNormal" onMouseExited="#makeAssistantsSmall" prefHeight="200.0" prefWidth="1260.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
+               <children>
+                  <Pane fx:id="AssistantCards" prefHeight="200.0" prefWidth="1260.0">
+                     <children>
+                        <ImageView fx:id="CARD_1" accessibleText="CARD_1" fitHeight="150.0" fitWidth="200.0" layoutX="20.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_1.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_2" accessibleText="CARD_2" fitHeight="150.0" fitWidth="200.0" layoutX="140.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_2.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_3" accessibleText="CARD_3" disable="true" fitHeight="150.0" fitWidth="200.0" layoutX="262.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_3.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_4" accessibleText="CARD_4" fitHeight="150.0" fitWidth="200.0" layoutX="384.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_4.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_5" accessibleText="CARD_5" fitHeight="150.0" fitWidth="200.0" layoutX="506.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_5.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_6" accessibleText="CARD_6" fitHeight="150.0" fitWidth="200.0" layoutX="628.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_6.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_7" accessibleText="CARD_7" fitHeight="150.0" fitWidth="200.0" layoutX="750.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_7.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_8" accessibleText="CARD_8" fitHeight="150.0" fitWidth="200.0" layoutX="872.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_8.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_9" accessibleText="CARD_9" fitHeight="150.0" fitWidth="200.0" layoutX="994.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_9.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="CARD_10" accessibleText="CARD_10" fitHeight="150.0" fitWidth="200.0" layoutX="1116.0" layoutY="25.0" onMouseClicked="#playAssistant" onMouseEntered="#shineBack" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/AssistantCards/CARD_10.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#1e6c93" height="111.0" layoutX="971.0" layoutY="179.0" stroke="#30a9e5" strokeType="OUTSIDE" strokeWidth="3.0" width="301.0" />
+            <Label fx:id="Prompt" alignment="TOP_LEFT" layoutX="1009.0" layoutY="194.0" prefHeight="64.0" prefWidth="219.0" text="Wow ma che bella nuvoletta, perchè non sposti quei bellissimi studenti? bla bla bla bla" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Pane fx:id="CharacterCardInfo" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Pane fx:id="ActionOuter" disable="true" layoutX="210.0" layoutY="586.0" prefHeight="200.0" prefWidth="711.0" scaleX="0.7" scaleY="0.7" translateX="370.0" translateY="30.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="693.0">
+               <children>
+                  <Pane fx:id="ActionInner" prefHeight="200.0" prefWidth="710.0">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="558.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/diningRoomSymbol.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="266.0" fitWidth="554.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imgs/Misc/entrance.png" />
+                           </image>
+                        </ImageView>
+                        <Pane fx:id="ActionStudents" prefHeight="200.0" prefWidth="553.0">
+                           <children>
+                              <ImageView fitHeight="103.0" fitWidth="76.0" layoutX="58.0" layoutY="27.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="152.0" layoutY="106.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="152.0" layoutY="27.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="240.0" layoutY="106.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="240.0" layoutY="27.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="336.0" layoutY="106.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="336.0" layoutY="27.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="429.0" layoutY="106.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="88.0" fitWidth="76.0" layoutX="429.0" layoutY="27.0" onDragDetected="#startDrag" onMouseEntered="#shineBackEntranceStudent" onMouseExited="#notShineBack" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <Label alignment="CENTER" layoutX="555.0" layoutY="23.0" onDragDropped="#placeStudentInDiningRoom" onDragEntered="#dragEnteredLabel" onDragExited="#dragExited" onDragOver="#acceptDrag" prefHeight="150.0" prefWidth="157.0" text="Insert Into Dining Room" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="23.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
          </children>
-      </Pane>
+      </AnchorPane>
+      <ImageView fx:id="testPicPane" disable="true" fitHeight="800.0" fitWidth="1524.0" layoutX="-2.0" layoutY="-5.0" pickOnBounds="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

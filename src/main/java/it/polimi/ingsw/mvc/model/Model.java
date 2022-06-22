@@ -65,6 +65,7 @@ public class Model implements Serializable {
     boolean characterCardPlayed;
     boolean motherNatureMoved;
     int studentsPlaced;
+    int lastPlayedCharacterCardIndex;
 
     // Initialize game with starting rules
 

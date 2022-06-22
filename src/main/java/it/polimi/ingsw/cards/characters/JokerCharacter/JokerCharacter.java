@@ -9,6 +9,8 @@ import it.polimi.ingsw.messages.ClientMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.CLI.CLIView;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.CharacterArgumentHandler.CLIJokerCharacterArgumentHandler;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoController;
+import it.polimi.ingsw.mvc.view.GUI.controllers.CardsInfo.CardInfoJoker;
 import it.polimi.ingsw.pawn.Student;
 
 import java.util.ArrayList;
@@ -32,6 +34,11 @@ public class JokerCharacter extends CharacterCardWithStudents {
 
     public JokerCharacter(Model model) {
         super(model, 1, INITIAL_STUDENT_SIZE);
+    }
+
+    @Override
+    public CardInfoController getCharacterCardInfoController() {
+        return new CardInfoJoker();
     }
 
     /**

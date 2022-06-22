@@ -127,6 +127,8 @@ public class ServerController extends Controller implements PlayerActions {
         }
         model.publicModel.playCharacterCard(cardIndex, effectArgument);
         model.publicModel.setCharacterCardPlayed(true);
+        model.publicModel.setCharacterCardPlayedIndex(cardIndex);
+
     }
 
 }

@@ -453,9 +453,10 @@ public class PrivateModel implements Serializable {
             maxStudentOfColor = fatherModel.professors.get(professColor.ordinal()).getPosition().getDiningRoom().get(professColor.ordinal()).size();
             maxBoard = fatherModel.professors.get(professColor.ordinal()).getPosition();
         }
+        List<Player> playersWithoutCurrent = new ArrayList<>(fatherModel.players);
+        playersWithoutCurrent.remove(fatherModel.currentPlayer);
 
-
-        for (Player player : fatherModel.players) {
+        for (Player player : playersWithoutCurrent) {
             Board currentBoard = player.getBoard();
 
             int studentsCountThisColor = currentBoard.getDiningRoom().get(professColor.ordinal()).size();
@@ -466,6 +467,16 @@ public class PrivateModel implements Serializable {
                 maxBoard = currentBoard;
             }
         }
+
+        Board currentBoard = fatherModel.currentPlayer.getBoard();
+
+        int studentsCountThisColor = currentBoard.getDiningRoom().get(professColor.ordinal()).size();
+
+        if (fatherModel.professorMoverRule.isMaxStudentsCount(studentsCountThisColor, maxStudentOfColor,
+                fatherModel.currentPlayer.getNickname())) {
+            maxBoard = currentBoard;
+        }
+
 
         if (maxBoard == null) {
             // This should never happen (?)

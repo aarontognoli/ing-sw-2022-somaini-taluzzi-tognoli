@@ -2,8 +2,10 @@ package it.polimi.ingsw.mvc.view.GUI;
 
 import it.polimi.ingsw.enums.DeckName;
 import it.polimi.ingsw.enums.GameMode;
+import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.messages.ServerMessage;
+import it.polimi.ingsw.messages.game.ClientGameMessage;
 import it.polimi.ingsw.messages.lobby.client.SetDeckMessage;
 import it.polimi.ingsw.messages.lobby.client.SetNicknameMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
@@ -12,6 +14,10 @@ import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMes
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.ClientView;
 import it.polimi.ingsw.notifier.Notifier;
+import it.polimi.ingsw.pawn.Student;
+import it.polimi.ingsw.player.Player;
+
+import java.util.List;
 
 public class GUIView extends ClientView {
     //lobby window components
@@ -25,12 +31,36 @@ public class GUIView extends ClientView {
 
     @Override
     public void show() {
-        showModel();
+        if (model != null) {
+            if (model.publicModel.getWinner() != null) {
+                String winner = model.publicModel.getWinner().getNickname();
+                if (winner.equals(myUsername)) {
+                    LobbyFrame.lobbyFrame.win();
+                } else {
+                    LobbyFrame.lobbyFrame.showWinner(winner);
+                }
+            } else {
+                showModel();
+            }
+        }
     }
 
     @Override
     protected void showModel() {
         LobbyFrame.lobbyFrame.updateModel(model);
+
+
+        String currentPlayerNickname = model.publicModel.getCurrentPlayer().getNickname();
+        if (!currentPlayerNickname.equals(this.myUsername)) {
+            LobbyFrame.lobbyFrame.waitForTurn(currentPlayerNickname);
+            return;
+        }
+
+        if (model.publicModel.getGamePhase().equals(GamePhase.PIANIFICATION)) {
+            LobbyFrame.lobbyFrame.planningPhase(model.publicModel.getCurrentPlayer().getDeck());
+        } else {
+            LobbyFrame.lobbyFrame.actionPhase(model.publicModel.getCurrentPlayer().getBoard(), model.publicModel.getGameMode(), model.publicModel.isCharacterCardPlayed(), model.publicModel.enoughStudentsPlaced(), model.publicModel.isMotherNatureMoved());
+        }
     }
 
     public void showError(ErrorMessage em) {
@@ -115,6 +145,37 @@ public class GUIView extends ClientView {
     public void loadCreateFrame() {
         LobbyFrame.lobbyFrame.loadCreateFrame();
     }
+
+    public void sendMessage(ClientGameMessage message) {
+        try {
+            notifySubscribers(message);
+        } catch (Exception e) {
+            showError(new ErrorMessage(e.getMessage()));
+
+        }
+    }
+
+    public void closeApp(String s) {
+        LobbyFrame.lobbyFrame.closedFromServer(s);
+    }
+
+    public int getMotherNatureMaxMovement() {
+        return model.publicModel.getCurrentPlayer().getMaxMotherNatureMovementValue();
+    }
+
+    public int getMotherNatureIslandIndex() {
+        return model.publicModel.getIslands().indexOf(model.publicModel.getMotherNatureIsland());
+    }
+
+    public List<Student> getThisPlayerEntrance() {
+        for (Player p : model.publicModel.getPlayers()) {
+            if (p.getNickname().equals(getMyUsername())) {
+                return p.getBoard().getEntrance();
+            }
+        }
+        throw new RuntimeException("Impossible state of game");
+    }
+
 }
 
 

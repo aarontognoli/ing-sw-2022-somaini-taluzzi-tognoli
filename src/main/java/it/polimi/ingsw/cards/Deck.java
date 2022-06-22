@@ -40,6 +40,10 @@ public class Deck implements Serializable {
         return new ArrayList<>(cards);
     }
 
+    public DeckName getDeckName() {
+        return deckName;
+    }
+
     /**
      * @return true if there are no assistant cards in deck, otherwise false
      */
