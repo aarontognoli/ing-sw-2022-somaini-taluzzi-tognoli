@@ -2,11 +2,9 @@ package it.polimi.ingsw.mvc.view.GUI;
 
 import it.polimi.ingsw.ServerApp;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
-import it.polimi.ingsw.cards.characters.BardCharacter.BardCharacter;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
-import it.polimi.ingsw.exceptions.AssistantCardAlreadyPlayedException;
-import it.polimi.ingsw.exceptions.InsufficientCoinException;
-import it.polimi.ingsw.exceptions.NotFoundException;
+import it.polimi.ingsw.enums.Color;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.mvc.controller.ClientController;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.notifier.Notifier;
@@ -16,13 +14,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static it.polimi.ingsw.mvc.model.PublicModelTest.*;
+import static it.polimi.ingsw.mvc.model.PublicModelTest.fourPlayersTestAllRed;
+import static it.polimi.ingsw.mvc.model.PublicModelTest.goToCloudGUIPhase;
 
 public class TestModel {
-    public static void main(String[] args) throws InterruptedException, IOException, AssistantCardAlreadyPlayedException, NotFoundException, InsufficientCoinException, CCArgumentException {
+    public static void main(String[] args) throws InterruptedException, IOException, AssistantCardAlreadyPlayedException, NotFoundException, InsufficientCoinException, CCArgumentException, DiningRoomFullException, TooMuchStepsException {
         LobbyFrame test = new LobbyFrame();
-        Model model = threePlayersExpertMode();
-        setFirstCharCard(model, new BardCharacter(model));
+        Model model = fourPlayersTestAllRed();
+        //setFirstCharCard(model, new WineCharacter(model));
         new Thread(() -> ServerApp.main(new String[]{})).start();
 
         Socket socket = null;
@@ -54,24 +53,21 @@ public class TestModel {
         LobbyFrame.lobbyFrame.loadCreateFrame();
         LobbyFrame.lobbyFrame.loadUsernameAndDeckFrame();
         LobbyFrame.lobbyFrame.showGameView();
-        update(model);
-        Thread.sleep(1000);
         model.publicModel.playAssistant(AssistantCard.CARD_1);
         model.publicModel.endTurn();
-        update(model);
 
         model.publicModel.playAssistant(AssistantCard.CARD_2);
         model.publicModel.endTurn();
-        giveCoinToCurrentPlayer(model);
         model.publicModel.playAssistant(AssistantCard.CARD_3);
         model.publicModel.endTurn();
-        giveCoinToCurrentPlayer(model);
-        /*model.publicModel.playAssistant(AssistantCard.CARD_4);
+        model.publicModel.playAssistant(AssistantCard.CARD_4);
         model.publicModel.endTurn();
-        giveCoinToCurrentPlayer(model);*/
-
+        for (int i = 0; i < 3; i++) {
+            model.publicModel.moveStudentToDiningRoom(Color.RED_DRAGONS);
+        }
+        model.publicModel.moveMotherNature(1);
+        goToCloudGUIPhase(model);
         update(model);
-        Thread.sleep(1000);
 
 
     }

@@ -332,4 +332,9 @@ public class PublicModelTest {
     public static void setWinner(Player p, Model model) {
         model.winner = p;
     }
+
+    public static void goToCloudGUIPhase(Model model) {
+        model.studentsPlaced = 3;
+        model.motherNatureMoved = true;
+    }
 }
