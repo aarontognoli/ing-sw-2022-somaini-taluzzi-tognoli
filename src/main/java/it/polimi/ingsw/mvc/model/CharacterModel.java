@@ -1,6 +1,6 @@
 package it.polimi.ingsw.mvc.model;
 
-import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.enums.Color;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;

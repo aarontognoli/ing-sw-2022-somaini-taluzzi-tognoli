@@ -1,4 +1,4 @@
-package it.polimi.ingsw.bag;
+package it.polimi.ingsw.exceptions;
 
 public class BagEmptyException extends Exception {
     public BagEmptyException() {

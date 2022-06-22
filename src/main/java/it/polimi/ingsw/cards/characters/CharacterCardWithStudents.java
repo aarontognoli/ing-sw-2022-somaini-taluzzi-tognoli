@@ -1,6 +1,6 @@
 package it.polimi.ingsw.cards.characters;
 
-import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.pawn.Student;
 

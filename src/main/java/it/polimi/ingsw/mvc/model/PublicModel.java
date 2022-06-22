@@ -1,6 +1,6 @@
 package it.polimi.ingsw.mvc.model;
 
-import it.polimi.ingsw.bag.BagEmptyException;
+import it.polimi.ingsw.exceptions.BagEmptyException;
 import it.polimi.ingsw.cards.assistant.AssistantCard;
 import it.polimi.ingsw.cards.characters.CCArgumentException;
 import it.polimi.ingsw.cards.characters.CharacterCard;
