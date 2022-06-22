@@ -65,6 +65,10 @@ public class Island implements Serializable {
         return students;
     }
 
+    /**
+     * @return true if there is a no entry tile positioned on the island,
+     *         otherwise false
+     */
     public boolean hasNoEntryTile() {
         return noEntryTile;
     }
@@ -77,6 +81,9 @@ public class Island implements Serializable {
         return this.towers.get(0).getColor();
     }
 
+    /**
+     * @throws Exception there is already an empty tile on this island
+     */
     public void putNoEntryTile() throws Exception {
         if (noEntryTile)
             throw new Exception("A No Entry tile is already present in this island");
@@ -87,6 +94,10 @@ public class Island implements Serializable {
         noEntryTile = false;
     }
 
+    /**
+     * @param tower tower we want to put on the island
+     * @throws TowerDifferentColorException there is already a tower of another color
+     */
     public void addTower(Tower tower) throws TowerDifferentColorException {
         // Make sure all the towers are of the same color
         if (towers.size() != 0) {

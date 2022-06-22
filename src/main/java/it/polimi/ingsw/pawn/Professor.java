@@ -14,6 +14,9 @@ public class Professor implements Serializable {
         this.color = color;
     }
 
+    /**
+     * @param newPosition board where we want to move the professor
+     */
     public void move(Board newPosition) {
         this.position = newPosition;
     }
