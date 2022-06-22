@@ -34,6 +34,12 @@ public class ClientController extends Controller {
         asyncReadObject();
     }
 
+    /**
+     * Reads an object asynchronously from the Object Input Stream, while the client
+     * is active
+     *
+     * For this purpose it creates a dedicated thread
+     */
     public void asyncReadObject() {
         new Thread(() -> {
             while (isActive) {
@@ -50,11 +56,17 @@ public class ClientController extends Controller {
             try {
                 socketIn.close();
                 socketOut.close();
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }).start();
     }
 
+    /**
+     * Sends an object asynchronously to the server through the Object Output Stream
+     * For this purpose it creates a dedicated thread
+     *
+     * @param obj object to send
+     */
     public void asyncSendObject(Object obj) {
         new Thread(() -> {
             synchronized (socketOut) {
@@ -72,6 +84,12 @@ public class ClientController extends Controller {
         }).start();
     }
 
+    /**
+     * Handle an object received from the network notifying its subscribers
+     * The object is handled if it is a Server Message or if it is a Model
+     *
+     * @param obj an object received from the network.
+     */
     public void handleObjectFromNetwork(Object obj) {
         if (obj instanceof ServerMessage message) {
             serverMessageNotifier.notifySubscribers(message);

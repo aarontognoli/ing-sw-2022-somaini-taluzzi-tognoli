@@ -55,6 +55,15 @@ public class Server {
     }
 
     //Wait for players
+
+    /**
+     * Puts the player in the waiting list of the lobby
+     * If the lobby has reached its maximum capacity, initializes and starts the game
+     *
+     * @param c target socket
+     * @param nickname name chosen by the player
+     * @param currentLobby target lobby
+     */
     public synchronized void lobby(SocketClientConnection c, String nickname, Lobby currentLobby) {
         currentLobby.waitingConnection.put(nickname, c);
 

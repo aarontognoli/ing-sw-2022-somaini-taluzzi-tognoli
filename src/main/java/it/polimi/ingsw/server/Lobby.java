@@ -27,6 +27,10 @@ public class Lobby {
         gameMode = null;
     }
 
+    /**
+     * @param message specific message sent from the client containing the information
+     *                to initialize the match
+     */
     synchronized public void setGameOptions(CreateLobbyMessage message) {
         gameOptionsChosen = true;
         maxPlayersCount = message.getPlayerCount();
