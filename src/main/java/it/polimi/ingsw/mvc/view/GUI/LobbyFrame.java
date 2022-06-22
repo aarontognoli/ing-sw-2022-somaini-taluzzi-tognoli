@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -29,6 +30,7 @@ public class LobbyFrame extends Application {
     private CreateLobbyController clc;
     private UsernameAndDeckLobbyViewController userAndDeckController;
     private GameViewController gvc;
+    private Image icon;
 
 
     private Stage mainStage;
@@ -38,10 +40,11 @@ public class LobbyFrame extends Application {
     public void start(Stage stage) throws Exception {
         stage.setTitle("Eryantis");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/LobbyView.fxml"));
-
+        icon = new Image("/imgs/Misc/icon.png");
         mainStage = stage;
         mainStage.setScene(new Scene((AnchorPane) loader.load()));
         lc = (LobbyController) loader.getController();
+        stage.getIcons().add(icon);
         lobbyFrame = this;
         mainStage.setResizable(false);
         mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -79,7 +82,7 @@ public class LobbyFrame extends Application {
                 Stage createLobbyStage = new Stage();
                 createLobbyStage.setTitle("Eryantis");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/CreateLobbyView.fxml"));
-
+                createLobbyStage.getIcons().add(icon);
                 try {
                     createLobbyStage.setScene(new Scene((AnchorPane) loader.load()));
                 } catch (Exception e) {
@@ -104,6 +107,7 @@ public class LobbyFrame extends Application {
                 if (clc != null)
                     clc.closeAndContinue();
                 Stage userAndDeckStage = new Stage();
+                userAndDeckStage.getIcons().add(icon);
                 userAndDeckStage.setTitle("Eryantis");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/UsernameAndDeckLobbyView.fxml"));
 
@@ -137,6 +141,8 @@ public class LobbyFrame extends Application {
             public void run() {
                 Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
                 alert.setTitle("Warning!");
+                alert.setHeaderText("Error:");
+                alert.initStyle(StageStyle.UTILITY);
                 alert.showAndWait();
             }
         });
@@ -158,6 +164,7 @@ public class LobbyFrame extends Application {
             public void run() {
 
                 Stage gameStage = new Stage();
+                gameStage.getIcons().add(icon);
                 gameStage.setTitle("Eryantis - " + GUIView.thisGUI.getMyUsername());
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameView.fxml"));
 
@@ -195,6 +202,8 @@ public class LobbyFrame extends Application {
             public void run() {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
                 alert.setTitle("Info!");
+                alert.setHeaderText("Info:");
+                alert.initStyle(StageStyle.UTILITY);
                 alert.showAndWait();
             }
         });
@@ -215,6 +224,7 @@ public class LobbyFrame extends Application {
             public void run() {
 
                 Stage winStage = new Stage();
+                winStage.getIcons().add(icon);
                 EndingController ec;
                 winStage.setTitle("Eryantis");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/EndingView.fxml"));
@@ -247,6 +257,7 @@ public class LobbyFrame extends Application {
             @Override
             public void run() {
                 Stage winStage = new Stage();
+                winStage.getIcons().add(icon);
                 EndingController ec;
                 winStage.setTitle("Eryantis");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/EndingView.fxml"));
@@ -317,6 +328,8 @@ public class LobbyFrame extends Application {
             public void run() {
                 Alert alert = new Alert(Alert.AlertType.ERROR, s, ButtonType.OK);
                 alert.setTitle("Warning!");
+                alert.setHeaderText("Error:");
+                alert.initStyle(StageStyle.UTILITY);
                 alert.showAndWait();
                 closeApp();
             }
