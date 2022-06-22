@@ -57,7 +57,7 @@ public class ServerController extends Controller implements PlayerActions {
 
     @Override
     public void playAssistant(AssistantCard assistantCard) throws Exception {
-        if (model.publicModel.getGamePhase() != GamePhase.PIANIFICATION) {
+        if (model.publicModel.getGamePhase() != GamePhase.PLANNING) {
             throw new WrongActionException(GameMessageConstants.wrongGamePhaseMessage);
         }
         model.publicModel.playAssistant(assistantCard);

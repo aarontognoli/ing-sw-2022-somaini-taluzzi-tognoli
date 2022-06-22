@@ -17,14 +17,24 @@ public class CharacterModel implements Serializable {
         this.fatherModel = fatherModel;
     }
 
+    /**
+     * @return student drawn from the bag
+     */
     public Student drawStudentFromBag() throws BagEmptyException {
         return fatherModel.privateModel.drawStudentFromBag();
     }
 
+    /**
+     * @param newProfessorMoverRule professor mover rule we want to set as current
+     */
     public void updateProfessorMoverRule(ProfessorMoverRuleDefault newProfessorMoverRule) {
         fatherModel.professorMoverRule = newProfessorMoverRule;
     }
 
+    /**
+     * @param newInfluenceCalculatorRules influence calculator rule we want to
+     *                                    set as current
+     */
     public void updateInfluenceCalculator(InfluenceCalculatorRules newInfluenceCalculatorRules) {
         fatherModel.influenceCalculator.setInfluenceCalculatorRules(newInfluenceCalculatorRules);
     }
@@ -52,10 +62,17 @@ public class CharacterModel implements Serializable {
         fatherModel.bag.reinsert(studToReinsert);
     }
 
+    /**
+     * @param index index of the island we want to get
+     * @return island of the corresponding index
+     */
     public Island getIsland(int index) throws IndexOutOfBoundsException {
         return fatherModel.islands.get(index);
     }
 
+    /**
+     * @param color color of the professor whose position we want to update
+     */
     public void updateProfessorPosition(Color color) {
         fatherModel.privateModel.updateProfessorPosition(color);
     }

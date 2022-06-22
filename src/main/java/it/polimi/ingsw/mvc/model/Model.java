@@ -150,7 +150,7 @@ public class Model implements Serializable {
         }
 
         currentPlayer = players.get(0);
-        gamePhase = GamePhase.PIANIFICATION;
+        gamePhase = GamePhase.PLANNING;
         winner = null;
         try {
             privateModel.prepareMatch(motherNatureStartingPosition);
