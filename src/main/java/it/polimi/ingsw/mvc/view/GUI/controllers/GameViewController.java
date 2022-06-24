@@ -340,7 +340,7 @@ public class GameViewController implements Initializable {
             int mnMaxMov = GUIView.thisGUI.getMotherNatureMaxMovement();
             for (int i = 0; i < mnMaxMov; i++) {
                 index = (mnIndex + i + 1) % islandsCount;
-                islands.getChildren().get(index).setStyle("-fx-effect: dropshadow(three-pass-box, #E6F3EA, 75, 0.5, 0, 0);");
+                islands.getChildren().get(index).setStyle("-fx-effect: dropshadow(three-pass-box, #55B46C, 75, 0.5, 0, 0);");
 
                 islands.getChildren().get(index).setOnMouseClicked(this::moveMotherNature);
             }
@@ -349,7 +349,7 @@ public class GameViewController implements Initializable {
             for (Node n : Clouds.getChildren()) {
                 int index = Clouds.getChildren().indexOf(n);
                 if (cloudControllerList.get(index).getSize() != 0) {
-                    n.setStyle("-fx-effect: dropshadow(three-pass-box, #E6F3EA, 75, 0.5, 0, 0);");
+                    n.setStyle("-fx-effect: dropshadow(three-pass-box, #55B46C, 75, 0.5, 0, 0);");
                     n.setOnMouseEntered(this::shineBack);
                     n.setOnMouseExited(this::greenBack);
                     n.setOnMouseClicked(this::selectCloud);
@@ -385,7 +385,7 @@ public class GameViewController implements Initializable {
     }
 
     public void shineBack(MouseEvent mouseEvent) {
-        ((Node) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #1E6C93, 50, 0, 0, 0);");
+        ((Node) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #ec7aae, 50, 0, 0, 0);");
     }
 
     public void shineBackEntranceStudent(MouseEvent mouseEvent) {
@@ -398,7 +398,7 @@ public class GameViewController implements Initializable {
     }
 
     public void greenBack(MouseEvent mouseEvent) {
-        ((Node) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #E6F3EA, 75, 0.5, 0, 0);");
+        ((Node) mouseEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #55B46C, 75, 0.5, 0, 0);");
     }
 
     public void makeAssistantsNormal(MouseEvent mouseEvent) {
@@ -447,7 +447,7 @@ public class GameViewController implements Initializable {
         if (dragEvent.getGestureSource() != dragEvent.getSource() &&
                 dragEvent.getDragboard().hasString()) {
 
-            ((Node) dragEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #1E6C93, 50, 0, 0, 0);");
+            ((Node) dragEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #ec7aae, 50, 0, 0, 0);");
 
             ((Node) dragEvent.getSource()).toBack();
 
@@ -460,7 +460,7 @@ public class GameViewController implements Initializable {
         if (dragEvent.getGestureSource() != dragEvent.getSource() &&
                 dragEvent.getDragboard().hasString()) {
 
-            ((Node) dragEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #1E6C93, 50, 0, 0, 0);");
+            ((Node) dragEvent.getSource()).setStyle("-fx-effect: dropshadow(three-pass-box, #ec7aae, 50, 0, 0, 0);");
 
 
         }

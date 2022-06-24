@@ -79,8 +79,8 @@
                   </Pane>
                </children>
             </Pane>
-            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#1e6c93" height="111.0" layoutX="971.0" layoutY="179.0" stroke="#30a9e5" strokeType="OUTSIDE" strokeWidth="3.0" width="301.0" />
-            <Label fx:id="Prompt" alignment="TOP_LEFT" layoutX="1009.0" layoutY="194.0" prefHeight="64.0" prefWidth="219.0" text="Wow ma che bella nuvoletta, perchè non sposti quei bellissimi studenti? bla bla bla bla" textFill="WHITE" wrapText="true">
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ec7aae" height="111.0" layoutX="971.0" layoutY="179.0" stroke="WHITE" strokeType="OUTSIDE" width="301.0" />
+            <Label fx:id="Prompt" alignment="TOP_LEFT" layoutX="991.0" layoutY="194.0" prefHeight="87.0" prefWidth="260.0" text="Wow ma che bella nuvoletta, perchè non sposti quei bellissimi studenti? bla bla bla bla" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="15.0" />
                </font>

@@ -34,9 +34,22 @@ public class GUIView extends ClientView {
         if (model != null) {
             if (model.publicModel.getWinner() != null) {
                 String winner = model.publicModel.getWinner().getNickname();
-                if (winner.equals(myUsername)) {
+                String secondWinner = "";
+                boolean won = false;
+                won = winner.equals(myUsername);
+                if (model.publicModel.getTotalPlayerCount() == 4) {
+                    int winnerIndex = model.publicModel.getPlayers().indexOf(model.publicModel.getWinner());
+                    secondWinner = model.publicModel.getPlayers().get(winnerIndex + 1).getNickname();
+                    if (!won) {
+                        won = secondWinner.equals(myUsername);
+                    }
+                }
+                if (won) {
                     LobbyFrame.lobbyFrame.win();
                 } else {
+                    if (model.publicModel.getTotalPlayerCount() == 4) {
+                        winner += "\nand\n" + secondWinner;
+                    }
                     LobbyFrame.lobbyFrame.showWinner(winner);
                 }
             } else {

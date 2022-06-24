@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 
 <fx:root type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-   <AnchorPane fx:id="BACK" prefHeight="170.0" prefWidth="600.0" style="-fx-background-color: #1E6C93; -fx-background-radius: 10;">
+   <AnchorPane fx:id="BACK" prefHeight="170.0" prefWidth="600.0" style="-fx-background-color: #EEB57F; -fx-background-radius: 10;">
       <children>
          <ImageView fitHeight="206.0" fitWidth="397.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
             <image>
@@ -72,7 +72,7 @@
             <Image url="@imgs/Decks/CLOUD_WITCH.png" />
          </image>
       </ImageView>
-      <Label fx:id="username" layoutX="405.0" layoutY="15.0" text="Username" textFill="WHITE" />
+      <Label fx:id="username" layoutX="405.0" layoutY="15.0" text="Username" />
       <ImageView fx:id="ASSISTANT_CARD" fitHeight="129.0" fitWidth="90.0" layoutX="501.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@imgs/AssistantCards/CARD_1.png" />
@@ -83,8 +83,8 @@
             <Image url="@imgs/Misc/coin.png" />
          </image>
       </ImageView>
-      <Label layoutX="443.0" layoutY="131.0" text="X" textFill="WHITE" />
-      <Label fx:id="coin" layoutX="453.0" layoutY="122.0" prefHeight="24.0" prefWidth="14.0" text="0" textFill="WHITE">
+      <Label layoutX="443.0" layoutY="131.0" text="X" />
+      <Label fx:id="coin" layoutX="453.0" layoutY="122.0" prefHeight="24.0" prefWidth="14.0" text="0">
          <font>
             <Font size="22.0" />
          </font>
