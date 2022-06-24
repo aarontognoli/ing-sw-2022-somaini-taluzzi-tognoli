@@ -11,6 +11,7 @@ import it.polimi.ingsw.enums.GamePhase;
 import it.polimi.ingsw.enums.TowerColor;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.mvc.PlayerActions;
+import it.polimi.ingsw.mvc.view.GUI.LobbyFrame;
 import it.polimi.ingsw.pawn.Professor;
 import it.polimi.ingsw.pawn.Student;
 import it.polimi.ingsw.places.Island;
@@ -46,7 +47,7 @@ public class PublicModel implements PlayerActions, Serializable {
      *                                             an assistant card, or there is more
      *                                             than one card in the deck and the card
      *                                             was already played by someone else
-     * @throws NotFoundException assistantCard not found in deck
+     * @throws NotFoundException                   assistantCard not found in deck
      */
     public void playAssistant(AssistantCard assistantCard) throws NotFoundException, AssistantCardAlreadyPlayedException {
         if (fatherModel.currentPlayer.getCurrentAssistantCard() != null) {
@@ -67,7 +68,7 @@ public class PublicModel implements PlayerActions, Serializable {
 
     /**
      * @throws EntranceFullException entrance is full
-     * @throws CloudEmptyException cloud is empty
+     * @throws CloudEmptyException   cloud is empty
      */
     public void drawStudentsIntoEntrance(int cloudIndex) throws EntranceFullException, CloudEmptyException {
 
@@ -206,7 +207,7 @@ public class PublicModel implements PlayerActions, Serializable {
 
     /**
      * @throws InsufficientCoinException the player has not enough coins to play the card
-     * @throws CCArgumentException there is something not right in the argument of the card
+     * @throws CCArgumentException       there is something not right in the argument of the card
      */
     public void playCharacterCard(int cardIndex, Object effectArgument)
             throws InsufficientCoinException, CCArgumentException {
@@ -365,7 +366,7 @@ public class PublicModel implements PlayerActions, Serializable {
 
     /**
      * @return true if a character card is being played in the current turn,
-     *         otherwise false
+     * otherwise false
      */
     public boolean isCharacterCardPlayed() {
         return fatherModel.characterCardPlayed;
@@ -377,7 +378,7 @@ public class PublicModel implements PlayerActions, Serializable {
 
     /**
      * @return true if mother nature has been moved in the current turn,
-     *         otherwise false
+     * otherwise false
      */
     public boolean isMotherNatureMoved() {
         return fatherModel.motherNatureMoved;
@@ -440,7 +441,7 @@ public class PublicModel implements PlayerActions, Serializable {
 
     /**
      * @return true if there are enough students placed to end the turn,
-     *         otherwise false
+     * otherwise false
      */
     public boolean enoughStudentsPlaced() {
         int maxStudentsToMove = 3;
@@ -459,5 +460,33 @@ public class PublicModel implements PlayerActions, Serializable {
      */
     public List<Island> getIslands() {
         return fatherModel.islands;
+    }
+
+    public record Winners(boolean youAreWinner, String winnersNames) {
+    }
+
+    /**
+     * @param myUsername The client username, to indicate if you are the winner
+     * @return a record that indicates if you are one of the winner, and the names of the winners
+     */
+    public Winners getWinners(String myUsername) {
+        String winner = getWinner().getNickname();
+        String secondWinner = "";
+
+        boolean won = winner.equals(myUsername);
+
+        if (getTotalPlayerCount() == 4) {
+            int winnerIndex = getPlayers().indexOf(getWinner());
+            secondWinner = getPlayers().get(winnerIndex + 1).getNickname();
+            if (!won) {
+                won = secondWinner.equals(myUsername);
+            }
+        }
+
+        if (getTotalPlayerCount() == 4) {
+            return new Winners(won, "%s\nand\n%s".formatted(winner, secondWinner));
+        } else {
+            return new Winners(won, winner);
+        }
     }
 }

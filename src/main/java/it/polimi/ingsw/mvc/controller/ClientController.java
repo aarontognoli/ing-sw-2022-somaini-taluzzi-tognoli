@@ -1,6 +1,7 @@
 package it.polimi.ingsw.mvc.controller;
 
 import it.polimi.ingsw.messages.ClientMessage;
+import it.polimi.ingsw.messages.ConnectionClosedMessage;
 import it.polimi.ingsw.messages.ServerMessage;
 import it.polimi.ingsw.mvc.model.Model;
 import it.polimi.ingsw.mvc.view.GUI.GUIView;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.notifier.Notifier;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 /**
  * The client controller receives message from the client View (Be it CLI or
@@ -18,13 +20,15 @@ import java.io.ObjectOutputStream;
 public class ClientController extends Controller {
     final private ObjectInputStream socketIn;
     final private ObjectOutputStream socketOut;
+    final private Socket socket;
 
     protected final Notifier<ServerMessage> serverMessageNotifier;
     final private Notifier<Model> modelNotifier;
 
     private boolean isActive = true;
 
-    public ClientController(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Notifier<Model> modelNotifier) {
+    public ClientController(Socket socket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Notifier<Model> modelNotifier) {
+        this.socket = socket;
         socketOut = objectOutputStream;
         socketIn = objectInputStream;
 
@@ -32,12 +36,30 @@ public class ClientController extends Controller {
         this.modelNotifier = modelNotifier;
 
         asyncReadObject();
+        checkConnection();
+    }
+
+    /**
+     * Asynchronously check if server is still active
+     */
+    private void checkConnection() {
+        new Thread(() -> {
+            while (isActive) {
+                if (socket.isClosed()) {
+                    closeClient("Connection lost from server.");
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    closeClient("Closing...");
+                }
+            }
+        }).start();
     }
 
     /**
      * Reads an object asynchronously from the Object Input Stream, while the client
      * is active
-     *
      * For this purpose it creates a dedicated thread
      */
     public void asyncReadObject() {
@@ -56,6 +78,7 @@ public class ClientController extends Controller {
             try {
                 socketIn.close();
                 socketOut.close();
+                socket.close();
             } catch (IOException ignored) {
             }
         }).start();
@@ -76,12 +99,24 @@ public class ClientController extends Controller {
                     socketOut.flush();
                 } catch (IOException e) {
                     e.printStackTrace(); //for debug
-                    if (GUIView.thisGUI != null) {
-                        GUIView.thisGUI.closeApp("Connection lost from server.");
-                    }
+                    closeClient("Connection lost from server.");
                 }
             }
         }).start();
+    }
+
+    /**
+     * Force the client to close
+     *
+     * @param message message to show
+     */
+    private void closeClient(String message) {
+        isActive = false;
+        serverMessageNotifier.notifySubscribers(new ConnectionClosedMessage(message));
+
+        if (GUIView.thisGUI != null) {
+            GUIView.thisGUI.closeApp(message);
+        }
     }
 
     /**
@@ -92,6 +127,9 @@ public class ClientController extends Controller {
      */
     public void handleObjectFromNetwork(Object obj) {
         if (obj instanceof ServerMessage message) {
+            if (message instanceof ConnectionClosedMessage) {
+                isActive = false;
+            }
             serverMessageNotifier.notifySubscribers(message);
         } else if (obj instanceof Model newModel) {
             if (newModel.publicModel.getWinner() != null) {

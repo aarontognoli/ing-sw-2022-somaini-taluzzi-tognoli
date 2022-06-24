@@ -94,9 +94,6 @@ public abstract class ClientView extends View implements Subscriber<ServerMessag
         @Override
         public void subscribeNotification(Model newValue) {
             model = newValue;
-            if (model.publicModel.getWinner() != null) {
-                setActive(false);
-            }
             show();
         }
     }

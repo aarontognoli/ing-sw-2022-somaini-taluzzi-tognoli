@@ -12,6 +12,7 @@ import it.polimi.ingsw.messages.lobby.client.lobbysetup.CreateLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.JoinLobbyMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.model.PublicModel;
 import it.polimi.ingsw.mvc.view.ClientView;
 import it.polimi.ingsw.notifier.Notifier;
 import it.polimi.ingsw.pawn.Student;
@@ -33,24 +34,13 @@ public class GUIView extends ClientView {
     public void show() {
         if (model != null) {
             if (model.publicModel.getWinner() != null) {
-                String winner = model.publicModel.getWinner().getNickname();
-                String secondWinner = "";
-                boolean won = false;
-                won = winner.equals(myUsername);
-                if (model.publicModel.getTotalPlayerCount() == 4) {
-                    int winnerIndex = model.publicModel.getPlayers().indexOf(model.publicModel.getWinner());
-                    secondWinner = model.publicModel.getPlayers().get(winnerIndex + 1).getNickname();
-                    if (!won) {
-                        won = secondWinner.equals(myUsername);
-                    }
-                }
-                if (won) {
+                setActive(false);
+                PublicModel.Winners winners = model.publicModel.getWinners(myUsername);
+
+                if (winners.youAreWinner()) {
                     LobbyFrame.lobbyFrame.win();
                 } else {
-                    if (model.publicModel.getTotalPlayerCount() == 4) {
-                        winner += "\nand\n" + secondWinner;
-                    }
-                    LobbyFrame.lobbyFrame.showWinner(winner);
+                    LobbyFrame.lobbyFrame.showWinner(winners.winnersNames());
                 }
             } else {
                 showModel();

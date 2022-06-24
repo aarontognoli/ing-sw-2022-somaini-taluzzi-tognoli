@@ -32,7 +32,7 @@ public class Client {
 
         Notifier<Model> modelNotifier = new Notifier<>();
 
-        ClientController clientController = new ClientController(socketIn, socketOut, modelNotifier);
+        ClientController clientController = new ClientController(socket, socketIn, socketOut, modelNotifier);
 
         ClientView clientView;
         if (isCLI) {

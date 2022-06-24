@@ -76,7 +76,7 @@ public class SocketClientConnection implements Runnable {
      * then closes the socket
      */
     public synchronized void closeConnection() {
-        send(new ConnectionClosedMessage("Connection closed server side!"));
+        send(new ConnectionClosedMessage("Connection closed, someone disconnected. Quitting."));
         try {
             socket.close();
         } catch (IOException e) {
@@ -133,10 +133,10 @@ public class SocketClientConnection implements Runnable {
 
     /**
      * @param newUsername nickname chosen by the player
-     * @param whichLobby target lobby
+     * @param whichLobby  target lobby
      * @return record where the first value is a boolean indicating if the
-     *         nickname is in use and the second value is a boolean
-     *         indicating if the player is the first in the target lobby
+     * nickname is in use and the second value is a boolean
+     * indicating if the player is the first in the target lobby
      */
     private UsernameInUse tryAddUsername(String newUsername, Lobby whichLobby) throws IOException {
         synchronized (whichLobby.nicknamesAndDecks) {
@@ -157,9 +157,8 @@ public class SocketClientConnection implements Runnable {
     }
 
     /**
-     *
-     * @param username nickname of the player
-     * @param deckName deck name chosen by the player
+     * @param username   nickname of the player
+     * @param deckName   deck name chosen by the player
      * @param whichLobby target lobby
      * @return true if the deck name is already in use, otherwise false
      */

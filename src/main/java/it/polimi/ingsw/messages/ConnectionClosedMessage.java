@@ -12,9 +12,9 @@ public class ConnectionClosedMessage extends ErrorMessage {
 
     @Override
     public void updateCLI(CLIView cliLobbyView) {
-        cliLobbyView.setErrorFrontEnd(getErrorMessageString());
+        cliLobbyView.setErrorFrontEnd(getErrorMessageString() + "\nPress enter to quit");
         cliLobbyView.setCurrentQueryMessage("");
-        cliLobbyView.setCliStringHandler(new CLIEmptyHandler("Connection closed! The game ended."));
+        cliLobbyView.setCliStringHandler(new CLIEmptyHandler(""));
         cliLobbyView.setModel(null);
         cliLobbyView.setActive(false);
     }
@@ -22,6 +22,6 @@ public class ConnectionClosedMessage extends ErrorMessage {
     @Override
     public void updateGUI(GUIView guiLobbyView) {
 
-        guiLobbyView.closeApp("Connection closed! The game ended.");
+        guiLobbyView.closeApp(getErrorMessageString());
     }
 }

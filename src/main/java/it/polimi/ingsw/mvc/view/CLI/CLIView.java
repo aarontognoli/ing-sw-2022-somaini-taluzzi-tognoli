@@ -7,6 +7,7 @@ import it.polimi.ingsw.messages.ServerMessage;
 import it.polimi.ingsw.messages.lobby.client.lobbysetup.RequestLobbyNamesListMessage;
 import it.polimi.ingsw.mvc.model.CLIModelPrinter;
 import it.polimi.ingsw.mvc.model.Model;
+import it.polimi.ingsw.mvc.model.PublicModel;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIEmptyHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.CLIStringHandler;
 import it.polimi.ingsw.mvc.view.CLIStringHandler.GameCLIStringHandler.ActionHandler.CLIChooseCloudTile;
@@ -36,20 +37,23 @@ public class CLIView extends ClientView {
 
     public void show() {
         if (model != null) {
-            if (model.publicModel.getWinner() != null) {
-                setActive(false);
-                String winner = model.publicModel.getWinner().getNickname();
-                if (winner.equals(myUsername)) {
-                    setErrorFrontEnd("YOU WIN!");
-                } else {
-                    setErrorFrontEnd("GAME OVER! The winner is " + winner);
-                }
+            if (getIsActive())
+                if (model.publicModel.getWinner() != null) {
+                    setActive(false);
 
-                setCurrentQueryMessage("");
-                setCliStringHandler(new CLIEmptyHandler());
-            } else {
-                showModel();
-            }
+                    PublicModel.Winners winners = model.publicModel.getWinners(myUsername);
+
+                    if (winners.youAreWinner()) {
+                        setErrorFrontEnd("YOU WIN!\nPress enter to quit.");
+                    } else {
+                        setErrorFrontEnd("GAME OVER!\n%s won the game.\nPress enter to quit.".formatted(winners.winnersNames()));
+                    }
+
+                    setCurrentQueryMessage("");
+                    setCliStringHandler(new CLIEmptyHandler(""));
+                } else {
+                    showModel();
+                }
         }
         System.out.println(frontEnd);
         System.out.println(currentQueryMessage);
