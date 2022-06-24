@@ -24,7 +24,7 @@ the [Eriantys](https://www.craniocreations.it/prodotto/eriantys/) table game.
 
 We wrote several tests to check that the behaviour of our code is correct.
 
-We focussed on testing the core features of the game engine: the Model and the classes it uses, the Controller and
+We focused on testing the core features of the game engine: the Model and the classes it uses, the Controller and
 networking.
 
 ### Excluded from coverage
@@ -57,11 +57,11 @@ networking.
 
 ### Server
 
-`java -jar deliverables/server.jar`
+`java -jar deliverables/EriantysServer.jar`
 
 ### Client
 
-`java -jar deliverables/client.jar <client_type> <server_ip>`
+`java -jar deliverables/EriantysClient.jar <client_type> <server_ip>`
 
 Where:
 
