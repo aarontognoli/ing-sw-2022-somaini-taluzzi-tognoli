@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Polygon?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
+<?import javafx.scene.text.*?>
 <fx:root pickOnBounds="false" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
     <AnchorPane onMouseEntered="#showInfo" onMouseExited="#hideInfo" prefHeight="123.0" prefWidth="151.0">
         <children>
             <ImageView fx:id="pic" fitHeight="123.0" fitWidth="151.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@imgs/Misc/island_1.png" />
-                </image>
-            </ImageView>
-            <ImageView fx:id="motherNature" fitHeight="53.0" fitWidth="33.0" layoutX="55.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@imgs/Misc/motherNature.png" />
                 </image>
             </ImageView>
             <ImageView fx:id="RED_DRAGONS" fitHeight="80.0" fitWidth="33.0" layoutX="17.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
@@ -56,29 +48,41 @@
                     <Image url="@imgs/Misc/noEntry.png" />
                 </image>
             </ImageView>
-            <Text fx:id="towerCount" boundsType="VISUAL" fill="WHITE" layoutX="107.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="8" textAlignment="CENTER" textOrigin="CENTER">
+            <Text fx:id="towerCount" boundsType="VISUAL" fill="WHITE" layoutX="107.0" layoutY="34.0"
+                  strokeType="OUTSIDE" strokeWidth="0.0" text="8" textAlignment="CENTER" textOrigin="CENTER">
                 <font>
-                    <Font size="24.0" />
+                    <Font size="24.0"/>
                 </font>
             </Text>
-            <Text fx:id="Index" fill="WHITE" layoutX="23.0" layoutY="43.0" stroke="#131313" strokeType="OUTSIDE" text="0">
+            <Text fx:id="Index" fill="WHITE" layoutX="23.0" layoutY="43.0" stroke="#131313" strokeType="OUTSIDE"
+                  text="0">
                 <font>
-                    <Font size="25.0" />
+                    <Font size="25.0"/>
                 </font>
             </Text>
-        </children>
-    </AnchorPane>
-    <AnchorPane fx:id="info" mouseTransparent="true" prefHeight="123.0" prefWidth="151.0">
-        <children>
-            <Polygon fill="#468041" layoutX="71.0" layoutY="52.0" opacity="0.61" points="34.99999237060547, 71.00000762939453, 69.39997863769531, 5.600002288818359, 34.99999237060547, -51.99999237060547, -37.00000762939453, -51.99999237060547, -71.00000762939453, 5.600002288818359, -40.600013732910156, 71.00001525878906" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" />
-            <ImageView fitHeight="80.0" fitWidth="33.0" layoutX="29.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" scaleX="0.8" scaleY="0.8">
+            <ImageView fx:id="motherNature" fitHeight="53.0" fitWidth="33.0" layoutX="55.0" layoutY="11.0"
+                       pickOnBounds="true" preserveRatio="true">
                 <image>
-                    <Image url="@imgs/Students/RED_DRAGONS.png" />
+                    <Image url="@imgs/Misc/motherNature.png"/>
                 </image>
             </ImageView>
-            <ImageView fitHeight="38.0" fitWidth="33.0" layoutX="29.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" scaleX="0.8" scaleY="0.8">
+        </children>
+    </AnchorPane>
+    <AnchorPane fx:id="info" mouseTransparent="true" prefHeight="123.0" prefWidth="151.0" visible="false">
+        <children>
+            <Polygon fill="#468041" layoutX="71.0" layoutY="52.0" opacity="0.61"
+                     points="34.99999237060547, 71.00000762939453, 69.39997863769531, 5.600002288818359, 34.99999237060547, -51.99999237060547, -37.00000762939453, -51.99999237060547, -71.00000762939453, 5.600002288818359, -40.600013732910156, 71.00001525878906"
+                     stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0"/>
+            <ImageView fitHeight="80.0" fitWidth="33.0" layoutX="29.0" layoutY="23.0" pickOnBounds="true"
+                       preserveRatio="true" scaleX="0.8" scaleY="0.8">
                 <image>
-                    <Image url="@imgs/Students/GREEN_FROGS.png" />
+                    <Image url="@imgs/Students/RED_DRAGONS.png"/>
+                </image>
+            </ImageView>
+            <ImageView fitHeight="38.0" fitWidth="33.0" layoutX="29.0" layoutY="-1.0" pickOnBounds="true"
+                       preserveRatio="true" scaleX="0.8" scaleY="0.8">
+                <image>
+                    <Image url="@imgs/Students/GREEN_FROGS.png"/>
                 </image>
             </ImageView>
             <ImageView fitHeight="52.0" fitWidth="33.0" layoutX="29.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true" scaleX="0.8" scaleY="0.8">
